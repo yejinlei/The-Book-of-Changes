@@ -214,35 +214,39 @@
       const ctx = this.ctx;
       // 微光底
       const r = 120 * easeOutBack(t);
-      const rot = this.now * 0.6; // 缓慢旋转
+      const rot = this.now * 0.4; // 缓慢顺时针自转
       ctx.save();
       ctx.translate(CX, CY);
       ctx.rotate(rot);
 
-      // 外圆
+      // 外圆白底（阳）
       ctx.beginPath();
       ctx.arc(0, 0, r, 0, Math.PI*2);
       ctx.fillStyle = '#fff';
       ctx.fill();
-      // 阴鱼（墨，右）+ 阳鱼（白，左）—— 以右半圆 + 两个小圆构成标准 S 曲线
+      // 阴鱼（墨色）：标准太极 S 曲线——阳鱼头（白）朝上方、阴鱼头（黑）朝下方
+      // 画法：左半大圆为阴 + 上小圆（阴凸入阳内的半圆）+ 下小圆（阳凸入阴内的留白）
       ctx.save();
       ctx.beginPath();
-      ctx.arc(0, 0, r, -Math.PI/2, Math.PI/2, false);        // 右半大圆：顶 → 右 → 底
-      ctx.arc(0, r/2, r/2, Math.PI/2, -Math.PI/2, true);     // 下小圆：向右凸
-      ctx.arc(0, -r/2, r/2, Math.PI/2, Math.PI*1.5, false);  // 上小圆：向左凸
+      // 左半大圆：顶(0,-r)→左(-r,0)→底(0,r)  逆时针
+      ctx.arc(0, 0, r, Math.PI/2, -Math.PI/2, true);
+      // 下小圆：从底(0,r)经右回到中(0,0)，构成阴鱼下半身（凸入右下半）
+      ctx.arc(0, r/2, r/2, -Math.PI/2, Math.PI/2, false);
+      // 上小圆：从中(0,0)经右回到顶(0,-r)，从阴鱼中挖掉（fill 使上半圆仍为白）
+      ctx.arc(0, -r/2, r/2, Math.PI/2, -Math.PI/2, true);
       ctx.closePath();
       ctx.fillStyle = COLOR.ink;
       ctx.fill();
       ctx.restore();
 
-      // 阴中有阳：黑鱼头（上）中的白眼；阳中有阴：白鱼头（下）中的黑眼
+      // 鱼眼：阳中阴（白鱼头在上，眼为黑点）；阴中阳（黑鱼头在下，眼为白点）
       ctx.beginPath();
       ctx.arc(0, -r/2, r/9, 0, Math.PI*2);
-      ctx.fillStyle = '#fff';
+      ctx.fillStyle = COLOR.ink;
       ctx.fill();
       ctx.beginPath();
       ctx.arc(0, r/2, r/9, 0, Math.PI*2);
-      ctx.fillStyle = COLOR.ink;
+      ctx.fillStyle = '#fff';
       ctx.fill();
 
       // 外描边（朱红）
@@ -259,65 +263,81 @@
     /* ====================================================== */
     _draw_two(t) {
       const ctx = this.ctx;
-      // 太极渐淡（须在 _draw_one 之前设置 alpha 才生效）
-      ctx.globalAlpha = 1 - t * 0.5;
-      this._draw_one(1); // 太极全显
+      // 太极逐渐上移、缩小并淡出，给下方的两仪让位
+      const taijiScale = 1 - t * 0.3;
+      const taijiY = CY - t * 30;
+      const taijiA = 1 - t * 0.55;
+      ctx.save();
+      ctx.globalAlpha = taijiA;
+      ctx.translate(CX, taijiY);
+      ctx.scale(taijiScale, taijiScale);
+      this._draw_one(1); // 太极图全显
+      ctx.restore();
       ctx.globalAlpha = 1;
-      // 阳爻从太极向左展开
-      const yangX = CX - 180;
-      const yangA = easeOutCubic(clamp01((t - 0.05)/0.4));
-      this._drawYao(ctx, 1, yangX, CY - 40, 120*yangA, 12, 18, COLOR.zhu, yangA);
-      if (t > 0.35) {
-        const ta = easeOutCubic((t-0.35)/0.4);
-        ctx.fillStyle = COLOR.zhu;
-        ctx.font = '16px "Songti SC","SimSun",serif';
-        ctx.textAlign = 'center';
-        ctx.fillText('阳', yangX, CY + 10);
-        this._drawYao(ctx, 1, yangX, CY + 38, 40, 6, 12, COLOR.zhu, ta);
-      }
-      // 阴爻从太极向右展开
-      const yinX = CX + 180;
-      const yinA = easeOutCubic(clamp01((t - 0.25)/0.4));
-      this._drawYao(ctx, 0, yinX, CY - 40, 120*yinA, 12, 18, COLOR.liu, yinA);
+
+      // 阳爻：自太极左侧向上方升起（阳上）
+      const yangX = CX - 230;
+      const yangY = CY - 80;
+      const yangA = easeOutCubic(clamp01((t - 0.1)/0.45));
+      this._drawYao(ctx, 1, yangX, yangY, 150*yangA, 14, 22, COLOR.zhu, yangA);
+
+      // 阴爻：自太极右侧向下方沉落（阴下）
+      const yinX = CX + 230;
+      const yinY = CY + 80;
+      const yinA = easeOutCubic(clamp01((t - 0.3)/0.45));
+      this._drawYao(ctx, 0, yinX, yinY, 150*yinA, 14, 22, COLOR.ink, yinA);
+
+      // 标签（阳上阴下，符合"清阳上升为天、浊阴下降为地"）
       if (t > 0.55) {
-        const ta = easeOutCubic((t-0.55)/0.4);
-        ctx.fillStyle = COLOR.liu;
-        ctx.font = '16px "Songti SC","SimSun",serif';
+        const la = easeOutCubic((t-0.55)/0.3);
+        ctx.globalAlpha = la;
         ctx.textAlign = 'center';
-        ctx.fillText('阴', yinX, CY + 10);
-        this._drawYao(ctx, 0, yinX, CY + 38, 40, 6, 12, COLOR.liu, ta);
+        ctx.font = 'bold 20px "Songti SC","SimSun",serif';
+        ctx.fillStyle = COLOR.zhu;
+        ctx.fillText('阳  ⚊', yangX, yangY + 40);
+        ctx.fillStyle = COLOR.ink;
+        ctx.fillText('阴  ⚋', yinX, yinY + 40);
+        // 副标签：天/地
+        ctx.font = '13px "Kaiti SC","STKaiti",serif';
+        ctx.fillStyle = COLOR.faint;
+        ctx.fillText('（天·刚·动）', yangX, yangY + 62);
+        ctx.fillText('（地·柔·静）', yinX, yinY + 62);
+        ctx.globalAlpha = 1;
       }
-      ctx.globalAlpha = 1;
     }
 
     /* ====================================================== */
     /*         场 景 4：两 仪 生 四 象 (太阳少阴少阳太阴)      */
     /* ====================================================== */
     _draw_four(t) {
-      // 四象 = 两爻堆叠：太阳(11) / 少阴(01) / 少阳(10) / 太阴(00)
+      // 四象 = 两爻堆叠：阳上叠阳=太阳(11)，阳上叠阴=少阴(10)，阴上叠阳=少阳(01)，阴上叠阴=太阴(00)
+      // 按生成顺序排成扇：太阳（阳盛·朱红·上左）、少阴（西·玉）、少阳（东·青）、太阴（阴盛·金·下右）
       const ctx = this.ctx;
       const sixiang = [
-        { yao:[1,1], name:'太阳', color:COLOR.zhu, x:CX-270 },
-        { yao:[0,1], name:'少阴', color:COLOR.jade, x:CX-90 },
-        { yao:[1,0], name:'少阳', color:COLOR.blue, x:CX+90 },
-        { yao:[0,0], name:'太阴', color:COLOR.liu, x:CX+270 }
+        { yao:[1,1], name:'太阳', sub:'夏·南', color:COLOR.zhu, x:CX-270, y:CY-60 },
+        { yao:[1,0], name:'少阴', sub:'秋·西', color:COLOR.jade, x:CX-90,  y:CY-20 },
+        { yao:[0,1], name:'少阳', sub:'春·东', color:COLOR.blue, x:CX+90,  y:CY-20 },
+        { yao:[0,0], name:'太阴', sub:'冬·北', color:COLOR.ink,  x:CX+270, y:CY-60 }
       ];
       const a = easeOutBack(clamp01(t/0.8));
       sixiang.forEach((s, i) => {
-        const delay = i * 0.06;
-        const ai = easeOutCubic(clamp01((t - delay)/0.5));
-        // 初爻、上爻（两爻）
+        const delay = i * 0.08;
+        const ai = easeOutCubic(clamp01((t - delay)/0.45));
+        // 初爻（下）、上爻（上），两爻，间距 24px
         for (let k = 0; k < 2; k++) {
-          const yy = CY + (0.5 - k) * 24;
+          const yy = s.y + (0.5 - k) * 24;  // k=0 初在下, k=1 上在上
           this._drawYao(ctx, s.yao[k], s.x, yy, 70*a, 10, 10,
-            s.yao[k] ? COLOR.zhu : COLOR.liu, ai);
+            s.yao[k] ? COLOR.zhu : COLOR.ink, ai);
         }
-        if (t > 0.5 + i*0.05) {
-          ctx.globalAlpha = easeOutCubic((t - 0.5 - i*0.05)/0.3);
+        if (t > 0.4 + i*0.05) {
+          ctx.globalAlpha = easeOutCubic((t - 0.4 - i*0.05)/0.3);
           ctx.fillStyle = s.color;
-          ctx.font = '14px "Songti SC","SimSun",serif';
+          ctx.font = 'bold 15px "Songti SC","SimSun",serif';
           ctx.textAlign = 'center';
-          ctx.fillText(s.name, s.x, CY + 50);
+          ctx.fillText(s.name, s.x, s.y + 44);
+          ctx.fillStyle = COLOR.faint;
+          ctx.font = '12px "Kaiti SC","STKaiti",serif';
+          ctx.fillText(s.sub, s.x, s.y + 62);
           ctx.globalAlpha = 1;
         }
       });
@@ -327,7 +347,7 @@
         ctx.fillStyle = COLOR.ink;
         ctx.font = '15px "Kaiti SC","STKaiti",serif';
         ctx.textAlign = 'center';
-        ctx.fillText('阳上叠加阳、阴 ── 成四象', CX, CY - 90);
+        ctx.fillText('阴阳之上复生阴阳，太阳·少阴·少阳·太阴', CX, CY - 100);
         ctx.globalAlpha = 1;
       }
     }

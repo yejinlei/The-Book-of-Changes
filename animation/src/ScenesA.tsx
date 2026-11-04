@@ -73,20 +73,18 @@ export const SceneTaiji: React.FC = () => {
         <g transform={`rotate(${rot} ${cx} ${cy})`}>
           {/* 白底（阳） */}
           <circle cx={cx} cy={cy} r={rOuter} fill="#f4ecd8" />
-          {/* 墨（阴）—— 用旋转的黑色扇形表示渗入 */}
+          {/* 墨（阴）—— 标准太极：阳鱼头（米白）朝上方、阴鱼头（墨）朝下方
+              画法：左半大圆 + 下小圆(阴凸入右下) + 上小圆(留白左上) */}
           <g clipPath="url(#taijiClip)">
             <path
-              d={`M ${cx} ${cy - R} A ${R} ${R} 0 0 0 ${cx} ${cy + R} A ${R / 2} ${R / 2} 0 0 1 ${cx} ${cy} A ${R / 2} ${R / 2} 0 0 0 ${cx} ${cy - R} Z`}
+              d={`M ${cx} ${cy - R} A ${R} ${R} 0 0 1 ${cx} ${cy + R} A ${R / 2} ${R / 2} 0 0 1 ${cx} ${cy} A ${R / 2} ${R / 2} 0 0 0 ${cx} ${cy - R} Z`}
               fill={COLORS.ink}
               opacity={swirl}
-              transform={`rotate(${(1 - swirl) * -120} ${cx} ${cy})`}
             />
-            {/* 黑鱼白眼（阴中有阳） */}
-            <circle cx={cx} cy={cy - R / 2} r={R / 8} fill={COLORS.ink} opacity={swirl} />
-            <circle cx={cx} cy={cy - R / 2} r={R / 20} fill="#f4ecd8" opacity={swirl} />
-            {/* 白鱼黑眼（阳中有阴） */}
-            <circle cx={cx} cy={cy + R / 2} r={R / 8} fill="#f4ecd8" opacity={swirl} />
-            <circle cx={cx} cy={cy + R / 2} r={R / 20} fill={COLORS.ink} opacity={swirl} />
+            {/* 阳中阴：白鱼头（上）中的黑眼 */}
+            <circle cx={cx} cy={cy - R / 2} r={R / 20} fill={COLORS.ink} opacity={swirl} />
+            {/* 阴中阳：黑鱼头（下）中的白眼 */}
+            <circle cx={cx} cy={cy + R / 2} r={R / 20} fill="#f4ecd8" opacity={swirl} />
           </g>
           {/* 外圈 */}
           <circle cx={cx} cy={cy} r={rOuter} fill="none" stroke={COLORS.jin} strokeWidth={2} opacity={0.5 * swirl} />
@@ -134,25 +132,25 @@ export const SceneLiangyi: React.FC = () => {
       <circle cx={cx} cy={whiteY} r={120 * (1 - split * 0.4)} fill="#f4ecd8" opacity={0.25} />
       <circle cx={cx} cy={blackY} r={120 * (1 - split * 0.4)} fill={COLORS.ink} opacity={0.5} />
 
-      {/* 阳爻 */}
+      {/* 阳爻（朱红·上） */}
       <g opacity={yaoAppear}>
-        <YaoLine x={cx - 320} y={cy - 230} w={640} h={34} yang progress={interpolate(frame, [70, 110], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })} color={COLORS.zhu} />
-        <text x={cx - 320 - 90} y={cy - 205} textAnchor="middle" fill={COLORS.zhu} fontSize={44} fontFamily="'Noto Serif CJK SC', serif" opacity={labelAppear}>
-          阳
+        <YaoLine x={cx - 280} y={cy - 240} w={560} h={32} yang progress={interpolate(frame, [70, 110], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })} color={COLORS.zhu} />
+        <text x={cx - 280 - 100} y={cy - 215} textAnchor="middle" fill={COLORS.zhu} fontSize={42} fontFamily="'Noto Serif CJK SC',serif" opacity={labelAppear}>
+          阳 ⚊
         </text>
-        <text x={cx + 320 + 90} y={cy - 205} textAnchor="middle" fill={COLORS.ink} fontSize={30} fontFamily="'Noto Serif CJK SC', serif" opacity={labelAppear}>
-          —
+        <text x={cx - 280 - 100} y={cy - 175} textAnchor="middle" fill={COLORS.jin} fontSize={22} fontFamily="'Noto Serif CJK SC',serif" opacity={labelAppear} letterSpacing={2}>
+          天 · 刚 · 动
         </text>
       </g>
 
-      {/* 阴爻 */}
+      {/* 阴爻（墨色·下） */}
       <g opacity={yaoAppear}>
-        <YaoLine x={cx - 320} y={cy + 190} w={640} h={34} yang={false} progress={interpolate(frame, [90, 130], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })} color={COLORS.ink} />
-        <text x={cx - 320 - 90} y={cy + 215} textAnchor="middle" fill={COLORS.ink} fontSize={44} fontFamily="'Noto Serif CJK SC', serif" opacity={labelAppear}>
-          阴
+        <YaoLine x={cx - 280} y={cy + 210} w={560} h={32} yang={false} progress={interpolate(frame, [90, 130], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })} color={COLORS.ink} />
+        <text x={cx - 280 - 100} y={cy + 238} textAnchor="middle" fill={COLORS.ink} fontSize={42} fontFamily="'Noto Serif CJK SC',serif" opacity={labelAppear}>
+          阴 ⚋
         </text>
-        <text x={cx + 320 + 90} y={cy + 215} textAnchor="middle" fill={COLORS.ink} fontSize={30} fontFamily="'Noto Serif CJK SC', serif" opacity={labelAppear}>
-          - -
+        <text x={cx - 280 - 100} y={cy + 278} textAnchor="middle" fill={COLORS.jin} fontSize={22} fontFamily="'Noto Serif CJK SC',serif" opacity={labelAppear} letterSpacing={2}>
+          地 · 柔 · 静
         </text>
       </g>
 

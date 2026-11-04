@@ -42,13 +42,23 @@ export const YijingYi: React.FC = () => {
   const current = ranges.find((r) => frame >= r.from && frame < r.to) || ranges[ranges.length - 1];
   const local = frame - current.from;
 
-  // 全局字幕渐入渐出（每场首尾各 15 帧）
+  // 全局字幕渐入渐出（每场首尾各 15 帧）+ 分句显示
   const subOpacity = interpolate(
     local,
     [0, 15, current.dur - 20, current.dur - 5],
     [0, 1, 1, 0],
     { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
   );
+  // 把旁白按句分成多段，根据本场进度只显示当前一句，避免整段铺满
+  const sentences = current.narration
+    .split(/(?<=[。！？，、])/)
+    .map((s) => s.trim())
+    .filter((s) => s.length > 0);
+  const subIdx = Math.min(
+    sentences.length - 1,
+    Math.floor((local / Math.max(1, current.dur - 10)) * sentences.length)
+  );
+  const subText = sentences[subIdx] || current.narration;
 
   const Comp = SceneComponents[current.kind];
 
@@ -65,8 +75,8 @@ export const YijingYi: React.FC = () => {
       {/* 章节标签 */}
       <ChapterTag index={current.id} name={current.name} frame={local} />
 
-      {/* 字幕 */}
-      <Subtitle text={current.narration} opacity={subOpacity} />
+      {/* 字幕（逐句，避免遮挡画面） */}
+      <Subtitle text={subText} opacity={subOpacity} />
 
       {/* 顶部细线进度条 */}
       <div
