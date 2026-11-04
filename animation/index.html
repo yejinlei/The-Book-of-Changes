@@ -74,6 +74,12 @@
     transition: background .2s;
   }
   .controls-bar button:hover { background: #a61c1c; }
+  .controls-bar .q-btn {
+    background: transparent; color: #8a7a5a; border: 1px solid #d8c8a8;
+    padding: 4px 10px; font-size: 12px; margin: 0 4px; border-radius: 2px;
+  }
+  .controls-bar .q-btn:hover { background: #e8d8b8; color: #5a3a1a; }
+  .controls-bar .q-btn.q-active { background: #b8860b; color: #fffaf0; border-color:#b8860b; }
   .controls-bar .time { margin-left: auto; color: #c8a878; font-variant-numeric: tabular-nums; }
 
   /* 场景时间轴 */
@@ -208,22 +214,24 @@
 
   <!-- 播放器 -->
   <div class="player-box">
-    <video id="video" preload="metadata" controls poster="assets/contact-sheet.png">
-      <source src="assets/yizhibian-sound.mp4" type="video/mp4">
-      <source src="assets/yizhibian-full.mp4" type="video/mp4">
+    <video id="video" preload="auto" controls playsinline poster="assets/contact-sheet.png">
+      <source id="videoSrc" src="assets/yizhibian-720p.mp4" type="video/mp4">
       您的浏览器不支持 video 标签。
     </video>
     <div class="controls-bar">
-      <button id="btnPlay" onclick="play()">▶ 播放（带声）</button>
+      <button id="btnPlay" onclick="play()">▶ 播放</button>
       <button onclick="pause()">⏸ 暂停</button>
-      <button id="btnSound" onclick="toggleSound()" title="点击开启/关闭古琴音轨">🔈 声音关</button>
-      <button onclick="video.muted = !video.muted; this.textContent = video.muted?'🔇 画面静音':'🔊 画面有声'">🔊 画面有声</button>
       <button onclick="restart()">↺ 重播</button>
-      <a href="assets/yizhibian-sound.mp4" download style="margin-left:8px;color:#b8860b;font-size:13px;text-decoration:none;">⬇ 下载有声版 MP4</a>
+      <span style="margin-left:6px;color:#8a7a5a;font-size:12px;">清晰度：</span>
+      <button id="q720" onclick="switchQuality('720p')" class="q-btn q-active">流畅 720p · 4.2MB</button>
+      <button id="q1080" onclick="switchQuality('1080p')" class="q-btn">高清 1080p · 7.2MB</button>
+      <button id="qOrig" onclick="switchQuality('orig')" class="q-btn">原版 1080p · 17MB</button>
+      <a href="assets/yizhibian-720p.mp4" id="dlLink" download style="margin-left:8px;color:#b8860b;font-size:13px;text-decoration:none;">⬇ 下载当前版本</a>
       <a href="assets/yizhibian-full.mp4" download style="color:#8a7a5a;font-size:13px;text-decoration:none;">⬇ 无声版</a>
       <span class="time" id="time">00:00 / 00:00</span>
     </div>
     <div class="chapter-bar" id="chapterBar"></div>
+    <p style="text-align:center;color:#8a7a5a;font-size:12px;margin:8px 0 0;">提示：已开启 moov 前置，可随时拖拽进度条；默认 720p 流畅版，约 4MB，加载快。</p>
   </div>
 
   <!-- 当前场景说明 -->
@@ -247,11 +255,11 @@
     <div class="meta-card">
       <h4>🎞 影片规格</h4>
       <ul>
-        <li>分辨率：1920 × 1080（1080p）</li>
-        <li>帧率：30 fps</li>
-        <li>时长：2 分 54 秒（共 14 幕）</li>
-        <li>文件大小：约 17 MB（H.264）</li>
-        <li>渲染时长：约 4 分钟 / 幕</li>
+        <li>分辨率：1920 × 1080 / 1280 × 720（可切换）</li>
+        <li>帧率：30 fps · 时长：2 分 54 秒</li>
+        <li>编码：H.264 + AAC · <b>moov 已前置，支持即时拖拽</b></li>
+        <li>文件大小：4.2 MB（720p）/ 7.2 MB（1080p）/ 17 MB（原版）</li>
+        <li>共 14 幕 · 古琴五声音阶实时音轨</li>
       </ul>
     </div>
     <div class="meta-card">
@@ -430,7 +438,9 @@ const files = [
   { name:'src/ScenesD.tsx (幕12–14)', size:'9KB', href:'src/ScenesD.tsx' },
   { name:'剧本-易道生化.md（第1版）', size:'8KB', href:'剧本-易道生化.md' },
   { name:'易之变——从一道到万象（第1版）.md（完整版）', size:'20KB', href:'易之变——从一道到万象（第1版）.md' },
-  { name:'assets/yizhibian-full.mp4（成片）', size:'17MB', href:'assets/yizhibian-full.mp4' },
+  { name:'assets/yizhibian-720p.mp4（流畅版，带声，moov前置）', size:'4.2MB', href:'assets/yizhibian-720p.mp4' },
+  { name:'assets/yizhibian-1080p.mp4（高清版，带声，moov前置）', size:'7.2MB', href:'assets/yizhibian-1080p.mp4' },
+  { name:'assets/yizhibian-full.mp4（原版无声，moov前置）', size:'17MB', href:'assets/yizhibian-full.mp4' },
 ];
 const fl = document.getElementById('fileList');
 files.forEach(f=>{
@@ -439,17 +449,43 @@ files.forEach(f=>{
   fl.appendChild(li);
 });
 </script>
-<!-- 易之变 · 音轨引擎（Web Audio API 实时合成古琴垫+磬+钟+爻弹+变卦锣） -->
+<!-- 清晰度切换 + 音轨引擎（Web Audio API 实时合成古琴垫+磬+钟+爻弹+变卦锣，与内嵌音轨互不干扰） -->
 <script src="assets/yijing-audio.js"></script>
 <script>
-// ——— 集成声音到播放控制 ———
+const QUALITIES = {
+  '720p': { src:'assets/yizhibian-720p.mp4',  size:'4.2MB', btn:'q720' },
+  '1080p':{ src:'assets/yizhibian-1080p.mp4', size:'7.2MB', btn:'q1080' },
+  'orig': { src:'assets/yizhibian-full.mp4',  size:'17MB',  btn:'qOrig' }
+};
+let curQuality = '720p';
+function switchQuality(q){
+  if (!QUALITIES[q]) return;
+  const wasPlaying = !video.paused;
+  const t = video.currentTime;
+  curQuality = q;
+  // 切换 source：直接改 src 让浏览器重新加载
+  video.src = QUALITIES[q].src;
+  video.load();
+  // 高亮按钮
+  Object.keys(QUALITIES).forEach(k=>{
+    document.getElementById(QUALITIES[k].btn).classList.toggle('q-active', k===q);
+  });
+  document.getElementById('dlLink').href = QUALITIES[q].src;
+  // 恢复到原来的时间点
+  video.addEventListener('loadedmetadata', function once(){
+    video.currentTime = Math.min(t, video.duration-0.1);
+    if (wasPlaying) video.play().catch(()=>{});
+    video.removeEventListener('loadedmetadata', once);
+  });
+}
+
+// 控制按钮
 const btnSound = document.getElementById('btnSound');
 let soundOn = false;
 
 async function play(){
-  // 用户点击才激活音频（浏览器自动播放策略）
-  if (!soundOn) { await toggleSound(); }
-  video.play();
+  // 视频本身带 AAC 音轨，直接播放即可；若用户额外开启 Web Audio 实时音轨则叠加
+  try { await video.play(); } catch(e){ /* 自动播放被拦截时由用户点击触发 */ }
 }
 function pause(){ video.pause(); if (window.YijingAudio) YijingAudio.stop(); }
 function restart(){
@@ -457,41 +493,11 @@ function restart(){
   video.currentTime = 0;
   play();
 }
-async function toggleSound(){
-  if (!window.YijingAudio) return;
-  soundOn = !soundOn;
-  if (soundOn) {
-    await YijingAudio.start();
-    btnSound.textContent = '🔊 声音开';
-    btnSound.style.background = '#1e3a8a';
-    YijingAudio.seek(video.currentTime); // 立刻触发当前位置应该在播的音
-  } else {
-    YijingAudio.stop();
-    btnSound.textContent = '🔈 声音关';
-    btnSound.style.background = '';
-  }
-}
+// 视频音轨默认**开**（因为现在 MP4 内带 AAC）
+video.muted = false;
 
-// 画面本身的原"静音"按钮保留（控制是否消掉视频音轨——本视频无声但以防万一）
-video.muted = true; // 默认视频音轨静音（视频本身也无声）
-
-// timeupdate 同步给音轨
-video.addEventListener('timeupdate', ()=>{
-  if (soundOn && window.YijingAudio) YijingAudio.seek(video.currentTime);
-});
-// 拖动/跳跃进度条时重置触发记录，让新位置的 cue 重新触发
-video.addEventListener('seeked', ()=>{
-  if (window.YijingAudio) YijingAudio.resetCues();
-  if (soundOn && window.YijingAudio) YijingAudio.seek(video.currentTime);
-});
-// 暂停时收一下垫音；继续时重新铺
-video.addEventListener('pause', ()=>{ if (window.YijingAudio) YijingAudio.stop(); });
-video.addEventListener('play', ()=>{
-  if (soundOn && window.YijingAudio) {
-    YijingAudio.start();
-    YijingAudio.seek(video.currentTime);
-  }
-});
+// Web Audio 实时音轨作为可选叠加层
+if (btnSound) btnSound.style.display = 'none'; // 暂时隐藏，因为内嵌音轨已覆盖
 </script>
 </body>
 </html>
