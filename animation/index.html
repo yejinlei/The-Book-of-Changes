@@ -7,7 +7,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>易之变 · 从一道到万象 — Remotion 动画</title>
-<script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.13/dist/hls.min.js"></script>
+<!-- HLS 播放器：本地优先，外部 CDN 兜底（避免 CDN 不稳导致边下边播失效） -->
+<script src="assets/hls.min.js"></script>
+<script>if(typeof Hls==='undefined'){document.write('<scr'+'ipt src="https://cdn.jsdelivr.net/npm/hls.js@1.5.13/dist/hls.min.js"><\/scr'+'ipt>');}</script>
 <style>
   :root {
     --paper: #f4ecd8;
