@@ -3,1514 +3,722 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>易经本体论 · The Book of Changes</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;500;600;700;900&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<title>易经本体论 | The Book of Changes Ontology</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-
 :root {
-  --paper: #f5f1e8;
-  --paper-light: #faf7f0;
-  --ink: #2c2416;
-  --ink-light: #5c4f3a;
-  --ink-muted: #8b7d65;
-  --red: #8b0000;
-  --red-light: #a52a2a;
+  --bg: #f4ecd8;
+  --paper: #faf6ed;
+  --text: #2b1810;
+  --accent: #8b0000;
   --gold: #b8860b;
-  --jade: #2e5d4e;
-  --blue: #3a4a6b;
-  --border: #d4c9b0;
-  --shadow: rgba(44,36,22,0.08);
+  --ink: #1a1a2e;
+  --blue: #1e3a8a;
+  --green: #14532d;
+  --purple: #4c1d95;
+  --border: #d4c5a3;
+  --shadow: rgba(139,0,0,0.08);
 }
-
-html { scroll-behavior: smooth; }
-
+* { margin:0; padding:0; box-sizing:border-box; }
 body {
-  font-family: 'Noto Serif SC', 'Songti SC', 'SimSun', serif;
-  background: var(--paper);
-  color: var(--ink);
-  line-height: 1.8;
-  font-size: 16px;
-}
-
-/* 顶部导航 */
-.topbar {
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  background: var(--paper-light);
-  border-bottom: 1px solid var(--border);
-  z-index: 1000;
-  padding: 0 40px;
-  height: 56px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.logo {
-  font-size: 18px;
-  font-weight: 600;
-  color: var(--ink);
-  letter-spacing: 4px;
-  text-decoration: none;
-}
-.logo span { color: var(--red); }
-
-.nav-links {
-  display: flex;
-  gap: 28px;
-  list-style: none;
-}
-.nav-links a {
-  color: var(--ink-light);
-  text-decoration: none;
-  font-size: 14px;
-  letter-spacing: 1px;
-  transition: color 0.2s;
-  font-family: 'Noto Sans SC', sans-serif;
-  font-weight: 400;
-}
-.nav-links a:hover, .nav-links a.active { color: var(--red); }
-
-/* Hero */
-.hero {
-  margin-top: 56px;
-  padding: 100px 40px 60px;
-  text-align: center;
-  border-bottom: 1px solid var(--border);
-  background: linear-gradient(180deg, var(--paper-light) 0%, var(--paper) 100%);
-}
-
-.hero-title {
-  font-size: 64px;
-  font-weight: 900;
-  letter-spacing: 24px;
-  color: var(--ink);
-  margin-bottom: 20px;
-  text-indent: 24px;
-}
-.hero-subtitle {
-  font-size: 18px;
-  color: var(--ink-muted);
-  letter-spacing: 8px;
-  font-weight: 300;
-  margin-bottom: 40px;
-}
-.hero-desc {
-  max-width: 700px;
-  margin: 0 auto;
-  font-size: 15px;
-  color: var(--ink-light);
-  line-height: 2;
-}
-
-/* 数据概览 */
-.stats-row {
-  display: flex;
-  justify-content: center;
-  gap: 60px;
-  margin-top: 50px;
-  flex-wrap: wrap;
-}
-.stat-item { text-align: center; }
-.stat-num {
-  font-size: 36px;
-  font-weight: 700;
-  color: var(--red);
   font-family: 'Noto Serif SC', serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.8;
 }
-.stat-label {
-  font-size: 13px;
-  color: var(--ink-muted);
-  letter-spacing: 2px;
-  margin-top: 4px;
+/* 导航栏 */
+.top-nav {
+  position: fixed; top:0; left:0; right:0; height:64px;
+  background: var(--paper); border-bottom:2px solid var(--border);
+  z-index:1000; display:flex; align-items:center; justify-content:space-between;
+  padding:0 40px; box-shadow:0 2px 8px var(--shadow);
 }
-
-/* 内容区通用 */
-.section {
-  padding: 60px 40px;
-  max-width: 1200px;
-  margin: 0 auto;
+.logo { font-size:20px; font-weight:700; color:var(--ink); text-decoration:none; display:flex; align-items:center; gap:8px; }
+.logo .taiji { color:var(--accent); font-size:28px; }
+.logo small { font-size:12px; font-weight:400; color:var(--gold); margin-left:6px; letter-spacing:1px; }
+.nav-links { display:flex; gap:24px; }
+.nav-links a { color:var(--text); text-decoration:none; font-size:14px; font-weight:500; transition:.2s; }
+.nav-links a:hover { color:var(--accent); }
+.btn-reader {
+  background:var(--accent); color:#fff !important; padding:6px 18px; border-radius:4px; font-size:13px;
 }
+.btn-reader:hover { background:#6d0000; }
+main { padding-top:64px; }
+/* Hero 区 */
+.hero {
+  text-align:center; padding:80px 40px 60px;
+  background: linear-gradient(180deg, var(--paper) 0%, var(--bg) 100%);
+  border-bottom:1px solid var(--border);
+  position:relative;
+}
+.hero::before, .hero::after {
+  content:""; position:absolute; left:50%; transform:translateX(-50%);
+  height:1px; width:60%; max-width:800px;
+  background:repeating-linear-gradient(90deg, var(--gold) 0, var(--gold) 4px, transparent 4px, transparent 10px);
+}
+.hero::before { top:20px; } .hero::after { bottom:20px; }
+.hero h1 { font-size:52px; color:var(--accent); font-weight:900; letter-spacing:12px; margin-bottom:12px; }
+.hero .subtitle { font-size:18px; color:var(--gold); letter-spacing:4px; margin-bottom:32px; }
+.hero .quote { font-size:15px; color:var(--ink); font-style:italic; max-width:600px; margin:0 auto 40px; opacity:.8; }
+/* 统计数字 */
+.stats-grid {
+  display:grid; grid-template-columns:repeat(6,1fr); gap:24px; max-width:1000px; margin:0 auto;
+}
+.stat-card {
+  background:var(--paper); border:1px solid var(--border); border-radius:8px; padding:20px 12px;
+  text-align:center;
+}
+.stat-num { font-size:36px; font-weight:900; color:var(--accent); line-height:1; margin-bottom:6px; }
+.stat-label { font-size:13px; color:var(--text); font-weight:500; }
+.stat-sub { font-size:11px; color:var(--gold); margin-top:4px; }
+/* 通用区块 */
+.section { padding:60px 40px; max-width:1200px; margin:0 auto; }
 .section-title {
-  font-size: 28px;
-  font-weight: 700;
-  color: var(--ink);
-  margin-bottom: 8px;
-  letter-spacing: 4px;
+  text-align:center; margin-bottom:48px;
 }
-.section-subtitle {
-  font-size: 14px;
-  color: var(--ink-muted);
-  margin-bottom: 40px;
-  letter-spacing: 2px;
+.section-title h2 {
+  font-size:32px; color:var(--accent); letter-spacing:6px; margin-bottom:8px;
+  position:relative; display:inline-block; padding:0 30px;
 }
-
-/* 模块卡片网格 */
-.module-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 20px;
+.section-title h2::before, .section-title h2::after {
+  content:""; position:absolute; top:50%; width:20px; height:1px; background:var(--gold);
 }
+.section-title h2::before { left:0; } .section-title h2::after { right:0; }
+.section-title p { color:var(--gold); font-size:14px; letter-spacing:2px; }
+/* 模块入口卡片 */
+.module-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; margin-bottom:40px; }
 .module-card {
-  background: var(--paper-light);
-  border: 1px solid var(--border);
-  padding: 28px;
-  text-decoration: none;
-  color: inherit;
-  transition: all 0.25s ease;
-  display: block;
-  position: relative;
+  background:var(--paper); border:1px solid var(--border); border-radius:8px; padding:30px;
+  transition:.3s; cursor:pointer; text-decoration:none; color:inherit; display:block;
+  border-top:3px solid var(--accent);
 }
-.module-card:hover {
-  border-color: var(--red);
-  box-shadow: 0 4px 20px var(--shadow);
-  transform: translateY(-2px);
-}
-.module-card-icon {
-  font-size: 28px;
-  margin-bottom: 12px;
-  color: var(--red);
-}
-.module-card-title {
-  font-size: 18px;
-  font-weight: 600;
-  margin-bottom: 8px;
-  letter-spacing: 2px;
-}
-.module-card-desc {
-  font-size: 13px;
-  color: var(--ink-muted);
-  line-height: 1.8;
-  margin-bottom: 16px;
-}
-.module-card-enter {
-  font-size: 13px;
-  color: var(--red);
-  letter-spacing: 2px;
-}
-.module-card:hover .module-card-enter { letter-spacing: 4px; }
-
-/* 3D 生成链容器 */
-#cosmos-canvas {
-  width: 100%;
-  height: 500px;
-  background: var(--paper-light);
-  border: 1px solid var(--border);
-  margin-bottom: 20px;
-}
-.cosmos-controls {
-  display: flex;
-  gap: 12px;
-  justify-content: center;
-  flex-wrap: wrap;
-  margin-bottom: 20px;
-}
-.ctrl-btn {
-  padding: 8px 20px;
-  border: 1px solid var(--border);
-  background: var(--paper-light);
-  color: var(--ink-light);
-  font-family: inherit;
-  font-size: 14px;
-  cursor: pointer;
-  transition: all 0.2s;
-  letter-spacing: 2px;
-}
-.ctrl-btn:hover { border-color: var(--red); color: var(--red); }
-.ctrl-btn.active { background: var(--red); color: white; border-color: var(--red); }
-
-/* 六十四卦矩阵 */
-.hex-grid {
-  display: grid;
-  grid-template-columns: repeat(8, 1fr);
-  gap: 8px;
-  max-width: 600px;
-  margin: 0 auto;
-}
-.hex-cell {
-  aspect-ratio: 1;
-  background: var(--paper-light);
-  border: 1px solid var(--border);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.2s;
-  font-size: 20px;
-}
-.hex-cell:hover {
-  background: var(--red);
-  color: white;
-  border-color: var(--red);
-  transform: scale(1.1);
-}
-.hex-cell .hex-num {
-  font-size: 10px;
-  color: var(--ink-muted);
-  margin-top: 2px;
-}
-.hex-cell:hover .hex-num { color: rgba(255,255,255,0.8); }
-
-/* 分栏布局 */
-.two-col {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 40px;
-}
-.three-col {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-}
-
-.info-block {
-  background: var(--paper-light);
-  border-left: 3px solid var(--red);
-  padding: 20px 24px;
-  margin-bottom: 16px;
-}
-.info-block h4 {
-  font-size: 16px;
-  font-weight: 600;
-  margin-bottom: 8px;
-  color: var(--ink);
-}
-.info-block p {
-  font-size: 14px;
-  color: var(--ink-light);
-  line-height: 1.9;
-}
-
-/* 引用样式 */
-.quote-block {
-  background: var(--paper-light);
-  border: 1px solid var(--border);
-  padding: 24px 32px;
-  margin: 20px 0;
-  position: relative;
-}
-.quote-block::before {
-  content: '"';
-  position: absolute;
-  top: 0; left: 12px;
-  font-size: 60px;
-  color: var(--gold);
-  opacity: 0.3;
-  font-family: Georgia, serif;
-  line-height: 1;
-}
-.quote-text {
-  font-size: 16px;
-  line-height: 2;
-  color: var(--ink);
-  text-indent: 2em;
-  margin-bottom: 8px;
-}
-.quote-source {
-  font-size: 13px;
-  color: var(--ink-muted);
-  text-align: right;
-}
-
-/* 时间轴 */
-.timeline {
-  position: relative;
-  padding-left: 30px;
-}
-.timeline::before {
-  content: '';
-  position: absolute;
-  left: 8px; top: 0; bottom: 0;
-  width: 2px;
-  background: var(--border);
-}
-.timeline-item {
-  position: relative;
-  margin-bottom: 28px;
-}
-.timeline-item::before {
-  content: '';
-  position: absolute;
-  left: -26px; top: 6px;
-  width: 10px; height: 10px;
-  border-radius: 50%;
-  background: var(--red);
-  border: 2px solid var(--paper);
-}
-.timeline-era {
-  font-size: 12px;
-  color: var(--red);
-  letter-spacing: 2px;
-  font-weight: 600;
-  margin-bottom: 4px;
-}
-.timeline-title {
-  font-size: 16px;
-  font-weight: 600;
-  margin-bottom: 4px;
-}
-.timeline-desc {
-  font-size: 13px;
-  color: var(--ink-muted);
-  line-height: 1.7;
-}
-
-/* 页脚 */
-.footer {
-  border-top: 1px solid var(--border);
-  padding: 40px;
-  text-align: center;
-  color: var(--ink-muted);
-  font-size: 13px;
-}
-.footer a { color: var(--red); text-decoration: none; }
-
-/* 弹窗（经文阅读等） */
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(44,36,22,0.6);
-  z-index: 2000;
-  display: none;
-  align-items: flex-start;
-  justify-content: center;
-  padding: 40px 20px;
-  overflow-y: auto;
-}
-.modal-overlay.show { display: flex; }
-.modal {
-  background: var(--paper-light);
-  width: 100%;
-  max-width: 960px;
-  min-height: 80vh;
-  border: 1px solid var(--border);
-  position: relative;
-}
-.modal-header {
-  padding: 20px 30px;
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  position: sticky;
-  top: 0;
-  background: var(--paper-light);
-  z-index: 10;
-}
-.modal-title { font-size: 20px; font-weight: 600; letter-spacing: 4px; }
-.modal-close {
-  width: 32px; height: 32px;
-  border: none; background: none;
-  font-size: 24px; cursor: pointer;
-  color: var(--ink-muted);
-}
-.modal-close:hover { color: var(--red); }
-.modal-body { padding: 30px; }
-
-/* 经文侧边栏 */
-.text-layout {
-  display: grid;
-  grid-template-columns: 140px 1fr;
-  gap: 24px;
-  min-height: 600px;
-}
-.hex-sidebar {
-  border-right: 1px solid var(--border);
-  padding-right: 16px;
-  max-height: 70vh;
-  overflow-y: auto;
-}
-.hex-sidebar-item {
-  padding: 8px 12px;
-  cursor: pointer;
-  font-size: 14px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  border-radius: 2px;
-  transition: all 0.15s;
-}
-.hex-sidebar-item:hover { background: rgba(139,0,0,0.08); }
-.hex-sidebar-item.active { background: var(--red); color: white; }
-.hex-sidebar-sym { font-size: 18px; }
-
-.hex-content h2 {
-  font-size: 28px;
-  margin-bottom: 8px;
-  letter-spacing: 8px;
-}
-.hex-meta {
-  font-size: 13px;
-  color: var(--ink-muted);
-  margin-bottom: 24px;
-  letter-spacing: 2px;
-}
-.hex-big-symbol {
-  font-size: 72px;
-  text-align: center;
-  margin: 20px 0;
-  color: var(--ink);
-}
-.text-section {
-  margin-bottom: 24px;
-}
-.text-section h5 {
-  font-size: 15px;
-  color: var(--red);
-  font-weight: 600;
-  margin-bottom: 8px;
-  letter-spacing: 2px;
-}
-.text-section .classical {
-  font-size: 17px;
-  line-height: 2.2;
-  color: var(--ink);
-  text-indent: 2em;
-}
-.text-section .commentary {
-  font-size: 14px;
-  color: var(--ink-light);
-  line-height: 2;
-  margin-top: 8px;
-  padding-left: 16px;
-  border-left: 2px solid var(--gold);
-}
-
-/* 爻辞列表 */
-.yao-list {
-  display: grid;
-  gap: 12px;
-  margin-top: 12px;
-}
-.yao-item {
-  padding: 16px 20px;
-  background: var(--paper);
-  border: 1px solid var(--border);
-}
-.yao-name {
-  font-weight: 600;
-  color: var(--red);
-  font-size: 15px;
-  margin-bottom: 6px;
-}
-.yao-text {
-  font-size: 16px;
-  line-height: 2;
-  color: var(--ink);
-}
-.yao-xiang {
-  font-size: 13px;
-  color: var(--ink-muted);
-  margin-top: 4px;
-  font-style: italic;
-}
-.yao-explain {
-  font-size: 14px;
-  color: var(--ink-light);
-  line-height: 1.8;
-  margin-top: 6px;
-}
-
-/* 知识图谱容器 */
-#graph-canvas {
-  width: 100%;
-  height: 600px;
-  background: var(--paper-light);
-  border: 1px solid var(--border);
-}
-
+.module-card:hover { transform:translateY(-4px); box-shadow:0 8px 24px var(--shadow); border-top-color:var(--gold); }
+.module-icon { font-size:36px; margin-bottom:12px; }
+.module-card h3 { font-size:20px; color:var(--ink); margin-bottom:8px; }
+.module-card p { font-size:14px; color:#5a4a3a; line-height:1.7; margin-bottom:12px; }
+.module-card .enter { color:var(--accent); font-size:13px; font-weight:600; }
 /* 八卦卡片 */
-.bagua-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
-}
+.bagua-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:20px; }
 .bagua-card {
-  background: var(--paper-light);
-  border: 1px solid var(--border);
-  padding: 20px;
-  text-align: center;
-  transition: all 0.2s;
+  background:var(--paper); border:1px solid var(--border); border-radius:8px; padding:24px; text-align:center;
+  position:relative; transition:.3s; cursor:default;
 }
-.bagua-card:hover { border-color: var(--red); transform: translateY(-2px); }
-.bagua-sym { font-size: 48px; margin-bottom: 8px; }
-.bagua-name { font-size: 20px; font-weight: 700; margin-bottom: 4px; letter-spacing: 4px; }
-.bagua-nature { font-size: 13px; color: var(--ink-muted); letter-spacing: 2px; }
-.bagua-attr { font-size: 12px; color: var(--gold); margin-top: 8px; }
-
+.bagua-card:hover { transform:translateY(-3px); box-shadow:0 6px 20px var(--shadow); }
+.bagua-symbol { font-size:64px; color:var(--ink); line-height:1; margin-bottom:8px; }
+.bagua-name { font-size:24px; font-weight:700; color:var(--accent); margin-bottom:8px; }
+.bagua-nature { font-size:14px; color:var(--gold); margin-bottom:12px; font-weight:500; }
+.bagua-attrs { display:grid; grid-template-columns:1fr 1fr; gap:6px; font-size:12px; text-align:left; }
+.bagua-attr { color:#5a4a3a; }
+.bagua-attr b { color:var(--ink); }
+/* 64卦网格 */
+.gua64-grid { display:grid; grid-template-columns:repeat(8,1fr); gap:8px; }
+.gua-cell {
+  aspect-ratio:1; background:var(--paper); border:1px solid var(--border); border-radius:4px;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  cursor:pointer; transition:.2s; font-family:serif; padding:4px;
+}
+.gua-cell:hover { background:var(--accent); color:#fff; border-color:var(--accent); transform:scale(1.1); z-index:2; }
+.gua-cell .sym { font-size:28px; line-height:1; }
+.gua-cell .name { font-size:11px; margin-top:2px; }
+.gua-cell .num { font-size:9px; opacity:.6; position:absolute; top:2px; left:4px; }
+.gua-cell { position:relative; }
+.gua-cell.jing-shang { border-top:2px solid var(--accent); }
+.gua-cell.jing-xia { border-top:2px solid var(--gold); }
+.jing-toggle { text-align:center; margin-bottom:20px; display:flex; justify-content:center; gap:12px; }
+.jing-toggle button {
+  padding:8px 20px; border:1px solid var(--border); background:var(--paper); color:var(--text);
+  border-radius:4px; cursor:pointer; font-family:inherit; font-size:14px; transition:.2s;
+}
+.jing-toggle button.active { background:var(--accent); color:#fff; border-color:var(--accent); }
+/* 大师卡片 */
+.master-section { padding:60px 40px; background:var(--paper); border-top:1px solid var(--border); border-bottom:1px solid var(--border); }
+.era-group { margin-bottom:36px; }
+.era-title {
+  font-size:20px; color:var(--accent); font-weight:700; margin-bottom:16px; padding-bottom:8px;
+  border-bottom:2px solid var(--gold); display:flex; align-items:center; gap:10px;
+}
+.era-title .count { font-size:13px; color:var(--gold); font-weight:400; }
+.masters-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
+.master-card {
+  background:var(--bg); border:1px solid var(--border); border-radius:6px; padding:16px; transition:.2s;
+}
+.master-card:hover { background:#fff; box-shadow:0 4px 12px var(--shadow); }
+.master-card .name { font-size:17px; font-weight:700; color:var(--ink); margin-bottom:4px; }
+.master-card .years { font-size:12px; color:var(--gold); margin-bottom:8px; }
+.master-card .school-tag {
+  display:inline-block; font-size:11px; padding:2px 8px; border-radius:3px; background:var(--gold); color:#fff;
+  margin-bottom:8px;
+}
+.master-card .masterpiece { font-size:12px; color:var(--accent); margin-bottom:6px; font-weight:500; }
+.master-card .desc { font-size:12px; color:#5a4a3a; line-height:1.6; }
+/* 注本列表 */
+.books-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:16px; }
+.book-card {
+  background:var(--paper); border:1px solid var(--border); border-left:4px solid var(--accent);
+  border-radius:4px; padding:16px 20px;
+}
+.book-card .book-name { font-size:17px; font-weight:700; color:var(--ink); margin-bottom:4px; }
+.book-card .book-meta { font-size:12px; color:var(--gold); margin-bottom:8px; }
+.book-card .book-meta span { margin-right:12px; }
+.book-card .book-desc { font-size:13px; color:#5a4a3a; line-height:1.7; }
+/* 流派/三易 */
+.schools-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+.school-card {
+  background:var(--paper); border:1px solid var(--border); border-radius:8px; padding:24px;
+  border-top:3px solid var(--green);
+}
+.school-card.sanyi { border-top-color:var(--accent); }
+.school-card h4 { font-size:18px; color:var(--accent); margin-bottom:10px; }
+.school-card p { font-size:13px; color:#5a4a3a; line-height:1.8; }
+/* 时间轴 */
+.timeline { position:relative; padding-left:30px; }
+.timeline::before {
+  content:""; position:absolute; left:10px; top:0; bottom:0; width:2px; background:var(--border);
+}
+.timeline-item { position:relative; margin-bottom:24px; padding-left:24px; }
+.timeline-item::before {
+  content:""; position:absolute; left:-24px; top:8px; width:14px; height:14px;
+  border-radius:50%; background:var(--accent); border:3px solid var(--bg);
+}
+.timeline-item .t-era { font-size:13px; color:var(--gold); font-weight:600; margin-bottom:4px; }
+.timeline-item .t-title { font-size:16px; font-weight:700; color:var(--ink); margin-bottom:4px; }
+.timeline-item .t-person { font-size:12px; color:var(--accent); margin-bottom:6px; }
+.timeline-item .t-content { font-size:13px; color:#5a4a3a; line-height:1.7; }
+/* 知识图谱 */
+.chart-container { width:100%; height:600px; background:var(--paper); border:1px solid var(--border); border-radius:8px; }
+/* 经文库入口 */
+.text-module-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; margin-top:30px; }
+.text-card {
+  background:var(--paper); border:1px solid var(--border); border-radius:8px; padding:30px; text-align:center; cursor:pointer; transition:.3s;
+}
+.text-card:hover { transform:translateY(-4px); box-shadow:0 8px 20px var(--shadow); }
+.text-card .icon { font-size:42px; margin-bottom:12px; }
+.text-card h3 { font-size:19px; color:var(--ink); margin-bottom:8px; }
+.text-card p { font-size:13px; color:#5a4a3a; line-height:1.7; }
+/* Footer */
+footer {
+  text-align:center; padding:40px; background:var(--ink); color:#aaa; font-size:13px; line-height:2;
+}
+footer .ont-note { color:var(--gold); font-size:12px; margin-top:8px; }
+/* 弹窗 */
+.modal-overlay {
+  display:none; position:fixed; inset:0; background:rgba(0,0,0,.6); z-index:2000;
+  align-items:center; justify-content:center; padding:20px;
+}
+.modal-overlay.show { display:flex; }
+.modal-box {
+  background:var(--paper); border-radius:8px; max-width:900px; width:100%; max-height:90vh;
+  overflow-y:auto; padding:40px; position:relative;
+}
+.modal-close {
+  position:absolute; top:16px; right:20px; font-size:24px; cursor:pointer; color:var(--text);
+  background:none; border:none; font-family:inherit;
+}
+.modal-title { font-size:28px; color:var(--accent); text-align:center; margin-bottom:8px; letter-spacing:4px; }
+.modal-subtitle { text-align:center; color:var(--gold); font-size:14px; margin-bottom:28px; }
+/* 卦详情 */
+.gua-detail-symbol { text-align:center; font-size:100px; margin:10px 0; color:var(--ink); line-height:1; }
+.gua-detail-meta { text-align:center; color:var(--gold); margin-bottom:24px; font-size:14px; }
+.gua-section { margin-bottom:20px; }
+.gua-section-title { font-size:15px; color:var(--accent); font-weight:700; margin-bottom:8px; padding-bottom:4px; border-bottom:1px solid var(--border); }
+.gua-section-content { font-size:15px; line-height:2; color:var(--text); }
+.yao-item { background:var(--bg); padding:14px 18px; border-radius:6px; margin-bottom:10px; border-left:3px solid var(--gold); }
+.yao-pos { font-weight:700; color:var(--accent); font-size:14px; }
+.yao-text { font-size:15px; margin:4px 0; }
+.yao-xx { font-size:13px; color:var(--blue); font-style:italic; }
+.yao-explain { font-size:13px; color:#5a4a3a; margin-top:4px; }
 /* 响应式 */
-@media (max-width: 768px) {
-  .topbar { padding: 0 20px; }
-  .nav-links { gap: 12px; }
-  .nav-links a { font-size: 12px; letter-spacing: 0; }
-  .hero { padding: 60px 20px 40px; }
-  .hero-title { font-size: 36px; letter-spacing: 12px; text-indent: 12px; }
-  .section { padding: 40px 20px; }
-  .two-col, .three-col { grid-template-columns: 1fr; gap: 20px; }
-  .bagua-grid { grid-template-columns: repeat(2, 1fr); }
-  .hex-grid { gap: 4px; }
-  .text-layout { grid-template-columns: 1fr; }
-  .hex-sidebar {
-    border-right: none;
-    border-bottom: 1px solid var(--border);
-    padding-right: 0;
-    padding-bottom: 12px;
-    display: flex;
-    gap: 4px;
-    overflow-x: auto;
-    max-height: none;
-  }
-  .hex-sidebar-item { white-space: nowrap; font-size: 12px; padding: 6px 10px; }
-  .stats-row { gap: 30px; }
-  .stat-num { font-size: 28px; }
+@media (max-width:900px) {
+  .stats-grid { grid-template-columns:repeat(3,1fr); }
+  .module-grid, .schools-grid, .text-module-grid { grid-template-columns:1fr; }
+  .bagua-grid { grid-template-columns:repeat(2,1fr); }
+  .gua64-grid { grid-template-columns:repeat(4,1fr); }
+  .masters-grid, .books-grid { grid-template-columns:1fr; }
+  .hero h1 { font-size:32px; letter-spacing:6px; }
+  .nav-links { gap:12px; }
+  .nav-links a { font-size:12px; margin-left:0 !important; }
+  .top-nav { padding:0 16px; }
+  .section { padding:40px 20px; }
 }
-
-/* ==================== 历代易学 ==================== */
-.section-intro { max-width: 1020px; margin: 0 auto 34px; font-size: 15px; color: var(--ink-light); line-height: 2.1; text-align: center; }
-.yixue-tabs { display: flex; gap: 10px; justify-content: center; margin-bottom: 34px; flex-wrap: wrap; }
-.yx-tab { padding: 8px 24px; border: 1px solid var(--border); background: var(--paper-light); color: var(--ink-light); cursor: pointer; font-family: inherit; font-size: 14px; letter-spacing: 3px; transition: all .2s; }
-.yx-tab:hover { border-color: var(--red); color: var(--red); }
-.yx-tab.active { background: var(--red); color: #fff; border-color: var(--red); }
-.yx-era { margin-bottom: 30px; }
-.yx-era-title { font-size: 17px; font-weight: 600; color: var(--red); letter-spacing: 4px; margin-bottom: 16px; border-left: 3px solid var(--red); padding-left: 12px; }
-.yx-master-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 16px; }
-.yx-master { background: var(--paper-light); border: 1px solid var(--border); padding: 18px 20px; transition: all .2s; }
-.yx-master:hover { border-color: var(--red); box-shadow: 0 4px 16px var(--shadow); }
-.yx-master-head { display: flex; align-items: center; gap: 10px; margin-bottom: 7px; }
-.yx-master-name { font-size: 18px; font-weight: 700; letter-spacing: 2px; }
-.yx-badge { font-size: 11px; padding: 1px 9px; border-radius: 10px; letter-spacing: 1px; flex: none; }
-.badge-xs { background: rgba(139,0,0,.10); color: var(--red); }
-.badge-yl { background: rgba(58,74,107,.13); color: var(--blue); }
-.badge-tj { background: rgba(46,93,78,.12); color: var(--jade); }
-.badge-js { background: rgba(184,134,11,.15); color: #8a6508; }
-.yx-master-work { font-size: 13px; color: var(--gold); margin-bottom: 6px; letter-spacing: .5px; }
-.yx-master-bio { font-size: 13px; color: var(--ink-muted); line-height: 1.9; }
-.yx-work-item { display: grid; grid-template-columns: 260px 1fr; gap: 20px; padding: 15px 0; border-bottom: 1px dashed var(--border); }
-.yx-work-title { font-size: 15px; font-weight: 600; color: var(--ink); }
-.yx-work-sub { font-size: 12px; color: var(--ink-muted); margin-top: 3px; letter-spacing: 1px; }
-.yx-work-desc { font-size: 13px; color: var(--ink-light); line-height: 1.95; }
-.hp-src { text-align: center; font-size: 13px; color: var(--ink-muted); margin-bottom: 22px; letter-spacing: 1px; }
-.hp-tabs { display: flex; gap: 6px; margin-bottom: 18px; flex-wrap: wrap; border-bottom: 1px solid var(--border); padding-bottom: 12px; }
-.hp-tab { padding: 6px 15px; font-size: 13px; border: 1px solid transparent; background: none; cursor: pointer; font-family: inherit; color: var(--ink-light); letter-spacing: 1px; }
-.hp-tab:hover { color: var(--red); }
-.hp-tab.active { color: var(--red); border-color: var(--red); background: rgba(139,0,0,.05); }
-.hp-line { padding: 7px 0; font-size: 15px; line-height: 2.0; }
-.hp-line.hp-orig { color: var(--ink); font-weight: 600; }
-.hp-line.hp-note { font-size: 14px; color: var(--ink-light); padding: 6px 0 6px 14px; border-left: 2px solid var(--gold); margin: 3px 0 3px 4px; }
-.hp-speaker { color: var(--red); font-weight: 600; margin-right: 5px; }
-.hp-zz-seg { margin-bottom: 20px; }
-.hp-zz-seg h4 { font-size: 14px; color: var(--red); letter-spacing: 2px; margin-bottom: 8px; }
-.hp-zz-seg p { font-size: 14.5px; line-height: 2.05; color: var(--ink-light); text-indent: 2em; margin-bottom: 6px; }
-.hp-empty { font-size: 14px; color: var(--ink-muted); padding: 20px 0; letter-spacing: 1px; }
-@media (max-width: 768px) {
-  .yx-work-item { grid-template-columns: 1fr; gap: 5px; }
-  .yx-master-grid { grid-template-columns: 1fr; }
-}
-
 </style>
 </head>
 <body>
-
-<!-- 顶部导航 -->
-<nav class="topbar">
-  <a href="#home" class="logo"><span>易</span>经本体论</a>
-  <ul class="nav-links">
-    <li><a href="#home" class="active">总览</a></li>
-    <li><a href="#cosmos">生成链</a></li>
-    <li><a href="#bagua">卦爻体系</a></li>
-    <li><a href="reader.html" style="color:var(--accent);font-weight:600">经文</a></li>
-    <li><a href="shiyi.html">十翼</a></li>
-    <li><a href="yitu.html">易图</a></li>
-    <li><a href="yanjiu.html">研究</a></li>
-    <li><a href="#yili">义理</a></li>
-    <li><a href="#graph">图谱</a></li>
-    <li><a href="#lineage">传承</a></li>
-    <li><a href="#yixue">易学</a></li>
-    <li><a href="#about">关于</a></li>
-  </ul>
+<!-- 导航 -->
+<nav class="top-nav">
+  <a href="#" class="logo"><span class="taiji">☯</span>易经本体论<small>ONTOLOGY</small></a>
+  <div class="nav-links">
+    <a href="#overview">总览</a>
+    <a href="#bagua">八卦</a>
+    <a href="#liushisigua">六十四卦</a>
+    <a href="#texts">经文</a>
+    <a href="#masters">历代易学</a>
+    <a href="#chart">知识图谱</a>
+    <a href="#lineage">传承</a>
+    <a href="reader.html" class="btn-reader" target="_blank">📖 经文批注阅读</a>
+  </div>
 </nav>
 
-<!-- Hero 总览 -->
-<section class="hero" id="home">
-  <h1 class="hero-title">易 经 本 体 论</h1>
-  <p class="hero-subtitle">The Book of Changes · Ontology</p>
-  <p class="hero-desc">
-    易有太极，是生两仪，两仪生四象，四象生八卦，八卦定吉凶，吉凶生大业。<br>
-    本项目以本体论方法重构《周易》符号体系与义理系统，从道、太极、阴阳、四象、八卦到六十四卦三百八十四爻，逐层建模，形成完整的易学知识本体。
-  </p>
-  <div class="stats-row">
-    <div class="stat-item">
-      <div class="stat-num">2</div>
-      <div class="stat-label">两仪</div>
-    </div>
-    <div class="stat-item">
-      <div class="stat-num">4</div>
-      <div class="stat-label">四象</div>
-    </div>
-    <div class="stat-item">
-      <div class="stat-num">8</div>
-      <div class="stat-label">经卦</div>
-    </div>
-    <div class="stat-item">
-      <div class="stat-num">64</div>
-      <div class="stat-label">别卦</div>
-    </div>
-    <div class="stat-item">
-      <div class="stat-num">384</div>
-      <div class="stat-label">爻</div>
-    </div>
-    <div class="stat-item">
-      <div class="stat-num">10</div>
-      <div class="stat-label">翼传</div>
-    </div>
-  </div>
+<main>
+<!-- Hero -->
+<section class="hero" id="overview">
+  <h1>易 经</h1>
+  <div class="subtitle">THE BOOK OF CHANGES ONTOLOGY</div>
+  <div class="quote">"易有太极，是生两仪，两仪生四象，四象生八卦，八卦定吉凶，吉凶生大业。"<br>——《周易·系辞上》</div>
+  <div class="stats-grid" id="statsGrid"></div>
 </section>
 
-<!-- 生成链 -->
-<section class="section" id="cosmos">
-  <h2 class="section-title">宇 宙 生 成 链</h2>
-  <p class="section-subtitle">道 → 太极 → 两仪 → 四象 → 八卦 → 六十四卦 → 三百八十四爻</p>
-  
-  <div id="cosmos-canvas"></div>
-  
-  <div class="cosmos-controls">
-    <button class="ctrl-btn active" data-level="0">全景</button>
-    <button class="ctrl-btn" data-level="1">太极</button>
-    <button class="ctrl-btn" data-level="2">两仪</button>
-    <button class="ctrl-btn" data-level="3">四象</button>
-    <button class="ctrl-btn" data-level="4">八卦</button>
-    <button class="ctrl-btn" data-level="5">六十四卦</button>
-    <button class="ctrl-btn" id="btn-evolve">逐级推演</button>
+<!-- 核心模块入口 -->
+<section class="section">
+  <div class="section-title">
+    <h2>本体架构</h2>
+    <p>SEVEN-LAYER ONTOLOGY · 七层本体建模</p>
   </div>
-
-  <div class="two-col" style="margin-top:30px">
-    <div class="info-block">
-      <h4>《道德经》· 道家生成论</h4>
-      <p>道生一，一生二，二生三，三生万物。万物负阴而抱阳，冲气以为和。<br>——《老子》第四十二章</p>
-    </div>
-    <div class="info-block">
-      <h4>《系辞传》· 周易符号体系</h4>
-      <p>易有太极，是生两仪，两仪生四象，四象生八卦，八卦定吉凶，吉凶生大业。<br>——《易传·系辞上传》第十一章</p>
-    </div>
-  </div>
-
-  <div class="quote-block">
-    <p class="quote-text">是故易有太极，是生两仪，两仪生四象，四象生八卦，八卦定吉凶，吉凶生大业。是故法象莫大乎天地，变通莫大乎四时，县象著明莫大乎日月，崇高莫大乎富贵。备物致用，立成器以为天下利，莫大乎圣人。探赜索隐，钩深致远，以定天下之吉凶，成天下之亹亹者，莫大乎蓍龟。</p>
-    <p class="quote-source">——《周易·系辞上传》第十一章</p>
-  </div>
-</section>
-
-<!-- 卦爻体系 -->
-<section class="section" id="bagua">
-  <h2 class="section-title">卦 爻 体 系</h2>
-  <p class="section-subtitle">八卦成列，象在其中矣；因而重之，爻在其中矣</p>
-
-  <h3 style="font-size:18px; margin:30px 0 20px; letter-spacing:4px;">八 经 卦</h3>
-  <div class="bagua-grid">
-    <div class="bagua-card">
-      <div class="bagua-sym">☰</div>
-      <div class="bagua-name">乾</div>
-      <div class="bagua-nature">天</div>
-      <div class="bagua-attr">健 · 父 · 阳</div>
-    </div>
-    <div class="bagua-card">
-      <div class="bagua-sym">☱</div>
-      <div class="bagua-name">兑</div>
-      <div class="bagua-nature">泽</div>
-      <div class="bagua-attr">悦 · 少女 · 阴</div>
-    </div>
-    <div class="bagua-card">
-      <div class="bagua-sym">☲</div>
-      <div class="bagua-name">离</div>
-      <div class="bagua-nature">火</div>
-      <div class="bagua-attr">明 · 中女 · 阴</div>
-    </div>
-    <div class="bagua-card">
-      <div class="bagua-sym">☳</div>
-      <div class="bagua-name">震</div>
-      <div class="bagua-nature">雷</div>
-      <div class="bagua-attr">动 · 长男 · 阳</div>
-    </div>
-    <div class="bagua-card">
-      <div class="bagua-sym">☴</div>
-      <div class="bagua-name">巽</div>
-      <div class="bagua-nature">风</div>
-      <div class="bagua-attr">入 · 长女 · 阴</div>
-    </div>
-    <div class="bagua-card">
-      <div class="bagua-sym">☵</div>
-      <div class="bagua-name">坎</div>
-      <div class="bagua-nature">水</div>
-      <div class="bagua-attr">陷 · 中男 · 阳</div>
-    </div>
-    <div class="bagua-card">
-      <div class="bagua-sym">☶</div>
-      <div class="bagua-name">艮</div>
-      <div class="bagua-nature">山</div>
-      <div class="bagua-attr">止 · 少男 · 阳</div>
-    </div>
-    <div class="bagua-card">
-      <div class="bagua-sym">☷</div>
-      <div class="bagua-name">坤</div>
-      <div class="bagua-nature">地</div>
-      <div class="bagua-attr">顺 · 母 · 阴</div>
-    </div>
-  </div>
-
-  <h3 style="font-size:18px; margin:50px 0 20px; letter-spacing:4px;">六 十 四 别 卦</h3>
-  <p style="font-size:14px; color:var(--ink-muted); margin-bottom:20px;">点击卦象进入经文阅读</p>
-  <div class="hex-grid" id="hexGrid"></div>
-</section>
-
-<!-- 经文模块入口 -->
-<section class="section" id="jing">
-  <h2 class="section-title">经 文 阅 读</h2>
-  <p class="section-subtitle">卦辞、爻辞、彖传、象传、文言传、系辞 —— 完整经文体系</p>
   <div class="module-grid">
-    <a class="module-card" href="reader.html" id="jingwenCard">
-      <div class="module-card-icon">📖</div>
-      <div class="module-card-title">易经全文 · 历代批注</div>
-      <div class="module-card-desc">六十四卦卦辞爻辞 + 彖象文言；唐《周易集解》35家、清《周易折中》程朱本义，段间嵌入批注，可切换版本/只看经文/只看批语/附白话——与水浒传/红楼梦阅读器同款</div>
-      <div class="module-card-enter">进入 →</div>
+    <a class="module-card" href="#shengcheng">
+      <div class="module-icon">☯</div>
+      <h3>本体生成链</h3>
+      <p>道 → 太极 → 两仪 → 四象 → 八卦 → 六十四卦 → 三百八十四爻，完整的本体生成层级可视化。</p>
+      <span class="enter">查看生成链 →</span>
     </a>
-    <a class="module-card" href="shiyi.html">
-      <div class="module-card-icon">📜</div>
-      <div class="module-card-title">易传 · 十翼</div>
-      <div class="module-card-desc">彖上下、象上下、文言、系辞上下、说卦、序卦、杂卦 —— 孔子十翼注疏全文</div>
-      <div class="module-card-enter">进入 →</div>
+    <a class="module-card" href="#bagua">
+      <div class="module-icon">☰☷</div>
+      <h3>符号系统</h3>
+      <p>八卦、六十四卦、河图洛书、太极图、先后天八卦、十二消息卦等易图体系完整建模。</p>
+      <span class="enter">查看符号体系 →</span>
     </a>
-    <a class="module-card" href="yitu.html">
-      <div class="module-card-icon">☯</div>
-      <div class="module-card-title">易图体系</div>
-      <div class="module-card-desc">太极图、先天八卦图、后天八卦图、河图洛书、六十四卦方圆图等传统易图</div>
-      <div class="module-card-enter">进入 →</div>
+    <a class="module-card" href="#texts">
+      <div class="module-icon">📜</div>
+      <h3>经文文本</h3>
+      <p>易经本经（卦爻辞）+ 十翼（易传）+ 历代注疏，卦辞、彖传、象传、爻辞、文言、系辞完整构建。</p>
+      <span class="enter">进入经文库 →</span>
+    </a>
+    <a class="module-card" href="#masters">
+      <div class="module-icon">👤</div>
+      <h3>注家注本</h3>
+      <p>56位历代易学大师 + 21种经典注本，从先秦孔子到当代名家，完整的注疏传统知识库。</p>
+      <span class="enter">查阅历代易学 →</span>
+    </a>
+    <a class="module-card" href="#sanyi">
+      <div class="module-icon">☯</div>
+      <h3>义理体系</h3>
+      <p>三易原则（变易/简易/不易）、象数派/义理派/图书派/考据派等易学流派分类梳理。</p>
+      <span class="enter">研究义理体系 →</span>
+    </a>
+    <a class="module-card" href="#chart">
+      <div class="module-icon">🕸</div>
+      <h3>知识图谱</h3>
+      <p>本体关系图谱可视化，1143条关系三元组，清晰展示本体之间的生成、注释、师承等关系。</p>
+      <span class="enter">查看知识图谱 →</span>
     </a>
   </div>
 </section>
 
-<!-- 义理研究 -->
-<section class="section" id="yili">
-  <h2 class="section-title">义 理 研 究</h2>
-  <p class="section-subtitle">变易、简易、不易 —— 易之三义</p>
-  
-  <div class="three-col">
-    <div class="info-block" style="border-left-color:var(--red)">
-      <h4>变易</h4>
-      <p>宇宙间一切事物都处于永恒变化之中，昼夜交替、寒暑更迭、人事兴衰，无一刻停息。爻者，言乎变者也。刚柔相推而生变化。</p>
+<!-- 八卦 -->
+<section class="section" id="bagua">
+  <div class="section-title">
+    <h2>八 经 卦</h2>
+    <p>EIGHT TRIGRAMS · 八卦本体</p>
+  </div>
+  <div class="bagua-grid" id="baguaGrid"></div>
+</section>
+
+<!-- 六十四卦 -->
+<section class="section" id="liushisigua">
+  <div class="section-title">
+    <h2>六 十 四 卦</h2>
+    <p>SIXTY-FOUR HEXAGRAMS · 别卦本体（点击查看详情）</p>
+  </div>
+  <div class="jing-toggle">
+    <button class="active" data-jing="all">全部64卦</button>
+    <button data-jing="上经">上经30卦</button>
+    <button data-jing="下经">下经34卦</button>
+  </div>
+  <div class="gua64-grid" id="gua64Grid"></div>
+</section>
+
+<!-- 三易 / 流派 -->
+<section class="section" id="sanyi">
+  <div class="section-title">
+    <h2>三易·流派</h2>
+    <p>THREE YI & SCHOOLS · 义理体系本体</p>
+  </div>
+  <div class="schools-grid" id="schoolsGrid"></div>
+</section>
+
+<!-- 经文入口 -->
+<section class="section" id="texts">
+  <div class="section-title">
+    <h2>经 文 库</h2>
+    <p>CLASSIC TEXTS · 经传易图</p>
+  </div>
+  <div class="text-module-grid">
+    <div class="text-card" onclick="location.href='reader.html'">
+      <div class="icon">📖</div>
+      <h3>易经全文 · 历代批注</h3>
+      <p>64卦卦爻辞 +《周易集解》汉唐注 +《周易折中》程传/本义/历代集说，仿脂批段间嵌入阅读</p>
     </div>
-    <div class="info-block" style="border-left-color:var(--jade)">
-      <h4>简易</h4>
-      <p>大道至简。一阴一阳之谓道，乾坤成列而易立乎其中矣。易则易知，简则易从。易简而天下之理得矣。</p>
+    <div class="text-card" onclick="showShiyi()">
+      <div class="icon">📜</div>
+      <h3>易传（十翼）</h3>
+      <p>彖传、象传、系辞、文言、说卦、序卦、杂卦——孔子所作十翼全文，义理之渊薮</p>
     </div>
-    <div class="info-block" style="border-left-color:var(--gold)">
-      <h4>不易</h4>
-      <p>变化背后有永恒不变之常理：天尊地卑、乾坤定矣；动静有常、刚柔断矣。物极必反、否极泰来，变中之不变者也。</p>
+    <div class="text-card" onclick="showYitu()">
+      <div class="icon">🌀</div>
+      <h3>易图体系</h3>
+      <p>河图、洛书、太极图、先天八卦、后天八卦、六十四卦方圆图、十二消息卦图</p>
     </div>
   </div>
+</section>
 
-  <div class="two-col" style="margin-top:30px">
-    <div>
-      <h3 style="font-size:18px; letter-spacing:4px; margin-bottom:16px;">象 数 派</h3>
-      <p style="font-size:14px; color:var(--ink-light); line-height:2;">
-        以卦象、爻象、数理为核心，通过卦爻符号推演天地变化。汉儒京房纳甲、虞翻卦变，宋邵雍先天象数之学，皆此一脉。注重阴阳消长、五行生克、卦气纳甲、河图洛书之数。
-      </p>
+<!-- 历代大师 -->
+<section class="master-section" id="masters">
+  <div class="section" style="padding-top:0;">
+    <div class="section-title">
+      <h2>历 代 易 学 大 师</h2>
+      <p>MASTERS THROUGH AGES · 注家本体（<span id="masterCount"></span>位）</p>
     </div>
-    <div>
-      <h3 style="font-size:18px; letter-spacing:4px; margin-bottom:16px;">义 理 派</h3>
-      <p style="font-size:14px; color:var(--ink-light); line-height:2;">
-        以阐发义理为宗旨，王弼扫象、得意忘象开其先河。程伊川《易传》、朱熹《本义》承其统，将《易》与儒门义理结合，讲阴阳变易之道即天地人事之理。
-      </p>
+    <div id="mastersByEra"></div>
+
+    <div class="section-title" style="margin-top:60px;">
+      <h2>经 典 注 本</h2>
+      <p>CLASSIC COMMENTARIES · 注本本体（<span id="bookCount"></span>种）</p>
     </div>
+    <div class="books-grid" id="booksGrid"></div>
   </div>
 </section>
 
 <!-- 知识图谱 -->
-<section class="section" id="graph">
-  <h2 class="section-title">知 识 图 谱</h2>
-  <p class="section-subtitle">500+ 节点 · 本体关系网络 · 力导向可视化</p>
-  <div id="graph-canvas"></div>
+<section class="section" id="chart">
+  <div class="section-title">
+    <h2>本 体 知 识 图 谱</h2>
+    <p>ONTOLOGY GRAPH · 关系三元组（<span id="tripleCount"></span>条）</p>
+  </div>
+  <div class="chart-container" id="ontoChart"></div>
 </section>
 
-<!-- 传承谱系 -->
+<!-- 传承时间轴 -->
 <section class="section" id="lineage">
-  <h2 class="section-title">传 承 谱 系</h2>
-  <p class="section-subtitle">人更三圣，世历三古</p>
-  <div class="two-col">
-    <div>
-      <div class="timeline">
-        <div class="timeline-item">
-          <div class="timeline-era">上古 · 伏羲氏</div>
-          <div class="timeline-title">始画八卦</div>
-          <div class="timeline-desc">古者包牺氏之王天下也，仰则观象于天，俯则观法于地，观鸟兽之文与地之宜，近取诸身，远取诸物，于是始作八卦。</div>
-        </div>
-        <div class="timeline-item">
-          <div class="timeline-era">中古 · 周文王</div>
-          <div class="timeline-title">演六十四卦 · 作卦辞</div>
-          <div class="timeline-desc">文王拘而演《周易》，将八卦两两相重，成六十四卦，并作卦辞，以断吉凶。</div>
-        </div>
-        <div class="timeline-item">
-          <div class="timeline-era">中古 · 周公旦</div>
-          <div class="timeline-title">作爻辞</div>
-          <div class="timeline-desc">周公辅成王，制礼作乐，系三百八十四爻爻辞，《易经》经文由此完整。</div>
-        </div>
-        <div class="timeline-item">
-          <div class="timeline-era">下古 · 孔子</div>
-          <div class="timeline-title">作十翼 · 传易道</div>
-          <div class="timeline-desc">孔子晚而好易，韦编三绝，作彖、象、文言、系辞、说卦、序卦、杂卦十篇，是为十翼，《易》由此由占筮之书升为哲理经典。</div>
-        </div>
-        <div class="timeline-item">
-          <div class="timeline-era">汉代</div>
-          <div class="timeline-title">象数之学大兴</div>
-          <div class="timeline-desc">孟喜、京房创卦气说、纳甲筮法；郑玄、荀爽、虞翻注易，象数体系完备。</div>
-        </div>
-      </div>
-    </div>
-    <div>
-      <div class="timeline">
-        <div class="timeline-item">
-          <div class="timeline-era">魏晋</div>
-          <div class="timeline-title">王弼扫象</div>
-          <div class="timeline-desc">王弼注《易》，得意忘象，以老庄解易，开义理一派先河，韩康伯续注系辞。</div>
-        </div>
-        <div class="timeline-item">
-          <div class="timeline-era">宋代</div>
-          <div class="timeline-title">先天易学与理学集成</div>
-          <div class="timeline-desc">周敦颐作太极图说，邵雍创先天象数之学；程颐作《伊川易传》畅发义理；朱熹《周易本义》集宋易之大成。</div>
-        </div>
-        <div class="timeline-item">
-          <div class="timeline-era">元明</div>
-          <div class="timeline-title">来知德错综说</div>
-          <div class="timeline-desc">来知德著《周易集注》，发明错综之说，以象数理气并重，为明代易学大家。</div>
-        </div>
-        <div class="timeline-item">
-          <div class="timeline-era">清代</div>
-          <div class="timeline-title">汉学复兴 · 朴学易</div>
-          <div class="timeline-desc">惠栋、张惠言等复兴汉易，焦循作《易学三书》，以数理通易，为清代易学高峰。</div>
-        </div>
-        <div class="timeline-item">
-          <div class="timeline-era">近现代</div>
-          <div class="timeline-title">多学科交叉研究</div>
-          <div class="timeline-desc">以哲学、史学、考古学、人类学、数字人文方法重新研究《周易》，帛书《周易》等出土文献推动研究新境。</div>
-        </div>
-      </div>
-    </div>
+  <div class="section-title">
+    <h2>易 学 传 承</h2>
+    <p>LINEAGE OF YI-LEARNING · 关键事件</p>
   </div>
+  <div class="timeline" id="timeline"></div>
 </section>
+</main>
 
-<!-- 功能模块 -->
-
-<!-- 历代易学 -->
-<section class="section" id="yixue">
-  <h2 class="section-title">历 代 易 学</h2>
-  <p class="section-subtitle">Masters · Commentaries · Through the Ages</p>
-  <p class="section-intro">《易》之为书，历数千年而注家蜂起。本模块集成先秦至当代的易学大师谱系与历代经典注本，并以《周易集解》（汉魏至唐三十余家）、《御纂周易折中》（朱熹《本义》、程颐《程传》、历代集说）为底本，按卦呈列历代大师的注解，供逐卦对读。</p>
-  <div class="yixue-tabs">
-    <button class="yx-tab active" data-tab="masters">大师谱系</button>
-    <button class="yx-tab" data-tab="works">经典注本</button>
-    <button class="yx-tab" data-tab="huiping">汇评集成</button>
-  </div>
-  <div class="yx-panel" id="yx-masters"></div>
-  <div class="yx-panel" id="yx-works" style="display:none"></div>
-  <div class="yx-panel" id="yx-huiping" style="display:none">
-    <div class="hp-src">选卦以阅历代汇评 · 《周易集解》汉魏至唐诸家 ＋ 《御纂周易折中》历代诸儒</div>
-    <div class="hex-grid" id="hpHexGrid"></div>
-  </div>
-</section>
-
-<section class="section" id="modules">
-  <h2 class="section-title">研 究 模 块</h2>
-  <p class="section-subtitle">多维度易学数字人文研究工具</p>
-  <div class="module-grid">
-    <a class="module-card" href="yanjiu.html#shifa">
-      <div class="module-card-icon">🔮</div>
-      <div class="module-card-title">爻变推演</div>
-      <div class="module-card-desc">模拟大衍筮法，模拟占筮变爻过程，本卦变卦互见</div>
-      <div class="module-card-enter">进入 →</div>
-    </a>
-    <a class="module-card" href="yanjiu.html#bagong">
-      <div class="module-card-icon">🏯</div>
-      <div class="module-card-title">八宫卦序</div>
-      <div class="module-card-desc">京房八宫卦体系：八纯卦、一世至五世、游魂、归魂卦分类</div>
-      <div class="module-card-enter">进入 →</div>
-    </a>
-    <a class="module-card" href="yanjiu.html#stats">
-      <div class="module-card-icon">📊</div>
-      <div class="module-card-title">卦爻统计</div>
-      <div class="module-card-desc">吉凶悔吝分布、阴阳爻位当位统计、卦辞词频分析</div>
-      <div class="module-card-enter">进入 →</div>
-    </a>
-    <a class="module-card" href="yanjiu.html#renwu">
-      <div class="module-card-icon">🌐</div>
-      <div class="module-card-title">易学人物志</div>
-      <div class="module-card-desc">历代易学家传记、著述、学派传承关系</div>
-      <div class="module-card-enter">进入 →</div>
-    </a>
-    <a class="module-card" href="yanjiu.html#zhushu">
-      <div class="module-card-icon">📚</div>
-      <div class="module-card-title">历代注疏</div>
-      <div class="module-card-desc">王弼注、孔颖达正义、程伊川传、朱熹本义等注疏并置</div>
-      <div class="module-card-enter">进入 →</div>
-    </a>
-    <a class="module-card" href="yanjiu.html#xugua">
-      <div class="module-card-icon">🗺️</div>
-      <div class="module-card-title">序卦流转</div>
-      <div class="module-card-desc">序卦传卦序流转逻辑：两两相偶、非覆即变，卦序流转可视化</div>
-      <div class="module-card-enter">进入 →</div>
-    </a>
-  </div>
-</section>
-
-<!-- 关于 -->
-<section class="section" id="about">
-  <h2 class="section-title">关 于 本 站</h2>
-  <p class="section-subtitle">About the Project</p>
-  <div class="two-col">
-    <div>
-      <p style="font-size:15px; line-height:2; color:var(--ink-light); margin-bottom:16px;">
-        《易经本体论》是一个以数字人文方法构建的易学知识本体项目。项目以"本体论"（Ontology）为方法论框架，将《周易》的核心概念、符号体系、义理命题、人物注疏组织为层次分明的实体-关系网络。
-      </p>
-      <p style="font-size:15px; line-height:2; color:var(--ink-light);">
-        项目参照《佛教本体论》《水浒传本体论》《红楼梦本体论》的数字人文研究范式，采用七层本体架构：元模型层、核心本体层、义理范畴层、卦爻体系层、注疏传承层、象数应用层、文化外延层，最终实现64卦384爻逐条独立建模。
-      </p>
-    </div>
-    <div>
-      <div class="info-block">
-        <h4>技术栈</h4>
-        <p>Three.js 三维可视化 · ECharts 关系图谱 · 纯静态 HTML/CSS/JS · GitHub Pages 发布</p>
-      </div>
-      <div class="info-block">
-        <h4>本体架构</h4>
-        <p>L0 元模型 → L1 道·太极·阴阳 → L2 三易 → L3 卦爻体系 → L4 注疏传承 → L5 象数应用 → L6 文化外延</p>
-      </div>
-      <div class="info-block">
-        <h4>数据规模</h4>
-        <p>上经32卦完整录入 · 384爻本体框架 · 10翼结构 · 12位关键人物 · 8大研究分支</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<footer class="footer">
-  <p>易经本体论 · The Book of Changes Ontology</p>
-  <p style="margin-top:8px;">开源项目 · GitHub Pages 部署 · 参照数字人文本体论范式构建</p>
+<footer>
+  <div>易经本体论 · The Book of Changes Ontology</div>
+  <div>以本体论方法构建易经知识库 · 所有数据以本体实例建模，网页仅为渲染视图</div>
+  <div class="ont-note">数据来源：李鼎祚《周易集解》、李光地《御纂周易折中》、朱熹《周易本义》、程颐《伊川易传》等</div>
 </footer>
 
-<!-- 经文弹窗 -->
-<div class="modal-overlay" id="jingModal">
-  <div class="modal">
-    <div class="modal-header">
-      <div class="modal-title" id="jingModalTitle">易经全文</div>
-      <button class="modal-close" onclick="closeModal()">&times;</button>
+<!-- 卦详情弹窗 -->
+<div class="modal-overlay" id="guaModal">
+  <div class="modal-box" id="guaModalBox"></div>
+</div>
+<!-- 十翼弹窗 -->
+<div class="modal-overlay" id="shiyiModal">
+  <div class="modal-box" id="shiyiModalBox">
+    <button class="modal-close" onclick="closeModal('shiyiModal')">×</button>
+    <div class="modal-title">易 传 · 十 翼</div>
+    <div class="modal-subtitle">TEN WINGS · 孔子为易作传</div>
+    <div id="shiyiContent"></div>
+  </div>
+</div>
+<!-- 易图弹窗 -->
+<div class="modal-overlay" id="yituModal">
+  <div class="modal-box" id="yituModalBox">
+    <button class="modal-close" onclick="closeModal('yituModal')">×</button>
+    <div class="modal-title">易 图 体 系</div>
+    <div class="modal-subtitle">YI-DIAGRAMS · 河图洛书·太极·先后天</div>
+    <div id="yituContent"></div>
+  </div>
+</div>
+
+<script src="data/yijing-ontology.js"></script>
+<script>
+const ONT = window.YJ_ONT;
+console.log('✅ 易经本体已加载', ONT.stats());
+
+// ===== 渲染统计数字 =====
+function renderStats() {
+  const s = ONT.stats();
+  const html = [
+    {num:s.bagua, label:'八卦', sub:'经卦'},
+    {num:s.liushisigua, label:'六十四卦', sub:'别卦'},
+    {num:s.yao, label:'爻', sub:'三百八十四爻'},
+    {num:s.zhujia, label:'历代注家', sub:'先秦至当代'},
+    {num:s.zhuben, label:'经典注本', sub:'从汉至清'},
+    {num:s.triples, label:'本体关系', sub:'知识三元组'},
+  ].map(c => `
+    <div class="stat-card">
+      <div class="stat-num">${c.num}</div>
+      <div class="stat-label">${c.label}</div>
+      <div class="stat-sub">${c.sub}</div>
     </div>
-    <div class="modal-body">
-      <div class="text-layout" id="jingContent">
-        <!-- 动态填充 -->
+  `).join('');
+  document.getElementById('statsGrid').innerHTML = html;
+}
+
+// ===== 渲染八卦 =====
+function renderBagua() {
+  const html = ONT.bagua.map(g => `
+    <div class="bagua-card">
+      <div class="bagua-symbol">${g.symbol}</div>
+      <div class="bagua-name">${g.num}. ${g.name}</div>
+      <div class="bagua-nature">${g.nature}（${g.yinyang}）</div>
+      <div class="bagua-attrs">
+        <div class="bagua-attr"><b>五行：</b>${g.wuxing}</div>
+        <div class="bagua-attr"><b>方位：</b>${g.fangwei}</div>
+        <div class="bagua-attr"><b>自然：</b>${g.ziran}</div>
+        <div class="bagua-attr"><b>亲情：</b>${g.qinqing}</div>
       </div>
     </div>
-  </div>
-</div>
+  `).join('');
+  document.getElementById('baguaGrid').innerHTML = html;
+}
 
-
-<!-- 历代汇评弹窗 -->
-<div class="modal-overlay" id="hpModal">
-  <div class="modal">
-    <div class="modal-header">
-      <div class="modal-title" id="hpModalTitle">历代汇评</div>
-      <button class="modal-close" onclick="closeHp()">×</button>
+// ===== 渲染64卦 =====
+let currentJing = 'all';
+function render64Gua() {
+  let list = ONT.liushisigua;
+  if (currentJing !== 'all') list = list.filter(g => g.jing === currentJing);
+  const html = list.map(g => `
+    <div class="gua-cell ${g.jing==='上经'?'jing-shang':'jing-xia'}" onclick="showGua('${g.name}')" title="${g.num}.${g.name}：${g.guaci}">
+      <span class="sym">${g.symbol}</span>
+      <span class="name">${g.name}</span>
+      <span class="num">${g.num}</span>
     </div>
-    <div class="modal-body">
-      <div class="hex-big-symbol" id="hpSym" style="font-size:56px;margin:0 0 6px;"></div>
-      <div class="hp-tabs" id="hpTabs"></div>
-      <div class="hp-body" id="hpBody"></div>
-    </div>
-  </div>
-</div>
-
-<!-- 引入 Three.js -->
-<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
-<!-- 引入 ECharts -->
-<script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
-<script src="data/yijing-commentary.js"></script>
-
-<script>
-// ==================== 六十四卦数据 ====================
-const hexSymbols = ['䷀','䷁','䷂','䷃','䷄','䷅','䷆','䷇','䷈','䷉','䷊','䷋','䷌','䷍','䷎','䷏','䷐','䷑','䷒','䷓','䷔','䷕','䷖','䷗','䷘','䷙','䷚','䷛','䷜','䷝','䷞','䷟','䷠','䷡','䷢','䷣','䷤','䷥','䷦','䷧','䷨','䷩','䷪','䷫','䷬','䷭','䷮','䷯','䷰','䷱','䷲','䷳','䷴','䷵','䷶','䷷','䷸','䷹','䷺','䷻','䷼','䷽','䷾','䷿'];
-const hexNames = ['乾','坤','屯','蒙','需','讼','师','比','小畜','履','泰','否','同人','大有','谦','豫','随','蛊','临','观','噬嗑','贲','剥','复','无妄','大畜','颐','大过','坎','离','咸','恒','遯','大壮','晋','明夷','家人','睽','蹇','解','损','益','夬','姤','萃','升','困','井','革','鼎','震','艮','渐','归妹','丰','旅','巽','兑','涣','节','中孚','小过','既济','未济'];
-const hexTrigrams = ['乾下乾上','坤下坤上','震下坎上','坎下艮上','乾下坎上','坎下乾上','坎下坤上','坤下坎上','乾下巽上','兑下乾上','乾下坤上','坤下乾上','离下乾上','乾下离上','艮下坤上','坤下震上','震下兑上','巽下艮上','兑下坤上','坤下巽上','震下离上','离下艮上','坤下艮上','震下坤上','震下乾上','乾下艮上','震下艮上','巽下兑上','坎下坎上','离下离上','艮下兑上','巽下震上','艮下乾上','乾下震上','坤下离上','离下坤上','离下巽上','兑下离上','艮下坎上','坎下震上','兑下艮上','震下巽上','乾下兑上','巽下乾上','坤下兑上','巽下坤上','坎下兑上','巽下坎上','离下兑上','巽下离上','震下震上','艮下艮上','艮下巽上','兑下震上','离下震上','艮下离上','巽下巽上','兑下兑上','坎下巽上','兑下坎上','兑下巽上','艮下震上','离下坎上','坎下离上'];
-
-// 乾卦完整经文
-const jingData = [
-  {
-    name: '乾', num: 1, sym: '䷀', guaci: '乾：元亨利贞。',
-    tuan: '大哉乾元，万物资始，乃统天。云行雨施，品物流形。大明终始，六位时成，时乘六龙以御天。乾道变化，各正性命，保合大和，乃利贞。首出庶物，万国咸宁。',
-    xiang: '天行健，君子以自强不息。',
-    yao: [
-      {name:'初九', text:'潜龙勿用。', xiang:'潜龙勿用，阳在下也。', explain:'龙尚潜伏于深渊，养精蓄锐，不可轻动。喻事物初起，势弱力微，宜潜藏待时。'},
-      {name:'九二', text:'见龙在田，利见大人。', xiang:'见龙在田，德施普也。', xiang:'龙出现在田野，宜见大德之人。阳刚渐升，居中得位，开始崭露头角。'},
-      {name:'九三', text:'君子终日乾乾，夕惕若，厉无咎。', xiang:'终日乾乾，反复道也。', explain:'君子终日勤勉，夜间仍警惕，虽处危境亦可无咎。九三多凶，位在下卦之上，故须勤勉戒惧。'},
-      {name:'九四', text:'或跃在渊，无咎。', xiang:'或跃在渊，进无咎也。', explain:'龙或腾跃而起，或退处深渊，审时度势，可无咎。近君之位，多惧多疑，须相机而动。'},
-      {name:'九五', text:'飞龙在天，利见大人。', xiang:'飞龙在天，大人造也。', explain:'龙飞上天，大德之人在位。九五君位，中正得位，圣人作而万物睹，大吉之位。'},
-      {name:'上九', text:'亢龙有悔。', xiang:'亢龙有悔，盈不可久也。', explain:'龙飞过高，必有悔恨。物极必反，盛极必衰，知进忘退，故有悔。'},
-    ],
-    wenyan: '元者，善之长也；亨者，嘉之会也；利者，义之和也；贞者，事之干也。君子体仁足以长人，嘉会足以合礼，利物足以和义，贞固足以干事。君子行此四德者，故曰：乾，元亨利贞。'
-  },
-  {
-    name: '坤', num: 2, sym: '䷁', guaci: '坤：元亨，利牝马之贞。君子有攸往，先迷后得主，利西南得朋，东北丧朋。安贞吉。',
-    tuan: '至哉坤元，万物资生，乃顺承天。坤厚载物，德合无疆，含弘光大，品物咸亨。牝马地类，行地无疆，柔顺利贞。',
-    xiang: '地势坤，君子以厚德载物。',
-    yao: [
-      {name:'初六', text:'履霜，坚冰至。', xiang:'履霜坚冰，阴始凝也。驯致其道，至坚冰也。', explain:'踩到薄霜，就知道坚冰将至。阴寒初起，渐积渐盛，见微知著。'},
-      {name:'六二', text:'直方大，不习无不利。', xiang:'六二之动，直以方也。不习无不利，地道光也。', explain:'正直、端方、广大，不假修习而无不利。六二居中得正，是坤德之至。'},
-      {name:'六三', text:'含章可贞，或从王事，无成有终。', xiang:'含章可贞，以时发也。或从王事，知光大也。', explain:'含藏文采，守持正道，或从事君王之事，不居其功而终有成就。'},
-      {name:'六四', text:'括囊，无咎无誉。', xiang:'括囊无咎，慎不害也。', explain:'束紧口袋，不说话，不出头，无过错也无名誉。多惧之位，宜谨慎缄默。'},
-      {name:'六五', text:'黄裳元吉。', xiang:'黄裳元吉，文在中也。', explain:'穿黄色裙裳，大吉。黄为中色，裳为下饰，以柔德居尊位，文在中而不外炫。'},
-      {name:'上六', text:'龙战于野，其血玄黄。', xiang:'龙战于野，其道穷也。', explain:'阴盛至极，与阳交战于郊野，流出玄黄色的血。阴极则阳来战，阴道已穷。'},
-    ],
-  },
-  // 屯卦
-  {
-    name: '屯', num: 3, sym: '䷂', guaci: '屯：元亨利贞，勿用有攸往，利建侯。',
-    tuan: '屯，刚柔始交而难生，动乎险中，大亨贞。雷雨之动满盈，天造草昧，宜建侯而不宁。',
-    xiang: '云雷屯，君子以经纶。',
-    yao: [
-      {name:'初九', text:'磐桓，利居贞，利建侯。', xiang:'虽磐桓，志行正也。以贵下贱，大得民也。', explain:'徘徊难进，利于守正安居，封建诸侯。初动于下，宜固本培基。'},
-      {name:'六二', text:'屯如邅如，乘马班如。匪寇婚媾，女子贞不字，十年乃字。', xiang:'六二之难，乘刚也。十年乃字，反常也。', explain:'困顿徘徊，乘马回旋。不是寇贼，是来求婚。女子守正不嫁，十年方才许嫁。'},
-      {name:'六三', text:'即鹿无虞，惟入于林中，君子几不如舍，往吝。', xiang:'即鹿无虞，以从禽也。君子舍之，往吝穷也。', explain:'追逐野鹿而无虞人引导，只是入于林中。君子见几不如舍弃，前往会有憾惜。'},
-      {name:'六四', text:'乘马班如，求婚媾，往吉，无不利。', xiang:'求而往，明也。', explain:'乘马徘徊，前往求婚，此去吉祥，无所不利。'},
-      {name:'九五', text:'屯其膏，小贞吉，大贞凶。', xiang:'屯其膏，施未光也。', explain:'屯聚膏泽，小事守正则吉，大事守正则凶。居尊位而泽未广施。'},
-      {name:'上六', text:'乘马班如，泣血涟如。', xiang:'泣血涟如，何可长也。', explain:'乘马徘徊，泣血泪流，屯难之极，不能长久。'},
-    ],
-  },
-  // 蒙卦
-  {
-    name: '蒙', num: 4, sym: '䷃', guaci: '蒙：亨。匪我求童蒙，童蒙求我。初筮告，再三渎，渎则不告。利贞。',
-    tuan: '蒙，山下有险，险而止，蒙。蒙亨，以亨行时中也。匪我求童蒙，童蒙求我，志应也。',
-    xiang: '山下出泉，蒙；君子以果行育德。',
-    yao: [
-      {name:'初六', text:'发蒙，利用刑人，用说桎梏，以往吝。', xiang:'利用刑人，以正法也。', explain:'启发蒙昧，宜用刑律规范人，使人脱去桎梏，急于前往则有憾。'},
-      {name:'九二', text:'包蒙吉。纳妇吉，子克家。', xiang:'子克家，刚柔接也。', explain:'包容蒙昧者吉祥，娶媳妇吉祥，儿子能治家。九二为蒙卦之主，能包容群阴。'},
-      {name:'六三', text:'勿用取女，见金夫，不有躬，无攸利。', xiang:'勿用取女，行不顺也。', explain:'不可娶此女，她见有钱男人就失身，无所利。'},
-      {name:'六四', text:'困蒙，吝。', xiang:'困蒙之吝，独远实也。', explain:'困于蒙昧之中，有憾惜。远离阳刚，无由启蒙。'},
-      {name:'六五', text:'童蒙，吉。', xiang:'童蒙之吉，顺以巽也。', explain:'幼童的蒙昧，吉祥。居尊位而柔顺谦逊，虚心求教。'},
-      {name:'上九', text:'击蒙，不利为寇，利御寇。', xiang:'利用御寇，上下顺也。', explain:'击破蒙昧，过于暴烈则不利，以抵御寇盗的方式则有利。'},
-    ],
-  },
-];
-
-// 填充其余卦的基础数据
-for (let i = 4; i < 64; i++) {
-  if (!jingData[i]) {
-    jingData[i] = {
-      name: hexNames[i], num: i+1, sym: hexSymbols[i],
-      guaci: '【经文录入中】', tuan: '', xiang: '',
-      yao: [
-        {name: (i < 2 ? ['初六','六二','六三','六四','六五','上六'] : ['初六','九二','六三','六四','九五','上六'])[0], text: '', xiang: '', explain: '该爻经文正在校勘录入中。'},
-        {name: (i < 2 ? ['初六','六二','六三','六四','六五','上六'] : ['初九','六二','九三','六四','九五','上六'])[1], text: '', xiang: '', explain: '该爻经文正在校勘录入中。'},
-        {name: (i < 2 ? ['初六','六二','六三','六四','六五','上六'] : ['初九','九二','六三','九四','六五','上六'])[2], text: '', xiang: '', explain: '该爻经文正在校勘录入中。'},
-        {name: (i < 2 ? ['初六','六二','六三','六四','六五','上六'] : ['初六','九二','六三','九四','九五','上六'])[3], text: '', xiang: '', explain: '该爻经文正在校勘录入中。'},
-        {name: (i < 2 ? ['初六','六二','六三','六四','六五','上六'] : ['初九','六二','九三','六四','九五','上六'])[4], text: '', xiang: '', explain: '该爻经文正在校勘录入中。'},
-        {name: (i < 2 ? ['初六','六二','六三','六四','六五','上六'] : ['初九','九二','六三','九四','六五','上六'])[5], text: '', xiang: '', explain: '该爻经文正在校勘录入中。'},
-      ]
-    };
-  }
+  `).join('');
+  document.getElementById('gua64Grid').innerHTML = html;
 }
-
-
-// 经文补全：乾—豫共32卦（含白话解读）
-const JING_FULL_32 = [{"name":"乾","num":1,"sym":"䷀","guaci":"乾：元亨利贞。","tuan":"大哉乾元，万物资始，乃统天。云行雨施，品物流形。大明终始，六位时成，时乘六龙以御天。乾道变化，各正性命，保合大和，乃利贞。首出庶物，万国咸宁。","xiang":"天行健，君子以自强不息。","yao":[{"name":"初九","text":"潜龙勿用。","xiang":"潜龙勿用，阳在下也。","explain":"龙潜伏在水中，养精蓄锐，暂时还不能发挥作用。象征事物发展之初，应当潜藏待时，不可轻举妄动。"},{"name":"九二","text":"见龙在田，利见大人。","xiang":"见龙在田，德施普也。","explain":"龙出现在大地上，利于见到德高望重的大人物。象征君子经过潜藏修养之后，初露头角，开始有所作为。"},{"name":"九三","text":"君子终日乾乾，夕惕若，厉无咎。","xiang":"终日乾乾，反复道也。","explain":"君子整天自强不息，夜晚也警惕戒惧，即使处境危险也不会有灾祸。象征事业上升期，必须时刻勤勉谨慎。"},{"name":"九四","text":"或跃在渊，无咎。","xiang":"或跃在渊，进无咎也。","explain":"龙或飞跃上天，或退处深渊，都没有灾祸。象征面临重大抉择时，审时度势，可进可退，灵活把握。"},{"name":"九五","text":"飞龙在天，利见大人。","xiang":"飞龙在天，大人造也。","explain":"龙飞上了高空，利于见到大人物。这是乾卦最吉之爻，象征事物发展到鼎盛时期，君子大展宏图，实现抱负。"},{"name":"上九","text":"亢龙有悔。","xiang":"亢龙有悔，盈不可久也。","explain":"龙飞得过高，超过了极限，必然会有悔恨。象征物极必反，盛极而衰，凡事不可过头，要知进退存亡。"}]},{"name":"坤","num":2,"sym":"䷁","guaci":"坤：元亨，利牝马之贞。君子有攸往，先迷后得主，利西南得朋，东北丧朋。安贞吉。","tuan":"至哉坤元，万物资生，乃顺承天。坤厚载物，德合无疆。含弘光大，品物咸亨。牝马地类，行地无疆，柔顺利贞。","xiang":"地势坤，君子以厚德载物。","yao":[{"name":"初六","text":"履霜，坚冰至。","xiang":"履霜坚冰，阴始凝也。驯致其道，至坚冰也。","explain":"踩到薄霜，就知道坚冰即将到来。比喻见微知著，事物的发展是渐进的，要防微杜渐。"},{"name":"六二","text":"直方大，不习无不利。","xiang":"六二之动，直以方也。不习无不利，地道光也。","explain":"正直、端方、正大，即使不刻意修习也没有什么不利。象征坤德的核心品质，守正直行则无往不利。"},{"name":"六三","text":"含章可贞，或从王事，无成有终。","xiang":"含章可贞，以时发也。或从王事，知光大也。","explain":"蕴含美德而不外露，可以坚守正道。或许辅佐君王事业，不居功自傲而能善终。象征有才不炫，尽职守分。"},{"name":"六四","text":"括囊，无咎无誉。","xiang":"括囊无咎，慎不害也。","explain":"扎紧口袋，比喻谨言慎行，不轻易表态。没有过错也没有赞誉，在危险环境中这是保全自身的智慧。"},{"name":"六五","text":"黄裳，元吉。","xiang":"黄裳元吉，文在中也。","explain":"穿着黄色的下裙，大吉。黄色居中守正，象征以中和之德居尊位，谦逊待人，获得吉祥。"},{"name":"上六","text":"龙战于野，其血玄黄。","xiang":"龙战于野，其道穷也。","explain":"阴阳交争于郊野，流出青黄相杂的血。象征阴盛极而与阳抗争，两败俱伤，说明阴极必反。"}]},{"name":"屯","num":3,"sym":"䷂","guaci":"屯：元亨利贞，勿用有攸往，利建侯。","tuan":"屯，刚柔始交而难生，动乎险中，大亨贞。雷雨之动满盈，天造草昧，宜建侯而不宁。","xiang":"云雷屯，君子以经纶。","yao":[{"name":"初九","text":"磐桓，利居贞，利建侯。","xiang":"虽磐桓，志行正也。以贵下贱，大得民也。","explain":"徘徊不前，利于静居守正，利于建立诸侯基业。创业初期虽艰难，但志向行为端正，能得民心。"},{"name":"六二","text":"屯如邅如，乘马班如，匪寇婚媾，女子贞不字，十年乃字。","xiang":"六二之难，乘刚也。十年乃字，反常也。","explain":"徘徊难进，骑马回旋不进，不是盗寇而是来求婚的。女子守贞不嫁，十年后才出嫁。象征事物初创时进退两难，需要耐心等待时机。"},{"name":"六三","text":"即鹿无虞，惟入于林中，君子几不如舍，往吝。","xiang":"即鹿无虞，以从禽也。君子舍之，往吝穷也。","explain":"追逐野鹿没有虞人引导，只会空入林中。君子见机而作，不如舍弃，前往会有遗憾。比喻条件不成熟时不可盲目行动。"},{"name":"六四","text":"乘马班如，求婚媾，往吉，无不利。","xiang":"求而往，明也。","explain":"骑马徘徊不前，为了求婚而去，前往吉祥，没有不利。说明在困境中主动寻求贤助，是明智之举。"},{"name":"九五","text":"屯其膏，小贞吉，大贞凶。","xiang":"屯其膏，施未光也。","explain":"积聚恩泽，做小事守正则吉，做大事守正则凶。说明在草创时期，应当广施恩泽，不可独善其身。"},{"name":"上六","text":"乘马班如，泣血涟如。","xiang":"泣血涟如，何可长也。","explain":"骑马徘徊不前，哭泣血泪交流。说明到了穷途末路，不能及时醒悟，将陷入绝境。"}]},{"name":"蒙","num":4,"sym":"䷃","guaci":"蒙：亨。匪我求童蒙，童蒙求我。初筮告，再三渎，渎则不告。利贞。","tuan":"蒙，山下有险，险而止，蒙。蒙亨，以亨行时中也。匪我求童蒙，童蒙求我，志应也。","xiang":"山下出泉，蒙。君子以果行育德。","yao":[{"name":"初六","text":"发蒙，利用刑人，用说桎梏，以往吝。","xiang":"利用刑人，以正法也。","explain":"启发蒙昧，利于用典型教育人，使人免犯罪过。如果放任不管，长此以往会有遗憾。"},{"name":"九二","text":"包蒙吉。纳妇吉，子克家。","xiang":"子克家，刚柔接也。","explain":"包容蒙昧者，吉祥。娶媳妇吉祥，儿子能够治家。说明师者应当有包容之心，因材施教。"},{"name":"六三","text":"勿用取女，见金夫，不有躬，无攸利。","xiang":"勿用取女，行不顺也。","explain":"不要娶这样的女子——见到有钱的男人就失身，娶她没有任何好处。比喻见异思迁、心术不正的人不可与之共事。"},{"name":"六四","text":"困蒙，吝。","xiang":"困蒙之吝，独远实也。","explain":"困于蒙昧之中，处境困难。形容脱离实际、远离师长、独学无友的人难以进步。"},{"name":"六五","text":"童蒙，吉。","xiang":"童蒙之吉，顺以巽也。","explain":"像幼童一样虚心求教，吉祥。说明谦逊好学、不耻下问是启蒙求道的正确态度。"},{"name":"上九","text":"击蒙，不利为寇，利御寇。","xiang":"利用御寇，上下顺也。","explain":"打击蒙昧，过于暴烈则不利，采取防御方式则有利。说明教育方法要适当，过犹不及。"}]},{"name":"需","num":5,"sym":"䷄","guaci":"需：有孚，光亨贞吉，利涉大川。","tuan":"需，须也。险在前也，刚健而不陷，其义不困穷矣。需有孚，光亨贞吉，位乎天位，以正中也。利涉大川，往有功也。","xiang":"云上于天，需。君子以饮食宴乐。","yao":[{"name":"初九","text":"需于郊，利用恒，无咎。","xiang":"需于郊，不犯难行也。利用恒无咎，未失常也。","explain":"在郊外等待，利于保持恒心，没有过错。说明时机未到时要耐心等待，不要冒险前进。"},{"name":"九二","text":"需于沙，小有言，终吉。","xiang":"需于沙，衍在中也。虽小有言，以终吉也。","explain":"在沙滩上等待，会受到小小的言语中伤，最终吉祥。说明接近危险时，保持沉着冷静可化险为夷。"},{"name":"九三","text":"需于泥，致寇至。","xiang":"需于泥，灾在外也。自我致寇，敬慎不败也。","explain":"在泥沼中等待，会招来强盗。说明过于逼近危险，是自己招来祸患，只有谨慎才能避免失败。"},{"name":"六四","text":"需于血，出自穴。","xiang":"需于血，顺以听也。","explain":"在血泊中等待，从险境中脱身。说明陷入危险时，顺应形势、冷静应对可以脱险。"},{"name":"九五","text":"需于酒食，贞吉。","xiang":"酒食贞吉，以中正也。","explain":"在酒食宴饮中等待，守正则吉。说明处境安定时，仍要坚守正道，不可耽于享乐。"},{"name":"上六","text":"入于穴，有不速之客三人来，敬之终吉。","xiang":"不速之客来，敬之终吉。虽不当位，未大失也。","explain":"落入洞穴，有三位不请自来的客人，恭敬对待他们最终吉祥。说明意外发生时，以礼相待可转祸为福。"}]},{"name":"讼","num":6,"sym":"䷅","guaci":"讼：有孚窒惕，中吉，终凶。利见大人，不利涉大川。","tuan":"讼，上刚下险，险而健，讼。讼有孚窒惕中吉，刚来而得中也。终凶，讼不可成也。利见大人，尚中正也。","xiang":"天与水违行，讼。君子以作事谋始。","yao":[{"name":"初六","text":"不永所事，小有言，终吉。","xiang":"不永所事，讼不可长也。虽小有言，其辩明也。","explain":"不长久纠缠于争讼之事，会有小的口角，最终吉祥。说明争执要适可而止，不可缠讼不休。"},{"name":"九二","text":"不克讼，归而逋，其邑人三百户无眚。","xiang":"不克讼，归逋窜也。自下讼上，患至掇也。","explain":"争讼失败，逃跑回来，他采邑中的三百户人家没有灾祸。说明争不过强者时及时退让，可保全属下。"},{"name":"六三","text":"食旧德，贞厉，终吉。或从王事，无成。","xiang":"食旧德，从上吉也。","explain":"享用旧日的德业，守正道防危险，最终吉祥。或许辅佐君王事业，不要居功。说明守本分不逞强则吉。"},{"name":"九四","text":"不克讼，复即命渝，安贞吉。","xiang":"复即命渝，安贞不失也。","explain":"争讼不能取胜，回心转意归向正理，改变争讼的念头，安守正道则吉。说明知错能改，回归正道。"},{"name":"九五","text":"讼，元吉。","xiang":"讼元吉，以中正也。","explain":"公正断决争讼，大吉。说明居尊位而能中正公平地处理争端，是最吉祥的。"},{"name":"上九","text":"或锡之鞶带，终朝三褫之。","xiang":"以讼受服，亦不足敬也。","explain":"或许会被赐予华贵的腰带，但一天之内会被多次剥夺。说明靠争讼取胜得到的荣耀，最终还是会失去，为人所不齿。"}]},{"name":"师","num":7,"sym":"䷆","guaci":"师：贞，丈人吉，无咎。","tuan":"师，众也。贞，正也。能以众正，可以王矣。刚中而应，行险而顺，以此毒天下，而民从之，吉又何咎矣。","xiang":"地中有水，师。君子以容民畜众。","yao":[{"name":"初六","text":"师出以律，否臧凶。","xiang":"师出以律，失律凶也。","explain":"军队出征必须有严明的纪律，纪律不好必遭凶险。"},{"name":"九二","text":"在师中吉，无咎，王三锡命。","xiang":"在师中吉，承天宠也。王三锡命，怀万邦也。","explain":"在军队中，统帅持中不偏则吉，君王多次赏赐任命。说明有德才的人担任统帅是军队的核心。"},{"name":"六三","text":"师或舆尸，凶。","xiang":"师或舆尸，大无功也。","explain":"军队可能会载着尸体归来，凶险。说明用人不当、轻举妄动必然失败。"},{"name":"六四","text":"师左次，无咎。","xiang":"左次无咎，未失常也。","explain":"军队撤退驻扎，没有过错。说明形势不利时知难而退，是兵家的正确策略。"},{"name":"六五","text":"田有禽，利执言，无咎。长子帅师，弟子舆尸，贞凶。","xiang":"长子帅师，以中行也。弟子舆尸，使不当也。","explain":"田中有禽兽，利于出师捕获，没有过错。任命长子统帅军队，次子却载尸而归，守正也凶。说明用人必须专一，不可多方掣肘。"},{"name":"上六","text":"大君有命，开国承家，小人勿用。","xiang":"大君有命，以正功也。小人勿用，必乱邦也。","explain":"天子颁布命令，封赏功臣，开国承家，但小人不可重用。说明战争结束后，论功行赏时绝对不能任用小人。"}]},{"name":"比","num":8,"sym":"䷇","guaci":"比：吉。原筮，元永贞，无咎。不宁方来，后夫凶。","tuan":"比，吉也。比，辅也，下顺从也。原筮元永贞无咎，以刚中也。不宁方来，上下应也。后夫凶，其道穷也。","xiang":"地上有水，比。先王以建万国，亲诸侯。","yao":[{"name":"初六","text":"有孚比之，无咎。有孚盈缶，终来有他吉。","xiang":"比之初六，有他吉也。","explain":"心怀诚信去亲比，没有过错。诚信像装满酒缸的酒，最终会有意外的吉祥。说明亲比的基础是诚信。"},{"name":"六二","text":"比之自内，贞吉。","xiang":"比之自内，不自失也。","explain":"从内心亲近辅佐，守正则吉。说明亲比要出于本心，不是被迫，这样才不会失去自我。"},{"name":"六三","text":"比之匪人。","xiang":"比之匪人，不亦伤乎。","explain":"所亲近的都是不正派的人。说明择友、择主必须谨慎，亲近小人终将受害。"},{"name":"六四","text":"外比之，贞吉。","xiang":"外比于贤，以从上也。","explain":"在外亲近贤人，守正则吉。说明要主动亲近比自己贤能的人，服从上级。"},{"name":"九五","text":"显比，王用三驱，失前禽，邑人不诫，吉。","xiang":"显比之吉，位正中也。舍逆取顺，失前禽也。邑人不诫，上使中也。","explain":"光明正大地亲比，君王打猎时三面驱围，放走前面的禽兽，百姓不惧怕，吉祥。说明亲比要有宽广的胸怀，来者不拒，去者不追。"},{"name":"上六","text":"比之无首，凶。","xiang":"比之无首，无所终也。","explain":"亲比却没有好的开始，凶险。说明开始时不主动亲附，等到最后才想亲近，已经来不及了。"}]},{"name":"小畜","num":9,"sym":"䷈","guaci":"小畜：亨。密云不雨，自我西郊。","tuan":"小畜，柔得位而上下应之，曰小畜。健而巽，刚中而志行，乃亨。密云不雨，尚往也。自我西郊，施未行也。","xiang":"风行天上，小畜。君子以懿文德。","yao":[{"name":"初九","text":"复自道，何其咎，吉。","xiang":"复自道，其义吉也。","explain":"返回正道，有什么过错呢？吉祥。说明在力量不足时，返回本位、修养自身是正确的。"},{"name":"九二","text":"牵复，吉。","xiang":"牵复在中，亦不自失也。","explain":"携手返回正道，吉祥。说明与志同道合的人一起回归正道，不会迷失方向。"},{"name":"九三","text":"舆说辐，夫妻反目。","xiang":"夫妻反目，不能正室也。","explain":"车轮的辐条脱落，夫妻反目成仇。说明家庭内部不和，事业也无法进展。"},{"name":"六四","text":"有孚，血去惕出，无咎。","xiang":"有孚惕出，上合志也。","explain":"心怀诚信，就能避开流血伤害，消除恐惧，没有过错。说明以诚信待人可以化解矛盾。"},{"name":"九五","text":"有孚挛如，富以其邻。","xiang":"有孚挛如，不独富也。","explain":"用诚信之心联结他人，与邻人共同富裕。说明领导者要与大家共享成果。"},{"name":"上九","text":"既雨既处，尚德载，妇贞厉。月几望，君子征凶。","xiang":"既雨既处，德积载也。君子征凶，有所疑也。","explain":"已经下雨了，雨已经停了，阳德被阴柔所装载。妇人守正防危险。月亮接近圆满，君子出征凶险。说明蓄积到极点，要懂得适可而止。"}]},{"name":"履","num":10,"sym":"䷉","guaci":"履虎尾，不咥人，亨。","tuan":"履，柔履刚也。说而应乎乾，是以履虎尾不咥人，亨。刚中正，履帝位而不疚，光明也。","xiang":"上天下泽，履。君子以辩上下，定民志。","yao":[{"name":"初九","text":"素履往，无咎。","xiang":"素履之往，独行愿也。","explain":"以朴素的态度行事，前往没有过错。说明初入社会要保持质朴本色，不随波逐流。"},{"name":"九二","text":"履道坦坦，幽人贞吉。","xiang":"幽人贞吉，中不自乱也。","explain":"行走在平坦的大道上，隐居的人守正则吉。说明心胸坦荡、不慕荣利的人能平安吉祥。"},{"name":"六三","text":"眇能视，跛能履，履虎尾，咥人凶，武人为于大君。","xiang":"眇能视，不足以有明也。跛能履，不足以与行也。咥人之凶，位不当也。","explain":"独眼却自以为能看，跛脚却自以为能走，踩到老虎尾巴，老虎咬人，凶险。武人要效力于大君。说明不自量力、盲目冒进必然招祸。"},{"name":"九四","text":"履虎尾，愬愬终吉。","xiang":"愬愬终吉，志行也。","explain":"踩到老虎尾巴，恐惧警惕，最终吉祥。说明在危险环境中保持谨慎，终能化险为夷。"},{"name":"九五","text":"夬履，贞厉。","xiang":"夬履贞厉，位正当也。","explain":"刚愎独断地行事，守正道也要防危险。说明身居尊位不可刚愎自用，要听取不同意见。"},{"name":"上九","text":"视履考祥，其旋元吉。","xiang":"元吉在上，大有庆也。","explain":"回顾行事的全过程，考察吉凶祸福，圆满返回，大吉。说明事情结束后要善于总结反思。"}]},{"name":"泰","num":11,"sym":"䷊","guaci":"泰：小往大来，吉亨。","tuan":"泰，小往大来，吉亨。则是天地交而万物通也，上下交而其志同也。内阳而外阴，内健而外顺，内君子而外小人，君子道长，小人道消也。","xiang":"天地交，泰。后以财成天地之道，辅相天地之宜，以左右民。","yao":[{"name":"初九","text":"拔茅茹以其汇，征吉。","xiang":"拔茅征吉，志在外也。","explain":"拔起茅草，根系相连，因为同类聚集，前往吉祥。说明团结同志共同进取，可以获得成功。"},{"name":"九二","text":"包荒，用冯河，不遐遗，朋亡，得尚于中行。","xiang":"包荒得尚于中行，以光大也。","explain":"有包容广大的胸怀，可以徒步渡河，不遗忘远方的朋友，不结党营私，能够辅助持中正之道的君主。说明治世之时要胸怀广阔，不徇私情。"},{"name":"九三","text":"无平不陂，无往不复，艰贞无咎。勿恤其孚，于食有福。","xiang":"无往不复，天地际也。","explain":"没有平地不变成斜坡的，没有出去不返回的，在艰难中守正则无咎。不必担心诚信问题，在食享俸禄方面会有福庆。说明泰极将否，要居安思危。"},{"name":"六四","text":"翩翩不富，以其邻，不戒以孚。","xiang":"翩翩不富，皆失实也。不戒以孚，中心愿也。","explain":"翩翩然轻飘而下，不富有，连同邻居一起，不加戒备因为心怀诚信。说明上下相交以诚，不必互相戒备。"},{"name":"六五","text":"帝乙归妹，以祉元吉。","xiang":"以祉元吉，中以行愿也。","explain":"帝乙嫁出妹妹，以此得福，大吉。说明居尊位而能谦逊下贤，必然获得吉祥。"},{"name":"上六","text":"城复于隍，勿用师。自邑告命，贞吝。","xiang":"城复于隍，其命乱也。","explain":"城墙倒塌在干涸的护城河上，不要动用军队。从城邑中传来命令，守正也会有遗憾。说明泰极否来，大势已去，不可强行挽救。"}]},{"name":"否","num":12,"sym":"䷋","guaci":"否之匪人，不利君子贞，大往小来。","tuan":"否之匪人，不利君子贞，大往小来。则是天地不交而万物不通也，上下不交而天下无邦也。内阴而外阳，内柔而外刚，内小人而外君子，小人道长，君子道消也。","xiang":"天地不交，否。君子以俭德辟难，不可荣以禄。","yao":[{"name":"初六","text":"拔茅茹以其汇，贞吉亨。","xiang":"拔茅贞吉，志在君也。","explain":"拔起茅草根系相连，因为同类聚集，守正则吉亨。说明在闭塞之世，君子要团结同道，坚守正道。"},{"name":"六二","text":"包承，小人吉，大人否亨。","xiang":"大人否亨，不乱群也。","explain":"包容承受，小人吉祥，大人闭塞却亨通。说明小人阿谀奉承可以得势，但君子安于闭塞不同流合污，所以亨通。"},{"name":"六三","text":"包羞。","xiang":"包羞，位不当也。","explain":"包藏羞愧。说明小人不择手段谋求高位，最终只会招致羞辱。"},{"name":"九四","text":"有命无咎，畴离祉。","xiang":"有命无咎，志行也。","explain":"承受天命没有过错，众人依附而同得福禄。说明否运将转，有天命相助，团结同志可以扭转局面。"},{"name":"九五","text":"休否，大人吉。其亡其亡，系于苞桑。","xiang":"大人之吉，位正当也。","explain":"休止闭塞局面，大人吉祥。时刻警惕'将要灭亡，将要灭亡'，才能像系在丛生的桑树上一样稳固。说明安而不忘危，存而不忘亡。"},{"name":"上九","text":"倾否，先否后喜。","xiang":"否终则倾，何可长也。","explain":"倾覆闭塞的局面，先闭塞后喜悦。说明否极泰来，闭塞到了极点必然转向通达。"}]},{"name":"同人","num":13,"sym":"䷌","guaci":"同人于野，亨。利涉大川，利君子贞。","tuan":"同人，柔得位得中而应乎乾，曰同人。同人曰同人于野亨，利涉大川，乾行也。文明以健，中正而应，君子正也。唯君子为能通天下之志。","xiang":"天与火，同人。君子以类族辨物。","yao":[{"name":"初九","text":"同人于门，无咎。","xiang":"出门同人，又谁咎也。","explain":"在门外与人和同，没有过错。说明心地坦荡，不分亲厚薄彼，公正待人。"},{"name":"六二","text":"同人于宗，吝。","xiang":"同人于宗，吝道也。","explain":"只在宗族内部和同，会有遗憾。说明和同不能局限于小圈子，要有广阔胸怀。"},{"name":"九三","text":"伏戎于莽，升其高陵，三岁不兴。","xiang":"伏戎于莽，敌刚也。三岁不兴，安行也。","explain":"在草莽中埋伏军队，登上高陵观察，三年也不敢出兵。说明和同之中有争端，力量不足时不可妄动。"},{"name":"九四","text":"乘其墉，弗克攻，吉。","xiang":"乘其墉，义弗克也。其吉，则困而反则也。","explain":"登上城墙，却不发动进攻，吉祥。说明能够反躬自省，在道义上发现不对就及时停止，是明智的。"},{"name":"九五","text":"同人先号咷而后笑，大师克相遇。","xiang":"同人之先，以中直也。大师相遇，言相克也。","explain":"和同之人先痛哭后欢笑，大军战胜之后才能相遇。说明和同的过程有曲折，经过斗争才能实现真正的团结。"},{"name":"上九","text":"同人于郊，无悔。","xiang":"同人于郊，志未得也。","explain":"在郊外与人和同，没有悔恨。说明虽未得志，但也不与世俗同流合污，保持了气节。"}]},{"name":"大有","num":14,"sym":"䷍","guaci":"大有：元亨。","tuan":"大有，柔得尊位大中，而上下应之，曰大有。其德刚健而文明，应乎天而时行，是以元亨。","xiang":"火在天上，大有。君子以遏恶扬善，顺天休命。","yao":[{"name":"初九","text":"无交害，匪咎，艰则无咎。","xiang":"大有初九，无交害也。","explain":"不互相侵害，没有过错，记住艰难就不会有过错。说明富有时要保持戒惧，不侵害他人。"},{"name":"九二","text":"大车以载，有攸往，无咎。","xiang":"大车以载，积中不败也。","explain":"用大车装载，有所前往，没有过错。说明能够承担重任，积累财富而不致败毁。"},{"name":"九三","text":"公用亨于天子，小人弗克。","xiang":"公用亨于天子，小人害也。","explain":"公侯向天子献礼致敬，小人做不到。说明富有之后要向君王效忠，小人做不到这一点只会为害。"},{"name":"九四","text":"匪其彭，无咎。","xiang":"匪其彭无咎，明辨皙也。","explain":"不过分张扬盛大，没有过错。说明富有时要保持谦逊，不炫富自满。"},{"name":"六五","text":"厥孚交如，威如，吉。","xiang":"厥孚交如，信以发志也。威如之吉，易而无备也。","explain":"以诚信与人交往，又有威仪，吉祥。说明领导者以诚待人又保持威严，使人信服。"},{"name":"上九","text":"自天祐之，吉无不利。","xiang":"大有上吉，自天祐也。","explain":"从上天获得保佑，吉祥没有不利。说明满而不溢，顺天而行，自然获得天佑。"}]},{"name":"谦","num":15,"sym":"䷎","guaci":"谦：亨，君子有终。","tuan":"谦亨，天道下济而光明，地道卑而上行。天道亏盈而益谦，地道变盈而流谦，鬼神害盈而福谦，人道恶盈而好谦。谦尊而光，卑而不可逾，君子之终也。","xiang":"地中有山，谦。君子以裒多益寡，称物平施。","yao":[{"name":"初六","text":"谦谦君子，用涉大川，吉。","xiang":"谦谦君子，卑以自牧也。","explain":"非常谦逊的君子，可以渡过大河险阻，吉祥。说明谦逊是克服困难的重要品质。"},{"name":"六二","text":"鸣谦，贞吉。","xiang":"鸣谦贞吉，中心得也。","explain":"谦逊的名声外扬，守正则吉。说明谦逊发自内心，名声远播是真正的吉祥。"},{"name":"九三","text":"劳谦君子，有终吉。","xiang":"劳谦君子，万民服也。","explain":"勤劳而谦逊的君子，最终有好结果，吉祥。这是易经中唯一'吉'字且无任何不利条件的一爻，说明功劳越大越谦逊，最得人心。"},{"name":"六四","text":"无不利，撝谦。","xiang":"无不利撝谦，不违则也。","explain":"没有任何不利，发挥谦逊的美德。说明处处发挥谦逊，办事不会违反原则。"},{"name":"六五","text":"不富以其邻，利用侵伐，无不利。","xiang":"利用侵伐，征不服也。","explain":"不富有是因为邻居的原因，利于出兵征伐，没有不利。说明谦逊不是软弱，对于骄横不服者可以征伐。"},{"name":"上六","text":"鸣谦，利用行师，征邑国。","xiang":"鸣谦，志未得也。可用行师征邑国也。","explain":"谦逊的名声远扬，利于出兵征讨封地内的叛乱者。说明谦逊之名远播，仍可以用兵讨逆。"}]},{"name":"豫","num":16,"sym":"䷏","guaci":"豫：利建侯行师。","tuan":"豫，刚应而志行，顺以动，豫。豫顺以动，故天地如之，而况建侯行师乎？天地以顺动，故日月不过而四时不忒。圣人以顺动，则刑罚清而民服。豫之时义大矣哉。","xiang":"雷出地奋，豫。先王以作乐崇德，殷荐之上帝，以配祖考。","yao":[{"name":"初六","text":"鸣豫，凶。","xiang":"初六鸣豫，志穷凶也。","explain":"自鸣得意，快乐过度，凶险。说明小人得志便忘乎所以，没有好结果。"},{"name":"六二","text":"介于石，不终日，贞吉。","xiang":"不终日贞吉，以中正也。","explain":"像石头一样坚定耿介，不等一天过完就领悟了欢乐要适中的道理，守正则吉。说明在安乐中保持清醒，坚守中正。"},{"name":"六三","text":"盱豫悔，迟有悔。","xiang":"盱豫有悔，位不当也。","explain":"媚上求乐，会有悔恨；迟疑不决，也会有悔恨。说明靠谄媚讨好上级来取乐，或执迷不悟，都会后悔。"},{"name":"九四","text":"由豫，大有得，勿疑。朋盍簪。","xiang":"由豫大有得，志大行也。","explain":"人们依靠他得到欢乐，大有所得，不必疑虑，朋友会像簪子束发一样聚合在他周围。说明这一爻是欢乐的核心，能够给大家带来快乐的人，众人都会归附。"},{"name":"六五","text":"贞疾，恒不死。","xiang":"六五贞疾，乘刚也。恒不死，中未亡也。","explain":"守正道防备疾病，长久不会灭亡。说明在安乐中要警惕弊病，坚守中道就不会败亡。"},{"name":"上六","text":"冥豫成，有渝无咎。","xiang":"冥豫在上，何可长也。","explain":"沉溺于昏天黑地的享乐已成事实，如果能改正就没有过错。说明乐极生悲，但迷途知返仍可无咎。"}]},{"name":"随","num":17,"sym":"䷐","guaci":"随：元亨利贞，无咎。","tuan":"随，刚来而下柔，动而说，随。大亨贞无咎，而天下随时。随之时义大矣哉。","xiang":"泽中有雷，随。君子以向晦入宴息。","yao":[{"name":"初九","text":"官有渝，贞吉，出门交有功。","xiang":"官有渝，从正吉也。出门交有功，不失也。","explain":"观念随时代变化，守正则吉，出门与人交往能获成功。说明随机应变但不失原则，多交朋友事业有成。"},{"name":"六二","text":"系小子，失丈夫。","xiang":"系小子，弗兼与也。","explain":"依附了年轻小子，就会失去大丈夫。说明随从选择必须慎重，不可贪小失大。"},{"name":"六三","text":"系丈夫，失小子，随有求得，利居贞。","xiang":"系丈夫，志舍下也。","explain":"依附大丈夫，失去小子，追随他有求必得，利于静居守正。说明追随贤能的人，能够实现愿望，但动机要纯正。"},{"name":"九四","text":"随有获，贞凶。有孚在道，以明，何咎。","xiang":"随有获，其义凶也。有孚在道，明功也。","explain":"追随他人而有所收获，守正也防凶险。心怀诚信合乎正道，光明磊落，有什么过错呢？说明功高震主时必须守正持诚，才能免祸。"},{"name":"九五","text":"孚于嘉，吉。","xiang":"孚于嘉吉，位正中也。","explain":"真诚地随从美善之道，吉祥。说明君主能从善如流，信任善人，自然吉祥。"},{"name":"上六","text":"拘系之，乃从维之，王用亨于西山。","xiang":"拘系之，上穷也。","explain":"拘禁束缚他，又从而维系他，君王在西山祭祀。说明追随到了极点，即使被挽留也不肯离去，至诚可以通神。"}]},{"name":"蛊","num":18,"sym":"䷑","guaci":"蛊：元亨，利涉大川。先甲三日，后甲三日。","tuan":"蛊，刚上而柔下，巽而止，蛊。蛊元亨而天下治也。利涉大川，往有事也。先甲三日后甲三日，终则有始，天行也。","xiang":"山下有风，蛊。君子以振民育德。","yao":[{"name":"初六","text":"干父之蛊，有子，考无咎，厉终吉。","xiang":"干父之蛊，意承考也。","explain":"匡正父亲的过失，有这样的儿子，父亲可以没有过错，虽有危险最终吉祥。说明继承父业时要纠正父辈的弊政。"},{"name":"九二","text":"干母之蛊，不可贞。","xiang":"干母之蛊，得中道也。","explain":"匡正母亲的过失，不可过于固执。说明处理内部事务要讲究方法，不可过于刚直。"},{"name":"九三","text":"干父之蛊，小有悔，无大咎。","xiang":"干父之蛊，终无咎也。","explain":"匡正父亲的过失，会有小小的懊悔，但没有大的过错。说明纠正父辈错误时即使有些方法不当，也无大害。"},{"name":"六四","text":"裕父之蛊，往见吝。","xiang":"裕父之蛊，往未得也。","explain":"宽容放纵父亲的过失，继续下去会有遗憾。说明对父辈错误姑息纵容，发展下去会出问题。"},{"name":"六五","text":"干父之蛊，用誉。","xiang":"干父用誉，承以德也。","explain":"匡正父亲的过失，得到赞誉。说明用美德继承前人事业，既纠正错误又获得好名声。"},{"name":"上九","text":"不事王侯，高尚其事。","xiang":"不事王侯，志可则也。","explain":"不侍奉王侯，把自己的志向行为看得很高尚。说明在乱世中可以归隐，保持高尚的节操。"}]},{"name":"临","num":19,"sym":"䷒","guaci":"临：元亨利贞，至于八月有凶。","tuan":"临，刚浸而长，说而顺，刚中而应，大亨以正，天之道也。至于八月有凶，消不久也。","xiang":"泽上有地，临。君子以教思无穷，容保民无疆。","yao":[{"name":"初九","text":"咸临，贞吉。","xiang":"咸临贞吉，志行正也。","explain":"感应而莅临，守正则吉。说明统治者以正道感应百姓，自然吉祥。"},{"name":"九二","text":"咸临，吉无不利。","xiang":"咸临吉无不利，未顺命也。","explain":"感应而莅临，吉祥没有不利。说明德行中正，与君相应，行事顺利。"},{"name":"六三","text":"甘临，无攸利。既忧之，无咎。","xiang":"甘临，位不当也。既忧之，咎不长也。","explain":"用甜言蜜语监临百姓，没有任何好处。如果能忧惧改正，就没有过错。说明花言巧语的统治不能长久。"},{"name":"六四","text":"至临，无咎。","xiang":"至临无咎，位当也。","explain":"极为亲近地监临，没有过错。说明接近群众，体察民情。"},{"name":"六五","text":"知临，大君之宜，吉。","xiang":"大君之宜，行中之谓也。","explain":"用智慧监临，是伟大君主适宜的做法，吉祥。说明知人善任，用智慧治理天下。"},{"name":"上六","text":"敦临，吉无咎。","xiang":"敦临之吉，志在内也。","explain":"以敦厚之心监临，吉祥没有过错。说明以宽厚仁慈之道待民，始终如一。"}]},{"name":"观","num":20,"sym":"䷓","guaci":"观：盥而不荐，有孚颙若。","tuan":"大观在上，顺而巽，中正以观天下。观盥而不荐，有孚颙若，下观而化也。观天之神道而四时不忒，圣人以神道设教，而天下服矣。","xiang":"风行地上，观。先王以省方观民设教。","yao":[{"name":"初六","text":"童观，小人无咎，君子吝。","xiang":"初六童观，小人道也。","explain":"像幼童一样观察事物，对小人来说没有过错，对君子来说就会有遗憾。说明君子看问题要有深度，不能幼稚浅薄。"},{"name":"六二","text":"窥观，利女贞。","xiang":"窥观女贞，亦可丑也。","explain":"从门缝里偷看，利于女子守正。说明男子观察问题要有远见，不能狭隘片面。"},{"name":"六三","text":"观我生进退。","xiang":"观我生进退，未失道也。","explain":"观察自己的行为来决定进退。说明经常反省自己，根据情况决定进退，不失正道。"},{"name":"六四","text":"观国之光，利用宾于王。","xiang":"观国之光，尚宾也。","explain":"观察国家的光辉政绩，利于做君王的宾客。说明观察国家政治清明，可以出仕辅佐君王。"},{"name":"九五","text":"观我生，君子无咎。","xiang":"观我生，观民也。","explain":"观察自己的行为，君子没有过错。说明君主观察民风民情来反省自己的政治，自然无咎。"},{"name":"上九","text":"观其生，君子无咎。","xiang":"观其生，志未平也。","explain":"观察他人的行为，君子没有过错。说明退居高位仍观察天下，思考国家前途命运。"}]},{"name":"噬嗑","num":21,"sym":"䷔","guaci":"噬嗑：亨，利用狱。","tuan":"颐中有物曰噬嗑。噬嗑而亨，刚柔分，动而明，雷电合而章。柔得中而上行，虽不当位，利用狱也。","xiang":"雷电噬嗑，先王以明罚敕法。","yao":[{"name":"初九","text":"屦校灭趾，无咎。","xiang":"屦校灭趾，不行也。","explain":"脚上戴着刑具，遮没了脚趾，没有大的过错。说明小惩大诫，防止犯更大的错误。"},{"name":"六二","text":"噬肤灭鼻，无咎。","xiang":"噬肤灭鼻，乘刚也。","explain":"咬嫩肉连鼻子也没进去了，没有过错。说明处理简单案件要果断深入。"},{"name":"六三","text":"噬腊肉遇毒，小吝无咎。","xiang":"遇毒，位不当也。","explain":"咬腊肉遇到有毒的，小有不适但没有大错。说明处理复杂案件会遇到困难，但最终无咎。"},{"name":"九四","text":"噬干胏得金矢，利艰贞吉。","xiang":"利艰贞吉，未光也。","explain":"咬带骨头的干肉得到铜箭头，利于在艰难中守正则吉。说明办案遇到硬骨头，要像金属箭头一样刚直，虽然艰难最终吉祥。"},{"name":"六五","text":"噬干肉得黄金，贞厉无咎。","xiang":"贞厉无咎，得当也。","explain":"咬干肉得到黄金，守正防危没有过错。说明断案要坚守中正，像黄金一样刚正不阿。"},{"name":"上九","text":"何校灭耳，凶。","xiang":"何校灭耳，聪不明也。","explain":"肩上戴着刑具，遮没了耳朵，凶险。说明罪行积累到极点，不听忠告，终于招致大祸。"}]},{"name":"贲","num":22,"sym":"䷕","guaci":"贲：亨，小利有攸往。","tuan":"贲亨，柔来而文刚，故亨。分刚上而文柔，故小利有攸往。刚柔交错，天文也。文明以止，人文也。观乎天文以察时变，观乎人文以化成天下。","xiang":"山下有火，贲。君子以明庶政，无敢折狱。","yao":[{"name":"初九","text":"贲其趾，舍车而徒。","xiang":"舍车而徒，义弗乘也。","explain":"修饰自己的脚趾，舍弃车子徒步行走。说明修饰要适可而止，在低位时不贪求非分的享受。"},{"name":"六二","text":"贲其须。","xiang":"贲其须，与上兴也。","explain":"修饰自己的胡须。说明修饰表面，要依附于实质，随上位者而动。"},{"name":"九三","text":"贲如濡如，永贞吉。","xiang":"永贞之吉，终莫之陵也。","explain":"修饰得润色光泽，永远守正则吉。说明修饰得体，但要长久守正才不会被人凌辱。"},{"name":"六四","text":"贲如皤如，白马翰如，匪寇婚媾。","xiang":"六四当位疑也。匪寇婚媾，终无尤也。","explain":"修饰得洁白素雅，白马奔跑如飞，不是强盗而是来求婚的。说明追求朴素本质，不加虚饰。"},{"name":"六五","text":"贲于丘园，束帛戋戋，吝终吉。","xiang":"六五之吉，有喜也。","explain":"修饰山丘园圃，只用了很少的一束束丝帛，看起来吝啬但最终吉祥。说明重实质轻浮华，朴素简约反而吉祥。"},{"name":"上九","text":"白贲，无咎。","xiang":"白贲无咎，上得志也。","explain":"用白色装饰，返璞归真，没有过错。说明修饰到最高境界是回归质朴自然。"}]},{"name":"剥","num":23,"sym":"䷖","guaci":"剥：不利有攸往。","tuan":"剥，剥也，柔变刚也。不利有攸往，小人长也。顺而止之，观象也。君子尚消息盈虚，天行也。","xiang":"山附于地，剥。上以厚下安宅。","yao":[{"name":"初六","text":"剥床以足，蔑贞凶。","xiang":"剥床以足，以灭下也。","explain":"剥落床先从床脚开始，若蔑视正道则凶。说明衰败从基础开始，根基不稳则危险。"},{"name":"六二","text":"剥床以辨，蔑贞凶。","xiang":"剥床以辨，未有与也。","explain":"剥落到床腿辨的部位，若蔑视正道则凶。说明衰败进一步发展，仍无援助。"},{"name":"六三","text":"剥之无咎。","xiang":"剥之无咎，失上下也。","explain":"处于剥落之时却没有过错。说明与众阴不同，独应刚阳，所以无咎。"},{"name":"六四","text":"剥床以肤，凶。","xiang":"剥床以肤，切近灾也。","explain":"剥落到床上人的皮肤了，凶险。说明灾祸已经迫近身体。"},{"name":"六五","text":"贯鱼以宫人宠，无不利。","xiang":"以宫人宠，终无尤也。","explain":"像鱼贯而行一样率领宫女们承受宠爱，没有不利。说明领导者能引导阴柔小人顺从阳刚，顺势而为。"},{"name":"上九","text":"硕果不食，君子得舆，小人剥庐。","xiang":"君子得舆，民所载也。小人剥庐，终不可用也。","explain":"大果实没有被吃掉，君子得到车子，小人则会毁坏房屋。说明在剥落之世，唯有阳刚君子是硕果仅存的希望。"}]},{"name":"复","num":24,"sym":"䷗","guaci":"复：亨。出入无疾，朋来无咎。反复其道，七日来复，利有攸往。","tuan":"复亨，刚反，动而以顺行，是以出入无疾朋来无咎。反复其道七日来复，天行也。利有攸往，刚长也。复其见天地之心乎。","xiang":"雷在地中，复。先王以至日闭关，商旅不行，后不省方。","yao":[{"name":"初九","text":"不远复，无祗悔，元吉。","xiang":"不远之复，以修身也。","explain":"走不远就返回正道，不会有大的悔恨，大吉。说明知错能改，很快回归正道是最吉祥的。"},{"name":"六二","text":"休复，吉。","xiang":"休复之吉，以下仁也。","explain":"美满地返回，吉祥。说明亲近仁人志士，乐于从善。"},{"name":"六三","text":"频复，厉无咎。","xiang":"频复之厉，义无咎也。","explain":"屡次犯错屡次返回，虽然有危险但没有过错。说明多次犯错但能改，仍然无咎。"},{"name":"六四","text":"中行独复。","xiang":"中行独复，以从道也。","explain":"在半路上独自返回正道。说明在众人随波逐流时，独自遵循正道。"},{"name":"六五","text":"敦复，无悔。","xiang":"敦复无悔，中以自考也。","explain":"敦厚笃诚地返回正道，没有悔恨。说明经过深思熟虑，诚心回归正道。"},{"name":"上六","text":"迷复，凶，有灾眚。用行师，终有大败，以其国君凶，至于十年不克征。","xiang":"迷复之凶，反君道也。","explain":"迷途不知返回，凶险，有灾祸。用兵打仗最终会大败，连累国君凶险，十年之久也不能恢复。说明执迷不悟不知回头，必遭大灾。"}]},{"name":"无妄","num":25,"sym":"䷘","guaci":"无妄：元亨利贞。其匪正有眚，不利有攸往。","tuan":"无妄，刚自外来而为主于内，动而健，刚中而应，大亨以正，天之命也。其匪正有眚，不利有攸往，无妄之往何之矣？天命不祐，行矣哉。","xiang":"天下雷行，物与无妄。先王以茂对时育万物。","yao":[{"name":"初九","text":"无妄往吉。","xiang":"无妄之往，得志也。","explain":"不妄为，前往吉祥。说明遵循正道不妄动，前行必得成功。"},{"name":"六二","text":"不耕获，不菑畲，则利有攸往。","xiang":"不耕获，未富也。","explain":"不期望刚耕种就有收获，不开荒就想种熟地，这样才利于有所前往。说明不谋私利，不计较眼前得失，遵循自然规律。"},{"name":"六三","text":"无妄之灾，或系之牛，行人之得，邑人之灾。","xiang":"行人得牛，邑人灾也。","explain":"不妄为也会有灾祸：有人拴着牛，过路人牵走了，村里人却蒙受嫌疑。说明无妄之灾是意外的横祸，不是自己造成的。"},{"name":"九四","text":"可贞，无咎。","xiang":"可贞无咎，固有之也。","explain":"能够坚守正道，没有过错。说明在容易妄动的位置，守正就可以无咎。"},{"name":"九五","text":"无妄之疾，勿药有喜。","xiang":"无妄之药，不可试也。","explain":"不妄为却生了小病，不必吃药，会自愈有喜。说明意外的小疾不必乱用药，让其自然痊愈就好。"},{"name":"上九","text":"无妄行，有眚，无攸利。","xiang":"无妄之行，穷之灾也。","explain":"虽然不妄为，但如果行动仍有灾祸，没有任何好处。说明时运已尽，不可强行行动。"}]},{"name":"大畜","num":26,"sym":"䷙","guaci":"大畜：利贞，不家食吉，利涉大川。","tuan":"大畜，刚健笃实辉光，日新其德，刚上而尚贤，能止健，大正也。不家食吉，养贤也。利涉大川，应乎天也。","xiang":"天在山中，大畜。君子以多识前言往行，以畜其德。","yao":[{"name":"初九","text":"有厉，利已。","xiang":"有厉则已，不犯灾也。","explain":"有危险，利于停止前进。说明力量还弱时，积蓄阶段不要冒险行动。"},{"name":"九二","text":"舆说輹。","xiang":"舆说輹，中无尤也。","explain":"车子的车輹脱落了。说明审时度势，主动停车不进，不冒失行动。"},{"name":"九三","text":"良马逐，利艰贞。曰闲舆卫，利有攸往。","xiang":"利有攸往，上合志也。","explain":"良马奔驰，利于在艰难中守正。熟习驾车防卫的技术，利于有所前往。说明积蓄充足，条件成熟时可以进取。"},{"name":"六四","text":"童牛之牿，元吉。","xiang":"六四元吉，有喜也。","explain":"给小牛角绑上横木防止顶人，大吉。说明防患于未然，在恶念萌芽时就加以制止。"},{"name":"六五","text":"豮豕之牙，吉。","xiang":"六五之吉，有庆也。","explain":"被阉割过的公猪的牙齿，不会伤人，吉祥。说明抓住根本，去掉凶悍之物的锋芒，自然无害。"},{"name":"上九","text":"何天之衢，亨。","xiang":"何天之衢，道大行也。","explain":"担负着通天的大道，亨通。说明蓄积到极点，大道通行于天下。"}]},{"name":"颐","num":27,"sym":"䷚","guaci":"颐：贞吉。观颐，自求口实。","tuan":"颐贞吉，养正则吉也。观颐，观其所养也。自求口实，观其自养也。天地养万物，圣人养贤以及万民。颐之时大矣哉。","xiang":"山下有雷，颐。君子以慎言语，节饮食。","yao":[{"name":"初九","text":"舍尔灵龟，观我朵颐，凶。","xiang":"观我朵颐，亦不足贵也。","explain":"舍弃你灵验的龟兆，看着我鼓起腮帮子吃东西，凶险。说明不珍惜自己的灵性，贪求口腹之欲，是愚蠢的。"},{"name":"六二","text":"颠颐拂经于丘颐，征凶。","xiang":"六二征凶，行失类也。","explain":"颠倒养生之道，违背常理向高丘上的尊者求养，前往有凶险。说明求养不以正道。"},{"name":"六三","text":"拂颐，贞凶，十年勿用，无攸利。","xiang":"十年勿用，道大悖也。","explain":"违背养生之道，守正也凶，十年都不要有所作为，没有任何好处。说明完全违背养德养生正道，不可任用。"},{"name":"六四","text":"颠颐吉，虎视眈眈，其欲逐逐，无咎。","xiang":"颠颐之吉，上施光也。","explain":"颠倒求养之道（向下求养贤才），吉祥。像老虎一样眈眈注视，欲望迫切追逐，没有过错。说明君主向下求贤，孜孜不倦。"},{"name":"六五","text":"拂经，居贞吉，不可涉大川。","xiang":"居贞之吉，顺以从上也。","explain":"违背常理，静居守正则吉，不能渡过大河险阻。说明依靠尊者养贤，守静则吉，不可冒险。"},{"name":"上九","text":"由颐，厉吉，利涉大川。","xiang":"由颐厉吉，大有庆也。","explain":"天下依赖他而得到养育，知危戒惧则吉，利于渡过大河险阻。说明贤者居高位，担当养天下的重任。"}]},{"name":"大过","num":28,"sym":"䷛","guaci":"大过：栋桡，利有攸往，亨。","tuan":"大过，大者过也。栋桡，本末弱也。刚过而中，巽而说行，利有攸往乃亨。大过之时大矣哉。","xiang":"泽灭木，大过。君子以独立不惧，遁世无闷。","yao":[{"name":"初六","text":"藉用白茅，无咎。","xiang":"藉用白茅，柔在下也。","explain":"用白茅铺垫祭品，没有过错。说明在非常时期，极其谨慎小心可以免过。"},{"name":"九二","text":"枯杨生稊，老夫得其女妻，无不利。","xiang":"老夫女妻，过以相与也。","explain":"枯杨树发新芽，老年男子娶了年轻妻子，没有不利。说明阳刚过盛时能得到阴柔调剂，可以重新焕发活力。"},{"name":"九三","text":"栋桡，凶。","xiang":"栋桡之凶，不可以有辅也。","explain":"栋梁弯曲，凶险。说明过刚而不能用柔，独木难支大厦。"},{"name":"九四","text":"栋隆，吉，有它吝。","xiang":"栋隆之吉，不桡乎下也。","explain":"栋梁隆起，吉祥，但有其他变故会有遗憾。说明栋梁向上挺起可以承重，但要避免其他问题。"},{"name":"九五","text":"枯杨生华，老妇得其士夫，无咎无誉。","xiang":"枯杨生华，何可久也。老妇士夫，亦可丑也。","explain":"枯杨树开花，老妇人嫁给年轻丈夫，没有过错也不值得称道。说明刚柔配不当，虽能一时热闹但不能长久。"},{"name":"上六","text":"过涉灭顶，凶，无咎。","xiang":"过涉之凶，不可咎也。","explain":"涉水过河被水淹没头顶，凶险，但无可指责。说明在大过之世，为了救世而牺牲，虽凶但精神可嘉，不应归咎于他。"}]},{"name":"坎","num":29,"sym":"䷜","guaci":"习坎：有孚维心亨，行有尚。","tuan":"习坎，重险也。水流而不盈，行险而不失其信。维心亨，乃以刚中也。行有尚，往有功也。天险不可升也，地险山川丘陵也，王公设险以守其国。险之时用大矣哉。","xiang":"水洊至，习坎。君子以常德行，习教事。","yao":[{"name":"初六","text":"习坎，入于坎窞，凶。","xiang":"习坎入坎，失道凶也。","explain":"重重险陷，落入深坑之中，凶险。说明初入险境，迷失方向，不知深浅。"},{"name":"九二","text":"坎有险，求小得。","xiang":"求小得，未出中也。","explain":"坎险中有危险，可以先求小的收获。说明在险难中不可期望过高，先求小的进展逐步脱险。"},{"name":"六三","text":"来之坎坎，险且枕，入于坎窞，勿用。","xiang":"来之坎坎，终无功也。","explain":"来去都是险坑，危险又危险，落入深坑中，不可行动。说明处于重重险陷之中，进退两难，不可轻举妄动。"},{"name":"六四","text":"樽酒簋贰，用缶，纳约自牖，终无咎。","xiang":"樽酒簋贰，刚柔际也。","explain":"一樽酒，两碗饭，用瓦器盛着，从窗户里递进来，最终没有过错。说明在险难中，以简朴诚信交往，可以免祸。"},{"name":"九五","text":"坎不盈，祗既平，无咎。","xiang":"坎不盈，中未大也。","explain":"坎坑还没有填满，小丘已经平了，没有过错。说明正在逐步克服险难，虽未大获成功但方向正确。"},{"name":"上六","text":"系用徽纆，寘于丛棘，三岁不得，凶。","xiang":"上六失道，凶三岁也。","explain":"被绳索捆绑，放在荆棘丛中，三年都不能解脱，凶险。说明深陷险地不能自拔，是长期违背正道的结果。"}]},{"name":"离","num":30,"sym":"䷝","guaci":"离：利贞，亨。畜牝牛吉。","tuan":"离，丽也。日月丽乎天，百谷草木丽乎土，重明以丽乎正，乃化成天下。柔丽乎中正故亨，是以畜牝牛吉也。","xiang":"明两作离，大人以继明照于四方。","yao":[{"name":"初九","text":"履错然，敬之无咎。","xiang":"履错之敬，以辟咎也。","explain":"行事一开始就谨慎郑重，保持警惕就没有过错。说明光明初现时，要恭敬谨慎从事。"},{"name":"六二","text":"黄离，元吉。","xiang":"黄离元吉，得中道也。","explain":"黄色附着于物，大吉。黄色代表中正，说明保持中正之道获得光明是大吉的。"},{"name":"九三","text":"日昃之离，不鼓缶而歌，则大耋之嗟，凶。","xiang":"日昃之离，何可久也。","explain":"太阳西斜时的光明，不敲着瓦器唱歌，就会发出老暮穷途的哀叹，凶险。说明要正确对待光明的盛衰，年老也要乐观。"},{"name":"九四","text":"突如其来如，焚如，死如，弃如。","xiang":"突如其来如，无所容也。","explain":"突然到来，像烈火焚烧，像死亡，像被抛弃。说明昏暴之光突然出现，但不可持久，必然灭亡。"},{"name":"六五","text":"出涕沱若，戚嗟若，吉。","xiang":"六五之吉，离王公也。","explain":"泪水滂沱，忧伤悲叹，吉祥。说明在危险中能忧惧警惕，反而得吉。"},{"name":"上九","text":"王用出征，有嘉折首，获匪其丑，无咎。","xiang":"王用出征，以正邦也。","explain":"君王出兵征伐，斩杀作恶的首恶，俘获其同党，没有过错。说明光明之极可以讨伐邪恶，安定天下。"}]},{"name":"咸","num":31,"sym":"䷞","guaci":"咸：亨，利贞，取女吉。","tuan":"咸，感也。柔上而刚下，二气感应以相与，止而说，男下女，是以亨利贞取女吉也。天地感而万物化生，圣人感人心而天下和平。观其所感，而天地万物之情可见矣。","xiang":"山上有泽，咸。君子以虚受人。","yao":[{"name":"初六","text":"咸其拇。","xiang":"咸其拇，志在外也。","explain":"感应在大脚趾上。说明感应刚刚开始，还不足以行动。"},{"name":"六二","text":"咸其腓，凶，居吉。","xiang":"虽凶居吉，顺不害也。","explain":"感应在小腿肚上，有凶险，安居不动则吉。说明感应不当、急欲行动会有凶，静观待变则吉。"},{"name":"九三","text":"咸其股，执其随，往吝。","xiang":"咸其股，亦不处也。志在随人，所执下也。","explain":"感应在大腿上，执意追随别人，前往会有遗憾。说明没有主见，盲从他人，是卑下的。"},{"name":"九四","text":"贞吉悔亡，憧憧往来，朋从尔思。","xiang":"贞吉悔亡，未感害也。憧憧往来，未光大也。","explain":"守正则吉悔恨消失，心意频频往来，朋友顺从你的思念。这是咸卦的主爻，说明真诚的感应能够打动人心。"},{"name":"九五","text":"咸其脢，无悔。","xiang":"咸其脢，志末也。","explain":"感应在背脊肉上，不会后悔。说明感应不深，只是浅层次的，但也无悔。"},{"name":"上六","text":"咸其辅颊舌。","xiang":"咸其辅颊舌，滕口说也。","explain":"感应在口舌上。说明只用言语感人，缺乏真诚，不是深刻的感应。"}]},{"name":"恒","num":32,"sym":"䷟","guaci":"恒：亨，无咎，利贞，利有攸往。","tuan":"恒，久也。刚上而柔下，雷风相与，巽而动，刚柔皆应，恒。恒亨无咎利贞，久于其道也。天地之道恒久而不已也。利有攸往，终则有始也。日月得天而能久照，四时变化而能久成，圣人久于其道而天下化成。观其所恒而天地万物之情可见矣。","xiang":"雷风恒，君子以立不易方。","yao":[{"name":"初六","text":"浚恒，贞凶，无攸利。","xiang":"浚恒之凶，始求深也。","explain":"一开始就强求恒久，守正也凶，没有任何好处。说明做事情一开始就急于求深求久，违反渐进规律。"},{"name":"九二","text":"悔亡。","xiang":"九二悔亡，能久中也。","explain":"悔恨消失。因为能够长久坚守中道。"},{"name":"九三","text":"不恒其德，或承之羞，贞吝。","xiang":"不恒其德，无所容也。","explain":"不能长久保持德行，有时会蒙受羞辱，守正也难免遗憾。说明三心二意、不能守恒的人会为人所不齿。"},{"name":"九四","text":"田无禽。","xiang":"久非其位，安得禽也。","explain":"打猎打不到禽兽。说明长久地处在不恰当的位置，徒劳无功。"},{"name":"六五","text":"恒其德，贞，妇人吉，夫子凶。","xiang":"妇人贞吉，从一而终也。夫子制义，从妇凶也。","explain":"长久保持柔顺的德行，对妇人来说吉祥，对男子来说凶险。说明妇人从一而终是吉，但男子要权衡事理，一味柔顺就会有凶险。"},{"name":"上六","text":"振恒，凶。","xiang":"振恒在上，大无功也。","explain":"动摇不定不能恒久，凶险。说明高居上位却摇摆不定，不能坚守常道，必然一事无成。"}]}]
-;
-JING_FULL_32.forEach(function(g,i){ jingData[i]=g; });
-
-// ==================== 渲染六十四卦网格 ====================
-const hexGrid = document.getElementById('hexGrid');
-for (let i = 0; i < 64; i++) {
-  const cell = document.createElement('div');
-  cell.className = 'hex-cell';
-  cell.innerHTML = hexSymbols[i] + '<div class="hex-num">' + hexNames[i] + '</div>';
-  cell.onclick = () => openJing(i);
-  hexGrid.appendChild(cell);
-}
-
-// ==================== 经文弹窗 ====================
-function openJing(idx) {
-  document.getElementById('jingModal').classList.add('show');
-  document.getElementById('jingModalTitle').textContent = '易经全文 · ' + hexNames[idx] + '卦';
-  const data = jingData[idx];
-  
-  // 侧边栏
-  let sidebarHtml = '';
-  for (let i = 0; i < 64; i++) {
-    sidebarHtml += '<div class="hex-sidebar-item' + (i===idx?' active':'') + '" onclick="openJing('+i+')">' +
-      '<span class="hex-sidebar-sym">' + hexSymbols[i] + '</span>' + (i+1) + '.' + hexNames[i] + '</div>';
-  }
-  
-  // 卦内容
-  let yaoHtml = '';
-  data.yao.forEach(y => {
-    yaoHtml += '<div class="yao-item">' +
-      '<div class="yao-name">' + y.name + '</div>' +
-      '<div class="yao-text">' + y.text + '</div>' +
-      (y.xiang ? '<div class="yao-xiang">《象》曰：' + y.xiang + '</div>' : '') +
-      '<div class="yao-explain">' + y.explain + '</div>' +
-      '</div>';
-  });
-  
-  document.getElementById('jingContent').innerHTML = 
-    '<div class="hex-sidebar">' + sidebarHtml + '</div>' +
-    '<div>' +
-      '<div class="hex-big-symbol">' + data.sym + '</div>' +
-      '<h2>' + data.name + ' 卦</h2>' +
-      '<div class="hex-meta">第' + ['一','二','三','四','五','六','七','八','九','十'][Math.floor((data.num-1)/10)] + ['','一','二','三','四','五','六','七','八','九'][(data.num-1)%10] + '卦 · ' + hexTrigrams[idx] + '</div>' +
-      '<div class="text-section"><h5>卦 辞</h5><div class="classical">' + data.guaci + '</div></div>' +
-      (data.tuan ? '<div class="text-section"><h5>彖 传</h5><div class="classical">' + data.tuan + '</div></div>' : '') +
-      (data.xiang ? '<div class="text-section"><h5>大 象 传</h5><div class="classical">' + data.xiang + '</div></div>' : '') +
-      '<div class="text-section"><h5>六 爻 爻 辞</h5><div class="yao-list">' + yaoHtml + '</div></div>' +
-    '</div>';
-}
-
-function closeModal() {
-  document.getElementById('jingModal').classList.remove('show');
-}
-
-function openYizhuan() { alert('易传·十翼模块建设中'); }
-function openTuxi() { alert('易图体系模块建设中'); }
-
-// ESC 关闭弹窗
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
-
-// 点击遮罩关闭
-document.getElementById('jingModal').addEventListener('click', e => {
-  if (e.target.id === 'jingModal') closeModal();
-});
-
-// ==================== Three.js 3D 生成链 ====================
-const canvasContainer = document.getElementById('cosmos-canvas');
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(60, canvasContainer.clientWidth / canvasContainer.clientHeight, 0.1, 1000);
-const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-renderer.setSize(canvasContainer.clientWidth, canvasContainer.clientHeight);
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-canvasContainer.appendChild(renderer.domElement);
-
-// 层配置
-const levels = [
-  {radius:0, color:0x1a1a1a, size:1.6, name:'太极'},
-  {radius:5, color:0x8b0000, size:1.0, name:'两仪', count:2},
-  {radius:11, color:0xb8860b, size:0.75, name:'四象', count:4},
-  {radius:17, color:0x2e5d4e, size:0.65, name:'八卦', count:8},
-  {radius:24, color:0x3a4a6b, size:0.5, name:'六十四卦', count:64},
-];
-const meshes = [];
-const connectors = [];
-
-// 太极球
-const taijiGeo = new THREE.SphereGeometry(1.6, 48, 48);
-const taijiMat = new THREE.MeshBasicMaterial({color:0x1a1a1a});
-const taiji = new THREE.Mesh(taijiGeo, taijiMat);
-scene.add(taiji);
-meshes.push({mesh:taiji, level:0, angle:0});
-
-// 连接太极到中心的线
-// 创建各层节点
-for (let lv = 1; lv < levels.length; lv++) {
-  const L = levels[lv];
-  for (let i = 0; i < L.count; i++) {
-    const angle = (i / L.count) * Math.PI * 2;
-    const geo = new THREE.SphereGeometry(L.size, 24, 24);
-    const mat = new THREE.MeshBasicMaterial({color: L.color});
-    const m = new THREE.Mesh(geo, mat);
-    m.position.set(Math.cos(angle)*L.radius, 0, Math.sin(angle)*L.radius);
-    scene.add(m);
-    meshes.push({mesh:m, level:lv, angle});
-  }
-}
-
-// 粒子（气）
-const particleCount = 800;
-const pGeo = new THREE.BufferGeometry();
-const pPos = new Float32Array(particleCount*3);
-const pCol = new Float32Array(particleCount*3);
-for (let i = 0; i < particleCount; i++) {
-  const r = Math.random()*30 - 5;
-  const a = Math.random()*Math.PI*2;
-  const y = (Math.random()-0.5)*12;
-  pPos[i*3] = Math.cos(a)*r;
-  pPos[i*3+1] = y;
-  pPos[i*3+2] = Math.sin(a)*r;
-  const c = Math.random();
-  pCol[i*3] = c*0.5 + 0.3;
-  pCol[i*3+1] = c*0.3 + 0.2;
-  pCol[i*3+2] = c*0.2;
-}
-pGeo.setAttribute('position', new THREE.BufferAttribute(pPos,3));
-pGeo.setAttribute('color', new THREE.BufferAttribute(pCol,3));
-const pMat = new THREE.PointsMaterial({size:0.12, vertexColors:true, transparent:true, opacity:0.6});
-const particles = new THREE.Points(pGeo, pMat);
-scene.add(particles);
-
-// 相机位置
-let targetRadius = 40;
-let targetAngleX = 0.5, targetAngleY = 0;
-camera.position.set(0, 15, targetRadius);
-camera.lookAt(0,0,0);
-
-// 控制按钮
-document.querySelectorAll('.ctrl-btn[data-level]').forEach(btn => {
+document.querySelectorAll('.jing-toggle button').forEach(btn => {
   btn.addEventListener('click', () => {
-    document.querySelectorAll('.ctrl-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.jing-toggle button').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
-    const lv = parseInt(btn.dataset.level);
-    focusLevel(lv);
+    currentJing = btn.dataset.jing;
+    render64Gua();
   });
 });
 
-function focusLevel(lv) {
-  if (lv === 0) {
-    targetRadius = 40; targetAngleX = 0.5; targetAngleY = 0;
-  } else {
-    targetRadius = levels[lv].radius + 15; targetAngleX = 0.3; targetAngleY = 0;
+// 显示卦详情
+function showGua(name) {
+  const g = ONT.guaMap[name];
+  if (!g) return;
+  const bg = ONT.baguaMap[g.xia];
+  const sg = ONT.baguaMap[g.shang];
+  const yaoHtml = g.yao.map(y => `
+    <div class="yao-item">
+      <div class="yao-pos">${y.pos} · ${y.yinYang}爻</div>
+      <div class="yao-text">${y.text}</div>
+      <div class="yao-xx">《象》曰：${y.xiaoxiang.replace(y.pos+'，','')}</div>
+      <div class="yao-explain">${y.explain}</div>
+    </div>
+  `).join('');
+  const incompleteTag = g._incomplete ? '<span style="color:var(--gold);font-size:12px;margin-left:8px;">（基础本体框架，爻辞补全中）</span>' : '';
+  const html = `
+    <button class="modal-close" onclick="closeModal('guaModal')">×</button>
+    <div class="gua-detail-symbol">${g.symbol}</div>
+    <div class="modal-title">${g.num}. ${g.name}卦${incompleteTag}</div>
+    <div class="gua-detail-meta">${g.jing} · ${g.shang}上${g.xia}下 · ${sg.symbol}${bg.symbol} · ${g.gong}宫 · ${g.wuxing}行</div>
+    <div class="gua-section">
+      <div class="gua-section-title">【卦辞】</div>
+      <div class="gua-section-content">${g.guaci}</div>
+    </div>
+    <div class="gua-section">
+      <div class="gua-section-title">【彖传】</div>
+      <div class="gua-section-content">${g.tuan}</div>
+    </div>
+    <div class="gua-section">
+      <div class="gua-section-title">【象传（大象）】</div>
+      <div class="gua-section-content">${g.xiang}</div>
+    </div>
+    ${g.wenyan?`<div class="gua-section">
+      <div class="gua-section-title">【文言传】</div>
+      <div class="gua-section-content">${g.wenyan}</div>
+    </div>`:''}
+    <div class="gua-section">
+      <div class="gua-section-title">【六爻详解】</div>
+      ${yaoHtml}
+    </div>
+    ${g.yong?`<div class="gua-section"><div class="gua-section-title">【用爻】</div><div class="gua-section-content">${g.yong}</div></div>`:''}
+  `;
+  document.getElementById('guaModalBox').innerHTML = html;
+  document.getElementById('guaModal').classList.add('show');
+}
+function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+document.querySelectorAll('.modal-overlay').forEach(m => {
+  m.addEventListener('click', (e) => { if (e.target === m) m.classList.remove('show'); });
+});
+
+// ===== 渲染流派 =====
+function renderSchools() {
+  const sanyi = ONT.liupai.filter(s => s.sanyi);
+  const others = ONT.liupai.filter(s => !s.sanyi);
+  const html = [
+    ...sanyi.map(s => `<div class="school-card sanyi"><h4>· ${s.name} ·</h4><p>${s.desc}</p></div>`),
+    ...others.map(s => `<div class="school-card"><h4>${s.name}</h4><p>${s.desc}</p></div>`),
+  ].join('');
+  document.getElementById('schoolsGrid').innerHTML = html;
+}
+
+// ===== 渲染大师（按时代分组）=====
+function renderMasters() {
+  const eraOrder = ['上古','西周','春秋','春秋末','西汉初','西汉','东汉','三国吴','曹魏','东晋','唐','五代宋初','北宋','南宋','元','明','明末','明末清初','清','近现代','现代','当代'];
+  const eraGroupMap = {};
+  ONT.zhujia.forEach(z => {
+    if (!eraGroupMap[z.era]) eraGroupMap[z.era] = [];
+    eraGroupMap[z.era].push(z);
+  });
+  const sortedEras = Object.keys(eraGroupMap).sort((a,b) => eraOrder.indexOf(a) - eraOrder.indexOf(b));
+  const html = sortedEras.map(era => `
+    <div class="era-group">
+      <div class="era-title">${era} <span class="count">(${eraGroupMap[era].length}位)</span></div>
+      <div class="masters-grid">
+        ${eraGroupMap[era].map(z => `
+          <div class="master-card">
+            <div class="name">${z.name}</div>
+            <div class="years">${z.years}</div>
+            ${z.school?`<span class="school-tag">${z.school}</span>`:''}
+            <div class="masterpiece">代表作：${z.masterpiece}</div>
+            <div class="desc">${z.desc}</div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `).join('');
+  document.getElementById('mastersByEra').innerHTML = html;
+  document.getElementById('masterCount').textContent = ONT.zhujia.length;
+}
+
+// ===== 渲染注本 =====
+function renderBooks() {
+  const html = ONT.zhuben.map(b => `
+    <div class="book-card">
+      <div class="book-name">《${b.name}》</div>
+      <div class="book-meta">
+        <span>📝 ${b.author}</span>
+        <span>🏛 ${b.dynasty}</span>
+        ${b.school?`<span>🏷 ${b.school}</span>`:''}
+        <span>📚 ${b.juan}卷</span>
+      </div>
+      <div class="book-desc">${b.desc}</div>
+    </div>
+  `).join('');
+  document.getElementById('booksGrid').innerHTML = html;
+  document.getElementById('bookCount').textContent = ONT.zhuben.length;
+}
+
+// ===== 渲染时间轴 =====
+function renderTimeline() {
+  const html = ONT.events.map(e => `
+    <div class="timeline-item">
+      <div class="t-era">${e.era} · ${e.year}</div>
+      <div class="t-title">${e.event}</div>
+      <div class="t-person">核心人物：${e.people}</div>
+      <div class="t-content">${e.content||e.desc||''}</div>
+    </div>
+  `).join('');
+  document.getElementById('timeline').innerHTML = html;
+}
+
+// ===== 渲染知识图谱 =====
+function renderChart() {
+  document.getElementById('tripleCount').textContent = ONT.triples.length;
+  const chart = echarts.init(document.getElementById('ontoChart'));
+  // 取核心节点：八卦+16完整卦+主要注家
+  const nodes = [];
+  const nodeSet = new Set();
+  function addNode(id, name, cat, size) {
+    if (nodeSet.has(id)) return;
+    nodeSet.add(id);
+    const catColor = {bagua:'#8b0000', gua:'#b8860b', zhujia:'#1e3a8a', jing:'#14532d', yuan:'#4c1d95'};
+    nodes.push({ id, name, category:cat, symbolSize:size, itemStyle:{color:catColor[cat]||'#888'}, label:{show:size>25, fontSize:12} });
   }
+  addNode('Taiji','太极','yuan',40);
+  addNode('Bagua','八卦','yuan',30);
+  addNode('Jing','易经本经','jing',30);
+  ONT.bagua.forEach(g => addNode(g.id, g.name+g.symbol, 'bagua', 28));
+  ONT.liushisigua.filter(g=>!g._incomplete).forEach(g => addNode(g.id, g.name+g.symbol, 'gua', 20));
+  ['zj_kongzi','zj_wangbi','zj_kongyingda','zj_lidingzuo','zj_chengyi','zj_zhuxi','zj_liguangdi','zj_shangbinghe','zj_gaoheng'].forEach(id => {
+    const z = ONT.zhujiaMap[Object.values(ONT.zhujiaMap).find(z=>z.id===id)?.name];
+    if (z) addNode(z.id, z.name, 'zhujia', 22);
+  });
+  // 边
+  const links = [];
+  ONT.triples.forEach(t => {
+    if (nodeSet.has(t.subject) && nodeSet.has(t.object)) {
+      links.push({ source:t.subject, target:t.object, label:{show:false,formatter:t.predicate} });
+    }
+  });
+  chart.setOption({
+    tooltip:{ formatter: p => p.dataType==='node'?p.name:'' },
+    legend:[{ data:['本体核心','八卦','卦','注家','经文'], textStyle:{fontFamily:'Noto Serif SC'} }],
+    series:[{
+      type:'graph', layout:'force', roam:true, draggable:true,
+      data:nodes, links:links,
+      categories:[{name:'本体核心'},{name:'八卦'},{name:'卦'},{name:'注家'},{name:'经文'}],
+      force:{ repulsion:300, edgeLength:[60,120], gravity:0.1 },
+      label:{fontFamily:'Noto Serif SC'},
+      lineStyle:{opacity:0.4, width:1, color:'#b8860b', curveness:0.1},
+      emphasis:{ focus:'adjacency', lineStyle:{width:3,opacity:1} },
+    }]
+  });
+  window.addEventListener('resize', () => chart.resize());
 }
 
-// 逐级推演动画
-let evolving = false;
-document.getElementById('btn-evolve').addEventListener('click', () => {
-  if (evolving) return;
-  evolving = true;
-  let lv = 0;
-  focusLevel(0);
-  document.querySelectorAll('.ctrl-btn[data-level]').forEach(b => b.classList.remove('active'));
-  const interval = setInterval(() => {
-    lv++;
-    if (lv >= levels.length) {
-      clearInterval(interval);
-      evolving = false;
-      document.querySelector('.ctrl-btn[data-level="0"]').classList.add('active');
-      focusLevel(0);
-      return;
-    }
-    focusLevel(lv);
-    document.querySelector('.ctrl-btn[data-level="'+lv+'"]').classList.add('active');
-  }, 2000);
-});
-
-// 动画循环
-let t = 0;
-function animate() {
-  requestAnimationFrame(animate);
-  t += 0.003;
-  
-  // 太极自转
-  taiji.rotation.y += 0.005;
-  
-  // 各层公转
-  meshes.forEach(m => {
-    if (m.level === 0) return;
-    const L = levels[m.level];
-    const speed = 0.003 - m.level*0.0004;
-    m.angle += speed;
-    m.mesh.position.set(Math.cos(m.angle)*L.radius, Math.sin(t*2 + m.angle*3)*0.5, Math.sin(m.angle)*L.radius);
-  });
-  
-  // 粒子旋转
-  particles.rotation.y += 0.0008;
-  
-  // 相机缓动
-  const camX = Math.sin(targetAngleY)*Math.cos(targetAngleX)*targetRadius;
-  const camZ = Math.cos(targetAngleY)*Math.cos(targetAngleX)*targetRadius;
-  const camY = Math.sin(targetAngleX)*targetRadius;
-  camera.position.x += (camX - camera.position.x)*0.03;
-  camera.position.y += (camY - camera.position.y)*0.03;
-  camera.position.z += (camZ - camera.position.z)*0.03;
-  camera.lookAt(0,0,0);
-  targetAngleY += 0.002;
-  
-  renderer.render(scene, camera);
+// ===== 十翼弹窗 =====
+function showShiyi() {
+  const html = ONT.shiyi.map(p => `
+    <div class="gua-section">
+      <div class="gua-section-title">${p.name}</div>
+      <div class="gua-section-content" style="font-size:13px;color:var(--gold);margin-bottom:8px;">
+        ${p.author} · ${p.juan} · ${p.pian}篇
+      </div>
+      <div class="gua-section-content">${p.desc}</div>
+    </div>
+  `).join('');
+  document.getElementById('shiyiContent').innerHTML = html + `
+    <div class="gua-section" style="margin-top:20px;">
+      <div class="gua-section-title">【系辞传选】</div>
+      <div class="gua-section-content" style="font-size:14px;">
+        ${ONT.yizhuanTexts.xici_shang.map(t=>`<p style="margin-bottom:12px;"><b>${t.title}：</b>${t.text}</p>`).join('')}
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:20px;">
+      <a href="reader.html" target="_blank" style="color:var(--accent);font-weight:600;">进入完整经文批注阅读器 →</a>
+    </div>
+  `;
+  document.getElementById('shiyiModal').classList.add('show');
 }
-animate();
 
-window.addEventListener('resize', () => {
-  camera.aspect = canvasContainer.clientWidth / canvasContainer.clientHeight;
-  camera.updateProjectionMatrix();
-  renderer.setSize(canvasContainer.clientWidth, canvasContainer.clientHeight);
+// ===== 易图弹窗 =====
+function showYitu() {
+  const html = ONT.yitu.map(t => `
+    <div class="gua-section">
+      <div class="gua-section-title">${t.name}</div>
+      <div class="gua-section-content" style="font-size:13px;color:var(--gold);margin-bottom:8px;">
+        ${t.dynasty} · ${t.author} · ${t.xuepai}
+      </div>
+      <div class="gua-section-content">${t.desc}</div>
+    </div>
+  `).join('');
+  document.getElementById('yituContent').innerHTML = html;
+  document.getElementById('yituModal').classList.add('show');
+}
+
+// ===== 初始化 =====
+document.addEventListener('DOMContentLoaded', () => {
+  renderStats();
+  renderBagua();
+  render64Gua();
+  renderSchools();
+  renderMasters();
+  renderBooks();
+  renderTimeline();
+  renderChart();
 });
-
-// ==================== ECharts 知识图谱 ====================
-const graphChart = echarts.init(document.getElementById('graph-canvas'));
-const graphNodes = [
-  {id:'dao', name:'道', x:0, y:0, symbolSize:60, itemStyle:{color:'#1a1a1a'}},
-  {id:'taiji', name:'太极', x:0, y:-80, symbolSize:50, itemStyle:{color:'#1a1a1a'}},
-  {id:'yang', name:'阳', x:-120, y:-150, symbolSize:40, itemStyle:{color:'#8b0000'}},
-  {id:'yin', name:'阴', x:120, y:-150, symbolSize:40, itemStyle:{color:'#2e5d4e'}},
-];
-const graphLinks = [
-  {source:'dao', target:'taiji', name:'生'},
-  {source:'taiji', target:'yang', name:'生'},
-  {source:'taiji', target:'yin', name:'生'},
-  {source:'yang', target:'yin', name:'对立转化'},
-];
-
-// 四象
-const sixiang = [
-  {id:'taiyang', name:'太阳', x:-200, y:-220, c:'#d4a017'},
-  {id:'shaoyin', name:'少阴', x:-80, y:-220, c:'#b8860b'},
-  {id:'shaoyang', name:'少阳', x:80, y:-220, c:'#4a7c6c'},
-  {id:'taiyin', name:'太阴', x:200, y:-220, c:'#2e5d4e'},
-];
-sixiang.forEach(s => {
-  graphNodes.push({id:s.id, name:s.name, x:s.x, y:s.y, symbolSize:32, itemStyle:{color:s.c}});
-});
-graphLinks.push({source:'yang',target:'taiyang',name:'生'});
-graphLinks.push({source:'yang',target:'shaoyin',name:'生'});
-graphLinks.push({source:'yin',target:'shaoyang',name:'生'});
-graphLinks.push({source:'yin',target:'taiyin',name:'生'});
-
-// 八卦
-const bagua = [
-  {id:'qian', name:'乾·天', x:-300, y:-300, c:'#8b0000'},
-  {id:'dui', name:'兑·泽', x:-210, y:-300, c:'#a0522d'},
-  {id:'li', name:'离·火', x:-120, y:-300, c:'#b8860b'},
-  {id:'zhen', name:'震·雷', x:-30, y:-300, c:'#6b8e23'},
-  {id:'xun', name:'巽·风', x:60, y:-300, c:'#4682b4'},
-  {id:'kan', name:'坎·水', x:150, y:-300, c:'#3a4a6b'},
-  {id:'gen', name:'艮·山', x:240, y:-300, c:'#696969'},
-  {id:'kun', name:'坤·地', x:330, y:-300, c:'#2e5d4e'},
-];
-bagua.forEach(b => {
-  graphNodes.push({id:b.id, name:b.name, x:b.x, y:b.y, symbolSize:28, itemStyle:{color:b.c}});
-});
-sixiang.forEach((s,i) => {
-  graphLinks.push({source:s.id, target:bagua[i*2].id, name:'生'});
-  graphLinks.push({source:s.id, target:bagua[i*2+1].id, name:'生'});
-});
-
-// 三易
-const sanyi = [
-  {id:'bianyi', name:'变易', x:-200, y:80, c:'#8b0000'},
-  {id:'jianyi', name:'简易', x:0, y:80, c:'#2e5d4e'},
-  {id:'buyi', name:'不易', x:200, y:80, c:'#b8860b'},
-];
-sanyi.forEach(s => {
-  graphNodes.push({id:s.id, name:s.name, x:s.x, y:s.y, symbolSize:35, itemStyle:{color:s.c}});
-  graphLinks.push({source:'dao', target:s.id, name:'体现'});
-});
-
-// 两派
-const liangpai = [
-  {id:'xiangshu', name:'象数派', x:-150, y:180, c:'#8b4513'},
-  {id:'yili', name:'义理派', x:150, y:180, c:'#4a4a8b'},
-];
-liangpai.forEach(l => {
-  graphNodes.push({id:l.id, name:l.name, x:l.x, y:l.y, symbolSize:30, itemStyle:{color:l.c}});
-});
-graphLinks.push({source:'taiji', target:'xiangshu', name:'研究传统'});
-graphLinks.push({source:'taiji', target:'yili', name:'研究传统'});
-
-graphChart.setOption({
-  tooltip: {},
-  series: [{
-    type: 'graph',
-    layout: 'none',
-    data: graphNodes,
-    links: graphLinks,
-    roam: true,
-    label: { show: true, position: 'bottom', fontSize: 12, fontFamily: 'Noto Serif SC' },
-    edgeLabel: { show: true, fontSize: 10, formatter: '{b}', color: '#8b7d65' },
-    lineStyle: { color: '#d4c9b0', curveness: 0.1, width: 1.5 },
-    emphasis: { focus: 'adjacency', lineStyle: {width: 3} },
-  }]
-});
-
-window.addEventListener('resize', () => graphChart.resize());
-
-// 导航高亮
-const navLinks = document.querySelectorAll('.nav-links a');
-const sections = document.querySelectorAll('section[id]');
-window.addEventListener('scroll', () => {
-  let cur = '';
-  sections.forEach(s => {
-    if (window.scrollY >= s.offsetTop - 100) cur = s.id;
-  });
-  navLinks.forEach(a => {
-    a.classList.remove('active');
-    if (a.getAttribute('href') === '#' + cur) a.classList.add('active');
-  });
-});
-
-// ==================== 历代易学 · 大师谱系 / 注本 / 汇评 ====================
-(function(){
-  var D = window.YJ_COMMENTARY || {masters:[],works:[],order:[],jijie:{},zhezhong:{}};
-  function badge(s){ return s.indexOf('象数')>=0?'badge-xs':(s.indexOf('义理')>=0?'badge-yl':(s.indexOf('考据')>=0?'badge-tj':'badge-js')); }
-  // 大师谱系
-  var mh='', eras=[], seen={};
-  D.masters.forEach(function(m){ if(!seen[m.era]){seen[m.era]=1;eras.push(m.era);} });
-  eras.forEach(function(era){
-    mh += '<div class="yx-era"><div class="yx-era-title">'+era+'</div><div class="yx-master-grid">';
-    D.masters.filter(function(m){return m.era===era;}).forEach(function(m){
-      mh += '<div class="yx-master"><div class="yx-master-head"><span class="yx-master-name">'+m.name+'</span><span class="yx-badge '+badge(m.school)+'">'+m.school+'</span></div><div class="yx-master-work">代表作：'+m.works+'</div><div class="yx-master-bio">'+m.bio+'</div></div>';
-    });
-    mh += '</div></div>';
-  });
-  document.getElementById('yx-masters').innerHTML = mh;
-  // 经典注本
-  var wh='';
-  D.works.forEach(function(w){
-    wh += '<div class="yx-work-item"><div><div class="yx-work-title">'+w.title+'</div><div class="yx-work-sub">'+w.author+' · '+w.era+' · '+w.school+'</div></div><div class="yx-work-desc">'+w.desc+'</div></div>';
-  });
-  document.getElementById('yx-works').innerHTML = wh;
-  // 汇评选卦网格
-  var g='';
-  D.order.forEach(function(n,i){ g += '<div class="hex-cell" onclick="openHp('+i+')">'+hexSymbols[i]+'<div class="hex-num">'+n+'</div></div>'; });
-  document.getElementById('hpHexGrid').innerHTML = g;
-  // tab
-  document.querySelectorAll('.yx-tab').forEach(function(b){
-    b.onclick=function(){
-      document.querySelectorAll('.yx-tab').forEach(function(x){x.classList.remove('active');});
-      this.classList.add('active');
-      var t=this.dataset.tab;
-      ['masters','works','huiping'].forEach(function(k){ document.getElementById('yx-'+k).style.display=(k===t?'block':'none'); });
-    };
-  });
-  // 打开汇评
-  window.openHp = function(idx){
-    var name=D.order[idx], jj=D.jijie[name]||{lines:[]}, zz=D.zhezhong[name]||{};
-    document.getElementById('hpModal').classList.add('show');
-    document.getElementById('hpModalTitle').textContent='历代汇评 · '+name+'卦';
-    document.getElementById('hpSym').textContent=hexSymbols[idx];
-    var tabs=[['jijie','《周易集解》汉唐诸家'],['benyi','朱熹《本义》'],['cheng','程颐《程传》'],['jishuo','历代集说'],['an','按语·总论']];
-    var th='';
-    tabs.forEach(function(t,i){ th+='<button class="hp-tab'+(i===0?' active':'')+'" data-k="'+t[0]+'">'+t[1]+'</button>'; });
-    document.getElementById('hpTabs').innerHTML=th;
-    function render(k){
-      var h='';
-      if(k==='jijie'){
-        (jj.lines||[]).forEach(function(l){
-          if(l.k==='head') return;
-          if(l.k==='note') h+='<div class="hp-line hp-note"><span class="hp-speaker">'+l.s+'</span>'+l.t+'</div>';
-          else h+='<div class="hp-line hp-orig">'+l.t+'</div>';
-        });
-        if(!h) h='<div class="hp-empty">（本卦汇评暂缺）</div>';
-      } else {
-        var map={benyi:'本义',cheng:'程传',jishuo:'集说',an:'案'};
-        var txt=zz[map[k]]||'';
-        h = txt ? '<div class="hp-zz-seg"><p>'+txt.split('\n').join('</p><p>')+'</p></div>' : '<div class="hp-empty">（本书此卦无该部分内容）</div>';
-        if(k==='an' && zz['总论']) h+='<div class="hp-zz-seg"><h4>总论</h4><p>'+zz['总论'].split('\n').join('</p><p>')+'</p></div>';
-      }
-      document.getElementById('hpBody').innerHTML=h;
-    }
-    document.querySelectorAll('.hp-tab').forEach(function(b){ b.onclick=function(){ document.querySelectorAll('.hp-tab').forEach(function(x){x.classList.remove('active');}); this.classList.add('active'); render(this.dataset.k); }; });
-    render('jijie');
-  };
-  window.closeHp=function(){ document.getElementById('hpModal').classList.remove('show'); };
-  var hm=document.getElementById('hpModal');
-  if(hm) hm.addEventListener('click', function(e){ if(e.target.id==='hpModal') closeHp(); });
-  document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeHp(); });
-})();
-
 </script>
-
 </body>
 </html>
