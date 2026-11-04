@@ -65,9 +65,9 @@ export const SceneLiushisi: React.FC = () => {
   const guaIdx: Record<string, number> = {};
   order64.forEach((g, i) => (guaIdx[g.name] = i));
 
-  // 方图 8x8，位于右下角缩小呈现
+  // 方图 8x8，位于右下角缩小呈现（整体上移，避让底部字幕带）
   const fx = 1350;
-  const fy = 640;
+  const fy = 590;
   const cell = 34;
 
   return (
