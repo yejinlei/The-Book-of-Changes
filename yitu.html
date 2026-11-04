@@ -35,12 +35,27 @@ body { font-family:'Songti SC','STSong','SimSun','Noto Serif CJK SC','Source Han
 .card .meta { font-size:12px; color:var(--gold); margin-bottom:14px; }
 .card .meta span { margin-right:12px; }
 .card .svgbox { text-align:center; margin:14px 0; }
+.svgbox svg { max-width:100%; height:auto; }
+/* 太极图：缓慢自转——道法自然 */
+.svgbox .taiji-spin { transform-origin:115px 115px; animation: taiji-rotate 38s linear infinite; }
+.logo .taiji { color:var(--accent); font-size:26px; display:inline-block; animation: taiji-rotate 48s linear infinite; transform-origin:center; }
+/* 消息卦爻条律动 */
+.xiaoxi-gua { display:inline-flex; flex-direction:column-reverse; align-items:center; gap:2px; margin:0 8px; vertical-align:middle; }
+.xiaoxi-gua .xxbar { background:#2a1f14; border-radius:1px; animation: xiaoxi-pulse 3s ease-in-out infinite; transform-origin:center; }
+.xiaoxi-gua .xxbar.yang { width:22px; height:4px; }
+.xiaoxi-gua .xxbar.yin  { width:9px; height:4px; }
+.xiaoxi-label { display:block; font-size:12px; color:#8b0000; margin-top:2px; }
+@keyframes taiji-rotate { to { transform: rotate(360deg); } }
+@keyframes xiaoxi-pulse {
+  0%,100% { opacity:.65; }
+  50% { opacity:1; }
+}
 .card p.desc { font-size:14px; line-height:2; color:#4a3a2a; text-align:justify; }
 @media (max-width:820px) {
   .wrap { padding:24px 16px 60px; }
   .grid { grid-template-columns:1fr; }
   .page-head h1 { font-size:30px; letter-spacing:6px; }
-  svg { max-width:100%; height:auto; }
+  .svgbox svg { max-width:100%; height:auto; }
 }
 </style>
 </head>
@@ -72,16 +87,21 @@ body { font-family:'Songti SC','STSong','SimSun','Noto Serif CJK SC','Source Han
 
 <script src="data/gua-full-data.js"></script>
 <script src="data/yijing-ontology.js"></script>
+<script src="data/gua-anim.js"></script>
 <script>
 const ONT = window.YJ_ONT;
 
 // —— 各图的 SVG 矢量绘制（本体 yitu 提供元数据与图说，此处按 id 配矢量图） ——
 const SVG = {
   tu_taiji: () => `<svg width="230" height="230" viewBox="0 0 230 230">
+    <g class="taiji-spin">
     <circle cx="115" cy="115" r="104" fill="#fdfaf3" stroke="#1a1a2e" stroke-width="2"/>
     <path d="M115,11 A104,104 0 0,1 115,219 A52,52 0 0,0 115,115 A52,52 0 0,1 115,11 Z" fill="#1a1a2e"/>
     <circle cx="115" cy="63" r="16" fill="#1a1a2e"/>
+    <circle cx="115" cy="63" r="5" fill="#fdfaf3"/>
     <circle cx="115" cy="167" r="16" fill="#fdfaf3"/>
+    <circle cx="115" cy="167" r="5" fill="#1a1a2e"/>
+    </g>
   </svg>`,
 
   tu_xiantian: () => baguaRing([
@@ -141,14 +161,46 @@ const SVG = {
     <text x="150" y="208" text-anchor="middle" font-size="13" fill="#b8860b">八卦相重 · 八八六十四卦</text>
   </svg>`,
 
-  tu_yaobian: () => `<svg width="560" height="120" viewBox="0 0 560 120">
-    ${['复','临','泰','大壮','夬','乾','姤','遁','否','观','剥','坤'].map((n,i)=>
-      `<text x="${30+i*46}" y="60" text-anchor="middle" font-size="15" fill="#1a1a2e">${n}</text>`).join('')}
-    <line x1="20" y1="88" x2="540" y2="88" stroke="#8b0000" stroke-dasharray="4 3"/>
-    <text x="30" y="106" text-anchor="start" font-size="11" fill="#b8860b">十一月·冬至</text>
-    <text x="280" y="106" text-anchor="middle" font-size="11" fill="#b8860b">阳息阴消</text>
-    <text x="530" y="106" text-anchor="end" font-size="11" fill="#b8860b">五月·夏至</text>
-  </svg>`
+  tu_yaobian: () => {
+    // 十二消息卦：自下而上 bits 1=阳
+    const XX = {
+      '复':[1,0,0,0,0,0],'临':[1,1,0,0,0,0],'泰':[1,1,1,0,0,0],'大壮':[1,1,1,1,0,0],
+      '夬':[1,1,1,1,1,0],'乾':[1,1,1,1,1,1],'姤':[0,1,1,1,1,1],'遁':[0,0,1,1,1,1],
+      '否':[0,0,0,1,1,1],'观':[0,0,0,0,1,1],'剥':[0,0,0,0,0,1],'坤':[0,0,0,0,0,0]
+    };
+    const months = ['十一月','十二月','正月','二月','三月','四月','五月','六月','七月','八月','九月','十月'];
+    let blocks='';
+    Object.keys(XX).forEach((n,i)=>{
+      const bits = XX[n];
+      // 初爻在最下 → 先画 bits[0]（最底）
+      let bars='';
+      bits.forEach((b,k)=>{
+        // k=0 初, k=5 上
+        const yy = b?'yang':'yin';
+        const delay = i*80 + k*60;
+        if(b===1){
+          bars += `<div class="xxbar yang" style="animation-delay:${delay}ms"></div>`;
+        } else {
+          bars += `<div class="xxbar yin" style="animation-delay:${delay}ms"></div><div class="xxbar yin" style="animation-delay:${delay}ms"></div>`;
+        }
+      });
+      blocks += `<div style="display:inline-block;text-align:center;width:42px;margin:0 2px">
+        <div class="xiaoxi-gua">${bars}</div>
+        <div class="xiaoxi-label">${n}</div>
+        <div style="font-size:9px;color:#8b7e6a;margin-top:1px">${months[i]}</div>
+      </div>`;
+    });
+    return `<svg width="560" height="190" viewBox="0 0 560 190" xmlns="http://www.w3.org/2000/svg">
+      <foreignObject x="10" y="10" width="540" height="170">
+        <div xmlns="http://www.w3.org/1999/xhtml" style="font-family:'Songti SC',serif">
+          <div style="text-align:center">${blocks}</div>
+          <div style="display:flex;justify-content:space-between;margin-top:8px;font-size:11px;color:#b8860b">
+            <span>冬至·一阳生</span><span>阳息阴消 →</span><span>夏至·一阴生</span>
+          </div>
+        </div>
+      </foreignObject>
+    </svg>`;
+  }
 };
 
 // 八卦环：position 数组 [符号,名,方位,x,y]

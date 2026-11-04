@@ -44,7 +44,10 @@ body { font-family:'Songti SC','STSong','SimSun','Noto Serif CJK SC','Source Han
 .back-link { display:inline-block; color:var(--accent); text-decoration:none; font-size:14px; margin-bottom:18px; }
 .back-link:hover { text-decoration:underline; }
 .gua-head { text-align:center; margin-bottom:30px; }
-.gua-symbol { font-size:96px; line-height:1; color:var(--ink); }
+.gua-symbol-wrap { display:flex; align-items:center; justify-content:center; gap:20px; margin-bottom:10px; }
+.gua-symbol-box { display:inline-block; }
+.gua-symbol-box .gua-svg { filter: drop-shadow(0 2px 4px rgba(139,0,0,.12)); }
+.gua-unicode { font-size:56px; color:var(--gold); opacity:.35; line-height:1; }
 .gua-title { font-size:40px; color:var(--accent); letter-spacing:6px; margin:8px 0; }
 .gua-meta { color:var(--gold); font-size:14px; }
 .tag-incomplete { color:var(--accent); font-size:13px; border:1px dashed var(--accent); border-radius:3px; padding:1px 8px; margin-left:8px; }
@@ -54,7 +57,9 @@ body { font-family:'Songti SC','STSong','SimSun','Noto Serif CJK SC','Source Han
 .block-content { font-size:16px; line-height:2.1; }
 
 .yao-list { margin-top:6px; }
-.yao-item { background:var(--bg); padding:16px 20px; border-radius:6px; margin-bottom:12px; border-left:4px solid var(--gold); }
+.yao-item { background:var(--bg); padding:16px 20px; border-radius:6px; margin-bottom:12px; border-left:4px solid var(--gold); cursor:pointer; transition:background .25s, transform .25s, box-shadow .25s; }
+.yao-item:hover { background:#fbf3e0; box-shadow:0 2px 8px rgba(139,0,0,.08); }
+.yao-item.yao-active { background:#fbf3e0; border-left-color:var(--accent); box-shadow:0 2px 10px rgba(139,0,0,.15); transform:translateX(4px); }
 .yao-head { display:flex; align-items:baseline; gap:10px; margin-bottom:6px; }
 .yao-pos { font-weight:700; color:var(--accent); font-size:15px; }
 .yao-wei { font-size:12px; color:var(--gold); }
@@ -76,8 +81,8 @@ body { font-family:'Songti SC','STSong','SimSun','Noto Serif CJK SC','Source Han
   .layout { grid-template-columns:1fr; }
   .side { display:none; }
   .main { padding:24px 18px 60px; }
-  .gua-symbol { font-size:72px; }
   .gua-title { font-size:30px; }
+  .gua-unicode { font-size:40px; }
   .gua-nav-grid { grid-template-columns:repeat(5,1fr); }
 }
 </style>
@@ -106,6 +111,7 @@ body { font-family:'Songti SC','STSong','SimSun','Noto Serif CJK SC','Source Han
 
 <script src="data/gua-full-data.js"></script>
 <script src="data/yijing-ontology.js"></script>
+<script src="data/gua-anim.js"></script>
 <script>
 const ONT = window.YJ_ONT;
 const YAO_WEI = {
@@ -153,12 +159,16 @@ function renderGua(name) {
 
   const incomplete = g._incomplete ? '<span class="tag-incomplete">本体框架已建，全文补录中</span>' : '';
 
-  document.getElementById('guaContent').innerHTML = `
+  const contentHtml = `
     <a class="back-link" href="index.html">← 返回首页</a>
     <div class="gua-head">
-      <div class="gua-symbol">${g.symbol}</div>
+      <div class="gua-symbol-wrap">
+        <div id="guaSymbolBox" class="gua-symbol-box"></div>
+        <div class="gua-unicode">${g.symbol}</div>
+      </div>
       <div class="gua-title">${g.num}. ${g.name}卦${incomplete}</div>
       <div class="gua-meta">第${g.num}卦 · ${g.jing} · ${g.shang}上${g.xia}下 · ${sg.symbol}${bg.symbol} · ${g.gong}宫 · ${g.wuxing}行</div>
+      <div class="gua-hint" style="font-size:12px;color:#8b7e6a;margin-top:6px">☞ 点击任一爻触发「动爻」；悬停爻条高亮</div>
     </div>
 
     <div class="block">
@@ -189,6 +199,36 @@ function renderGua(name) {
       ${ONT.liushisigua.map(x=>`<a class="${x.name===name?'active':''}" href="gua.html#${x.name}">${x.name}</a>`).join('')}
     </div>
   `;
+
+  document.getElementById('guaContent').innerHTML = contentHtml;
+  // 挂动效卦
+  const svg = GuaAnim.mount(document.getElementById('guaSymbolBox'), g, {size:220});
+  // 爻列表点击联动：点文字也能触发对应动爻
+  if(svg){
+    svg.addEventListener('yao-move', (e)=>{
+      const items = document.querySelectorAll('.yao-item');
+      items.forEach(it=>it.classList.remove('yao-active'));
+      const target = items[e.detail.idx];
+      if(target){ target.classList.add('yao-active'); target.scrollIntoView({behavior:'smooth',block:'center'}); }
+    });
+    document.querySelectorAll('.yao-item').forEach((it,i)=>{
+      it.addEventListener('mouseenter', ()=>{
+        svg.querySelectorAll('.yao').forEach(b=>{
+          if(+b.dataset.idx===i){ b.style.fill='#8b0000'; b.style.filter='brightness(1.2)'; }
+        });
+      });
+      it.addEventListener('mouseleave', ()=>{
+        svg.querySelectorAll('.yao').forEach(b=>{ b.style.fill=''; b.style.filter=''; });
+      });
+      it.addEventListener('click', ()=>{
+        // 模拟点 SVG 爻
+        const evt = new Event('click');
+        const bars = svg.querySelectorAll('.yao');
+        const same = Array.from(bars).filter(b=>+b.dataset.idx===i);
+        if(same[0]) same[0].dispatchEvent(new MouseEvent('click',{bubbles:true}));
+      });
+    });
+  }
   document.title = `${g.num}.${g.name}卦 · 卦爻详解 | 易经本体论`;
 }
 function update() {

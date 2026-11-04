@@ -105,7 +105,9 @@ main { padding-top:64px; }
   position:relative; transition:.3s; cursor:default;
 }
 .bagua-card:hover { transform:translateY(-3px); box-shadow:0 6px 20px var(--shadow); }
-.bagua-symbol { font-size:64px; color:var(--ink); line-height:1; margin-bottom:8px; }
+.bagua-symbol { display:flex; justify-content:center; align-items:center; margin-bottom:8px; height:72px; }
+.bagua-symbol .gua-svg { transition: transform .3s; }
+.bagua-card:hover .bagua-symbol .gua-svg { transform: rotate(3deg) scale(1.05); }
 .bagua-name { font-size:24px; font-weight:700; color:var(--accent); margin-bottom:8px; }
 .bagua-nature { font-size:14px; color:var(--gold); margin-bottom:12px; font-weight:500; }
 .bagua-attrs { display:grid; grid-template-columns:1fr 1fr; gap:6px; font-size:12px; text-align:left; }
@@ -120,7 +122,9 @@ main { padding-top:64px; }
   text-decoration:none; color:inherit;
 }
 .gua-cell:hover { background:var(--accent); color:#fff; border-color:var(--accent); transform:scale(1.1); z-index:2; }
-.gua-cell .sym { font-size:28px; line-height:1; }
+.gua-cell .sym { display:flex; justify-content:center; align-items:center; height:36px; }
+.gua-cell:hover .sym .gua-svg { transform: scale(1.08); filter: drop-shadow(0 0 4px rgba(255,255,255,.5)); }
+.gua-cell .sym .gua-svg { transition: transform .3s, filter .3s; }
 .gua-cell .name { font-size:11px; margin-top:2px; }
 .gua-cell .num { font-size:9px; opacity:.6; position:absolute; top:2px; left:4px; }
 .gua-cell { position:relative; }
@@ -410,6 +414,7 @@ footer .ont-note { color:var(--gold); font-size:12px; margin-top:8px; }
 
 <script src="data/gua-full-data.js"></script>
 <script src="data/yijing-ontology.js"></script>
+<script src="data/gua-anim.js"></script>
 <script>
 const ONT = window.YJ_ONT;
 console.log('✅ 易经本体已加载', ONT.stats());
@@ -437,8 +442,8 @@ function renderStats() {
 // ===== 渲染八卦 =====
 function renderBagua() {
   const html = ONT.bagua.map(g => `
-    <div class="bagua-card">
-      <div class="bagua-symbol">${g.symbol}</div>
+    <div class="bagua-card" data-bagua="${g.name}">
+      <div class="bagua-symbol" data-bagua-sym="${g.name}"></div>
       <div class="bagua-name">${g.num}. ${g.name}</div>
       <div class="bagua-nature">${g.nature}（${g.yinyang}）</div>
       <div class="bagua-attrs">
@@ -450,6 +455,9 @@ function renderBagua() {
     </div>
   `).join('');
   document.getElementById('baguaGrid').innerHTML = html;
+  document.querySelectorAll('[data-bagua-sym]').forEach(el=>{
+    GuaAnim.baguaSVG(el, el.dataset.baguaSym, 60);
+  });
 }
 
 // ===== 渲染64卦 =====
@@ -458,13 +466,19 @@ function render64Gua() {
   let list = ONT.liushisigua;
   if (currentJing !== 'all') list = list.filter(g => g.jing === currentJing);
   const html = list.map(g => `
-    <a class="gua-cell ${g.jing==='上经'?'jing-shang':'jing-xia'}" href="gua.html#${g.name}" title="${g.num}.${g.name}：${g.guaci||''}">
-      <span class="sym">${g.symbol}</span>
+    <a class="gua-cell ${g.jing==='上经'?'jing-shang':'jing-xia'}" href="gua.html#${g.name}" title="${g.num}.${g.name}：${g.guaci||'}" data-gua-idx="${g.num-1}">
+      <span class="sym" data-gua-sym="${g.num-1}"></span>
       <span class="name">${g.name}</span>
       <span class="num">${g.num}</span>
     </a>
   `).join('');
   document.getElementById('gua64Grid').innerHTML = html;
+  // 挂六爻小图
+  document.querySelectorAll('[data-gua-sym]').forEach(el=>{
+    const idx = +el.dataset.guaSym;
+    const g = ONT.liushisigua[idx];
+    GuaAnim.mountMini(el, g, {size: 40});
+  });
 }
 document.querySelectorAll('.jing-toggle button').forEach(btn => {
   btn.addEventListener('click', () => {

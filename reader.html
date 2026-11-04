@@ -65,7 +65,13 @@ a:hover{text-decoration:underline}
 .gua-head{text-align:center;border-bottom:1px double var(--line);padding-bottom:18px;margin-bottom:24px}
 .gua-title{font-family:"STKaiti","KaiTi","Kaiti SC","Songti SC",serif;font-size:40px;color:var(--zhu);letter-spacing:8px;margin:0 0 6px}
 .gua-sub{font-size:15px;color:var(--soft);letter-spacing:2px}
-.gua-symbol{font-size:60px;line-height:1;margin:12px 0;color:var(--ink);letter-spacing:0}
+.reader-gua-row{display:flex;align-items:center;justify-content:center;gap:28px;margin:16px 0 4px}
+.reader-gua-svg{flex-shrink:0}
+.reader-gua-svg .gua-svg{filter:drop-shadow(0 2px 4px rgba(139,0,0,.12))}
+.reader-gua-text{text-align:left}
+.reader-bagua-row{display:flex;align-items:center;gap:6px;margin-top:6px;font-size:13px;color:var(--gold)}
+.reader-bagua{display:inline-flex;align-items:center}
+.reader-sep{opacity:.5;margin:0 2px}
 .gua-meta{font-size:14px;color:var(--soft);margin-top:8px}
 .section-hd{font-size:22px;color:var(--zhu);text-align:center;letter-spacing:6px;margin:28px 0 14px;font-weight:600;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:8px 0;background:linear-gradient(90deg,transparent,rgba(139,0,0,.05),transparent)}
 .sub-hd{font-size:17px;color:var(--lan);font-weight:600;margin:18px 0 8px;padding-left:8px;border-left:3px solid var(--lan)}
@@ -98,7 +104,7 @@ a:hover{text-decoration:underline}
 
 /* 无批/只看批 */
 body.no-anno .anno{display:none}
-body.only-anno .gua-text,body.only-anno .section-hd.sub-gua,body.only-anno .gua-symbol{display:none}
+body.only-anno .gua-text,body.only-anno .section-hd.sub-gua,body.only-anno .reader-gua-svg{display:none}
 body.only-anno .gua-head{border-bottom:1px dashed var(--line);padding-bottom:8px;margin-bottom:12px}
 body.only-anno .gua-title{font-size:28px}
 body.no-baihua .anno.cmt-baihua{display:none}
@@ -200,8 +206,10 @@ body.no-zj .anno.cmt-jijie,body.no-zj .anno.cmt-zhezhong{display:none}
 
 <script src="data/gua-full-data.js"></script>
 <script src="data/yj-index.js"></script>
+<script src="data/gua-anim.js"></script>
 <script>
 (function(){
+  const ONT = window.YJ_ONT;
   const IDX = window.YJ_INDEX;
   const ORDER = IDX.order;
   // 按需加载的单卦缓存
@@ -350,12 +358,29 @@ body.no-zj .anno.cmt-jijie,body.no-zj .anno.cmt-zhezhong{display:none}
     const symDown = BAGUA[s.down] || ' ';
     head.innerHTML = `
       <div class="gua-meta">第 ${num} 卦 · ${num<=30?'上经':'下经'}</div>
-      <h1 class="gua-title">${name}</h1>
-      <div class="gua-sub">${updown || ''}　${jijie.title || ''}</div>
-      <div class="gua-symbol">${symUp}<br>${symDown}</div>
-      <div class="gua-meta">上卦 ${s.up} ${symUp}　·　下卦 ${s.down} ${symDown}</div>
+      <div class="reader-gua-row">
+        <div class="reader-gua-svg" id="readerBigGua"></div>
+        <div class="reader-gua-text">
+          <h1 class="gua-title">${name}</h1>
+          <div class="gua-sub">${updown || ''}　${jijie.title || ''}</div>
+          <div class="reader-bagua-row">
+            <span class="reader-bgua" id="readerUpGua"></span>
+            <span class="reader-ud-label">上${s.up}</span>
+            <span class="reader-sep">／</span>
+            <span class="reader-bgua" id="readerDownGua"></span>
+            <span class="reader-ud-label">下${s.down}</span>
+          </div>
+        </div>
+      </div>
     `;
     cont.appendChild(head);
+    // 挂动效卦
+    const g = ONT.liushisigua.find(x=>x.name===name);
+    if(g){
+      GuaAnim.mount(document.getElementById('readerBigGua'), g, {size:150});
+    }
+    GuaAnim.baguaSVG(document.getElementById('readerUpGua'), s.up, 42);
+    GuaAnim.baguaSVG(document.getElementById('readerDownGua'), s.down, 42);
 
     // 白话卦解
     if(guaBaihua(name)){
