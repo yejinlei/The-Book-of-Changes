@@ -465,6 +465,35 @@ window.YJ_ONT = (function() {
     LiuShiSiGua.push(g);
   });
 
+  // ========== 用完整经文数据覆盖（经文层补全）==========
+  // YJ_GUA_FULL 由 data/gua-full-data.js 提供（64卦完整卦辞/彖/象/爻辞/白话）
+  if (typeof window !== 'undefined' && window.YJ_GUA_FULL) {
+    const FULL = window.YJ_GUA_FULL;
+    LiuShiSiGua.forEach(g => {
+      const f = FULL[g.name];
+      if (!f) return;
+      g.guaci = f.guaci || g.guaci;
+      g.guaciBai = f.guaciBai || '';
+      g.tuan = f.tuan || g.tuan;
+      g.xiang = f.xiang || g.xiang;
+      g.wenyan = f.wenyan || g.wenyan || '';
+      g.xugua = f.xugua || '';
+      if (f.symbol) g.symbol = f.symbol;
+      // 以完整文字重写爻
+      if (f.yao && f.yao.length) {
+        g.yao = f.yao.map(y => ({
+          pos: y.pos,
+          yinYang: y.pos.includes('九') ? '阳' : (y.pos.includes('六') ? '阴' : ''),
+          text: y.text,
+          xiaoxiang: y.xiaoxiang || '',
+          explain: y.bai || '',
+        }));
+      }
+      g._incomplete = false;      // 已补全
+      g._fullText = true;         // 完整经文标记
+    });
+  }
+
   // 64卦索引
   const GuaMap = {};
   LiuShiSiGua.forEach(g => GuaMap[g.name] = g);
@@ -655,12 +684,16 @@ window.YJ_ONT = (function() {
   const Triples = [];
   function addTriple(s, p, o) { Triples.push({subject:s, predicate:p, object:o}); }
 
-  // 生成链：道→太极→两仪→四象→八卦→64卦→384爻
-  addTriple('Dao','shengCheng','Taiji');
-  addTriple('Taiji','shengCheng','YinYang');
-  addTriple('YinYang','shengCheng','Sixiang');
-  addTriple('Sixiang','shengCheng','Bagua');
-  // 八卦→64卦：两两相重
+  // ---- 生成链：道→太极→两仪→四象→八卦→64卦→384爻（双向）----
+  const chain = ['Dao','Taiji','YinYang','Sixiang','Bagua'];
+  for (let i=0;i<chain.length-1;i++){
+    addTriple(chain[i],'shengCheng',chain[i+1]);
+    addTriple(chain[i+1],'shengYu',chain[i]);
+  }
+  addTriple('Dao','hanYou','Taiji');
+  addTriple('Taiji','hanYou','YinYang');
+
+  // ---- 八卦→64卦：两两相重（保留 chongGua 与 shang/xia）----
   BaGua.forEach(g1 => BaGua.forEach(g2 => {
     const found = LiuShiSiGua.find(g => g.shang===g1.name && g.xia===g2.name);
     if (found) {
@@ -668,27 +701,115 @@ window.YJ_ONT = (function() {
       addTriple(g2.id, 'chongGua', found.id);
       addTriple(found.id, 'shangGua', g1.id);
       addTriple(found.id, 'xiaGua', g2.id);
+      addTriple(found.id, 'zuHeCheng', g1.id);
+      addTriple(found.id, 'zuHeCheng', g2.id);
     }
   }));
-  // 64卦→384爻
+
+  // ---- 八卦→源头 ----
+  BaGua.forEach(g => addTriple('Bagua','baoHan',g.id));
+  BaGua.forEach(g => addTriple(g.id,'shuYu','Bagua'));
+  // 八卦同象归并（天/地/雷/风/水/火/山/泽）
+  BaGua.forEach(g => addTriple(g.id,'xiangZheng', 'ziran_'+g.ziran));
+
+  // ---- 64卦→经（分上经/下经）----
+  LiuShiSiGua.forEach(g => {
+    addTriple(g.id,'shuYuJing', g.jing==='上经'?'Jing_shang':'Jing_xia');
+    addTriple('Jing','baoHanGua', g.id);
+  });
+  addTriple('Jing','fenJuan','Jing_shang');
+  addTriple('Jing','fenJuan','Jing_xia');
+
+  // ---- 64卦→爻（含爻位属性）----
   LiuShiSiGua.forEach(g => g.yao.forEach((y,i) => {
     const yid = g.id+'_y'+(i+1);
     addTriple(g.id, 'yaoWei', yid);
     addTriple(yid, 'shuYuGua', g.id);
+    addTriple(yid, 'yaoWeiMing', 'Yao_'+y.pos);
+    addTriple(yid, 'yinYang', 'YinYang_'+(y.yinYang==='阳'?'yang':'yin'));
   }));
-  // 十翼→经
-  ShiYi.forEach(zy => addTriple(zy.id, 'zhushi', 'Jing'));
-  // 注家→注本
-  ZhuBen.forEach(zb => {
-    if (ZhuJiaMap[zb.author.replace(/、.*$/,'')]) {
-      const authorId = ZhuJiaMap[zb.author.replace(/、.*$/,'')].id;
-      addTriple(authorId, 'zhuZuo', zb.id);
-      addTriple(zb.id, 'zuoZhe', authorId);
-    }
+  // 爻位命名节点
+  ['初','二','三','四','五','上'].forEach((pos)=>{
+    addTriple('Yao','baoHan','Yao_'+pos+'wei');
   });
-  // 注本→经（注释对象）
+
+  // ---- 卦序关系：序卦（相邻两卦）----
+  const sorted = LiuShiSiGua.slice().sort((a,b)=>a.num-b.num);
+  for (let i=0;i<sorted.length-1;i++){
+    addTriple(sorted[i].id,'xuGua',sorted[i+1].id);
+  }
+  // 错卦（六爻全变）：阴阳相反
+  function inverseBinary(g){ return g.yao.map(y=>y.yinYang==='阳'?'阴':'阳').join(''); }
+  function binaryOf(g){ return g.yao.map(y=>y.yinYang==='阳'?'阳':'阴').join(''); }
+  const byBin = {};
+  LiuShiSiGua.forEach(g=>{ byBin[binaryOf(g)]=g; });
+  LiuShiSiGua.forEach(g=>{
+    const inv = inverseBinary(g);
+    const t = byBin[inv];
+    if (t && t.id!==g.id) addTriple(g.id,'cuoGua',t.id);
+  });
+  // 综卦（整体倒转，上下颠倒）
+  LiuShiSiGua.forEach(g=>{
+    const arr = g.yao.map(y=>y.yinYang);
+    const rev = arr.slice().reverse().join('');
+    const t = LiuShiSiGua.find(x=>x.id!==g.id && x.yao.map(y=>y.yinYang).join('')===rev);
+    if (t) addTriple(g.id,'zongGua',t.id);
+  });
+  // 互卦（二三四爻为下卦，三四五爻为上卦）
+  LiuShiSiGua.forEach(g=>{
+    const y = g.yao.map(o=>o.yinYang);
+    const xia = [y[1],y[2],y[3]].join('');
+    const shang = [y[2],y[3],y[4]].join('');
+    const t = LiuShiSiGua.find(x=>x.yao.map(o=>o.yinYang).join('')===shang+xia);
+    if (t && t.id!==g.id) addTriple(g.id,'huGua',t.id);
+  });
+
+  // ---- 十翼→经 与 十翼→作者（孔子）----
+  ShiYi.forEach(zy => {
+    addTriple(zy.id, 'zhushi', 'Jing');
+    addTriple(zy.id, 'zuoZhe', 'zj_kongzi');
+    addTriple('zj_kongzi', 'zhuZuo', zy.id);
+    if (zy.id.indexOf('tuan')>=0) addTriple(zy.id,'shiCheng','Jing');
+  });
+
+  // ---- 圣人链：伏羲→文王→周公→孔子（易之四圣）----
+  addTriple('zj_fuxi','xiangChuan','zj_wenwang');
+  addTriple('zj_wenwang','xiangChuan','zj_zhougong');
+  addTriple('zj_zhougong','xiangChuan','zj_kongzi');
+  // 四圣→经
+  addTriple('zj_fuxi','zuoZhe','Bagua');
+  addTriple('zj_wenwang','zuoZhe','Jing');
+  addTriple('zj_zhougong','zuoZhe','Jing');
+  addTriple('zj_kongzi','zuoZhe','ShiYi');
+  addTriple('Bagua','zuoZheShi','zj_fuxi');
+  addTriple('ShiYi','zuoZheShi','zj_kongzi');
+
+  // ---- 注家→注本（健壮匹配：去括注、拆多作者）----
+  const zjName2Id = {};
+  ZhuJia.forEach(zj => zjName2Id[zj.name] = zj.id);
+  function cleanAuthors(a){
+    return a.replace(/（[^）]*）/g,'').replace(/\([^)]*\)/g,'')
+            .split(/[、,，\/]/).map(s=>s.trim()).filter(Boolean);
+  }
+  ZhuBen.forEach(zb => {
+    cleanAuthors(zb.author).forEach(name=>{
+      const id = zjName2Id[name];
+      if (id){
+        addTriple(id, 'zhuZuo', zb.id);
+        addTriple(zb.id, 'zuoZhe', id);
+      }
+    });
+  });
+  // ---- 注本→经（注释对象）----
   ZhuBen.forEach(zb => addTriple(zb.id, 'zhushi', 'Jing'));
-  // 注家→流派
+  // 注本→注本（集解/折中 汇编诸家）
+  addTriple('zb_jijie','huiBian','zb_yufan');
+  addTriple('zb_jijie','huiBian','zb_wangbi');
+  addTriple('zb_jijie','huiBian','zb_zhengxuan');
+  addTriple('zb_zhezhong','huiBian','zb_benyi');
+  addTriple('zb_zhezhong','huiBian','zb_chengtuan');
+
+  // ---- 注家→流派 ----
   const schoolMap = {'象数派':'lp_xiangshu','义理派':'lp_yili','义理派（理学易）':'lp_yili','古文经学':'lp_kaozheng',
     '古文经学（兼采今文）':'lp_kaozheng','象数派（京氏易）':'lp_xiangshu','义理派（玄学易）':'lp_yili',
     '象数派（集解体）':'lp_xiangshu','图书派（道家易）':'lp_tushu','象数派（先天学）':'lp_xiangshu',
@@ -703,8 +824,70 @@ window.YJ_ONT = (function() {
     '义理派（正义派）':'lp_yili','官方':'lp_yili','融会中西':'lp_qitazongjiao','易学史/科学易':'lp_qitazongjiao'
   };
   ZhuJia.forEach(zj => {
-    const lpId = schoolMap[zj.school];
-    if (lpId) addTriple(zj.id, 'shuYuLiupai', lpId);
+    const lpId = schoolMap[zj.school] || (zj.school ? (zj.school.indexOf('象数')>=0?'lp_xiangshu': zj.school.indexOf('考据')>=0?'lp_kaozheng': zj.school.indexOf('道')>=0?'lp_dao': zj.school.indexOf('佛')>=0?'lp_fo':'lp_yili') : '');
+    if (lpId){ addTriple(zj.id, 'shuYuLiupai', lpId); addTriple(lpId,'youZhujia',zj.id); }
+  });
+
+  // ---- 注家→时代 ----
+  const eraOfZJ = {};
+  ZhuJia.forEach(zj => {
+    const e = (zj.era||'').trim();
+    if (e){ addTriple(zj.id,'shengHuoYu','era_'+e); addTriple('era_'+e,'youZhujia',zj.id); }
+  });
+
+  // ---- 注家间师承（据正文可考的授受链）----
+  const lineage = [
+    ['zj_kongzi','zj_zixia'],
+    ['zj_zixia','zj_tianhe'],
+    ['zj_tianhe','zj_mengxi'],
+    ['zj_mengxi','zj_jiaoyan'],
+    ['zj_jiaoyan','zj_jingfang'],
+    ['zj_marong','zj_zhengxuan'],
+    ['zj_zhengxuan','zj_xunshuang'],
+    ['zj_xunshuang','zj_yufan'],
+    ['zj_wangbi','zj_hangkangbo'],
+    ['zj_zhangzai','zj_chengyi'],
+    ['zj_chengtuan','zj_zhuxi'],
+    ['zj_zhuxi','zj_hu_bingwen'],
+    ['zj_zhuxi','zj_yangwanli'],
+    ['zj_huangzongxi','zj_wangfuzhi'],
+    ['zj_wangfuzhi','zj_huidong'],
+    ['zj_huidong','zj_zhanghuiyan'],
+    ['zj_shangbinghe','zj_gaoheng']
+  ];
+  lineage.forEach(p=>{ addTriple(p[0],'shiCheng',p[1]); addTriple(p[1],'xiChengYu',p[0]); });
+
+  // ---- 易之三义（变易/简易/不易）归于「易」概念 ----
+  ['lp_bianyi','lp_jianyi','lp_buyi'].forEach(lp=>{ addTriple('Dao','sanYi',lp); addTriple(lp,'shuYu','Dao'); });
+  // ---- 术数派：关联京房、邵雍 ----
+  addTriple('zj_jingfang','shuYuLiupai','lp_tuili');
+  addTriple('lp_tuili','youZhujia','zj_jingfang');
+  addTriple('zj_shaoyong','shuYuLiupai','lp_tuili');
+  addTriple('lp_tuili','youZhujia','zj_shaoyong');
+  addTriple('lp_tuili','shuYu','Yitu');
+  // ---- 易图→源头与所象 ----
+  addTriple('Yitu','baoHan','tu_hetu');
+  addTriple('Yitu','baoHan','tu_luoshu');
+  addTriple('Yitu','baoHan','tu_taiji');
+  addTriple('Yitu','baoHan','tu_xiantian');
+  addTriple('Yitu','baoHan','tu_houtian');
+  addTriple('Yitu','baoHan','tu_64guafang');
+  addTriple('Yitu','baoHan','tu_bagua_64gua');
+  addTriple('Yitu','baoHan','tu_yaobian');
+  addTriple('tu_taiji','biaoZheng','Taiji');
+  addTriple('tu_hetu','biaoZheng','YinYang');
+  addTriple('tu_luoshu','biaoZheng','Sixiang');
+  addTriple('tu_xiantian','xiangZhengZhi','Bagua');
+  addTriple('tu_houtian','xiangZhengZhi','Bagua');
+  addTriple('tu_64guafang','shengCheng','Bagua');
+  addTriple('tu_bagua_64gua','shengCheng','Bagua');
+  addTriple('tu_yaobian','biaoZheng','YinYang');
+  addTriple('Bagua','keShiHuaYu','tu_xiantian');
+  addTriple('Bagua','keShiHuaYu','tu_houtian');
+
+  // ---- 事件→相关人物/经典 ----
+  (typeof Events!=='undefined'?Events:[]).forEach(ev=>{
+    if (ev.people) ev.people.forEach(p=>{ const id=zjName2Id[p]; if(id) addTriple(id,'canYu', ev.id); });
   });
 
   // ========== 公开API ==========

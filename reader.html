@@ -198,6 +198,7 @@ body.no-zj .anno.cmt-jijie,body.no-zj .anno.cmt-zhezhong{display:none}
   <a href="index.html">← 返回易经本体论首页</a>
 </div>
 
+<script src="data/gua-full-data.js"></script>
 <script src="data/yj-index.js"></script>
 <script>
 (function(){
@@ -270,6 +271,18 @@ body.no-zj .anno.cmt-jijie,body.no-zj .anno.cmt-zhezhong{display:none}
     '乾':['初九：龙尚潜伏于渊，不宜有所作为——比喻人当韬光养晦，时未可动。','九二：龙出现在田野，利于见到大德之人——德施已普，居中得位。','九三：君子整日奋勉自励，夜间也警惕戒惧，虽处危地，终无咎害。','九四：龙或跃起于深渊，审时度势可无咎。','九五：龙飞上天，大展宏图之时，大利大德之人出现。','上九：龙飞过高，必有悔恨——知进而不知退则极而必反。','用九：群龙并出而不以首领自居，吉。'],
     '坤':['初六：踩到霜上，坚冰将至——阴寒之事由微渐著，防微杜渐。','六二：正直、端方、广大，不待修习自然无所不利。','六三：含藏章美，守持正固；或跟从王事，不以成功自居，终有好结果。','六四：束紧囊口，慎言免害，无咎亦无誉。','六五：黄色裙裳，大吉——以中和之德居尊位。','上六：龙在原野上交战，流出玄黄之血——阴盛极而战阳，天地之气混杂。','用六：利于永远守持正固，以厚德大终其事。']
   };
+
+  // ===== 本体白话（优先）：完整64卦白话从 YJ_GUA_FULL 读取 =====
+  function guaBaihua(name){
+    const F = (typeof window!=='undefined') && window.YJ_GUA_FULL && window.YJ_GUA_FULL[name];
+    if (F && F.guaciBai) return F.guaciBai;
+    return BAIHUA[name] || '';
+  }
+  function yaoBaihua(name, idx){
+    const F = (typeof window!=='undefined') && window.YJ_GUA_FULL && window.YJ_GUA_FULL[name];
+    if (F && F.yao && F.yao[idx] && F.yao[idx].bai) return F.yao[idx].bai;
+    return (LINE_BAIHUA[name] && LINE_BAIHUA[name][idx]) || '';
+  }
 
   // 卦象拆分：从jijie title"乾下乾上"解析上下卦
   function splitGua(guaStr, name){
@@ -345,10 +358,10 @@ body.no-zj .anno.cmt-jijie,body.no-zj .anno.cmt-zhezhong{display:none}
     cont.appendChild(head);
 
     // 白话卦解
-    if(BAIHUA[name]){
+    if(guaBaihua(name)){
       const bh = document.createElement('div');
       bh.className = 'anno cmt-baihua';
-      bh.innerHTML = '<span class="src">白话</span>'+BAIHUA[name];
+      bh.innerHTML = '<span class="src">白话</span>'+guaBaihua(name);
       cont.appendChild(bh);
     }
 
@@ -466,10 +479,10 @@ body.no-zj .anno.cmt-jijie,body.no-zj .anno.cmt-zhezhong{display:none}
           yh.appendChild(document.createTextNode(rest));
           cont.appendChild(yh);
           // 白话爻注（如有）
-          if(LINE_BAIHUA[name] && LINE_BAIHUA[name][yaoCount-1]){
+          if(yaoBaihua(name, yaoCount-1)){
             const abh = document.createElement('div');
             abh.className='anno cmt-baihua';
-            abh.innerHTML='<span class="src">白话</span>'+LINE_BAIHUA[name][yaoCount-1];
+            abh.innerHTML='<span class="src">白话</span>'+yaoBaihua(name, yaoCount-1);
             cont.appendChild(abh);
           }
           continue;
@@ -506,10 +519,10 @@ body.no-zj .anno.cmt-jijie,body.no-zj .anno.cmt-zhezhong{display:none}
       {key:'案',title:'御纂·按语',anno:'cmt-an'},
       {key:'总论',title:'总论',anno:'cmt-zonglun'}
     ];
-    if(BAIHUA[name]){
+    if(guaBaihua(name)){
       const bh=document.createElement('div');
       bh.className='anno cmt-baihua';
-      bh.innerHTML='<span class="src">白话</span>'+BAIHUA[name];
+      bh.innerHTML='<span class="src">白话</span>'+guaBaihua(name);
       cont.appendChild(bh);
     }
     sections.forEach(sec=>{
