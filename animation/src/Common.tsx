@@ -76,42 +76,60 @@ export const VerticalTitle: React.FC<{
   );
 };
 
-/** 底部旁白字幕 */
+/** 底部旁白字幕：贴到底边，自身高度极薄，不遮挡画面主体 */
 export const Subtitle: React.FC<{
   text: string;
   opacity?: number;
   size?: number;
-}> = ({ text, opacity = 1, size = 40 }) => {
+}> = ({ text, opacity = 1, size = 30 }) => {
   return (
-    <div
-      style={{
-        position: "absolute",
-        bottom: 70,
-        left: 0,
-        right: 0,
-        display: "flex",
-        justifyContent: "center",
-        opacity,
-        padding: "0 160px",
-      }}
-    >
+    <>
+      {/* 底部渐变暗条：仅在最底边做一层极薄的渐隐，不向上侵入画面 */}
       <div
         style={{
-          maxWidth: 1500,
-          textAlign: "center",
-          fontSize: size,
-          lineHeight: 1.7,
-          color: "#f4ecd8",
-          fontFamily: "'Noto Serif CJK SC', serif",
-          letterSpacing: 2,
-          textShadow: "0 2px 16px rgba(0,0,0,0.9), 0 0 40px rgba(0,0,0,0.7)",
-          padding: "14px 32px",
-          background: "linear-gradient(90deg, transparent, rgba(10,10,16,0.55), transparent)",
+          position: "absolute",
+          left: 0,
+          right: 0,
+          bottom: 0,
+          height: 90,
+          background:
+            "linear-gradient(to top, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.35) 40%, rgba(0,0,0,0) 100%)",
+          pointerEvents: "none",
+          opacity,
+        }}
+      />
+      <div
+        style={{
+          position: "absolute",
+          bottom: 18,
+          left: 0,
+          right: 0,
+          display: "flex",
+          justifyContent: "center",
+          opacity,
+          padding: "0 120px",
+          pointerEvents: "none",
         }}
       >
-        {text}
+        <div
+          style={{
+            maxWidth: 1500,
+            textAlign: "center",
+            fontSize: size,
+            lineHeight: 1.45,
+            color: "#f4ecd8",
+            fontFamily: "'Noto Serif CJK SC', serif",
+            letterSpacing: 1,
+            textShadow:
+              "0 1px 4px rgba(0,0,0,0.95), 0 0 14px rgba(0,0,0,0.85)",
+            padding: "6px 18px",
+            background: "transparent",
+          }}
+        >
+          {text}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

@@ -224,26 +224,25 @@
       ctx.arc(0, 0, r, 0, Math.PI*2);
       ctx.fillStyle = '#fff';
       ctx.fill();
-      // 阳鱼（白）+阴鱼（墨）
-      // 阴鱼（左墨）用半圆+两个小圆构成S形
+      // 阴鱼（墨，右）+ 阳鱼（白，左）—— 以右半圆 + 两个小圆构成标准 S 曲线
       ctx.save();
       ctx.beginPath();
-      ctx.arc(0, 0, r, Math.PI/2, Math.PI*1.5, false);
-      ctx.arc(0, -r/2, r/2, Math.PI*0.5, Math.PI*1.5, true);
-      ctx.arc(0, r/2, r/2, Math.PI*1.5, Math.PI*0.5, false);
+      ctx.arc(0, 0, r, -Math.PI/2, Math.PI/2, false);        // 右半大圆：顶 → 右 → 底
+      ctx.arc(0, r/2, r/2, Math.PI/2, -Math.PI/2, true);     // 下小圆：向右凸
+      ctx.arc(0, -r/2, r/2, Math.PI/2, Math.PI*1.5, false);  // 上小圆：向左凸
       ctx.closePath();
       ctx.fillStyle = COLOR.ink;
       ctx.fill();
       ctx.restore();
 
-      // 阳鱼眼（上白中的黑点）+阴鱼眼（下黑中的白点）
+      // 阴中有阳：黑鱼头（上）中的白眼；阳中有阴：白鱼头（下）中的黑眼
       ctx.beginPath();
-      ctx.arc(0, -r/2, r/10, 0, Math.PI*2);
-      ctx.fillStyle = COLOR.ink;
+      ctx.arc(0, -r/2, r/9, 0, Math.PI*2);
+      ctx.fillStyle = '#fff';
       ctx.fill();
       ctx.beginPath();
-      ctx.arc(0, r/2, r/10, 0, Math.PI*2);
-      ctx.fillStyle = '#fff';
+      ctx.arc(0, r/2, r/9, 0, Math.PI*2);
+      ctx.fillStyle = COLOR.ink;
       ctx.fill();
 
       // 外描边（朱红）
@@ -259,34 +258,34 @@
     /*          场 景 3：一 生 二 · 两 仪 (爻线浮现)           */
     /* ====================================================== */
     _draw_two(t) {
-      // 先保留太极，渐淡
-      this._draw_one(1); // 太极全显
       const ctx = this.ctx;
-      ctx.globalAlpha = 1 - t*0.5; // 太极稍淡
-
+      // 太极渐淡（须在 _draw_one 之前设置 alpha 才生效）
+      ctx.globalAlpha = 1 - t * 0.5;
+      this._draw_one(1); // 太极全显
       ctx.globalAlpha = 1;
       // 阳爻从太极向左展开
       const yangX = CX - 180;
       const yangA = easeOutCubic(clamp01((t - 0.05)/0.4));
       this._drawYao(ctx, 1, yangX, CY - 40, 120*yangA, 12, 18, COLOR.zhu, yangA);
       if (t > 0.35) {
-        ctx.globalAlpha = easeOutCubic((t-0.35)/0.4);
+        const ta = easeOutCubic((t-0.35)/0.4);
         ctx.fillStyle = COLOR.zhu;
         ctx.font = '16px "Songti SC","SimSun",serif';
         ctx.textAlign = 'center';
-        ctx.fillText('阳  ⚊  ——', yangX, CY + 10);
+        ctx.fillText('阳', yangX, CY + 10);
+        this._drawYao(ctx, 1, yangX, CY + 38, 40, 6, 12, COLOR.zhu, ta);
       }
       // 阴爻从太极向右展开
-      ctx.globalAlpha = 1;
       const yinX = CX + 180;
       const yinA = easeOutCubic(clamp01((t - 0.25)/0.4));
       this._drawYao(ctx, 0, yinX, CY - 40, 120*yinA, 12, 18, COLOR.liu, yinA);
       if (t > 0.55) {
-        ctx.globalAlpha = easeOutCubic((t-0.55)/0.4);
+        const ta = easeOutCubic((t-0.55)/0.4);
         ctx.fillStyle = COLOR.liu;
         ctx.font = '16px "Songti SC","SimSun",serif';
         ctx.textAlign = 'center';
-        ctx.fillText('阴  ⚋  — —', yinX, CY + 10);
+        ctx.fillText('阴', yinX, CY + 10);
+        this._drawYao(ctx, 0, yinX, CY + 38, 40, 6, 12, COLOR.liu, ta);
       }
       ctx.globalAlpha = 1;
     }
