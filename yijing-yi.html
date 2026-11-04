@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ctext y='26' font-size='26'%3E%E2%98%AF%3C/text%3E%3C/svg%3E">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>易之变 · 动态影像 | The Book of Changes</title>
+<style>
+:root {
+  --bg: #f4ecd8;
+  --paper: #faf6ed;
+  --text: #2b1810;
+  --accent: #8b0000;
+  --gold: #b8860b;
+  --border: #d4c5a3;
+  --shadow: rgba(139,0,0,0.08);
+  --screen: #0b0b10;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: 'Songti SC','STSong','SimSun','Noto Serif CJK SC','Source Han Serif SC','Noto Serif SC',serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.8;
+}
+/* 导航栏 */
+nav {
+  position: sticky; top:0; z-index:100;
+  background: var(--paper); border-bottom:2px solid var(--border);
+  padding: 0 40px; height: 62px;
+  display:flex; align-items:center; justify-content:space-between;
+  box-shadow: 0 2px 12px var(--shadow);
+}
+.logo { font-size:20px; font-weight:700; color:var(--accent); letter-spacing:6px; }
+.nav-links { display:flex; gap:26px; align-items:center; }
+.nav-links a { color:var(--text); text-decoration:none; font-size:14px; transition:.2s; }
+.nav-links a:hover { color:var(--accent); }
+.nav-links a.active { color:var(--accent); font-weight:700; }
+.container { max-width:1180px; margin:0 auto; padding:0 28px; }
+
+header.film-hero { text-align:center; padding:52px 0 26px; }
+header.film-hero h1 { font-size:48px; letter-spacing:20px; color:var(--accent); font-weight:700; text-indent:20px; }
+header.film-hero .sub { font-size:13px; letter-spacing:4px; color:var(--gold); margin-top:10px; }
+header.film-hero .quote { margin-top:18px; font-size:15px; color:#6b5540; letter-spacing:1px; }
+
+/* 放映区 */
+.screen-wrap {
+  max-width:1100px; margin:0 auto 10px;
+  background: var(--screen); border:1px solid var(--border);
+  border-radius:6px; box-shadow: 0 6px 30px rgba(0,0,0,.35);
+  overflow:hidden; position:relative;
+}
+.screen-wrap video { display:block; width:100%; background:#000; }
+.screen-tag {
+  position:absolute; left:16px; top:14px; font-size:12px; color:var(--gold);
+  opacity:.85; letter-spacing:1px; pointer-events:none;
+}
+
+/* 章节导航 */
+.chapters {
+  max-width:1100px; margin:20px auto 0;
+  display:grid; grid-template-columns:repeat(auto-fill,minmax(168px,1fr)); gap:9px;
+}
+.chapters button {
+  cursor:pointer; border:1px solid var(--border); background:var(--paper);
+  color:var(--text); border-radius:4px; padding:9px 12px; text-align:left;
+  font-family:inherit; font-size:12.5px; line-height:1.55; transition:.18s;
+}
+.chapters button:hover { border-color:var(--accent); transform:translateY(-1px); box-shadow:0 3px 10px var(--shadow); }
+.chapters button.on { border-color:var(--accent); background:#fbeee9; }
+.chapters button b { color:var(--accent); font-size:13px; }
+.chapters button span { opacity:.68; }
+
+/* 说明 */
+.notes { max-width:1100px; margin:30px auto 0; }
+.notes h2 { font-size:22px; color:var(--accent); letter-spacing:6px; margin-bottom:14px; border-left:4px solid var(--accent); padding-left:14px; }
+.notes p { font-size:14.5px; color:#4a3826; margin-bottom:10px; }
+.notes .tech { display:flex; gap:20px; flex-wrap:wrap; margin:18px 0 6px; }
+.notes .tech > div { flex:1; min-width:220px; background:var(--paper); border:1px solid var(--border); border-radius:5px; padding:16px 18px; }
+.notes .tech h3 { font-size:15px; color:var(--gold); margin-bottom:7px; letter-spacing:2px; }
+.notes .tech p { font-size:13px; margin:0; color:#5a4632; }
+
+/* 幕次表 */
+.scene-table { max-width:1100px; margin:34px auto 0; }
+.scene-table h2 { font-size:22px; color:var(--accent); letter-spacing:6px; margin-bottom:14px; border-left:4px solid var(--accent); padding-left:14px; }
+.scene-table table { width:100%; border-collapse:collapse; font-size:13.5px; background:var(--paper); }
+.scene-table th, .scene-table td { border:1px solid var(--border); padding:9px 12px; text-align:left; vertical-align:top; }
+.scene-table th { background:#f0e6d2; color:var(--accent); font-weight:700; letter-spacing:2px; }
+.scene-table tr:nth-child(even) td { background:#fbf7ee; }
+.scene-table td.n { color:var(--gold); font-weight:700; width:56px; text-align:center; }
+.scene-table td.t { width:130px; color:var(--accent); }
+.scene-table td.time { width:78px; color:#6b5540; }
+
+footer { text-align:center; padding:44px 0 34px; color:#8a7558; font-size:13px; letter-spacing:1px; }
+footer a { color:var(--accent); text-decoration:none; }
+@media (max-width:720px){
+  nav{ padding:0 16px; } .nav-links{ gap:14px; } .nav-links a{ font-size:12px; }
+  header.film-hero h1{ font-size:34px; letter-spacing:12px; }
+}
+</style>
+</head>
+<body>
+<nav>
+  <div class="logo">☯ 易之变</div>
+  <div class="nav-links">
+    <a href="index.html">首页</a>
+    <a href="index.html#bagua">八卦</a>
+    <a href="index.html#liushisigua">六十四卦</a>
+    <a href="reader.html">经文批注</a>
+    <a href="yitu.html">易图</a>
+    <a href="yijing-yi.html" class="active">动态影像</a>
+  </div>
+</nav>
+
+<div class="container">
+  <header class="film-hero">
+    <h1>易 之 变</h1>
+    <div class="sub">THE CHANGES · FROM THE ONE TO THE MYRIAD</div>
+    <div class="quote">"易有太极，是生两仪，两仪生四象，四象生八卦，八卦定吉凶，吉凶生大业。"——《周易·系辞上》</div>
+  </header>
+
+  <div class="screen-wrap">
+    <video id="film" controls preload="metadata" playsinline src="media/易之变-易之变.mp4">
+      您的浏览器不支持视频播放。
+    </video>
+    <div class="screen-tag">道生一 → 一生二 → 二生三 → 三生万物 → 错·综·互·变 → 万变归一</div>
+  </div>
+
+  <div class="chapters" id="chapters"></div>
+
+  <section class="notes">
+    <h2>本 片 说 明</h2>
+    <p>本片为《易经》宇宙生成链与卦变体系的动态影像，全程约 <b>5 分 28 秒</b>，共十四幕。以一条连续的视觉叙事带观众亲历：从无名无象的"道"出发，演为太极，分作阴阳两仪，化为四象，叠成八卦，重为六十四卦；再在六十四卦内部展开错、综、互、变、消息、卦序等全部卦象变化，最后落回"变"本身——万变归一。</p>
+    <div class="tech">
+      <div>
+        <h3>SVG · 经传卦象</h3>
+        <p>爻、卦、太极、方圆图、十二消息卦等全部以矢量逐帧绘制，朱红为阳、墨黑为阴，宣纸米黄为底，呈古籍气韵。</p>
+      </div>
+      <div>
+        <h3>three.js · 三维星尘</h3>
+        <p>以 three.js 计算球面均匀分布的粒子、欧拉旋转与透视投影，渲染"道生一"与"三生万物"的星尘聚散。</p>
+      </div>
+      <div>
+        <h3>Remotion · 时间轴编排</h3>
+        <p>十四幕按帧编排、转场与旁白字幕同步，逐帧渲染为影像，保证每一帧精确复现。</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="scene-table">
+    <h2>十 四 幕 一 览</h2>
+    <table>
+      <thead>
+        <tr><th>幕</th><th>标题</th><th>时长</th><th>画面内容</th></tr>
+      </thead>
+      <tbody id="sceneBody"></tbody>
+    </table>
+  </section>
+</div>
+
+<footer>
+  <a href="index.html">← 返回易经本体论首页</a> &nbsp;·&nbsp;
+  <a href="media/易之变-易之变.mp4" download>下载全片 MP4</a>
+  <p style="margin-top:14px;">易经本体论 · 所有内容先为本体实例，网页仅为渲染视图</p>
+</footer>
+
+<script>
+(function(){
+  var meta = [
+    [1,"太虚","道生一之前",12,"屏幕全黑，良久，画面正中央浮出一粒微乎其微的光点。三维星尘自一点聚散，暗示万象含于未形。"],
+    [2,"太极之境","道生一",18,"光点向四周晕开，化作浑然浑圆的白光，墨色渗入，旋成首尾相抱的双鱼，太极图成型。"],
+    [3,"两仪之境","一生二",22,"太极中央 S 形曲线一亮，剖为左白右黑，阳爻一画、阴爻两断浮于虚空。"],
+    [4,"四象之境","二生三",22,"阴阳之上各复生阴阳，太阳、少阴、少阳、太阴四象排成半弧。"],
+    [5,"八卦之境","四象生八卦",26,"四象再加一爻，三爻成卦，乾坤震巽坎离艮兑绕成先天圆环。"],
+    [6,"重卦之境","八卦重六十四卦",30,"八卦两两相叠，八八相错，六十四卦铺成伏羲方圆图，圆图象天、方图象地。"],
+    [7,"错卦之境","阴阳全反",22,"乾之六爻尽变为坤，三十二对错卦如镜像对立，朱红连线标'错'。"],
+    [8,"综卦之境","上下倒置",22,"卦体旋转一百八十度，屯综蒙、泰综否，如印翻转，鎏金连线标'综'。"],
+    [9,"互卦之境","卦中有卦",22,"取二三四、三四五爻重组成互卦，噬嗑腹中浮出山火贲，示卦中有卦。"],
+    [10,"变卦之境","爻变之卦",24,"乾卦六爻依次变为姤、同人、履、小畜、大有、夬，一爻动则生一卦。"],
+    [11,"消息之境","十二消息卦",26,"复临泰大壮夬乾、姤遁否观剥坤环布成一年时序，阳长阴消、循环不已。"],
+    [12,"卦序之境","序卦传与卦序",26,"六十四卦锁链排开，乾坤始、既未济终；三套卦序并列对照。"],
+    [13,"筮法之境","大衍之数",30,"五十策蓍草，四营成易，十八变而成卦，老阳老阴之爻微颤为动爻。"],
+    [14,"易理之境","万变归一",26,"六爻、八卦、四象、两仪、太极层层回退，重归一点微光；变易、简易、不易三义浮现。"]
+  ];
+  var starts = [0,12,30,52,74,100,130,152,174,196,220,246,272,302];
+  var box = document.getElementById('chapters');
+  var vid = document.getElementById('film');
+  meta.forEach(function(m, i){
+    var b = document.createElement('button');
+    b.type='button';
+    b.innerHTML = '<b>第'+m[0]+'幕 · '+m[1]+'</b><br><span>'+m[2]+'</span>';
+    b.onclick = function(){
+      vid.currentTime = starts[i] || 0;
+      vid.play();
+      document.querySelector('.screen-wrap').scrollIntoView({behavior:'smooth', block:'center'});
+      document.querySelectorAll('.chapters button').forEach(function(x){x.classList.remove('on');});
+      b.classList.add('on');
+    };
+    box.appendChild(b);
+  });
+
+  var tb = document.getElementById('sceneBody');
+  meta.forEach(function(m){
+    var tr = document.createElement('tr');
+    tr.innerHTML = '<td class="n">'+m[0]+'</td><td class="t">'+m[1]+'<br><span style="font-size:11.5px;opacity:.7">'+m[2]+'</span></td><td class="time">'+m[3]+'s</td><td>'+m[4]+'</td>';
+    tb.appendChild(tr);
+  });
+})();
+</script>
+</body>
+</html>
