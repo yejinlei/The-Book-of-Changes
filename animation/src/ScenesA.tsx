@@ -169,9 +169,9 @@ export const SceneSixiang: React.FC = () => {
   const cy = 560;
   const rad = 340;
 
-  // 位置：从右上太阳 到 左下太阴 排成弧
-  const angleStart = -70;
-  const angleEnd = 70;
+  // 位置：从左下太阳 → 右下太阴 排成平缓半弧（阳左阴右、上阳下阴）
+  const angleStart = -160;
+  const angleEnd = -20;
 
   return (
     <svg width={1920} height={1080} style={{ position: "absolute" }}>
