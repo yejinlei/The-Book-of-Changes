@@ -209,15 +209,18 @@
   <!-- 播放器 -->
   <div class="player-box">
     <video id="video" preload="metadata" controls poster="assets/contact-sheet.png">
+      <source src="assets/yizhibian-sound.mp4" type="video/mp4">
       <source src="assets/yizhibian-full.mp4" type="video/mp4">
       您的浏览器不支持 video 标签。
     </video>
     <div class="controls-bar">
-      <button onclick="play()">▶ 播放</button>
+      <button id="btnPlay" onclick="play()">▶ 播放（带声）</button>
       <button onclick="pause()">⏸ 暂停</button>
-      <button onclick="toggleMute()">🔊 静音</button>
-      <button onclick="video.currentTime = 0; video.play()">↺ 重播</button>
-      <a href="assets/yizhibian-full.mp4" download style="margin-left:8px;color:#b8860b;font-size:13px;text-decoration:none;">⬇ 下载 MP4</a>
+      <button id="btnSound" onclick="toggleSound()" title="点击开启/关闭古琴音轨">🔈 声音关</button>
+      <button onclick="video.muted = !video.muted; this.textContent = video.muted?'🔇 画面静音':'🔊 画面有声'">🔊 画面有声</button>
+      <button onclick="restart()">↺ 重播</button>
+      <a href="assets/yizhibian-sound.mp4" download style="margin-left:8px;color:#b8860b;font-size:13px;text-decoration:none;">⬇ 下载有声版 MP4</a>
+      <a href="assets/yizhibian-full.mp4" download style="color:#8a7a5a;font-size:13px;text-decoration:none;">⬇ 无声版</a>
       <span class="time" id="time">00:00 / 00:00</span>
     </div>
     <div class="chapter-bar" id="chapterBar"></div>
@@ -434,6 +437,60 @@ files.forEach(f=>{
   const li = document.createElement('li');
   li.innerHTML = '<span class="fname">📄 '+f.name+'</span><span class="fsize">'+f.size+'</span><a href="'+f.href+'" target="_blank">查看</a>';
   fl.appendChild(li);
+});
+</script>
+<!-- 易之变 · 音轨引擎（Web Audio API 实时合成古琴垫+磬+钟+爻弹+变卦锣） -->
+<script src="assets/yijing-audio.js"></script>
+<script>
+// ——— 集成声音到播放控制 ———
+const btnSound = document.getElementById('btnSound');
+let soundOn = false;
+
+async function play(){
+  // 用户点击才激活音频（浏览器自动播放策略）
+  if (!soundOn) { await toggleSound(); }
+  video.play();
+}
+function pause(){ video.pause(); if (window.YijingAudio) YijingAudio.stop(); }
+function restart(){
+  if (window.YijingAudio) YijingAudio.resetCues();
+  video.currentTime = 0;
+  play();
+}
+async function toggleSound(){
+  if (!window.YijingAudio) return;
+  soundOn = !soundOn;
+  if (soundOn) {
+    await YijingAudio.start();
+    btnSound.textContent = '🔊 声音开';
+    btnSound.style.background = '#1e3a8a';
+    YijingAudio.seek(video.currentTime); // 立刻触发当前位置应该在播的音
+  } else {
+    YijingAudio.stop();
+    btnSound.textContent = '🔈 声音关';
+    btnSound.style.background = '';
+  }
+}
+
+// 画面本身的原"静音"按钮保留（控制是否消掉视频音轨——本视频无声但以防万一）
+video.muted = true; // 默认视频音轨静音（视频本身也无声）
+
+// timeupdate 同步给音轨
+video.addEventListener('timeupdate', ()=>{
+  if (soundOn && window.YijingAudio) YijingAudio.seek(video.currentTime);
+});
+// 拖动/跳跃进度条时重置触发记录，让新位置的 cue 重新触发
+video.addEventListener('seeked', ()=>{
+  if (window.YijingAudio) YijingAudio.resetCues();
+  if (soundOn && window.YijingAudio) YijingAudio.seek(video.currentTime);
+});
+// 暂停时收一下垫音；继续时重新铺
+video.addEventListener('pause', ()=>{ if (window.YijingAudio) YijingAudio.stop(); });
+video.addEventListener('play', ()=>{
+  if (soundOn && window.YijingAudio) {
+    YijingAudio.start();
+    YijingAudio.seek(video.currentTime);
+  }
 });
 </script>
 </body>

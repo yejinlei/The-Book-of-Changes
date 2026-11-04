@@ -296,6 +296,33 @@ footer .ont-note { color:var(--gold); font-size:12px; margin-top:8px; }
   </div>
 </section>
 
+<!-- 易之变 · 动态影像（Remotion + three.js + SVG） -->
+<section class="section" id="yi-film-section" style="max-width:1100px;">
+  <div class="section-title">
+    <h2>易 之 变</h2>
+    <p>REMOTION 动态影像 · 从一道到万象 · 十四幕卦变全程</p>
+  </div>
+  <div id="yi-film" style="position:relative;max-width:1100px;margin:0 auto;background:#0b0b10;border:1px solid var(--border);border-radius:6px;box-shadow:0 4px 24px rgba(0,0,0,.35);overflow:hidden;">
+    <video id="yi-film-video" controls preload="metadata" playsinline
+           poster=""
+           style="display:block;width:100%;background:#000;"
+           src="media/易之变-易之变.mp4">
+      您的浏览器不支持视频播放。
+    </video>
+    <div style="position:absolute;left:14px;top:12px;font-size:12px;color:#d4a017;opacity:.85;font-family:'Kaiti SC','STKaiti',serif;pointer-events:none;letter-spacing:1px;">易之变 · 十四幕 · 五分钟左右 · 道生一 → 一生二 → 二生三 → 三生万物 → 错·综·互·变 → 万变归一</div>
+  </div>
+
+  <!-- 十四幕章节导航 -->
+  <div id="yi-film-chapters" style="max-width:1100px;margin:16px auto 0;display:grid;grid-template-columns:repeat(auto-fill,minmax(158px,1fr));gap:8px;"></div>
+  <p style="max-width:1100px;margin:12px auto 0;font-size:12.5px;color:var(--text);opacity:.62;text-align:center;line-height:1.8;">
+    本片由 Remotion 逐帧渲染，画面以 SVG 绘制经传卦象、three.js 生成三维星尘、Remotion 编排时间轴与旁白 ——
+    完整呈现《易经》的宇宙生成链与错、综、互、变、消息、卦序六种卦变。<br>
+    <a href="media/易之变-易之变.mp4" download style="color:var(--accent);text-decoration:none;">↓ 下载全片 MP4</a>
+    &nbsp;·&nbsp;
+    <a href="yijing-yi.html" style="color:var(--accent);text-decoration:none;">进入独立放映页 →</a>
+  </p>
+</section>
+
 <!-- 核心模块入口 -->
 <section class="section">
   <div class="section-title">
@@ -847,5 +874,36 @@ document.addEventListener('DOMContentLoaded', () => {
 </script>
 <!-- 道生万物 · 易经演化动画（独立 Canvas 模块，0 依赖）-->
 <script src="data/daosheng-anim.js"></script>
+<!-- 易之变 · 影片章节导航 -->
+<script>
+(function(){
+  var meta = [
+    [1,"太虚","道生一之前"], [2,"太极之境","道生一"], [3,"两仪之境","一生二"],
+    [4,"四象之境","二生三"], [5,"八卦之境","四象生八卦"], [6,"重卦之境","八卦重六十四卦"],
+    [7,"错卦之境","阴阳全反"], [8,"综卦之境","上下倒置"], [9,"互卦之境","卦中有卦"],
+    [10,"变卦之境","爻变之卦"], [11,"消息之境","十二消息卦"], [12,"卦序之境","序卦传"],
+    [13,"筮法之境","大衍之数"], [14,"易理之境","万变归一"]
+  ];
+  // 各幕起始秒数（按剧本时长累计，与视频一致）
+  var starts = [0,12,30,52,74,100,130,152,174,196,220,246,272,302];
+  var box = document.getElementById('yi-film-chapters');
+  var vid = document.getElementById('yi-film-video');
+  if(!box || !vid) return;
+  meta.forEach(function(m, i){
+    var d = document.createElement('button');
+    d.type = 'button';
+    d.style.cssText = 'cursor:pointer;border:1px solid var(--border);background:var(--paper);color:var(--text);border-radius:4px;padding:8px 10px;text-align:left;font-family:inherit;font-size:12.5px;line-height:1.5;transition:.18s;';
+    d.innerHTML = '<b style="color:var(--accent);font-size:13px;">第'+m[0]+'幕 · '+m[1]+'</b><br><span style="opacity:.7">'+m[2]+'</span>';
+    d.onmouseenter = function(){ d.style.borderColor='var(--accent)'; d.style.transform='translateY(-1px)'; };
+    d.onmouseleave = function(){ d.style.borderColor='var(--border)'; d.style.transform='none'; };
+    d.onclick = function(){
+      vid.currentTime = starts[i] || 0;
+      vid.play();
+      vid.scrollIntoView({behavior:'smooth', block:'center'});
+    };
+    box.appendChild(d);
+  });
+})();
+</script>
 </body>
 </html>
