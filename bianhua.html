@@ -468,14 +468,13 @@ function initSVG(){
   taijiG.setAttribute('transform','translate(640,360)');
   const R=96;
   taijiG.innerHTML=`
-    <circle r="${R}" fill="none" stroke="#c9a94e" stroke-width="2.4"/>
-    <!-- 阳鱼（米白）：左半大圆 + 下半小阴凸 + 上半小阳凸（阳鱼头朝上，在左上方） -->
-    <path id="yj-yang" d="M0,${-R} A${R},${R} 0 0 0 0,${R} A${R/2},${R/2} 0 0 0 0,0 A${R/2},${R/2} 0 0 1 0,${-R} Z" fill="#f4ecd8" opacity="0.94"/>
-    <!-- 阴鱼（朱红）：右半大圆 + 下半小阳凸 + 上半小阴凸（阴鱼头朝下，在右下方） -->
-    <path id="yj-yin"  d="M0,${-R} A${R},${R} 0 0 1 0,${R} A${R/2},${R/2} 0 0 1 0,0 A${R/2},${R/2} 0 0 0 0,${-R} Z" fill="#8b0000" opacity="0.94"/>
-    <!-- 鱼眼：阳中阴眼在阳鱼头（上）、阴中阳眼在阴鱼头（下） -->
+    <circle r="${R}" fill="#f4ecd8"/>
+    <!-- 阴鱼（朱红）：右半大弧 + 下半小凸(左包) + 上半小凸(右挖)，标准先天太极——阴鱼头朝右下、阳鱼头朝左上 -->
+    <path d="M0,${-R} A${R},${R} 0 0 1 0,${R} A${R/2},${R/2} 0 0 0 0,0 A${R/2},${R/2} 0 0 1 0,${-R} Z" fill="#8b0000" opacity="0.94"/>
+    <!-- 阳中阴眼（阳鱼头在上，朱点）、阴中阳眼（阴鱼头在下，米白点） -->
     <circle cx="0" cy="${-R/2}" r="${R/6}" fill="#8b0000"/>
     <circle cx="0" cy="${R/2}"  r="${R/6}" fill="#f4ecd8"/>
+    <circle r="${R}" fill="none" stroke="#c9a94e" stroke-width="2.4"/>
   `;
   svgRoot.appendChild(taijiG);
 

@@ -146,13 +146,16 @@ function svgTaiji() {
     <g id="taijiMasks" style="pointer-events:none;visibility:hidden"></g>
     <circle id="taijiOuter" cx="120" cy="120" r="108" fill="none" stroke="#1a1a2e" stroke-width="2"/>
     <g id="taijiCore" class="ix" style="pointer-events:painted">
-      <!-- 阴鱼（墨色）：左半大圆 + 下半小阳凸 + 上半小阴凸，鱼头朝下 -->
-      <path id="taijiYangPath" d="M120,12 A108,108 0 0,0 120,228 A54,54 0 0,0 120,120 A54,54 0 0,1 120,12 Z" fill="#1a1a2e"/>
+      <!-- 阴鱼（墨色）：左半大圆 + 下半小阳凸 + 上半小阴凸，阴鱼头朝右下 -->
+      <path id="taijiYinPath" d="M120,12 A108,108 0 0,0 120,228 A54,54 0 0,0 120,120 A54,54 0 0,1 120,12 Z" fill="#1a1a2e"/>
+      <!-- 阳鱼（米白）：右半大圆由底圆留白自然形成；S形参考线 -->
+      <path id="taijiYangArc" d="M120,12 A108,108 0 0,1 120,228 A54,54 0 0,1 120,120 A54,54 0 0,0 120,12 Z" fill="none"/>
+      <!-- 阳中阴眼：阳鱼头(上)有黑点 -->
+      <circle id="yinDot"  cx="120" cy="66"  r="17" fill="#1a1a2e"/>
+      <circle cx="120" cy="66"  r="5.5" fill="#fdfaf3"/>
+      <!-- 阴中阳眼：阴鱼头(下)有白点 -->
       <circle id="yangDot" cx="120" cy="174" r="17" fill="#fdfaf3"/>
       <circle cx="120" cy="174" r="5.5" fill="#1a1a2e"/>
-      <circle id="yinDot" cx="120" cy="66" r="17" fill="#1a1a2e"/>
-      <circle cx="120" cy="66" r="5.5" fill="#fdfaf3"/>
-      <path id="taijiYinArc" d="M120,12 A108,108 0 0,1 120,228 A54,54 0 0,1 120,120 A54,54 0 0,0 120,12 Z" fill="none"/>
     </g>
   </svg>
   <div class="toolbar">
@@ -184,7 +187,7 @@ function bindTaiji() {
   let flipped = false;
   core.onclick = () => {
     flipped = !flipped;
-    const yang = document.getElementById('taijiYangPath');
+    const yang = document.getElementById('taijiYinPath');
     yang.setAttribute('fill', flipped ? '#8b0000' : '#1a1a2e');
     core.classList.toggle('hot', flipped);
     hint.textContent = flipped ? '阳鱼现朱 —— 太极动而生阳' : '太极本然 —— 阴阳合而未分';
