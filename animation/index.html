@@ -80,6 +80,8 @@
   }
   .controls-bar .q-btn:hover { background: #e8d8b8; color: #5a3a1a; }
   .controls-bar .q-btn.q-active { background: #b8860b; color: #fffaf0; border-color:#b8860b; }
+  .controls-bar .q-btn.q-highlight { border-color: #a52a2a; color: #a52a2a; }
+  .controls-bar .q-btn.q-highlight.q-active { background: #a52a2a; color: #fffaf0; border-color:#a52a2a; }
   .controls-bar .time { margin-left: auto; color: #c8a878; font-variant-numeric: tabular-nums; }
 
   /* 场景时间轴 */
@@ -215,23 +217,24 @@
   <!-- 播放器 -->
   <div class="player-box">
     <video id="video" preload="auto" controls playsinline poster="assets/contact-sheet.png">
-      <source id="videoSrc" src="assets/yizhibian-720p.mp4" type="video/mp4">
+      <source id="videoSrc" src="assets/yizhibian-voice-720p.mp4" type="video/mp4">
       您的浏览器不支持 video 标签。
     </video>
     <div class="controls-bar">
       <button id="btnPlay" onclick="play()">▶ 播放</button>
       <button onclick="pause()">⏸ 暂停</button>
       <button onclick="restart()">↺ 重播</button>
-      <span style="margin-left:6px;color:#8a7a5a;font-size:12px;">清晰度：</span>
-      <button id="q720" onclick="switchQuality('720p')" class="q-btn q-active">流畅 720p · 4.2MB</button>
-      <button id="q1080" onclick="switchQuality('1080p')" class="q-btn">高清 1080p · 7.2MB</button>
-      <button id="qOrig" onclick="switchQuality('orig')" class="q-btn">原版 1080p · 17MB</button>
-      <a href="assets/yizhibian-720p.mp4" id="dlLink" download style="margin-left:8px;color:#b8860b;font-size:13px;text-decoration:none;">⬇ 下载当前版本</a>
-      <a href="assets/yizhibian-full.mp4" download style="color:#8a7a5a;font-size:13px;text-decoration:none;">⬇ 无声版</a>
+      <span style="margin-left:6px;color:#8a7a5a;font-size:12px;">版本：</span>
+      <button id="q720" onclick="switchQuality('720p')" class="q-btn">🎵 古琴版 720p · 4.2MB</button>
+      <button id="q1080" onclick="switchQuality('1080p')" class="q-btn">🎵 古琴版 1080p · 7.2MB</button>
+      <button id="qVoice720" onclick="switchQuality('voice720')" class="q-btn q-highlight q-active">🎙 人声解说 720p · 4.1MB</button>
+      <button id="qVoice1080" onclick="switchQuality('voice1080')" class="q-btn q-highlight">🎙 人声解说 1080p · 6.9MB</button>
+      <button id="qOrig" onclick="switchQuality('orig')" class="q-btn">🔇 无声版 · 17MB</button>
+      <a href="assets/yizhibian-voice-720p.mp4" id="dlLink" download style="margin-left:8px;color:#b8860b;font-size:13px;text-decoration:none;">⬇ 下载当前版本</a>
       <span class="time" id="time">00:00 / 00:00</span>
     </div>
     <div class="chapter-bar" id="chapterBar"></div>
-    <p style="text-align:center;color:#8a7a5a;font-size:12px;margin:8px 0 0;">提示：已开启 moov 前置，可随时拖拽进度条；默认 720p 流畅版，约 4MB，加载快。</p>
+    <p style="text-align:center;color:#8a7a5a;font-size:12px;margin:8px 0 0;">提示：已开启 moov 前置，可随时拖拽进度条。「🎙 人声解说版」含中文旁白+古琴背景乐，适合首次观看；「🎵 古琴版」为纯音乐版，适合循环播放。</p>
   </div>
 
   <!-- 当前场景说明 -->
@@ -258,8 +261,9 @@
         <li>分辨率：1920 × 1080 / 1280 × 720（可切换）</li>
         <li>帧率：30 fps · 时长：2 分 54 秒</li>
         <li>编码：H.264 + AAC · <b>moov 已前置，支持即时拖拽</b></li>
-        <li>文件大小：4.2 MB（720p）/ 7.2 MB（1080p）/ 17 MB（原版）</li>
-        <li>共 14 幕 · 古琴五声音阶实时音轨</li>
+        <li>文件大小：4.1 MB（人声解说 720p）/ 6.9 MB（人声解说 1080p）/ 4.2 MB（古琴版 720p）/ 7.2 MB（古琴版 1080p）/ 17 MB（原版无声）</li>
+        <li>人声解说：由 edge-tts 合成（YunyangNeural 男声），文言旁白逐场对应</li>
+        <li>背景乐：古琴五声音阶（宫商角徵羽），含磬/钟/拨弦，人声时段自动压低</li>
       </ul>
     </div>
     <div class="meta-card">
@@ -438,8 +442,10 @@ const files = [
   { name:'src/ScenesD.tsx (幕12–14)', size:'9KB', href:'src/ScenesD.tsx' },
   { name:'剧本-易道生化.md（第1版）', size:'8KB', href:'剧本-易道生化.md' },
   { name:'易之变——从一道到万象（第1版）.md（完整版）', size:'20KB', href:'易之变——从一道到万象（第1版）.md' },
-  { name:'assets/yizhibian-720p.mp4（流畅版，带声，moov前置）', size:'4.2MB', href:'assets/yizhibian-720p.mp4' },
-  { name:'assets/yizhibian-1080p.mp4（高清版，带声，moov前置）', size:'7.2MB', href:'assets/yizhibian-1080p.mp4' },
+  { name:'assets/yizhibian-720p.mp4（古琴版 720p，AAC音轨，moov前置）', size:'4.2MB', href:'assets/yizhibian-720p.mp4' },
+  { name:'assets/yizhibian-1080p.mp4（古琴版 1080p，AAC音轨，moov前置）', size:'7.2MB', href:'assets/yizhibian-1080p.mp4' },
+  { name:'assets/yizhibian-voice-720p.mp4（人声解说 720p，edge-tts旁白+古琴BGM）', size:'4.1MB', href:'assets/yizhibian-voice-720p.mp4' },
+  { name:'assets/yizhibian-voice-1080p.mp4（人声解说 1080p，edge-tts旁白+古琴BGM）', size:'6.9MB', href:'assets/yizhibian-voice-1080p.mp4' },
   { name:'assets/yizhibian-full.mp4（原版无声，moov前置）', size:'17MB', href:'assets/yizhibian-full.mp4' },
 ];
 const fl = document.getElementById('fileList');
@@ -453,25 +459,30 @@ files.forEach(f=>{
 <script src="assets/yijing-audio.js"></script>
 <script>
 const QUALITIES = {
-  '720p': { src:'assets/yizhibian-720p.mp4',  size:'4.2MB', btn:'q720' },
-  '1080p':{ src:'assets/yizhibian-1080p.mp4', size:'7.2MB', btn:'q1080' },
-  'orig': { src:'assets/yizhibian-full.mp4',  size:'17MB',  btn:'qOrig' }
+  '720p':      { src:'assets/yizhibian-720p.mp4',       size:'4.2MB', btn:'q720',      hasWebAudio:true,  voice:false },
+  '1080p':     { src:'assets/yizhibian-1080p.mp4',      size:'7.2MB', btn:'q1080',     hasWebAudio:true,  voice:false },
+  'voice720':  { src:'assets/yizhibian-voice-720p.mp4', size:'4.1MB', btn:'qVoice720', hasWebAudio:false, voice:true },
+  'voice1080': { src:'assets/yizhibian-voice-1080p.mp4',size:'6.9MB', btn:'qVoice1080',hasWebAudio:false, voice:true },
+  'orig':      { src:'assets/yizhibian-full.mp4',       size:'17MB',  btn:'qOrig',     hasWebAudio:false, voice:false }
 };
-let curQuality = '720p';
+let curQuality = 'voice720';
 function switchQuality(q){
   if (!QUALITIES[q]) return;
   const wasPlaying = !video.paused;
   const t = video.currentTime;
   curQuality = q;
-  // 切换 source：直接改 src 让浏览器重新加载
-  video.src = QUALITIES[q].src;
+  const cfg = QUALITIES[q];
+  // 人声解说版自带完整音轨（旁白+BGM），关掉 Web Audio 实时琴音避免叠声
+  if (window.YijingAudio) {
+    if (cfg.hasWebAudio) { YijingAudio.setMuted(false); }
+    else { YijingAudio.stop(); YijingAudio.setMuted(true); }
+  }
+  video.src = cfg.src;
   video.load();
-  // 高亮按钮
   Object.keys(QUALITIES).forEach(k=>{
     document.getElementById(QUALITIES[k].btn).classList.toggle('q-active', k===q);
   });
-  document.getElementById('dlLink').href = QUALITIES[q].src;
-  // 恢复到原来的时间点
+  document.getElementById('dlLink').href = cfg.src;
   video.addEventListener('loadedmetadata', function once(){
     video.currentTime = Math.min(t, video.duration-0.1);
     if (wasPlaying) video.play().catch(()=>{});

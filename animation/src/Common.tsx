@@ -81,19 +81,19 @@ export const Subtitle: React.FC<{
   text: string;
   opacity?: number;
   size?: number;
-}> = ({ text, opacity = 1, size = 30 }) => {
+}> = ({ text, opacity = 1, size = 26 }) => {
   return (
     <>
-      {/* 底部渐变暗条：仅在最底边做一层极薄的渐隐，不向上侵入画面 */}
+      {/* 底部渐变暗条：极窄，仅在最底边 */}
       <div
         style={{
           position: "absolute",
           left: 0,
           right: 0,
           bottom: 0,
-          height: 90,
+          height: 70,
           background:
-            "linear-gradient(to top, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.35) 40%, rgba(0,0,0,0) 100%)",
+            "linear-gradient(to top, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.25) 55%, rgba(0,0,0,0) 100%)",
           pointerEvents: "none",
           opacity,
         }}
@@ -101,29 +101,30 @@ export const Subtitle: React.FC<{
       <div
         style={{
           position: "absolute",
-          bottom: 18,
+          bottom: 10,
           left: 0,
           right: 0,
           display: "flex",
           justifyContent: "center",
           opacity,
-          padding: "0 120px",
+          padding: "0 180px",
           pointerEvents: "none",
         }}
       >
         <div
           style={{
-            maxWidth: 1500,
+            maxWidth: 1200,
             textAlign: "center",
             fontSize: size,
-            lineHeight: 1.45,
+            lineHeight: 1.35,
             color: "#f4ecd8",
             fontFamily: "'Noto Serif CJK SC', serif",
             letterSpacing: 1,
             textShadow:
-              "0 1px 4px rgba(0,0,0,0.95), 0 0 14px rgba(0,0,0,0.85)",
-            padding: "6px 18px",
+              "0 1px 3px rgba(0,0,0,0.98), 0 0 10px rgba(0,0,0,0.9)",
+            padding: "4px 14px",
             background: "transparent",
+            whiteSpace: "normal",
           }}
         >
           {text}
