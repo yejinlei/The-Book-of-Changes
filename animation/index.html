@@ -237,9 +237,10 @@
       <button onclick="pause()">⏸ 暂停</button>
       <button onclick="restart()">↺ 重播</button>
       <span style="margin-left:6px;color:#8a7a5a;font-size:12px;">播放模式：</span>
-      <button id="modeHls" onclick="switchMode('hls')" class="mode-btn active">⚡ HLS 边下边播（推荐）</button>
-      <button id="modeMp4" onclick="switchMode('mp4')" class="mode-btn">🎞 MP4 完整文件</button>
-      <a href="assets/yizhibian-narration.mp4" id="dlLink" download style="margin-left:8px;color:#b8860b;font-size:13px;text-decoration:none;">⬇ 下载完整版 MP4 (46MB)</a>
+      <button id="modeHls" onclick="switchMode('hls')" class="mode-btn" title="HLS 分片为旧版，建议直接 MP4">⚡ HLS 边下边播（旧版）</button>
+      <button id="modeMp4" onclick="switchMode('mp4')" class="mode-btn active">🎞 MP4 完整文件（字幕已优化）</button>
+      <a href="assets/yizhibian-narration.mp4" id="dlLink" download style="margin-left:8px;color:#b8860b;font-size:13px;text-decoration:none;">⬇ 下载 720p (6.5MB)</a>
+      <a href="assets/yizhibian-1080p.mp4" download style="margin-left:8px;color:#b8860b;font-size:13px;text-decoration:none;">⬇ 下载 1080p (18MB)</a>
       <span id="loadStatus" class="loading"></span>
       <span class="time" id="time">00:00 / 00:00</span>
     </div>
@@ -521,7 +522,8 @@ const files = [
   ['易之变——从一道到万象（第1版）.md', '完整14场分镜剧本', '14KB'],
   ['assets/hls/playlist.m3u8', 'HLS播放列表', '1.6KB'],
   ['assets/hls/seg_000~050.ts', 'HLS分片（51个，共46MB）', '8秒/片'],
-  ['assets/yizhibian-narration.mp4', '完整MP4母版（edge-tts人声+古琴BGM）', '46MB'],
+  ['assets/yizhibian-narration.mp4', '完整MP4（720p · 字幕贴底 · 古琴BGM）', '6.5MB'],
+  ['assets/yizhibian-1080p.mp4', '完整MP4（1080p 高清版）', '18MB']
 ];
 const fileList = document.getElementById('fileList');
 files.forEach(([name, desc, size])=>{
