@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ctext y='26' font-size='26'%3E%E2%98%AF%3C/text%3E%3C/svg%3E">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>变化 · 道家宇宙生成动态沙盘 | The Book of Changes</title>
+<script src="https://cdn.jsdelivr.net/npm/three@0.149.0/build/three.min.js"></script>
+<style>
+:root{
+  --bg:#f4ecd8; --paper:#faf6ed; --text:#2b1810; --accent:#8b0000;
+  --gold:#b8860b; --ink:#1a1a2e; --border:#d4c5a3; --shadow:rgba(139,0,0,.08);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+  font-family:'Songti SC','STSong','SimSun','Noto Serif CJK SC','Source Han Serif SC',serif;
+  background:var(--bg); color:var(--text); line-height:1.8;
+}
+/* ===== 顶栏 ===== */
+.top-nav{
+  position:fixed;top:0;left:0;right:0;height:64px;background:var(--paper);
+  border-bottom:2px solid var(--border);z-index:1000;display:flex;align-items:center;
+  justify-content:space-between;padding:0 40px;box-shadow:0 2px 8px var(--shadow);
+}
+.logo{font-size:20px;font-weight:700;color:var(--ink);text-decoration:none;display:flex;align-items:center;gap:8px;}
+.logo .taiji{color:var(--accent);font-size:28px;}
+.logo small{font-size:12px;font-weight:400;color:var(--gold);margin-left:6px;letter-spacing:1px;}
+.nav-links{display:flex;gap:24px;align-items:center;}
+.nav-links a{color:var(--text);text-decoration:none;font-size:14px;font-weight:500;transition:.2s;}
+.nav-links a:hover{color:var(--accent);}
+.nav-links a.cur{color:var(--accent);font-weight:700;border-bottom:2px solid var(--accent);padding-bottom:2px;}
+main{padding-top:64px;}
+
+/* ===== 舞台 ===== */
+.stage-wrap{position:relative;width:100%;height:calc(100vh - 64px);min-height:560px;background:#0b0a08;overflow:hidden;}
+#three-canvas{position:absolute;inset:0;width:100%;height:100%;display:block;}
+#svg-layer{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;}
+#svg-layer svg{width:100%;height:100%;display:block;}
+
+/* 中央字幕 */
+.verse{
+  position:absolute;left:50%;top:14%;transform:translateX(-50%);
+  text-align:center;color:#f4ecd8;pointer-events:none;z-index:20;
+  text-shadow:0 2px 16px rgba(0,0,0,.9),0 0 40px rgba(139,0,0,.4);
+  width:92%;max-width:900px;
+}
+.verse .big{font-size:clamp(26px,5vw,54px);letter-spacing:.18em;font-weight:700;color:#faf6ed;}
+.verse .sub{font-size:clamp(13px,2vw,19px);letter-spacing:.12em;color:#c9a94e;margin-top:14px;}
+.verse .src{font-size:clamp(11px,1.4vw,14px);letter-spacing:.1em;color:#8c8578;margin-top:10px;}
+
+/* 幕标尺 */
+.stage-badge{
+  position:absolute;left:24px;top:22px;z-index:20;color:#c9a94e;
+  font-size:13px;letter-spacing:.16em;padding:6px 14px;border:1px solid rgba(201,169,78,.4);
+  border-radius:2px;background:rgba(0,0,0,.35);
+}
+.stage-badge b{color:#faf6ed;font-size:15px;}
+
+/* ===== 控制台 ===== */
+.console{
+  position:absolute;left:0;right:0;bottom:0;z-index:30;padding:18px 28px 22px;
+  background:linear-gradient(180deg,rgba(11,10,8,0) 0%,rgba(11,10,8,.86) 34%,rgba(11,10,8,.96) 100%);
+}
+.progress{height:4px;background:rgba(244,236,216,.16);border-radius:2px;cursor:pointer;position:relative;margin-bottom:16px;}
+.progress .fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--gold));border-radius:2px;width:0;transition:width .08s linear;}
+.progress .knob{
+  position:absolute;top:50%;width:14px;height:14px;border-radius:50%;
+  background:#faf6ed;border:3px solid var(--accent);transform:translate(-50%,-50%);left:0;
+  box-shadow:0 0 12px rgba(139,0,0,.8);
+}
+.ctrl-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+.ctrl-btn{
+  background:rgba(244,236,216,.08);border:1px solid rgba(201,169,78,.45);color:#e8dfc8;
+  padding:8px 16px;border-radius:3px;font-family:inherit;font-size:13.5px;cursor:pointer;transition:.2s;letter-spacing:.06em;
+}
+.ctrl-btn:hover{background:rgba(139,0,0,.5);border-color:var(--accent);color:#fff;}
+.ctrl-btn.primary{background:var(--accent);border-color:var(--accent);color:#fff;}
+.ctrl-btn.primary:hover{background:#6d0000;}
+.ctrl-btn.on{background:rgba(139,0,0,.6);border-color:#e0b04a;color:#fff;}
+.scene-tabs{display:flex;gap:8px;margin-left:auto;flex-wrap:wrap;}
+.scene-tabs .tab{
+  padding:7px 13px;font-size:12.5px;border-radius:3px;cursor:pointer;
+  border:1px solid rgba(201,169,78,.3);color:#b9ab8c;transition:.2s;letter-spacing:.05em;white-space:nowrap;
+}
+.scene-tabs .tab:hover{color:#faf6ed;border-color:var(--gold);}
+.scene-tabs .tab.active{background:rgba(139,0,0,.55);color:#fff;border-color:var(--accent);}
+
+/* ===== 底部注文面板 ===== */
+.note-panel{
+  position:absolute;right:24px;top:80px;width:300px;z-index:20;
+  background:rgba(11,10,8,.72);border-left:2px solid var(--accent);
+  padding:18px 20px;color:#c9c0a8;font-size:13.5px;line-height:2;
+  backdrop-filter:blur(3px);max-height:60vh;overflow:auto;
+}
+.note-panel h4{color:#e0b04a;font-size:15px;margin-bottom:10px;letter-spacing:.1em;font-weight:600;}
+.note-panel .hl{color:#faf6ed;}
+.note-panel .cn{color:#e8dfc8;font-size:14.5px;}
+.note-panel::-webkit-scrollbar{width:5px;}
+.note-panel::-webkit-scrollbar-thumb{background:rgba(139,0,0,.6);border-radius:3px;}
+
+/* 提示 */
+.hint{
+  position:absolute;left:24px;bottom:108px;z-index:20;color:#8c8578;font-size:12px;
+  letter-spacing:.08em;
+}
+
+/* 展开的卦格子 */
+.gua-pop{position:absolute;z-index:40;display:none;}
+.gua-pop.show{display:block;}
+
+@media(max-width:820px){
+  .note-panel{display:none;}
+  .top-nav{padding:0 16px;}
+  .nav-links a:not(.cur):not(.btn-reader){display:none;}
+  .scene-tabs{margin-left:0;width:100%;}
+}
+</style>
+</head>
+<body>
+<nav class="top-nav">
+  <a class="logo" href="index.html"><span class="taiji">☯</span>易经本体论<small>CHANGES</small></a>
+  <div class="nav-links">
+    <a href="index.html">首页</a>
+    <a href="gua.html">六十四卦</a>
+    <a href="reader.html">经文汇评</a>
+    <a href="shiyi.html">十翼</a>
+    <a href="yitu.html">易图</a>
+    <a href="bianhua.html" class="cur">变化</a>
+    <a href="yanjiu.html">研究</a>
+  </div>
+</nav>
+<main>
+<div class="stage-wrap" id="stage">
+  <canvas id="three-canvas"></canvas>
+  <div id="svg-layer"></div>
+
+  <div class="stage-badge">第 <b id="badge-no">1</b> 幕 · <span id="badge-name">无极</span></div>
+
+  <div class="verse">
+    <div class="big" id="v-big">无 极</div>
+    <div class="sub" id="v-sub">虚而待之，寂然不动</div>
+    <div class="src" id="v-src"></div>
+  </div>
+
+  <div class="note-panel" id="note-panel">
+    <h4 id="np-title">无极</h4>
+    <div id="np-body"></div>
+  </div>
+
+  <div class="hint" id="hint">点击「三生万物」幕可点八卦展开其八子卦 · 拖底部进度条可回放</div>
+
+  <div class="console">
+    <div class="progress" id="progress"><div class="fill" id="fill"></div><div class="knob" id="knob"></div></div>
+    <div class="ctrl-row">
+      <button class="ctrl-btn primary" id="btn-play">▶ 播放</button>
+      <button class="ctrl-btn" id="btn-reset">↺ 从头</button>
+      <button class="ctrl-btn" id="btn-next">下一幕 ⏭</button>
+      <div class="scene-tabs" id="scene-tabs"></div>
+    </div>
+  </div>
+</div>
+</main>
+
+<script>
+/* =========================================================
+   《变化》—— 道家宇宙生成动态沙盘
+   骨：SVG  境：three.js  编：自定时间轴
+   主链：道 → 一 → 二 → 三 → 万物 → 复归
+   ========================================================= */
+(function(){
+'use strict';
+
+/* ---------------- 幕定义 ---------------- */
+const SCENES = [
+  {id:0, key:'wuji',   name:'无极',     t:0,
+   big:'无 极', sub:'虚而待之，寂然不动', src:'',
+   title:'无极',
+   body:'<p class="cn">未有天地之先，浑然一气，无形无象，谓之无极。</p><p>周敦颐《太极图说》：<span class="hl">「无极而太极。」</span></p><p>此幕只见虚空中浮尘无数，无中心、无结构，以示"无"。</p>'},
+  {id:1, key:'daoshengyi', name:'道生一', t:1,
+   big:'道 生 一', sub:'混沌初开，太极始立', src:'《道德经》第四十二章',
+   title:'道生一',
+   body:'<p class="cn">虚中生一，众尘向心而聚，凝为唯一光核。</p><p>《道德经》：<span class="hl">「道生一。」</span></p><p>一者，太极也。此幕见散者聚、暗者明——"生"的第一次动作。</p>'},
+  {id:2, key:'yishenger', name:'一生二', t:2,
+   big:'一 生 二', sub:'太极动而生阳，静而生阴', src:'《易传·系辞》《太极图说》',
+   title:'一生二',
+   body:'<p class="cn">光核对称破缺，一分为二：左阳右阴，环抱成流。</p><p>《太极图说》：<span class="hl">「太极动而生阳，动极而静，静而生阴。」</span></p><p>二者，两仪也——阴阳始判。</p>'},
+  {id:3, key:'ershengsan', name:'二生三', t:3,
+   big:'二 生 三', sub:'阴阳交冲，三才始成', src:'《道德经》第四十二章',
+   title:'二生三',
+   body:'<p class="cn">阴阳二气交汇冲和，激生"第三"——天、地、人三才。</p><p>《道德经》：<span class="hl">「一生二，二生三。」</span></p><p>四象（太阳·少阴·少阳·太阴）为"二生三"之过渡，四段爻条依次生成。</p>'},
+  {id:4, key:'wanshengwu', name:'三生万物', t:4,
+   big:'三 生 万 物', sub:'八卦成列，六十四卦备矣', src:'《易传·系辞下》',
+   title:'三生万物',
+   body:'<p class="cn">三才既定，重之为八卦，八八相重而得六十四卦，万物之象备矣。</p><p>《道德经》：<span class="hl">「三生万物。」</span></p><p>《系辞》：<span class="hl">「八卦成列，象在其中矣。」</span></p><p style="color:#e0b04a">▶ 点击任一八卦，展开其八子卦（共六十四卦）</p>'},
+  {id:5, key:'fugui', name:'复归于道', t:5,
+   big:'复 归 于 道', sub:'万物并作，吾以观复', src:'《道德经》第十六章',
+   title:'复归于道',
+   body:'<p class="cn">六十四卦缓缓收拢，光尘回落，终还原为一粒光点。</p><p>《道德经》：<span class="hl">「万物并作，吾以观复。」</span></p><p>终而复始，道之周行——是谓"变化"。</p>'}
+];
+const SCENE_DUR = 7.5;           // 每幕秒数
+const TOTAL = SCENES.length*SCENE_DUR;
+
+/* ---------------- 全局状态 ---------------- */
+let sceneIdx = 0;
+let playing = false;
+let t = 0;                       // 全局时间（秒）
+let lastTs = 0;
+let guaExpanded = null;          // 当前展开的八卦索引
+
+/* ---------------- three.js 场景 ---------------- */
+let renderer, scene, camera, clock;
+let dustPts, coreMesh, coreLight, yinPts, yangPts, sanLight, burstPts, burstGeo;
+let ambientGroup;
+
+const TMP = new THREE.Vector3();
+
+function initThree(){
+  const canvas = document.getElementById('three-canvas');
+  renderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:false});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+  renderer.setSize(canvas.clientWidth, canvas.clientHeight, false);
+
+  scene = new THREE.Scene();
+  scene.fog = new THREE.FogExp2(0x0b0a08, 0.05);
+  camera = new THREE.PerspectiveCamera(52, canvas.clientWidth/canvas.clientHeight, 0.1, 400);
+  camera.position.set(0,0,70);
+  clock = new THREE.Clock();
+
+  ambientGroup = new THREE.Group();
+  scene.add(ambientGroup);
+
+  /* --- 1. 虚空浮尘（无极） --- */
+  const N = 4200;
+  const pos = new Float32Array(N*3);
+  dustPts = { seed: new Float32Array(N*3), home:new Float32Array(N*3), N:N };
+  for(let i=0;i<N;i++){
+    const r = 60 + Math.random()*120;
+    const th = Math.random()*Math.PI*2, ph = Math.acos(2*Math.random()-1);
+    const x = r*Math.sin(ph)*Math.cos(th);
+    const y = r*Math.sin(ph)*Math.sin(th)*0.6;
+    const z = r*Math.cos(ph);
+    pos[i*3]=x; pos[i*3+1]=y; pos[i*3+2]=z;
+    dustPts.home[i*3]=x; dustPts.home[i*3+1]=y; dustPts.home[i*3+2]=z;
+    dustPts.seed[i*3]=Math.random()*100; dustPts.seed[i*3+1]=Math.random()*100; dustPts.seed[i*3+2]=Math.random()*100;
+  }
+  const dg = new THREE.BufferGeometry();
+  dg.setAttribute('position', new THREE.BufferAttribute(pos,3));
+  const dm = new THREE.PointsMaterial({color:0xd8cfb0, size:0.75, transparent:true, opacity:0.55, depthWrite:false, sizeAttenuation:true});
+  const dp = new THREE.Points(dg, dm);
+  scene.add(dp);
+  dustPts.geo = dg; dustPts.mat = dm; dustPts.obj = dp;
+
+  /* --- 2. 光核（道生一） --- */
+  coreMesh = new THREE.Mesh(
+    new THREE.SphereGeometry(2.2, 48, 48),
+    new THREE.MeshBasicMaterial({color:0xfff2d0, transparent:true, opacity:0})
+  );
+  scene.add(coreMesh);
+  coreLight = new THREE.PointLight(0xffd27a, 0, 300, 2);
+  scene.add(coreLight);
+  const halo = new THREE.Mesh(
+    new THREE.SphereGeometry(6, 32, 32),
+    new THREE.MeshBasicMaterial({color:0x8b0000, transparent:true, opacity:0, side:THREE.BackSide})
+  );
+  scene.add(halo);
+  coreMesh.userData.halo = halo;
+
+  /* --- 3. 阴阳双鱼流（一生二） --- */
+  const NY = 2600;
+  const ypos = new Float32Array(NY*3), ycol = new Float32Array(NY*3);
+  for(let i=0;i<NY;i++){
+    const u = Math.random();
+    const side = i<NY/2 ? 1 : -1;
+    const ang = u*Math.PI*2;
+    ypos[i*3]= (i*0.001)%1; ypos[i*3+1]=0; ypos[i*3+2]=0;
+    const c = side>0 ? [0.86,0.20,0.16] : [0.16,0.15,0.20];
+    ycol[i*3]=c[0]; ycol[i*3+1]=c[1]; ycol[i*3+2]=c[2];
+  }
+  const yg = new THREE.BufferGeometry();
+  yg.setAttribute('position', new THREE.BufferAttribute(ypos,3));
+  yg.setAttribute('color', new THREE.BufferAttribute(ycol,3));
+  yinPts = {geo:yg, N:NY, u:new Float32Array(NY), side:new Float32Array(NY), seed:new Float32Array(NY), bright:new Float32Array(NY)};
+  for(let i=0;i<NY;i++){ yinPts.u[i]=Math.random(); yinPts.side[i]= i<NY/2?1:-1; yinPts.seed[i]=Math.random()*1000; yinPts.bright[i]=0.35+Math.random()*0.65; }
+  const ymat = new THREE.PointsMaterial({size:0.62, vertexColors:true, transparent:true, opacity:0, depthWrite:false, sizeAttenuation:true});
+  const yp = new THREE.Points(yg, ymat);
+  scene.add(yp);
+  yinPts.mat = ymat; yinPts.obj = yp;
+
+  /* --- 4. 三才光柱（二生三） --- */
+  const sanGrp = new THREE.Group();
+  for(let k=0;k<3;k++){
+    const c = [0xe0b04a,0x8b0000,0x3a5a9a][k];
+    const m = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.5,0.5,44,10),
+      new THREE.MeshBasicMaterial({color:c, transparent:true, opacity:0})
+    );
+    m.rotation.z = Math.PI/2;
+    m.position.x = (k-1)*14;
+    sanGrp.add(m);
+  }
+  scene.add(sanGrp);
+  sanLight = sanGrp;
+
+  /* --- 5. 万物爆发粒子（三生万物） --- */
+  const NB = 6400;
+  const bpos = new Float32Array(NB*3), bcol = new Float32Array(NB*3);
+  for(let i=0;i<NB;i++){ bpos[i*3]=0;bpos[i*3+1]=0;bpos[i*3+2]=0;
+    const c = i%3===0 ? [0.86,0.20,0.16] : (i%3===1?[0.88,0.69,0.29]:[0.90,0.87,0.78]);
+    bcol[i*3]=c[0];bcol[i*3+1]=c[1];bcol[i*3+2]=c[2];
+  }
+  burstGeo = new THREE.BufferGeometry();
+  burstGeo.setAttribute('position', new THREE.BufferAttribute(bpos,3));
+  burstGeo.setAttribute('color', new THREE.BufferAttribute(bcol,3));
+  burstPts = {geo:burstGeo, N:NB, dir:new Float32Array(NB*3), spd:new Float32Array(NB), bright:new Float32Array(NB)};
+  for(let i=0;i<NB;i++){
+    const th=Math.random()*Math.PI*2, ph=Math.acos(2*Math.random()-1);
+    burstPts.dir[i*3]=Math.sin(ph)*Math.cos(th);
+    burstPts.dir[i*3+1]=Math.sin(ph)*Math.sin(th);
+    burstPts.dir[i*3+2]=Math.cos(ph);
+    burstPts.spd[i]=6+Math.random()*26; burstPts.bright[i]=0.4+Math.random()*0.6;
+  }
+  const bmat = new THREE.PointsMaterial({size:0.7, vertexColors:true, transparent:true, opacity:0, depthWrite:false, sizeAttenuation:true});
+  burstPts.obj = new THREE.Points(burstGeo, bmat);
+  burstPts.mat = bmat;
+  scene.add(burstPts.obj);
+
+  window.addEventListener('resize', onResize);
+}
+
+function onResize(){
+  const canvas = document.getElementById('three-canvas');
+  const w = canvas.clientWidth, h = canvas.clientHeight;
+  renderer.setSize(w,h,false);
+  camera.aspect = w/h; camera.updateProjectionMatrix();
+  layoutSVG();
+}
+
+/* =========================================================
+   幕间数值驱动：给每幕一个 0..1 的本地进度 p
+   统一在此用平滑函数驱动 three.js 对象
+   ========================================================= */
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const smoothstep=(e0,e1,x)=>{const t=clamp((x-e0)/(e1-e0),0,1);return t*t*(3-2*t);};
+
+function driveThree(dt){
+  const local = (t/SCENE_DUR) - sceneIdx; // 当前幕 0..1
+  const idx = sceneIdx;
+
+  /* ---------- 浮尘（全程的"气"，无极时散，道生一时向心聚拢） ---------- */
+  /* g=0 散在远处；g=1 全部聚到光核 */
+  let g = 0;
+  if(idx===1) g = smoothstep(0.05,0.88,local);
+  else if(idx>1 && idx<5) g = 1;
+  else if(idx===5) g = 1 - smoothstep(0.15,0.85,local); // 复归：重新散开
+  dustPts.mat.opacity = 0.5 * (1 - 0.45*g);
+
+  const gp = dustPts.geo.attributes.position.array;
+  for(let i=0;i<dustPts.N;i++){
+    const ix=i*3;
+    const hx=dustPts.home[ix], hy=dustPts.home[ix+1], hz=dustPts.home[ix+2];
+    /* 向心插值：从 home 位置 → 原点附近 */
+    const k = g;                       // 0 散 → 1 聚
+    const tx = hx*(1-k) + (hx*0.05)*k;
+    const ty = hy*(1-k) + (hy*0.05)*k;
+    const tz = hz*(1-k) + (hz*0.05)*k;
+    const sw = Math.sin(t*0.6 + dustPts.seed[ix]) * (0.8 + k*0.2);
+    /* 未聚时轻微漂浮（不破坏整体形态） */
+    gp[ix]   = tx + sw*(1-k);
+    gp[ix+1] = ty + Math.cos(t*0.5 + dustPts.seed[ix+1])*(0.8*(1-k));
+    gp[ix+2] = tz + sw*(1-k);
+  }
+  dustPts.geo.attributes.position.needsUpdate = true;
+
+  /* ---------- 光核（道生一） ---------- */
+  const coreIn = (idx===1)? smoothstep(0.5,0.95,local) : (idx>1?1:0);
+  coreMesh.material.opacity = coreIn * (idx>=3 ? 0.55 : 1);
+  const cs = 1 + coreIn*0.55 + Math.sin(t*3)*0.06;
+  coreMesh.scale.setScalar(cs);
+  coreMesh.userData.halo.material.opacity = coreIn*0.30;
+  coreMesh.userData.halo.scale.setScalar(1 + Math.sin(t*1.5)*0.08);
+  coreLight.intensity = coreIn * (2.4 + Math.sin(t*4)*0.6);
+
+  /* ---------- 阴阳双鱼流（一生二） ---------- */
+  const yinOn = (idx===2)? smoothstep(0.1,0.85,local) : (idx===5? (1-smoothstep(0.1,0.7,local)) : (idx>2?1:0));
+  yinPts.mat.opacity = yinOn*0.85;
+  const ya = yinPts.geo.attributes.position.array;
+  for(let i=0;i<yinPts.N;i++){
+    const ix=i*3;
+    const u = (yinPts.u[i] + t*0.055) % 1;
+    const side = yinPts.side[i];
+    const ang = u*Math.PI*2;
+    /* 太极 S 双鱼：半径按 ang 微调，两色沿相反方向环绕 */
+    const Rr = 19;
+    const xx = Math.sin(ang + (side>0?0:Math.PI)) * Rr;
+    const yy = Math.cos(ang + (side>0?0:Math.PI)) * Rr*0.72;
+    /* 上浮/下沉使其成环抱感 */
+    const zz = (side>0?1:-1)*4 + Math.sin(ang*1.2)*3;
+    ya[ix]   = xx + Math.sin(t*0.5+yinPts.seed[i])*0.9;
+    ya[ix+1] = yy + Math.cos(t*0.55+yinPts.seed[i])*0.9;
+    ya[ix+2] = zz;
+  }
+  yinPts.geo.attributes.position.needsUpdate = true;
+
+  /* ---------- 三才光柱（二生三） ---------- */
+  const sanOn = (idx===3)? smoothstep(0.15,0.9,local) : (idx===5? 1-smoothstep(0.1,0.7,local) : (idx>3?1:0));
+  sanLight.children.forEach((m,k)=>{
+    m.material.opacity = sanOn*0.45;
+    m.scale.y = 0.35 + sanOn*0.65;
+    m.position.y = Math.sin(t*1.2 + k)*2;
+  });
+  sanLight.rotation.z = Math.sin(t*0.3)*0.05;
+
+  /* ---------- 万物爆发（三生万物） ---------- */
+  const burstOn = (idx===4)? smoothstep(0.05,0.75,local) : (idx===5? (1-smoothstep(0.05,0.6,local)) : (idx>4?1:0));
+  burstPts.mat.opacity = burstOn*0.9;
+  const ba = burstPts.geo.attributes.position.array;
+  const reach = burstOn;
+  for(let i=0;i<burstPts.N;i++){
+    const ix=i*3;
+    const d = burstPts.spd[i]*reach*1.05;
+    ba[ix]  = burstPts.dir[ix]*d   + Math.sin(t*0.5+burstPts.bright[i]*9)*0.7;
+    ba[ix+1]= burstPts.dir[ix+1]*d + Math.cos(t*0.55+burstPts.bright[i]*7)*0.7;
+    ba[ix+2]= burstPts.dir[ix+2]*d*0.72;
+  }
+  burstPts.geo.attributes.position.needsUpdate = true;
+
+  /* ---------- 相机：各幕推拉，始终看向原点 ---------- */
+  let camZ = 78;
+  if(idx===1) camZ = 78 - smoothstep(0.3,0.95,local)*16;
+  else if(idx===2) camZ = 62 - smoothstep(0,0.6,local)*8;
+  else if(idx===3) camZ = 54 + smoothstep(0,1,local)*6;
+  else if(idx===4) camZ = 88 - smoothstep(0,0.8,local)*40;
+  else if(idx===5) camZ = 48 + smoothstep(0,1,local)*30;
+  camera.position.x += (Math.sin(t*0.18)*2.2 - camera.position.x)*0.05;
+  camera.position.y += (Math.cos(t*0.22)*1.4 - camera.position.y)*0.05;
+  camera.position.z += (camZ - camera.position.z)*0.06;
+  camera.lookAt(0,0,0);
+}
+
+/* =========================================================
+   SVG 层：太极图 / 四象 / 八卦 / 六十四卦
+   ========================================================= */
+const NS='http://www.w3.org/2000/svg';
+let svgRoot;
+let taijiG, fourG, baguaG, liushiG;
+let baguaNodes=[], guaCells=[];
+
+const BAGUA=[
+  {n:'乾',tri:[1,1,1],dir:'西北'},{n:'兑',tri:[1,1,0],dir:'西'},
+  {n:'离',tri:[1,0,1],dir:'南'},{n:'震',tri:[1,0,0],dir:'东'},
+  {n:'巽',tri:[0,1,1],dir:'东南'},{n:'坎',tri:[0,1,0],dir:'北'},
+  {n:'艮',tri:[0,0,1],dir:'东北'},{n:'坤',tri:[0,0,0],dir:'西南'}
+];
+const BAGUA_ORDER=['乾','兑','离','震','巽','坎','艮','坤'];
+
+function initSVG(){
+  const layer=document.getElementById('svg-layer');
+  svgRoot=document.createElementNS(NS,'svg');
+  svgRoot.setAttribute('viewBox','0 0 1280 720');
+  svgRoot.setAttribute('preserveAspectRatio','xMidYMid meet');
+  layer.appendChild(svgRoot);
+
+  /* --- 太极图（一生二 / 二生三 用） --- */
+  taijiG=document.createElementNS(NS,'g');
+  taijiG.setAttribute('opacity','0');
+  taijiG.setAttribute('transform','translate(640,360)');
+  const R=96;
+  taijiG.innerHTML=`
+    <circle r="${R}" fill="none" stroke="#c9a94e" stroke-width="2.4"/>
+    <path id="yj-yang" d="M0,${-R} A${R},${R} 0 0 1 0,${R} A${R/2},${R/2} 0 0 1 0,0 A${R/2},${R/2} 0 0 0 0,${-R} Z" fill="#f4ecd8" opacity="0.94"/>
+    <path id="yj-yin" d="M0,${-R} A${R},${R} 0 0 0 0,${R} A${R/2},${R/2} 0 0 1 0,0 A${R/2},${R/2} 0 0 0 0,${-R} Z" fill="#8b0000" opacity="0.94"/>
+    <circle cx="0" cy="${-R/2}" r="${R/6}" fill="#8b0000"/>
+    <circle cx="0" cy="${R/2}" r="${R/6}" fill="#f4ecd8"/>
+  `;
+  svgRoot.appendChild(taijiG);
+
+  /* --- 四象（二生三过渡） --- */
+  fourG=document.createElementNS(NS,'g');
+  fourG.setAttribute('opacity','0');
+  const SIXIANG=[{n:'太阳',l:[1,1]},{n:'少阴',l:[1,0]},{n:'少阳',l:[0,1]},{n:'太阴',l:[0,0]}];
+  SIXIANG.forEach((sx,i)=>{
+    const cx=430+i*140, cy=560;
+    const g=document.createElementNS(NS,'g');
+    g.setAttribute('transform',`translate(${cx},${cy})`);
+    g.classList.add('sx-item'); g.dataset.i=i;
+    g.innerHTML=lineGroupSVG(sx.l, 44, 13, 9);
+    const tx=document.createElementNS(NS,'text');
+    tx.setAttribute('x',0); tx.setAttribute('y',64); tx.setAttribute('text-anchor','middle');
+    tx.setAttribute('fill','#c9a94e'); tx.setAttribute('font-size','17'); tx.setAttribute('letter-spacing','2');
+    tx.textContent=sx.n; g.appendChild(tx);
+    fourG.appendChild(g);
+  });
+  svgRoot.appendChild(fourG);
+
+  /* --- 八卦（三生万物） --- */
+  baguaG=document.createElementNS(NS,'g');
+  baguaG.setAttribute('opacity','0');
+  const baguaCY = 230;
+  BAGUA_ORDER.forEach((nm,gi)=>{
+    const b=BAGUA.find(x=>x.n===nm);
+    const cx = 200 + gi*140;
+    const g=document.createElementNS(NS,'g');
+    g.setAttribute('transform',`translate(${cx},${baguaCY})`);
+    g.classList.add('bg-item'); g.dataset.i=gi;
+    g.style.cursor='pointer';
+    g.innerHTML=lineGroupSVG(b.tri, 60, 15, 9);
+    const tx=document.createElementNS(NS,'text');
+    tx.setAttribute('x',0); tx.setAttribute('y',58); tx.setAttribute('text-anchor','middle');
+    tx.setAttribute('fill','#faf6ed'); tx.setAttribute('font-size','24'); tx.setAttribute('font-weight','700');
+    tx.textContent=nm; g.appendChild(tx);
+    const hint=document.createElementNS(NS,'text');
+    hint.setAttribute('x',0); hint.setAttribute('y',-58); hint.setAttribute('text-anchor','middle');
+    hint.setAttribute('fill','#8c8578'); hint.setAttribute('font-size','13'); hint.setAttribute('letter-spacing','1');
+    hint.textContent='八'; g.appendChild(hint);
+    baguaG.appendChild(g);
+    baguaNodes.push({el:g, name:nm, gi:gi, cx:cx, cy:baguaCY, tri:b.tri});
+  });
+  svgRoot.appendChild(baguaG);
+
+  /* --- 六十四卦展开层 --- */
+  liushiG=document.createElementNS(NS,'g');
+  liushiG.setAttribute('opacity','0');
+  svgRoot.appendChild(liushiG);
+
+  /* 交互绑定点 */
+  baguaNodes.forEach(nd=>{
+    nd.el.addEventListener('click',()=>{
+      if(sceneIdx===4){ toggleBagua(nd.gi); }
+    });
+  });
+  layoutSVG();
+}
+
+/* 生成一组爻条的 SVG inner（自下而上，index0=初爻） */
+function lineGroupSVG(tri, w, h, gap){
+  let s='';
+  const nTri=tri.length;
+  for(let k=0;k<nTri;k++){
+    const y = -((nTri-1)/2 - k)*(h+gap);
+    if(tri[k]===1){
+      s+=`<rect x="${-w/2}" y="${y-h/2}" width="${w}" height="${h}" rx="2" fill="#8b0000"/>`;
+    }else{
+      const seg=(w-gap*1.2)/2;
+      s+=`<rect x="${-w/2}" y="${y-h/2}" width="${seg}" height="${h}" rx="2" fill="#2b1810"/>`;
+      s+=`<rect x="${w/2-seg}" y="${y-h/2}" width="${seg}" height="${h}" rx="2" fill="#2b1810"/>`;
+    }
+  }
+  return s;
+}
+
+/* 展开某八卦的八子卦（六爻） */
+function toggleBagua(gi){
+  if(guaExpanded===gi){ guaExpanded=null; liushiG.innerHTML=''; liushiG.setAttribute('opacity','0'); return; }
+  guaExpanded=gi;
+  const upper = BAGUA[gi].tri;
+  liushiG.innerHTML='';
+  /* 在下方网格展示 8 个子卦（下卦轮流八卦） */
+  const cols=8;
+  const gx0=180, gy0=430, dx=130, dy=0;
+  const titles=['上卦：'+BAGUA[gi].n+''];
+  for(let j=0;j<8;j++){
+    const lower = BAGUA.find(b=>b.n===BAGUA_ORDER[j]).tri;
+    const cx = 200 + j*140, cy = 470;
+    const g=document.createElementNS(NS,'g');
+    g.setAttribute('transform',`translate(${cx},${cy})`);
+    g.setAttribute('opacity','0');
+    /* 六爻：自下而上 lower(3) 然后 upper(3) */
+    const six = lower.concat(upper);
+    g.innerHTML = lineGroupSVG(six, 46, 11, 5.5);
+    const tx=document.createElementNS(NS,'text');
+    tx.setAttribute('x',0); tx.setAttribute('y',72); tx.setAttribute('text-anchor','middle');
+    tx.setAttribute('fill','#c9a94e'); tx.setAttribute('font-size','16');
+    tx.textContent = BAGUA[gi].n + BAGUA_ORDER[j];
+    g.appendChild(tx);
+    liushiG.appendChild(g);
+    /* 逐格淡入 */
+    setTimeout(()=>{ g.style.transition='opacity .4s'; g.setAttribute('opacity','0.96'); }, j*55);
+  }
+  liushiG.setAttribute('opacity','1');
+  const t0=document.createElementNS(NS,'text');
+  t0.setAttribute('x',640); t0.setAttribute('y',400); t0.setAttribute('text-anchor','middle');
+  t0.setAttribute('fill','#e0b04a'); t0.setAttribute('font-size','18'); t0.setAttribute('letter-spacing','3');
+  t0.textContent = `上卦「${BAGUA[gi].n}」统 ${BAGUA[gi].n}宫八卦（八八相重，共六十四卦之八）`;
+  liushiG.appendChild(t0);
+}
+
+function layoutSVG(){
+  /* SVG 用 viewBox 固定坐标系，无需按像素重算；保留占位 */
+}
+
+/* 依据幕进度控制 SVG 显隐 */
+function driveSVG(){
+  const local = (t/SCENE_DUR) - sceneIdx;
+  const idx=sceneIdx;
+
+  /* 太极图：一生二淡入，二生三起转为四象 */
+  let taijiOp = 0;
+  if(idx===2) taijiOp = smoothstep(0.05,0.6,local);
+  else if(idx===3) taijiOp = smoothstep(0.0,0.35,local)*(1-smoothstep(0.45,0.8,local));
+  else if(idx>3) taijiOp=0;
+  taijiG.setAttribute('opacity', taijiOp.toFixed(3));
+
+  /* 四象：二生三后半 + 三生万物流出 */
+  let fourOp=0;
+  if(idx===3) fourOp = smoothstep(0.45,0.85,local);
+  else if(idx===4) fourOp = smoothstep(0.0,0.25,local)*(1-smoothstep(0.35,0.6,local));
+  fourG.setAttribute('opacity', fourOp.toFixed(3));
+
+  /* 八卦：三生万物前段 */
+  let bgOp=0;
+  if(idx===4) bgOp = smoothstep(0.15,0.5,local);
+  else if(idx===5) bgOp = smoothstep(0.0,0.2,local)*(1-smoothstep(0.3,0.75,local));
+  baguaG.setAttribute('opacity', bgOp.toFixed(3));
+
+  /* 六十四卦：三生万物后段，或用户展开 */
+  if(idx===4){
+    liushiG.setAttribute('opacity', guaExpanded!==null ? '1' : (smoothstep(0.5,0.8,local)).toFixed(3));
+  }else if(idx===5){
+    liushiG.setAttribute('opacity', (1-smoothstep(0.1,0.5,local)).toFixed(3));
+  }else if(idx!==4){
+    liushiG.setAttribute('opacity','0');
+  }
+}
+
+/* =========================================================
+   主循环
+   ========================================================= */
+function animate(ts){
+  requestAnimationFrame(animate);
+  if(!lastTs) lastTs=ts;
+  const dt=Math.min((ts-lastTs)/1000,0.05); lastTs=ts;
+  if(playing){
+    t += dt;
+    if(t>=TOTAL){ t=TOTAL; playing=false; updatePlayBtn(); }
+    updateSceneByTime();
+  }
+  driveThree(dt);
+  driveSVG();
+  renderer.render(scene,camera);
+}
+
+function updateSceneByTime(){
+  const idx = clamp(Math.floor(t/SCENE_DUR),0,SCENES.length-1);
+  if(idx!==sceneIdx){ enterScene(idx); }
+  const local=(t/SCENE_DUR)-idx;
+  const pct=(t/TOTAL)*100;
+  fill.style.width=pct+'%';
+  knob.style.left=pct+'%';
+}
+
+/* =========================================================
+   幕切换
+   ========================================================= */
+const badgeNo=document.getElementById('badge-no');
+const badgeName=document.getElementById('badge-name');
+const vBig=document.getElementById('v-big'), vSub=document.getElementById('v-sub'), vSrc=document.getElementById('v-src');
+const npTitle=document.getElementById('np-title'), npBody=document.getElementById('np-body');
+const fill=document.getElementById('fill'), knob=document.getElementById('knob');
+
+function enterScene(idx){
+  sceneIdx=idx;
+  const s=SCENES[idx];
+  badgeNo.textContent=idx+1;
+  badgeName.textContent=s.name;
+  vBig.textContent=s.big;
+  vSub.textContent=s.sub;
+  vSrc.textContent=s.src?('—— '+s.src):'';
+  npTitle.textContent=s.title;
+  npBody.innerHTML=s.body;
+  /* 更新 tab 高亮 */
+  document.querySelectorAll('.scene-tabs .tab').forEach((el,i)=>el.classList.toggle('active',i===idx));
+  /* 离开三生万物幕时收起卦格 */
+  if(idx!==4 && guaExpanded!==null){ guaExpanded=null; liushiG.innerHTML=''; liushiG.setAttribute('opacity','0'); }
+}
+
+function buildTabs(){
+  const wrap=document.getElementById('scene-tabs');
+  SCENES.forEach((s,i)=>{
+    const d=document.createElement('div');
+    d.className='tab'+(i===0?' active':'');
+    d.textContent=`${i+1}. ${s.name}`;
+    d.addEventListener('click',()=>{ t=i*SCENE_DUR+0.001; enterScene(i); playing=true; updatePlayBtn(); });
+    wrap.appendChild(d);
+  });
+}
+
+/* =========================================================
+   控件
+   ========================================================= */
+const btnPlay=document.getElementById('btn-play');
+const btnReset=document.getElementById('btn-reset');
+const btnNext=document.getElementById('btn-next');
+const progress=document.getElementById('progress');
+
+function updatePlayBtn(){ btnPlay.textContent = playing?'❚❚ 暂停':'▶ 播放'; btnPlay.classList.toggle('primary',!playing); }
+
+btnPlay.addEventListener('click',()=>{
+  if(t>=TOTAL) t=0;
+  playing=!playing; updatePlayBtn();
+});
+btnReset.addEventListener('click',()=>{ t=0; enterScene(0); playing=true; updatePlayBtn(); });
+btnNext.addEventListener('click',()=>{
+  const ni=(sceneIdx+1)%SCENES.length;
+  t=ni*SCENE_DUR+0.001; enterScene(ni); playing=true; updatePlayBtn();
+});
+let dragging=false;
+function seek(e){
+  const r=progress.getBoundingClientRect();
+  const x=clamp((e.clientX-r.left)/r.width,0,1);
+  t=x*TOTAL;
+  const idx=clamp(Math.floor(t/SCENE_DUR),0,SCENES.length-1);
+  if(idx!==sceneIdx) enterScene(idx);
+  fill.style.width=(x*100)+'%'; knob.style.left=(x*100)+'%';
+}
+progress.addEventListener('mousedown',e=>{dragging=true;seek(e);});
+window.addEventListener('mousemove',e=>{if(dragging)seek(e);});
+window.addEventListener('mouseup',()=>dragging=false);
+progress.addEventListener('touchstart',e=>{dragging=true;seek(e.touches[0]);},{passive:true});
+window.addEventListener('touchmove',e=>{if(dragging)seek(e.touches[0]);},{passive:true});
+window.addEventListener('touchend',()=>dragging=false);
+
+/* =========================================================
+   启动
+   ========================================================= */
+function boot(){
+  initThree();
+  initSVG();
+  buildTabs();
+  enterScene(0);
+  updatePlayBtn();
+  /* 支持 ?t=秒 定格某时刻（便于截图/嵌入），否则自动播放 */
+  const q=new URLSearchParams(location.search);
+  if(q.has('t')){
+    t=clamp(parseFloat(q.get('t'))||0,0,TOTAL);
+    const i=clamp(Math.floor(t/SCENE_DUR),0,SCENES.length-1);
+    enterScene(i);
+    playing=false;
+    /* 让时间轴立即到位 */
+    const pct=(t/TOTAL)*100; fill.style.width=pct+'%'; knob.style.left=pct+'%';
+  }else{
+    playing=true;
+  }
+  requestAnimationFrame(animate);
+  /* 供 Remotion / 调试读取 */
+  window.__BIANHUA__={SCENES,SCENE_DUR,TOTAL,
+    setTime:(v)=>{t=clamp(v,0,TOTAL);const i=clamp(Math.floor(t/SCENE_DUR),0,SCENES.length-1);if(i!==sceneIdx)enterScene(i);},
+    pause:()=>{playing=false;updatePlayBtn();}, play:()=>{playing=true;updatePlayBtn();},
+    _debug:()=>{
+      const pos=dustPts.geo.attributes.position.array;
+      let bad=0,mx=0; for(let i=0;i<pos.length;i++){if(!isFinite(pos[i]))bad++;else mx=Math.max(mx,Math.abs(pos[i]));}
+      return {t, sceneIdx, dustOpacity:dustPts.mat.opacity, dustBad:bad, dustMax:mx,
+        burstOpacity:burstPts.mat.opacity, yinOpacity:yinPts.mat.opacity,
+        coreOpacity:coreMesh.material.opacity, camZ:camera.position.z,
+        visible:[dustPts.obj.visible, burstPts.obj.visible, yinPts.obj.visible]};
+    }};
+  /* 暴露给调试 */
+  window.__three={dustPts,burstPts,yinPts,coreMesh,camera,scene};
+}
+boot();
+
+})();
+</script>
+</body>
+</html>
