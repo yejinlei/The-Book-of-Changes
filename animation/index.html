@@ -507,8 +507,9 @@ function restart(){
 // 视频音轨默认**开**（因为现在 MP4 内带 AAC）
 video.muted = false;
 
-// Web Audio 实时音轨作为可选叠加层
+// Web Audio 实时音轨作为可选叠加层（默认静音，等用户切到古琴版才开启）
 if (btnSound) btnSound.style.display = 'none'; // 暂时隐藏，因为内嵌音轨已覆盖
+if (window.YijingAudio) { YijingAudio.setMuted(true); }
 </script>
 </body>
 </html>
