@@ -355,7 +355,7 @@ footer .ont-note { color:var(--gold); font-size:12px; margin-top:8px; }
     <a class="text-card" href="yitu.html">
       <div class="icon">🌀</div>
       <h3>易图体系</h3>
-      <p>河图、洛书、太极图、先天八卦、后天八卦、六十四卦方圆图、十二消息卦图</p>
+      <p>河图洛书·太极图·先后天八卦·六十四卦方圆图·十二消息卦 —— <b>八图皆可互动</b>，点数可算、卦位可拖、卦变可演</p>
     </a>
   </div>
 </section>
@@ -466,7 +466,7 @@ function render64Gua() {
   let list = ONT.liushisigua;
   if (currentJing !== 'all') list = list.filter(g => g.jing === currentJing);
   const html = list.map(g => `
-    <a class="gua-cell ${g.jing==='上经'?'jing-shang':'jing-xia'}" href="gua.html#${g.name}" title="${g.num}.${g.name}：${g.guaci||'}" data-gua-idx="${g.num-1}">
+    <a class="gua-cell ${g.jing==='上经'?'jing-shang':'jing-xia'}" href="gua.html#${g.name}" title="${g.num}.${g.name}：${(g.guaci||'').replace(/"/g,'')}" data-gua-idx="${g.num-1}">
       <span class="sym" data-gua-sym="${g.num-1}"></span>
       <span class="name">${g.name}</span>
       <span class="num">${g.num}</span>

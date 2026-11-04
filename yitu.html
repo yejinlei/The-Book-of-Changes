@@ -4,7 +4,7 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ctext y='26' font-size='26'%3E%E2%98%AF%3C/text%3E%3C/svg%3E">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>易图体系 | 易经本体论</title>
+<title>易图体系 · 可玩互动 | 易经本体论</title>
 <style>
 :root { --bg:#f4ecd8; --paper:#faf6ed; --text:#2b1810; --accent:#8b0000; --gold:#b8860b;
   --ink:#1a1a2e; --blue:#1e3a8a; --border:#d4c5a3; --shadow:rgba(139,0,0,0.08); }
@@ -20,12 +20,14 @@ body { font-family:'Songti SC','STSong','SimSun','Noto Serif CJK SC','Source Han
 .nav-links a:hover, .nav-links a.active { color:var(--accent); }
 .nav-links a.active { font-weight:700; }
 
-.wrap { max-width:1150px; margin:64px auto 0; padding:36px 40px 80px; }
+.wrap { max-width:1180px; margin:64px auto 0; padding:36px 40px 80px; }
 .back-link { display:inline-block; color:var(--accent); text-decoration:none; font-size:14px; margin-bottom:18px; }
 .back-link:hover { text-decoration:underline; }
-.page-head { text-align:center; margin-bottom:36px; }
+.page-head { text-align:center; margin-bottom:20px; }
 .page-head h1 { font-size:42px; color:var(--accent); letter-spacing:10px; margin-bottom:8px; }
 .page-head p { color:var(--gold); font-size:15px; }
+.playtip { text-align:center; font-size:13px; color:#8b7e6a; margin-bottom:30px; }
+.playtip b { color:var(--accent); }
 
 .grid { display:grid; grid-template-columns:repeat(2,1fr); gap:26px; }
 .card { background:var(--paper); border:1px solid var(--border); border-radius:8px; padding:26px;
@@ -36,21 +38,39 @@ body { font-family:'Songti SC','STSong','SimSun','Noto Serif CJK SC','Source Han
 .card .meta span { margin-right:12px; }
 .card .svgbox { text-align:center; margin:14px 0; }
 .svgbox svg { max-width:100%; height:auto; }
-/* 太极图：缓慢自转——道法自然 */
+.card p.desc { font-size:14px; line-height:2; color:#4a3a2a; text-align:justify; }
+
+/* ===== 交互条 ===== */
+.toolbar { display:flex; flex-wrap:wrap; gap:8px; align-items:center; justify-content:center; margin:10px 0 4px; }
+.tbtn { font-family:inherit; font-size:12.5px; color:var(--accent); background:#fff8ef; border:1px solid var(--border);
+  border-radius:16px; padding:4px 13px; cursor:pointer; transition:.18s; }
+.tbtn:hover { background:var(--accent); color:#fff8ef; border-color:var(--accent); }
+.tbtn.on { background:var(--accent); color:#fff8ef; border-color:var(--accent); }
+.hint { text-align:center; font-size:12px; color:var(--gold); min-height:20px; margin-top:6px; font-style:italic; }
+
+/* 可交互元素通用 */
+.ix { cursor:pointer; transition:.18s; }
+.ix:hover { filter:drop-shadow(0 0 6px rgba(139,0,0,.55)); }
+.hot { filter:drop-shadow(0 0 8px rgba(139,0,0,.9)); }
+@keyframes pop { 0%{transform:scale(1)} 50%{transform:scale(1.35)} 100%{transform:scale(1)} }
+.pop { animation:pop .45s ease; transform-box:fill-box; transform-origin:center; }
+
+/* 太极自转 & 阴阳光 */
 .svgbox .taiji-spin { transform-origin:115px 115px; animation: taiji-rotate 38s linear infinite; }
 .logo .taiji { color:var(--accent); font-size:26px; display:inline-block; animation: taiji-rotate 48s linear infinite; transform-origin:center; }
-/* 消息卦爻条律动 */
+.card .taiji-spin.paused { animation-play-state:paused; }
+
+/* 消息卦爻条 */
 .xiaoxi-gua { display:inline-flex; flex-direction:column-reverse; align-items:center; gap:2px; margin:0 8px; vertical-align:middle; }
 .xiaoxi-gua .xxbar { background:#2a1f14; border-radius:1px; animation: xiaoxi-pulse 3s ease-in-out infinite; transform-origin:center; }
 .xiaoxi-gua .xxbar.yang { width:22px; height:4px; }
 .xiaoxi-gua .xxbar.yin  { width:9px; height:4px; }
 .xiaoxi-label { display:block; font-size:12px; color:#8b0000; margin-top:2px; }
 @keyframes taiji-rotate { to { transform: rotate(360deg); } }
-@keyframes xiaoxi-pulse {
-  0%,100% { opacity:.65; }
-  50% { opacity:1; }
-}
-.card p.desc { font-size:14px; line-height:2; color:#4a3a2a; text-align:justify; }
+@keyframes xiaoxi-pulse { 0%,100% { opacity:.55; } 50% { opacity:1; } }
+@keyframes flow { to { stroke-dashoffset:-40; } }
+.flowline { stroke-dasharray:5 5; animation:flow 1.6s linear infinite; }
+
 @media (max-width:820px) {
   .wrap { padding:24px 16px 60px; }
   .grid { grid-template-columns:1fr; }
@@ -82,6 +102,7 @@ body { font-family:'Songti SC','STSong','SimSun','Noto Serif CJK SC','Source Han
     <h1>易 图 体 系</h1>
     <p>河图洛书 · 太极两仪 · 先后天八卦 · 六十四卦方圆 · 十二消息卦</p>
   </div>
+  <p class="playtip">八幅古图皆为 <b>可玩互动</b>：数点可数可算、卦位可拖拽演算、卦变可推演、圆方可按步旋转 —— 点一点、拖一拖，图自会说话。</p>
   <div class="grid" id="tuxiGrid"></div>
 </div>
 
@@ -90,174 +111,498 @@ body { font-family:'Songti SC','STSong','SimSun','Noto Serif CJK SC','Source Han
 <script src="data/gua-anim.js"></script>
 <script>
 const ONT = window.YJ_ONT;
+const guaByName = {}; ONT.liushisigua.forEach(g => guaByName[g.name] = g);
+const baguaByName = {}; ONT.bagua.forEach(b => baguaByName[b.name] = b);
 
-// —— 各图的 SVG 矢量绘制（本体 yitu 提供元数据与图说，此处按 id 配矢量图） ——
-const SVG = {
-  tu_taiji: () => `<svg width="230" height="230" viewBox="0 0 230 230">
-    <g class="taiji-spin">
-    <circle cx="115" cy="115" r="104" fill="#fdfaf3" stroke="#1a1a2e" stroke-width="2"/>
-    <path d="M115,11 A104,104 0 0,1 115,219 A52,52 0 0,0 115,115 A52,52 0 0,1 115,11 Z" fill="#1a1a2e"/>
-    <circle cx="115" cy="63" r="16" fill="#1a1a2e"/>
-    <circle cx="115" cy="63" r="5" fill="#fdfaf3"/>
-    <circle cx="115" cy="167" r="16" fill="#fdfaf3"/>
-    <circle cx="115" cy="167" r="5" fill="#1a1a2e"/>
+/* 由六十四卦上下卦推六爻位（自下而上，1=阳） */
+function guaBits(g) {
+  const up = baguaByName[g.shang], lo = baguaByName[g.xia];
+  const bits = a => (a.yao || '').split('').map(c => c === '☰' || c === '☱' || c === '☲' || c === '☳' || c === '☵' || c === '☶' ? 1 : 0);
+  // 直接用上下卦的爻性：从 BaGua.yao 字符串映射（该字符串为装饰，改用经典爻性表）
+  const THREE = { '乾':[1,1,1], '兑':[1,1,0], '离':[1,0,1], '震':[1,0,0],
+                  '巽':[0,1,1], '坎':[0,1,0], '艮':[0,0,1], '坤':[0,0,0] };
+  return THREE[g.xia].concat(THREE[g.shang]); // 下卦在初位
+}
+
+/* 六爻 SVG 小图（返回 <g> 内元素，供方格用） */
+function miniGua(g, size) {
+  const bits = guaBits(g);
+  const w = size, h = size * 1.0, bh = size * 0.11;
+  let s = '';
+  for (let i = 5; i >= 0; i--) {           // 上爻先画
+    const y = (5 - i) * (size * 0.155) + size * 0.08;
+    if (bits[i] === 1) s += `<rect x="0" y="${y.toFixed(1)}" width="${w}" height="${bh.toFixed(1)}" rx="1" fill="#2a1f14"/>`;
+    else s += `<rect x="0" y="${y.toFixed(1)}" width="${(w*0.42).toFixed(1)}" height="${bh.toFixed(1)}" rx="1" fill="#2a1f14"/>
+               <rect x="${(w*0.58).toFixed(1)}" y="${y.toFixed(1)}" width="${(w*0.42).toFixed(1)}" height="${bh.toFixed(1)}" rx="1" fill="#2a1f14"/>`;
+  }
+  return s;
+}
+
+/* ---------------- 1. 太极图：可拖动阴阳、可停转、可点击阴阳鱼 ---------------- */
+function svgTaiji() {
+  return `<svg id="sv_taiji" width="240" height="240" viewBox="0 0 240 240">
+    <g class="taiji-spin" id="taijiSpin">
+      <circle cx="120" cy="120" r="108" fill="#fdfaf3" stroke="#1a1a2e" stroke-width="2"/>
     </g>
-  </svg>`,
-
-  tu_xiantian: () => baguaRing([
-    ['☰','乾','南',115,32],['☱','兑','东南',182,68],['☲','离','东',203,122],['☳','震','东北',182,176],
-    ['☷','坤','北',115,212],['☶','艮','西北',48,176],['☵','坎','西',27,122],['☴','巽','西南',48,68]
-  ], '太极'),
-
-  tu_houtian: () => baguaRing([
-    ['☲','离','南',115,32],['☴','巽','东南',182,68],['☳','震','东',203,122],['☷','坤','西南',182,176],
-    ['☵','坎','北',115,212],['☰','乾','西北',48,176],['☱','兑','西',27,122],['☶','艮','东北',48,68]
-  ], '中宫'),
-
-  tu_hetu: () => `<svg width="230" height="230" viewBox="0 0 230 230">
-    <circle cx="115" cy="115" r="104" fill="none" stroke="#8b0000" stroke-width="1"/>
-    ${dots(115,42,2,'#1a1a2e')}${dots(94,60,7,'#8b0000')}
-    ${dots(115,188,1,'#1a1a2e')}${dots(115,206,6,'#8b0000')}
-    ${dots(42,115,3,'#1a1a2e')}${dots(30,115,8,'#8b0000')}
-    ${dots(188,115,4,'#1a1a2e')}${dots(202,115,9,'#8b0000')}
-    ${dots(115,115,5,'#1a1a2e')}${dots(115,131,10,'#8b0000')}
-    <text x="115" y="126" text-anchor="middle" font-size="11" fill="#8b0000" font-weight="700">河图五行生成数</text>
-  </svg>`,
-
-  tu_luoshu: () => `<svg width="230" height="230" viewBox="0 0 230 230">
-    <rect x="20" y="20" width="190" height="190" rx="8" fill="#fdfaf3" stroke="#8b0000"/>
-    <line x1="83" y1="20" x2="83" y2="210" stroke="#d4c5a3"/><line x1="147" y1="20" x2="147" y2="210" stroke="#d4c5a3"/>
-    <line x1="20" y1="83" x2="210" y2="83" stroke="#d4c5a3"/><line x1="20" y1="147" x2="210" y2="147" stroke="#d4c5a3"/>
-    <text x="51" y="58" text-anchor="middle" font-size="22" fill="#1a1a2e" font-weight="700">4</text>
-    <text x="115" y="58" text-anchor="middle" font-size="22" fill="#1a1a2e" font-weight="700">9</text>
-    <text x="178" y="58" text-anchor="middle" font-size="22" fill="#1a1a2e" font-weight="700">2</text>
-    <text x="51" y="120" text-anchor="middle" font-size="22" fill="#1a1a2e" font-weight="700">3</text>
-    <text x="115" y="120" text-anchor="middle" font-size="22" fill="#8b0000" font-weight="700">5</text>
-    <text x="178" y="120" text-anchor="middle" font-size="22" fill="#1a1a2e" font-weight="700">7</text>
-    <text x="51" y="182" text-anchor="middle" font-size="22" fill="#1a1a2e" font-weight="700">8</text>
-    <text x="115" y="182" text-anchor="middle" font-size="22" fill="#1a1a2e" font-weight="700">1</text>
-    <text x="178" y="182" text-anchor="middle" font-size="22" fill="#1a1a2e" font-weight="700">6</text>
-  </svg>`,
-
-  tu_64guafang: () => `<svg width="560" height="290" viewBox="0 0 560 290">
-    <g transform="translate(145,145)">
-      <circle r="105" fill="none" stroke="#8b0000" stroke-width="1.2"/>
-      ${circleHexagrams()}
-      <text y="6" text-anchor="middle" font-size="13" fill="#8b0000" font-weight="700">圆图·天</text>
+    <g id="taijiMasks" style="pointer-events:none;visibility:hidden"></g>
+    <circle id="taijiOuter" cx="120" cy="120" r="108" fill="none" stroke="#1a1a2e" stroke-width="2"/>
+    <g id="taijiCore" class="ix" style="pointer-events:painted">
+      <path id="taijiYangPath" d="M120,12 A108,108 0 0,1 120,228 A54,54 0 0,0 120,120 A54,54 0 0,1 120,12 Z" fill="#1a1a2e"/>
+      <circle id="yangDot" cx="120" cy="66" r="17" fill="#1a1a2e"/>
+      <circle cx="120" cy="66" r="5.5" fill="#fdfaf3"/>
+      <circle id="yinDot" cx="120" cy="174" r="17" fill="#fdfaf3"/>
+      <circle cx="120" cy="174" r="5.5" fill="#1a1a2e"/>
+      <path id="taijiYinArc" d="M120,228 A108,108 0 0,1 120,12 A54,54 0 0,0 120,120 A54,54 0 0,1 120,228 Z" fill="none"/>
     </g>
-    <g transform="translate(320,35)">
-      <rect width="210" height="210" fill="none" stroke="#8b0000" stroke-width="1.2"/>
-      ${squareHexagrams()}
-      <text x="105" y="228" text-anchor="middle" font-size="13" fill="#8b0000" font-weight="700">方图·地</text>
-    </g>
-  </svg>`,
+  </svg>
+  <div class="toolbar">
+    <button class="tbtn" data-act="taiji-spin">⏸ 停 / 转</button>
+    <button class="tbtn" data-act="taiji-click">☯ 点亮阴阳</button>
+  </div>
+  <div class="hint" id="hint_taiji">点太极图看阴阳流转 · 拖动可改轴心</div>`;
+}
+function bindTaiji() {
+  const spin = document.getElementById('taijiSpin');
+  const core = document.getElementById('taijiCore');
+  const hint = document.getElementById('hint_taiji');
+  document.querySelectorAll('[data-act^="taiji"]').forEach(btn => btn.onclick = () => {
+    const a = btn.dataset.act;
+    if (a === 'taiji-spin') {
+      spin.style.animation = spin.style.animation ? '' : 'none';
+      // 外层转角控制
+      const g = document.getElementById('taijiSpin');
+      if (g.style.transform === 'rotate(0deg)') { g.style.transform = ''; btn.classList.remove('on'); }
+      else { g.style.transform = 'rotate(0deg)'; g.style.animation = 'none'; btn.classList.add('on'); }
+      hint.textContent = btn.classList.contains('on') ? '太极已停 · 道本静，静极复动' : '太极复转 · 一动一静，互为其根';
+    } else if (a === 'taiji-click') {
+      const yang = document.getElementById('yangDot'), yin = document.getElementById('yinDot');
+      [yang, yin].forEach(el => { el.classList.remove('pop'); void el.offsetWidth; el.classList.add('pop'); });
+      hint.textContent = '阴中有阳，阳中有阴 —— 阴阳鱼互为其根';
+    }
+  });
+  // 点击阴阳区域高亮切换
+  let flipped = false;
+  core.onclick = () => {
+    flipped = !flipped;
+    const yang = document.getElementById('taijiYangPath');
+    yang.setAttribute('fill', flipped ? '#8b0000' : '#1a1a2e');
+    core.classList.toggle('hot', flipped);
+    hint.textContent = flipped ? '阳鱼现朱 —— 太极动而生阳' : '太极本然 —— 阴阳合而未分';
+  };
+  // 拖动旋转
+  let drag = false, last = 0, angle = 0;
+  const svg = document.getElementById('sv_taiji');
+  svg.addEventListener('mousedown', e => { drag = true; spin.style.animation = 'none'; last = e.clientX; svg.style.cursor = 'grabbing'; });
+  window.addEventListener('mousemove', e => { if (!drag) return; angle += (e.clientX - last) * 0.6; last = e.clientX; spin.style.transform = `rotate(${angle}deg)`; });
+  window.addEventListener('mouseup', () => { if (drag) { drag = false; svg.style.cursor = 'pointer'; hint.textContent = `手转太极至 ${Math.round((angle % 360 + 360) % 360)}° —— 一气流行，无始无终`; } });
+}
 
-  tu_bagua_64gua: () => `<svg width="300" height="230" viewBox="0 0 300 230">
-    ${ONT.bagua.map((b,i)=>{
-      const x=40+(i%4)*70, y=60+Math.floor(i/4)*90;
-      return `<text x="${x}" y="${y}" text-anchor="middle" font-size="30" fill="#1a1a2e">${b.symbol}</text>
-        <text x="${x}" y="${y+22}" text-anchor="middle" font-size="13" fill="#8b0000">${b.name}</text>`;
-    }).join('')}
-    <text x="150" y="208" text-anchor="middle" font-size="13" fill="#b8860b">八卦相重 · 八八六十四卦</text>
-  </svg>`,
-
-  tu_yaobian: () => {
-    // 十二消息卦：自下而上 bits 1=阳
-    const XX = {
-      '复':[1,0,0,0,0,0],'临':[1,1,0,0,0,0],'泰':[1,1,1,0,0,0],'大壮':[1,1,1,1,0,0],
-      '夬':[1,1,1,1,1,0],'乾':[1,1,1,1,1,1],'姤':[0,1,1,1,1,1],'遁':[0,0,1,1,1,1],
-      '否':[0,0,0,1,1,1],'观':[0,0,0,0,1,1],'剥':[0,0,0,0,0,1],'坤':[0,0,0,0,0,0]
+/* ---------------- 2. 河图：可数可算，点击数点高亮五行 ---------------- */
+function svgHetu() {
+  const pos = [
+    {n:2, x:120, y:44, c:'#1a1a2e', wx:'火'}, {n:7, x:95, y:64, c:'#8b0000', wx:'火'},
+    {n:1, x:120, y:196, c:'#1a1a2e', wx:'水'}, {n:6, x:120, y:216, c:'#8b0000', wx:'水'},
+    {n:3, x:44, y:120, c:'#1a1a2e', wx:'木'}, {n:8, x:28, y:120, c:'#8b0000', wx:'木'},
+    {n:4, x:196, y:120, c:'#1a1a2e', wx:'金'}, {n:9, x:212, y:120, c:'#8b0000', wx:'金'},
+    {n:5, x:120, y:120, c:'#1a1a2e', wx:'土'}, {n:10, x:120, y:138, c:'#8b0000', wx:'土'},
+  ];
+  const dotsHtml = pos.map(p => {
+    let d = '';
+    if (p.n <= 5) d += `<circle cx="${p.x}" cy="${p.y}" r="5.5" fill="${p.c}"/>`;
+    const half = Math.floor(p.n / 2), gap = 8;
+    for (let i = 0; i < half; i++) {
+      const off = (i - (half - 1) / 2) * gap;
+      if (p.n > 5) { d += `<circle cx="${p.x-7}" cy="${p.y+off}" r="4.5" fill="${p.c}"/><circle cx="${p.x+7}" cy="${p.y+off}" r="4.5" fill="${p.c}"/>`; }
+      else if (p.n > 1) { d += `<circle cx="${p.x}" cy="${p.y+off}" r="4.5" fill="${p.c}"/>`; }
+    }
+    return `<g class="ix hetu-num" data-wx="${p.wx}" data-num="${p.n}">${d}
+      <text x="${p.x}" y="${p.y+ (p.n>5?26:22)}" text-anchor="middle" font-size="10" fill="${p.c}">${p.n}</text></g>`;
+  }).join('');
+  return `<svg id="sv_hetu" width="240" height="250" viewBox="0 0 240 250">
+    <circle cx="120" cy="120" r="108" fill="none" stroke="#8b0000" stroke-width="1"/>
+    ${dotsHtml}
+    <text x="120" y="246" text-anchor="middle" font-size="11" fill="#8b0000" font-weight="700">河图五行生成数</text>
+  </svg>
+  <div class="toolbar">
+    <button class="tbtn" data-wx="水">水 一六</button>
+    <button class="tbtn" data-wx="火">火 二七</button>
+    <button class="tbtn" data-wx="木">木 三八</button>
+    <button class="tbtn" data-wx="金">金 四九</button>
+    <button class="tbtn" data-wx="土">土 五十</button>
+    <button class="tbtn" data-act="hetu-sum">Σ 相加</button>
+  </div>
+  <div class="hint" id="hint_hetu">生数 1-5，成数 6-10 · 点五行看数点</div>`;
+}
+function bindHetu() {
+  const hint = document.getElementById('hint_hetu');
+  const WX = { 水:'天一生水，地六成之', 火:'地二生火，天七成之', 木:'天三生木，地八成之', 金:'地四生金，天九成之', 土:'天五生土，地十成之' };
+  document.querySelectorAll('#sv_hetu .hetu-num').forEach(g => {
+    g.onclick = () => {
+      const wx = g.dataset.wx;
+      document.querySelectorAll('.hetu-num').forEach(x => x.style.opacity = x.dataset.wx === wx ? 1 : .22);
+      document.querySelectorAll('.hetu-num').forEach(x => x.classList.toggle('hot', x.dataset.wx === wx));
+      document.querySelectorAll('button[data-wx]').forEach(b => b.classList.toggle('on', b.dataset.wx === wx));
+      g.classList.add('pop'); setTimeout(() => g.classList.remove('pop'), 450);
+      hint.textContent = `${wx}：${WX[wx]}`;
     };
-    const months = ['十一月','十二月','正月','二月','三月','四月','五月','六月','七月','八月','九月','十月'];
-    let blocks='';
-    Object.keys(XX).forEach((n,i)=>{
-      const bits = XX[n];
-      // 初爻在最下 → 先画 bits[0]（最底）
-      let bars='';
-      bits.forEach((b,k)=>{
-        // k=0 初, k=5 上
-        const yy = b?'yang':'yin';
-        const delay = i*80 + k*60;
-        if(b===1){
-          bars += `<div class="xxbar yang" style="animation-delay:${delay}ms"></div>`;
-        } else {
-          bars += `<div class="xxbar yin" style="animation-delay:${delay}ms"></div><div class="xxbar yin" style="animation-delay:${delay}ms"></div>`;
-        }
-      });
-      blocks += `<div style="display:inline-block;text-align:center;width:42px;margin:0 2px">
-        <div class="xiaoxi-gua">${bars}</div>
-        <div class="xiaoxi-label">${n}</div>
-        <div style="font-size:9px;color:#8b7e6a;margin-top:1px">${months[i]}</div>
-      </div>`;
-    });
-    return `<svg width="560" height="190" viewBox="0 0 560 190" xmlns="http://www.w3.org/2000/svg">
-      <foreignObject x="10" y="10" width="540" height="170">
-        <div xmlns="http://www.w3.org/1999/xhtml" style="font-family:'Songti SC',serif">
-          <div style="text-align:center">${blocks}</div>
-          <div style="display:flex;justify-content:space-between;margin-top:8px;font-size:11px;color:#b8860b">
-            <span>冬至·一阳生</span><span>阳息阴消 →</span><span>夏至·一阴生</span>
-          </div>
-        </div>
-      </foreignObject>
-    </svg>`;
-  }
-};
+  });
+  document.querySelectorAll('button[data-wx]').forEach(b => b.onclick = () => {
+    const wx = b.dataset.wx;
+    const g = document.querySelector(`.hetu-num[data-wx="${wx}"]`);
+    if (g) g.onclick();
+    else { /* 复位 */ document.querySelectorAll('.hetu-num').forEach(x => x.style.opacity = 1); }
+  });
+  const sumBtn = document.querySelector('button[data-act="hetu-sum"]');
+  if (sumBtn) sumBtn.onclick = () => {
+    document.querySelectorAll('.hetu-num').forEach(x => x.style.opacity = 1);
+    hint.textContent = '生数 1+2+3+4+5=15，成数 6+7+8+9+10=40，合 55 —— 天地之数五十有五';
+  };
+}
 
-// 八卦环：position 数组 [符号,名,方位,x,y]
-function baguaRing(ring, centerLabel) {
-  return `<svg width="230" height="230" viewBox="0 0 230 230">
-    <circle cx="115" cy="115" r="104" fill="#fdfaf3" stroke="#8b0000" stroke-width="1.2"/>
-    ${ring.map(r=>`
-      <text x="${r[3]}" y="${r[4]}" text-anchor="middle" font-size="26" fill="#1a1a2e">${r[0]}</text>
-      <text x="${r[3]}" y="${r[4]+16}" text-anchor="middle" font-size="11" fill="#8b0000">${r[1]}</text>
-    `).join('')}
-    <text x="115" y="120" text-anchor="middle" font-size="13" fill="#8b0000" font-weight="700">${centerLabel}</text>
-  </svg>`;
-}
-// 画点：n 个点围绕中心，简易排布（奇数直列，偶数分列）
-function dots(cx, cy, n, color) {
-  let out='';
-  if (n<=5) { out+=`<circle cx="${cx}" cy="${cy}" r="5" fill="${color}"/>`; }
-  const half=Math.floor(n/2), gap=7;
-  for (let i=0;i<half;i++){
-    const off=(i-(half-1)/2)*gap;
-    if(n>5){ out+=`<circle cx="${cx-6}" cy="${cy+off}" r="4.5" fill="${color}"/>`; out+=`<circle cx="${cx+6}" cy="${cy+off}" r="4.5" fill="${color}"/>`; }
-    else if(n>1){ out+=`<circle cx="${cx}" cy="${cy+off}" r="4.5" fill="${color}"/>`; }
+/* ---------------- 3. 洛书：魔方阵，点行/列/斜验证皆十五 ---------------- */
+function svgLuoshu() {
+  const L = [[4,9,2],[3,5,7],[8,1,6]];
+  let cells = '';
+  for (let r = 0; r < 3; r++) for (let c = 0; c < 3; c++) {
+    const x = 30 + c * 60, y = 30 + r * 60;
+    cells += `<g class="ix ls-cell" data-r="${r}" data-c="${c}">
+      <rect x="${x}" y="${y}" width="60" height="60" fill="#fdfaf3" stroke="#d4c5a3" stroke-width="1"/>
+      <text x="${x+30}" y="${y+39}" text-anchor="middle" font-size="24" fill="#1a1a2e" font-weight="700">${L[r][c]}</text></g>`;
   }
-  return out;
+  return `<svg id="sv_luoshu" width="240" height="240" viewBox="0 0 240 240">
+    <rect x="25" y="25" width="190" height="190" rx="8" fill="none" stroke="#8b0000" stroke-width="1.4"/>
+    ${cells}
+    <text x="120" y="233" text-anchor="middle" font-size="11" fill="#b8860b">纵横斜相加皆十五</text>
+  </svg>
+  <div class="toolbar">
+    <button class="tbtn" data-act="ls-row">验 行</button>
+    <button class="tbtn" data-act="ls-col">验 列</button>
+    <button class="tbtn" data-act="ls-dia">验 斜</button>
+    <button class="tbtn" data-act="ls-reset">复 位</button>
+  </div>
+  <div class="hint" id="hint_luoshu">戴九履一，左三右七 · 点任意格看所在行</div>`;
 }
-// 圆图：先天64卦按序分布于圆周
-function circleHexagrams() {
-  const arr = ONT.liushisigua;
-  let s='';
-  for (let i=0;i<64;i++){
-    const ang = (i/64)*Math.PI*2 - Math.PI/2;
-    const r = 92, x = Math.cos(ang)*r, y = Math.sin(ang)*r;
-    s += `<text x="${x.toFixed(1)}" y="${(y+3).toFixed(1)}" text-anchor="middle" font-size="9" fill="#2b1810">${arr[i].symbol}</text>`;
+function bindLuoshu() {
+  const hint = document.getElementById('hint_luoshu');
+  const L = [[4,9,2],[3,5,7],[8,1,6]];
+  const colorCells = list => {
+    document.querySelectorAll('.ls-cell').forEach(g => {
+      const r = +g.dataset.r, c = +g.dataset.c;
+      const on = list.some(([rr, cc]) => rr === r && cc === c);
+      g.querySelector('rect').setAttribute('fill', on ? '#f7e2c8' : '#fdfaf3');
+      g.querySelector('text').setAttribute('fill', on ? '#8b0000' : '#1a1a2e');
+    });
+  };
+  document.querySelectorAll('.ls-cell').forEach(g => g.onclick = () => {
+    const r = +g.dataset.r, c = +g.dataset.c;
+    const list = []; for (let k = 0; k < 3; k++) { list.push([r, k]); list.push([k, c]); }
+    colorCells(list);
+    hint.textContent = `过 ${L[r][c]} 的行列：${list.slice(0,3).map(([rr,cc])=>L[rr][cc]).join('+')}=${list.slice(0,3).reduce((s,[rr,cc])=>s+L[rr][cc],0)}，${list.slice(3).map(([rr,cc])=>L[rr][cc]).join('+')}=${list.slice(3).reduce((s,[rr,cc])=>s+L[rr][cc],0)}`;
+  });
+  document.querySelectorAll('[data-act^="ls-"]').forEach(b => b.onclick = () => {
+    const a = b.dataset.act;
+    if (a === 'ls-reset') { colorCells([]); hint.textContent = '复位 · 戴九履一，左三右七，二四为肩，六八为足，五居中央'; return; }
+    let sum = 15, name = '行';
+    if (a === 'ls-row') { colorCells([[0,0],[0,1],[0,2]]); name = '上排 4+9+2'; }
+    if (a === 'ls-col') { colorCells([[0,1],[1,1],[2,1]]); name = '中列 9+5+1'; }
+    if (a === 'ls-dia') { colorCells([[0,0],[1,1],[2,2]]); name = '对角 4+5+6'; }
+    hint.textContent = `${name} = 15 ✓ 九宫之法，五居中央，八方拱卫`;
+  });
+}
+
+/* ---------------- 4. 先天 / 后天八卦环：方位可点、可旋转互换 ---------------- */
+const RING_XIANTIAN = [['☰','乾','南'],['☱','兑','东南'],['☲','离','东'],['☳','震','东北'],
+  ['☷','坤','北'],['☶','艮','西北'],['☵','坎','西'],['☴','巽','西南']];
+const RING_HOUTIAN = [['☲','离','南'],['☴','巽','东南'],['☳','震','东'],['☷','坤','西南'],
+  ['☵','坎','北'],['☰','乾','西北'],['☱','兑','西'],['☶','艮','东北']];
+function baguaRingSVG(ring, id, center) {
+  let s = `<g id="${id}Rot">`;
+  ring.forEach((r, i) => {
+    const ang = (i / 8) * Math.PI * 2 - Math.PI / 2;
+    const x = 120 + Math.cos(ang) * 92, y = 120 + Math.sin(ang) * 92;
+    s += `<g class="ix ring-node" data-idx="${i}" data-name="${r[1]}" data-dir="${r[2]}">
+      <circle cx="${x.toFixed(1)}" cy="${(y-6).toFixed(1)}" r="19" fill="transparent"/>
+      <text x="${x.toFixed(1)}" y="${(y+2).toFixed(1)}" text-anchor="middle" font-size="27" fill="#1a1a2e">${r[0]}</text>
+      <text x="${x.toFixed(1)}" y="${(y+19).toFixed(1)}" text-anchor="middle" font-size="10" fill="#8b0000">${r[1]}</text>
+      <text x="${x.toFixed(1)}" y="${(y+31).toFixed(1)}" text-anchor="middle" font-size="8.5" fill="#b8860b">${r[2]}</text>
+    </g>`;
+  });
+  s += `</g>`;
+  return `<svg id="sv_${id}" width="240" height="240" viewBox="0 0 240 240">
+    <circle cx="120" cy="120" r="108" fill="#fdfaf3" stroke="#8b0000" stroke-width="1.3"/>
+    ${s}
+    <text x="120" y="120" text-anchor="middle" font-size="13" fill="#8b0000" font-weight="700">${center}</text>
+  </svg>
+  <div class="toolbar">
+    <button class="tbtn" data-act="${id}-rot">↻ 旋转排位</button>
+    <button class="tbtn" data-act="${id}-reset">复 位</button>
+  </div>
+  <div class="hint" id="hint_${id}">点卦位看其方位卦德</div>`;
+}
+function bindRing(id, ring) {
+  const hint = document.getElementById('hint_' + id);
+  const rot = document.getElementById(id + 'Rot');
+  let base = 0;
+  const apply = deg => { rot.style.transformOrigin = '120px 120px'; rot.style.transform = `rotate(${deg}deg)`; };
+  apply(0);
+  document.querySelectorAll(`#sv_${id} .ring-node`).forEach(g => {
+    g.onclick = () => {
+      const n = g.dataset.name, d = g.dataset.dir;
+      const b = baguaByName[n] || {};
+      g.classList.add('pop'); setTimeout(() => g.classList.remove('pop'), 450);
+      hint.textContent = `${n} 居${d}：${b.ziran ? '象'+b.ziran : ''}${b.nature ? '，性'+b.nature : ''}${b.qinqing ? '，为'+b.qinqing : ''}`;
+    };
+  });
+  document.querySelector(`[data-act="${id}-rot"]`).onclick = () => {
+    base += 45; apply(base);
+    hint.textContent = `八卦整体旋 ${base % 360}° —— 方位虽转，卦序不乱`;
+  };
+  document.querySelector(`[data-act="${id}-reset"]`).onclick = () => { base = 0; apply(0); hint.textContent = '复位 · 卦归本位'; };
+}
+
+/* ---------------- 5. 六十四卦方圆图：圆图旋转 + 点卦视角 + 方图寻卦 ---------------- */
+function svg64Fang() {
+  return `<svg id="sv_fangyuan" width="580" height="320" viewBox="0 0 580 320">
+    <g transform="translate(150,150)">
+      <circle r="120" fill="none" stroke="#8b0000" stroke-width="1.2"/>
+      <circle r="92" fill="none" stroke="#d4c5a3" stroke-width=".8" stroke-dasharray="2 3"/>
+      <g id="yuanRot"></g>
+      <text y="5" text-anchor="middle" font-size="13" fill="#8b0000" font-weight="700">圆图·天</text>
+    </g>
+    <g transform="translate(330,40)">
+      <rect width="220" height="220" fill="none" stroke="#8b0000" stroke-width="1.2"/>
+      <g id="fangGrid"></g>
+      <text x="110" y="240" text-anchor="middle" font-size="13" fill="#8b0000" font-weight="700">方图·地</text>
+    </g>
+  </svg>
+  <div class="toolbar">
+    <button class="tbtn" data-act="fy-rot">↻ 圆图旋转</button>
+    <button class="tbtn" data-act="fy-cw">顺行一度</button>
+    <button class="tbtn" data-act="fy-ccw">逆行一度</button>
+    <button class="tbtn" data-act="fy-reset">复 位</button>
+  </div>
+  <div class="hint" id="hint_fangyuan">点圆图任何一卦，方图对应亮起 · 圆象天行，方象地载</div>`;
+}
+function bindFangyuan() {
+  const hint = document.getElementById('hint_fangyuan');
+  const yuan = ONT.liushisigua;
+  // 圆图：按先天卦序排布 64 卦
+  let yh = '';
+  yuan.forEach((g, i) => {
+    const ang = (i / 64) * Math.PI * 2 - Math.PI / 2;
+    const r = 106, x = Math.cos(ang) * r, y = Math.sin(ang) * r;
+    yh += `<text class="ix fy-yuan" data-id="${g.id}" data-idx="${i}" x="${x.toFixed(1)}" y="${(y+3).toFixed(1)}"
+      text-anchor="middle" font-size="9" fill="#2b1810" transform="rotate(${(ang*180/Math.PI+90).toFixed(1)},${x.toFixed(1)},${y.toFixed(1)})">${g.symbol}</text>`;
+  });
+  document.getElementById('yuanRot').innerHTML = yh;
+  // 方图 8×8
+  let fh = '';
+  for (let j = 0; j < 8; j++) for (let i = 0; i < 8; i++) {
+    const g = yuan[(j * 8 + i) % 64];
+    const x = 30 + i * 26.25, y = 30 + j * 26.25;
+    fh += `<g class="fx" transform="translate(${(i*26.25+4).toFixed(1)},${(j*26.25+4).toFixed(1)})">
+      <rect class="fy-cell" data-id="${g.id}" x="0" y="0" width="20" height="20" rx="2" fill="transparent"/>
+      <text class="fy-fang" data-id="${g.id}" x="10" y="14" text-anchor="middle" font-size="14" fill="#2b1810">${g.symbol}</text></g>`;
   }
-  return s;
+  document.getElementById('fangGrid').innerHTML = fh;
+
+  const highlight = id => {
+    document.querySelectorAll('.fy-fang,.fy-yuan').forEach(el => {
+      const on = el.dataset.id === id;
+      el.setAttribute('fill', on ? '#8b0000' : '#2b1810');
+      el.classList.toggle('hot', on);
+    });
+  };
+  document.querySelectorAll('.fy-yuan').forEach(t => t.onclick = () => {
+    const g = yuan[+t.dataset.idx];
+    highlight(g.id);
+    t.classList.add('pop'); setTimeout(() => t.classList.remove('pop'), 450);
+    hint.textContent = `圆图 · ${g.name}（第${g.num}卦）上下卦：${g.shang}上 ${g.xia}下`;
+  });
+  document.querySelectorAll('.fy-fang').forEach(t => t.onclick = () => {
+    const g = ONT.liushisigua.find(x => x.id === t.dataset.id);
+    highlight(g.id);
+    t.classList.add('pop'); setTimeout(() => t.classList.remove('pop'), 450);
+    hint.textContent = `方图 · ${g.name} —— ${g.guaci ? g.guaci.split('：')[1] || '' : ''}`;
+  });
+
+  const rot = document.getElementById('yuanRot');
+  let deg = 0;
+  const apply = () => { rot.style.transformOrigin = '0 0'; rot.style.transform = `rotate(${deg}deg)`; };
+  document.querySelector('[data-act="fy-rot"]').onclick = () => { deg += 30; apply(); hint.textContent = `圆图旋 ${deg % 360}° · 天道左旋`; };
+  document.querySelector('[data-act="fy-cw"]').onclick = () => { deg += 11.25; apply(); hint.textContent = '顺行一度 · 阳气渐长'; };
+  document.querySelector('[data-act="fy-ccw"]').onclick = () => { deg -= 11.25; apply(); hint.textContent = '逆行一度 · 阴气渐生'; };
+  document.querySelector('[data-act="fy-reset"]').onclick = () => { deg = 0; apply(); hint.textContent = '复位 · 圆图归先天本位'; };
 }
-// 方图：8×8 卦符网格（先天方图排布）
-function squareHexagrams() {
-  let s='';
-  for (let j=0;j<8;j++) for (let i=0;i<8;i++){
-    const g = ONT.liushisigua[(j*8+i)%64];
-    s += `<text x="${13+i*26}" y="${20+j*26}" text-anchor="middle" font-size="15" fill="#2b1810">${g.symbol}</text>`;
-  }
-  return s;
+
+/* ---------------- 6. 八卦变六十四卦：点上下卦实时重卦 ---------------- */
+function svgBagua64() {
+  let top = '', bot = '';
+  ONT.bagua.forEach((b, i) => {
+    const x = 40 + (i % 4) * 62, y = 50 + Math.floor(i / 4) * 96;
+    top += `<g class="ix bg-item" data-idx="${i}" data-role="top">
+      <text x="${x}" y="${y}" text-anchor="middle" font-size="30" fill="#1a1a2e">${b.symbol}</text>
+      <text x="${x}" y="${y+20}" text-anchor="middle" font-size="13" fill="#8b0000">${b.name}</text></g>`;
+  });
+  return `<svg id="sv_bg64" width="300" height="330" viewBox="0 0 300 330">
+    <text x="150" y="22" text-anchor="middle" font-size="12" fill="#b8860b">上卦（点选）</text>
+    ${top}
+    <text x="150" y="160" text-anchor="middle" font-size="12" fill="#b8860b">下卦（点选）</text>
+    <g id="bgBot">${ONT.bagua.map((b, i) => {
+      const x = 40 + (i % 4) * 62, y = 186 + Math.floor(i / 4) * 52;
+      return `<g class="ix bg-item" data-idx="${i}" data-role="bot">
+        <text x="${x}" y="${y}" text-anchor="middle" font-size="24" fill="#1a1a2e">${b.symbol}</text>
+        <text x="${x}" y="${y+15}" text-anchor="middle" font-size="11" fill="#8b0000">${b.name}</text></g>`;
+    }).join('')}</g>
+    <g id="bgResult"><text x="150" y="316" text-anchor="middle" font-size="14" fill="#8b0000" font-weight="700">上卦 ⊕ 下卦 = 成卦</text></g>
+  </svg>
+  <div class="toolbar">
+    <button class="tbtn" data-act="bg-random">⚄ 随机重卦</button>
+    <button class="tbtn" data-act="bg-reset">复 位</button>
+  </div>
+  <div class="hint" id="hint_bg64">先点一个上卦，再点一个下卦，看成何卦</div>`;
 }
+function bindBagua64() {
+  const hint = document.getElementById('hint_bg64');
+  let pickedTop = null, pickedBot = null;
+  const update = () => {
+    document.querySelectorAll('.bg-item text:first-child').forEach(() => {});
+    const res = document.getElementById('bgResult');
+    if (pickedTop == null || pickedBot == null) { hint.textContent = '先点一个上卦，再点一个下卦，看成何卦'; return; }
+    const T = ONT.bagua[pickedTop], B = ONT.bagua[pickedBot];
+    const g = ONT.liushisigua.find(x => x.shang === T.name && x.xia === B.name);
+    if (!g) { res.innerHTML = `<text x="150" y="316" text-anchor="middle" font-size="14" fill="#8b0000">未找到对应卦</text>`; return; }
+    res.innerHTML = `<text x="150" y="300" text-anchor="middle" font-size="34" fill="#1a1a2e" class="pop">${g.symbol}</text>
+      <text x="150" y="322" text-anchor="middle" font-size="13" fill="#8b0000" font-weight="700">${g.name} · 第${g.num}卦（${T.name}上${B.name}下）</text>`;
+    hint.textContent = `${T.name}上 ${B.name}下 = ${g.name}：${g.guaci || (g.name + '')}`;
+  };
+  document.querySelectorAll('.bg-item').forEach(g => g.onclick = () => {
+    const i = +g.dataset.idx, role = g.dataset.role;
+    if (role === 'top') { pickedTop = i; document.querySelectorAll('[data-role="top"] text').forEach(t => t.setAttribute('fill', '#1a1a2e')); g.querySelectorAll('text').forEach(t => t.setAttribute('fill', '#8b0000')); }
+    else { pickedBot = i; document.querySelectorAll('[data-role="bot"] text').forEach(t => t.setAttribute('fill', '#1a1a2e')); g.querySelectorAll('text').forEach(t => t.setAttribute('fill', '#8b0000')); }
+    g.classList.add('pop'); setTimeout(() => g.classList.remove('pop'), 450);
+    update();
+  });
+  document.querySelector('[data-act="bg-random"]').onclick = () => {
+    pickedTop = Math.floor(Math.random() * 8); pickedBot = Math.floor(Math.random() * 8);
+    document.querySelectorAll('.bg-item').forEach(g => {
+      g.querySelectorAll('text').forEach(t => t.setAttribute('fill', '#1a1a2e'));
+      if (+g.dataset.idx === (g.dataset.role === 'top' ? pickedTop : pickedBot)) g.querySelectorAll('text').forEach(t => t.setAttribute('fill', '#8b0000'));
+    });
+    update();
+  };
+  document.querySelector('[data-act="bg-reset"]').onclick = () => {
+    pickedTop = pickedBot = null;
+    document.querySelectorAll('.bg-item text').forEach(t => t.setAttribute('fill', '#1a1a2e'));
+    document.getElementById('bgResult').innerHTML = `<text x="150" y="316" text-anchor="middle" font-size="14" fill="#8b0000" font-weight="700">上卦 ⊕ 下卦 = 成卦</text>`;
+    hint.textContent = '复位 · 先点上卦，再点下卦';
+  };
+}
+
+/* ---------------- 7. 十二消息卦：点击逐月推演阴阳消长 ---------------- */
+const XIAOXI = [
+  { n:'复', bits:[1,0,0,0,0,0], m:'十一月', jie:'冬至', y:1 },
+  { n:'临', bits:[1,1,0,0,0,0], m:'十二月', jie:'大寒', y:2 },
+  { n:'泰', bits:[1,1,1,0,0,0], m:'正月', jie:'雨水', y:3 },
+  { n:'大壮', bits:[1,1,1,1,0,0], m:'二月', jie:'春分', y:4 },
+  { n:'夬', bits:[1,1,1,1,1,0], m:'三月', jie:'谷雨', y:5 },
+  { n:'乾', bits:[1,1,1,1,1,1], m:'四月', jie:'小满', y:6 },
+  { n:'姤', bits:[0,1,1,1,1,1], m:'五月', jie:'夏至', y:5 },
+  { n:'遁', bits:[0,0,1,1,1,1], m:'六月', jie:'大暑', y:4 },
+  { n:'否', bits:[0,0,0,1,1,1], m:'七月', jie:'处暑', y:3 },
+  { n:'观', bits:[0,0,0,0,1,1], m:'八月', jie:'秋分', y:2 },
+  { n:'剥', bits:[0,0,0,0,0,1], m:'九月', jie:'霜降', y:1 },
+  { n:'坤', bits:[0,0,0,0,0,0], m:'十月', jie:'小雪', y:0 },
+];
+function svgXiaoxi() {
+  return `<svg id="sv_xiaoxi" width="580" height="230" viewBox="0 0 580 230">
+    <g id="xxRow">${XIAOXI.map((x, i) => {
+      const bx = 24 + i * 46;
+      let bars = '';
+      for (let k = 5; k >= 0; k--) {
+        const yy = 60 + (5 - k) * 13;
+        if (x.bits[k] === 1) bars += `<rect class="xx-rect" x="${bx}" y="${yy}" width="30" height="7" rx="1.5" fill="#2a1f14"/>`;
+        else bars += `<rect class="xx-rect" x="${bx}" y="${yy}" width="12.5" height="7" rx="1.5" fill="#2a1f14"/>
+                      <rect class="xx-rect" x="${bx+17.5}" y="${yy}" width="12.5" height="7" rx="1.5" fill="#2a1f14"/>`;
+      }
+      return `<g class="ix xx-gua" data-idx="${i}" data-name="${x.n}">
+        ${bars}
+        <text x="${bx+15}" y="${60+6*13+16}" text-anchor="middle" font-size="13" fill="#8b0000" font-weight="700">${x.n}</text>
+        <text x="${bx+15}" y="${60+6*13+30}" text-anchor="middle" font-size="9" fill="#8b7e6a">${x.m}</text>
+      </g>`;
+    }).join('')}</g>
+    <line id="xxCursor" x1="39" y1="52" x2="39" y2="152" stroke="#8b0000" stroke-width="1.5" stroke-dasharray="3 3"/>
+    <text x="290" y="212" text-anchor="middle" font-size="11" fill="#b8860b">← 冬至一阳生 · 阳息阴消 · 夏至一阴生 →</text>
+    <text id="xxInfo" x="290" y="18" text-anchor="middle" font-size="12" fill="#8b0000" font-weight="700">复卦 · 十一月冬至 · 一阳来复</text>
+  </svg>
+  <div class="toolbar">
+    <button class="tbtn" data-act="xx-prev">◀ 前一月</button>
+    <button class="tbtn" data-act="xx-play">▶ 自动推演</button>
+    <button class="tbtn" data-act="xx-next">后一月 ▶</button>
+  </div>
+  <div class="hint" id="hint_xiaoxi">点任意卦看该月阴阳之数</div>`;
+}
+function bindXiaoxi() {
+  const hint = document.getElementById('hint_xiaoxi');
+  let cur = 0, timer = null;
+  const info = document.getElementById('xxInfo');
+  const cursor = document.getElementById('xxCursor');
+  const show = i => {
+    cur = (i + 12) % 12;
+    const x = XIAOXI[cur];
+    cursor.setAttribute('x1', 39 + cur * 46); cursor.setAttribute('x2', 39 + cur * 46);
+    info.textContent = `${x.n}卦 · ${x.m}${x.jie} · ${x.y === 0 ? '纯阴无阳' : x.y === 6 ? '纯阳无阴' : '阳' + x.y + '阴' + (6 - x.y)}`;
+    document.querySelectorAll('.xx-gua').forEach((g, k) => {
+      g.querySelectorAll('.xx-rect').forEach(r => r.setAttribute('fill', k === cur ? '#8b0000' : '#2a1f14'));
+      g.querySelectorAll('text').forEach(t => t.setAttribute('fill', k === cur ? '#8b0000' : (t.getAttribute('font-size') === '9' ? '#8b7e6a' : '#2b1810')));
+    });
+    hint.textContent = `${x.n}：${x.y === 0 ? '六爻皆阴，坤德厚载' : x.y === 6 ? '六爻皆阳，乾道刚健' : `阳气居下 ${x.y} 爻，阴气在上 ${6 - x.y} 爻`}`;
+  };
+  document.querySelectorAll('.xx-gua').forEach(g => g.onclick = () => show(+g.dataset.idx));
+  document.querySelector('[data-act="xx-prev"]').onclick = () => show(cur - 1);
+  document.querySelector('[data-act="xx-next"]').onclick = () => show(cur + 1);
+  document.querySelector('[data-act="xx-play"]').onclick = e => {
+    if (timer) { clearInterval(timer); timer = null; e.target.classList.remove('on'); return; }
+    e.target.classList.add('on');
+    timer = setInterval(() => show(cur + 1), 900);
+  };
+  show(0);
+}
+
+/* ============ SVG 注册表 ============ */
+const SVG = {
+  tu_taiji: svgTaiji,
+  tu_xiantian: () => baguaRingSVG(RING_XIANTIAN, 'xt', '太极'),
+  tu_houtian: () => baguaRingSVG(RING_HOUTIAN, 'ht', '中宫'),
+  tu_hetu: svgHetu,
+  tu_luoshu: svgLuoshu,
+  tu_64guafang: svg64Fang,
+  tu_bagua_64gua: svgBagua64,
+  tu_yaobian: svgXiaoxi,
+};
+const BIND = {
+  tu_taiji: bindTaiji,
+  tu_xiantian: () => bindRing('xt', RING_XIANTIAN),
+  tu_houtian: () => bindRing('ht', RING_HOUTIAN),
+  tu_hetu: bindHetu,
+  tu_luoshu: bindLuoshu,
+  tu_64guafang: bindFangyuan,
+  tu_bagua_64gua: bindBagua64,
+  tu_yaobian: bindXiaoxi,
+};
 
 function render() {
   document.getElementById('tuxiGrid').innerHTML = ONT.yitu.map(t => {
-    const wide = ['tu_64guafang','tu_yaobian'].includes(t.id) ? ' wide' : '';
+    const wide = ['tu_64guafang', 'tu_yaobian'].includes(t.id) ? ' wide' : '';
     const svg = SVG[t.id] ? SVG[t.id]() : '';
     return `<div class="card${wide}">
       <h3>${t.name}</h3>
-      <div class="meta"><span>📜 ${t.dynasty||'—'}</span><span>✍ ${t.author||'—'}</span><span>🏷 ${t.xuepai||'—'}</span></div>
-      ${svg?`<div class="svgbox">${svg}</div>`:''}
+      <div class="meta"><span>📜 ${t.dynasty || '—'}</span><span>✍ ${t.author || '—'}</span><span>🏷 ${t.xuepai || '—'}</span></div>
+      ${svg ? `<div class="svgbox" id="box_${t.id}">${svg}</div>` : ''}
       <p class="desc">${t.desc}</p>
     </div>`;
   }).join('');
+  Object.keys(BIND).forEach(id => { try { BIND[id](); } catch (e) { console.warn('bind fail', id, e); } });
 }
 document.addEventListener('DOMContentLoaded', render);
 </script>
