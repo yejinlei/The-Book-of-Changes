@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>易传 · 十翼 | 易经本体论</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f4ecd8;
+  --text: #2b1810;
+  --accent: #8b0000;
+  --gold: #b8860b;
+  --ink: #1a1a2e;
+  --blue: #1e3a8a;
+  --green: #14532d;
+  --border: #d4c5a3;
+  --card: #faf6ed;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: 'Noto Serif SC', serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 2;
+  padding-top: 70px;
+}
+.top-nav {
+  position: fixed; top:0; left:0; right:0;
+  height: 70px;
+  background: var(--card);
+  border-bottom: 2px solid var(--border);
+  z-index: 1000;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 30px;
+}
+.logo { font-size:20px; font-weight:700; color:var(--ink); text-decoration:none; }
+.logo span { color: var(--accent); font-size:26px; }
+.nav-links a {
+  margin-left:24px; color:var(--text); text-decoration:none;
+  font-size:15px; font-weight:500;
+}
+.nav-links a:hover { color:var(--accent); }
+.reader-container { max-width:960px; margin:40px auto; padding:0 40px; }
+.page-title { text-align:center; margin-bottom:40px; }
+.page-title h1 { font-size:42px; color:var(--accent); letter-spacing:8px; margin-bottom:8px; }
+.page-title p { color:var(--gold); font-size:16px; }
+.shiyi-list { margin-top:30px; }
+.shiyi-item {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--accent);
+  margin-bottom:20px;
+  padding:25px 30px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.shiyi-item:hover { box-shadow: 0 4px 12px rgba(139,0,0,0.1); }
+.shiyi-item h3 { font-size:22px; color:var(--accent); margin-bottom:10px; }
+.shiyi-item .desc { color:var(--text); opacity:0.8; margin-bottom:10px; }
+.shiyi-item .content { display:none; margin-top:20px; padding-top:20px; border-top:1px dashed var(--border); white-space:pre-wrap; line-height:2.2; font-size:16px; }
+.shiyi-item.open .content { display:block; }
+.shiyi-item.open { border-left-color: var(--gold); }
+.back-link { display:inline-block; margin-bottom:30px; color:var(--accent); text-decoration:none; font-size:16px; }
+.back-link:hover { text-decoration:underline; }
+</style>
+</head>
+<body>
+<nav class="top-nav">
+  <a href="index.html" class="logo"><span>易</span>经本体论</a>
+  <div class="nav-links">
+    <a href="index.html">总览</a>
+    <a href="reader.html">经文阅读</a>
+    <a href="shiyi.html" style="color:var(--accent);font-weight:600">易传十翼</a>
+    <a href="index.html#yixue">历代易学</a>
+    <a href="index.html#graph">知识图谱</a>
+  </div>
+</nav>
+
+<div class="reader-container">
+  <a href="index.html" class="back-link">← 返回首页</a>
+  <div class="page-title">
+    <h1>易 传 · 十 翼</h1>
+    <p>孔子及后学所作 · 《易经》最权威注疏</p>
+  </div>
+
+  <div class="shiyi-list">
+    <div class="shiyi-item">
+      <h3>《彖传》上下</h3>
+      <p class="desc">解释六十四卦卦名、卦辞及卦义，共64则，分上下两篇。</p>
+      <div class="content">
+《彖传》是对卦辞的解释，"彖"即断，断定一卦之义。
+
+【彖上·乾】大哉乾元，万物资始，乃统天。云行雨施，品物流形。大明始终，六位时成，时乘六龙以御天。乾道变化，各正性命，保合大和，乃利贞。首出庶物，万国咸宁。
+
+【彖上·坤】至哉坤元，万物资生，乃顺承天。坤厚载物，德合无疆。含弘光大，品物咸亨。牝马地类，行地无疆，柔顺利贞。君子攸行，先迷失道，后顺得常。西南得朋，乃与类行；东北丧朋，乃终有庆。安贞之吉，应地无疆。
+
+（其余62卦彖辞略，完整彖传随经文阅读页面逐卦呈现。）
+      </div>
+    </div>
+
+    <div class="shiyi-item">
+      <h3>《象传》上下</h3>
+      <p class="desc">分"大象"（解释卦象）与"小象"（解释爻象爻辞），共450条。</p>
+      <div class="content">
+大象传取八卦所象征的天、地、雷、风、水、火、山、泽等自然现象解释卦象，并推衍出人事修德准则。
+
+【大象·乾】天行健，君子以自强不息。
+【大象·坤】地势坤，君子以厚德载物。
+【大象·屯】云雷屯，君子以经纶。
+【大象·蒙】山下出泉，蒙；君子以果行育德。
+【大象·需】云上于天，需；君子以饮食宴乐。
+【大象·讼】天与水违行，讼；君子以作事谋始。
+【大象·师】地中有水，师；君子以容民畜众。
+【大象·比】地上有水，比；先王以建万国，亲诸侯。
+
+小象传解释各爻爻辞，例如乾卦初九"潜龙勿用"，阳在下也。
+      </div>
+    </div>
+
+    <div class="shiyi-item">
+      <h3>《文言传》</h3>
+      <p class="desc">专门解释乾坤两卦的卦辞爻辞，是理解易义理精髓的重要篇章。</p>
+      <div class="content">
+《文言》是乾坤两卦的专论，文饰乾坤两卦之言。
+
+【乾文言】
+"元"者，善之长也；"亨"者，嘉之会也；"利"者，义之和也；"贞"者，事之干也。君子体仁足以长人，嘉会足以合礼，利物足以和义，贞固足以干事。君子行此四德者，故曰：乾：元、亨、利、贞。
+
+初九曰"潜龙勿用"，何谓也？子曰："龙德而隐者也。不易乎世，不成乎名；遁世无闷，不见是而无闷；乐则行之，忧则违之，确乎其不可拔，潜龙也。"
+
+九二曰"见龙在田，利见大人"，何谓也？子曰："龙德而正中者也。庸言之信，庸行之谨；闲邪存其诚，善世而不伐，德博而化。《易》曰：'见龙在田，利见大人'，君德也。"
+      </div>
+    </div>
+
+    <div class="shiyi-item">
+      <h3>《系辞传》上下</h3>
+      <p class="desc">《易经》通论，阐述易的起源、原理、筮法及哲学思想，是易学纲领。</p>
+      <div class="content">
+《系辞传》是《易经》最重要的哲学通论，相传为孔子所作。
+
+【系辞上选】
+天尊地卑，乾坤定矣。卑高以陈，贵贱位矣。动静有常，刚柔断矣。方以类聚，物以群分，吉凶生矣。在天成象，在地成形，变化见矣。
+
+一阴一阳之谓道。继之者善也，成之者性也。仁者见之谓之仁，知者见之谓之知，百姓日用而不知，故君子之道鲜矣。
+
+易有太极，是生两仪，两仪生四象，四象生八卦，八卦定吉凶，吉凶生大业。
+
+形而上者谓之道，形而下者谓之器。化而裁之谓之变，推而行之谓之通，举而错之天下之民谓之事业。
+
+【系辞下选】
+古者包牺氏之王天下也，仰则观象于天，俯则观法于地，观鸟兽之文与地之宜，近取诸身，远取诸物，于是始作八卦，以通神明之德，以类万物之情。
+      </div>
+    </div>
+
+    <div class="shiyi-item">
+      <h3>《说卦传》</h3>
+      <p class="desc">说明八卦所象征的事物，阐述八卦取象特点与卦位关系。</p>
+      <div class="content">
+《说卦传》解说八卦象征的自然现象、人伦关系及万物类象，是理解八卦取象的基础。
+
+昔者圣人之作《易》也，幽赞于神明而生蓍，参天两地而倚数，观变于阴阳而立卦，发挥于刚柔而生爻，和顺于道德而理于义，穷理尽性以至于命。
+
+天地定位，山泽通气，雷风相薄，水火不相射，八卦相错。数往者顺，知来者逆，是故《易》逆数也。
+
+乾为天、为圜、为君、为父、为玉、为金、为寒、为冰、为大赤、为良马、为老马、为瘠马、为驳马、为木果。
+坤为地、为母、为布、为釜、为吝啬、为均、为子母牛、为大舆、为文、为众、为柄；其于地也为黑。
+震为雷、为龙、为玄黄、为敷、为大涂、为长子、为决躁、为苍筤竹、为萑苇。
+巽为木、为风、为长女、为绳直、为工、为白、为长、为高、为进退、为不果、为臭。
+坎为水、为沟渎、为隐伏、为矫輮、为弓轮；其于人也为加忧、为心病、为耳痛、为血卦、为赤。
+离为火、为日、为电、为中女、为甲胄、为戈兵；其于人也为大腹、为乾卦、为鳖、为蟹、为蠃、为蚌、为龟。
+艮为山、为径路、为小石、为门阙、为果蓏、为阍寺、为指、为狗、为鼠、为黔喙之属。
+兑为泽、为少女、为巫、为口舌、为毁折、为附决；其于地也为刚卤、为妾、为羊。
+      </div>
+    </div>
+
+    <div class="shiyi-item">
+      <h3>《序卦传》</h3>
+      <p class="desc">说明六十四卦的排列顺序，揭示卦与卦之间的因果流转关系。</p>
+      <div class="content">
+《序卦传》解释六十四卦排序逻辑：两两相偶、非覆即变。
+
+有天地，然后万物生焉。盈天地之间者唯万物，故受之以屯。屯者，盈也。屯者，物之始生也。物生必蒙，故受之以蒙。蒙者，蒙也，物之稚也。物稚不可不养也，故受之以需。需者，饮食之道也。饮食必有讼，故受之以讼。讼必有众起，故受之以师。师者，众也。众必有所比，故受之以比。比者，比也。比必有所畜，故受之以小畜。物畜然后有礼，故受之以履。履而泰然后安，故受之以泰。泰者，通也。物不可以终通，故受之以否。物不可以终否，故受之以同人。与人同者，物必归焉，故受之以大有。有大者不可以盈，故受之以谦。有大而能谦必豫，故受之以豫。豫必有随，故受之以随。以喜随人者必有事，故受之以蛊。蛊者，事也。有事而后可大，故受之以临。临者，大也。物大然后可观，故受之以观。可观而后有所合，故受之以噬嗑。嗑者，合也。物不可以苟合而已，故受之以贲。贲者，饰也。致饰然后亨则尽矣，故受之以剥。剥者，剥也。物不可以终尽剥，穷上反下，故受之以复。复则不妄矣，故受之以无妄。有无妄然后可畜，故受之以大畜。物畜然后可养，故受之以颐。颐者，养也。不养则不可动，故受之以大过。物不可以终过，故受之以坎。坎者，陷也。陷必有所丽，故受之以离。离者，丽也。
+
+（下经序略，从咸、恒开始直至既济、未济。）
+      </div>
+    </div>
+
+    <div class="shiyi-item">
+      <h3>《杂卦传》</h3>
+      <p class="desc">错杂解说六十四卦卦义，以对立统一的方式简括各卦特点。</p>
+      <div class="content">
+《杂卦传》不按卦序，以两两对举的方式揭示卦义：
+
+乾刚坤柔，比乐师忧。临观之义，或与或求。屯见而不失其居，蒙杂而著。震起也，艮止也；损益盛衰之始也。大畜时也，无妄灾也。萃聚而升不来也，谦轻而豫怠也。噬嗑食也，贲无色也；兑见而巽伏也。随无故也，蛊则饬也。剥烂也，复反也。晋昼也，明夷诛也。井通而困相遇也。咸速也，恒久也。涣离也，节止也；解缓也，蹇难也；睽外也，家人内也；否泰反其类也。大壮则止，遁则退也。大有众也，同人亲也；革去故也，鼎取新也；小过过也，中孚信也；丰多故，亲寡旅也。离上而坎下也。小畜寡也，履不处也。需不进也，讼不亲也。大过颠也。姤遇也，柔遇刚也。渐女归待男行也。颐养正也，既济定也。归妹女之终也，未济男之穷也。夬决也，刚决柔也，君子道长，小人道忧也。
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.querySelectorAll('.shiyi-item').forEach(item => {
+  item.addEventListener('click', () => item.classList.toggle('open'));
+});
+</script>
+</body>
+</html>

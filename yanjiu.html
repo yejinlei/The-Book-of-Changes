@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>易学研究工具 | 易经本体论</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f4ecd8;
+  --text: #2b1810;
+  --accent: #8b0000;
+  --gold: #b8860b;
+  --blue: #1e3a8a;
+  --green: #14532d;
+  --border: #d4c5a3;
+  --card: #faf6ed;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: 'Noto Serif SC', serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 2;
+  padding-top:70px;
+}
+.top-nav {
+  position:fixed;top:0;left:0;right:0;height:70px;
+  background:var(--card);border-bottom:2px solid var(--border);
+  z-index:1000;display:flex;align-items:center;justify-content:space-between;padding:0 30px;
+}
+.logo { font-size:20px;font-weight:700;color:var(--text);text-decoration:none; }
+.logo span { color:var(--accent);font-size:26px; }
+.nav-links a { margin-left:24px;color:var(--text);text-decoration:none;font-size:15px; }
+.nav-links a:hover { color:var(--accent); }
+.container { max-width:1000px;margin:40px auto;padding:0 40px; }
+.back-link { display:inline-block;margin-bottom:30px;color:var(--accent);text-decoration:none; }
+.back-link:hover { text-decoration:underline; }
+.tabs { display:flex;gap:0;border-bottom:2px solid var(--border);margin-bottom:30px;flex-wrap:wrap; }
+.tab {
+  padding:12px 24px;cursor:pointer;font-size:16px;font-weight:500;
+  border-bottom:3px solid transparent;margin-bottom:-2px;
+}
+.tab.active { color:var(--accent);border-bottom-color:var(--accent);font-weight:600; }
+.tab-content { display:none; }
+.tab-content.active { display:block; }
+.page-title h1 { font-size:42px;color:var(--accent);letter-spacing:8px;text-align:center;margin-bottom:8px; }
+.page-title p { color:var(--gold);text-align:center;font-size:16px;margin-bottom:20px; }
+.card { background:var(--card);border:1px solid var(--border);border-radius:6px;padding:30px;margin-bottom:20px; }
+.card h3 { color:var(--accent);font-size:22px;margin-bottom:16px; }
+.shi-yi-box {
+  border:1px solid var(--gold);padding:20px;margin:20px 0;border-radius:4px;background:#fffdf5;
+  text-align:center;font-size:20px;letter-spacing:4px;
+}
+.shi-yi-result { margin-top:20px;padding:15px;border-top:1px dashed var(--border);font-size:16px;line-height:2; }
+.btn { padding:10px 24px;background:var(--accent);color:#fff;border:none;border-radius:4px;cursor:pointer;font-size:16px;font-family:inherit;margin:10px 5px; }
+.btn:hover { opacity:0.9; }
+.btn-gold { background:var(--gold); }
+.bagua-grid { display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:20px 0; }
+.bagua-item { padding:15px;text-align:center;border:1px solid var(--border);border-radius:4px;background:#fff;cursor:pointer; }
+.bagua-item:hover { border-color:var(--accent); }
+.bagua-item .sym { font-size:32px;color:var(--accent); }
+.gong-table { width:100%;border-collapse:collapse;margin:20px 0; }
+.gong-table th, .gong-table td { border:1px solid var(--border);padding:10px;text-align:center; }
+.gong-table th { background:var(--accent);color:#fff; }
+.stats-bar { display:flex;gap:20px;margin:20px 0;flex-wrap:wrap; }
+.stat-item { flex:1;min-width:140px;padding:20px;background:#fff;border:1px solid var(--border);border-radius:4px;text-align:center; }
+.stat-num { font-size:32px;font-weight:700;color:var(--accent); }
+.stat-label { font-size:14px;opacity:0.8; }
+.person-grid { display:grid;grid-template-columns:repeat(2,1fr);gap:20px; }
+.person-card { padding:20px;background:var(--card);border-left:4px solid var(--accent);border-radius:4px; }
+.person-card h4 { color:var(--accent);font-size:18px;margin-bottom:8px; }
+.person-card .era { color:var(--gold);font-size:14px;margin-bottom:8px; }
+@media(max-width:768px) { .person-grid,.bagua-grid{grid-template-columns:repeat(2,1fr);} .bagua-grid{grid-template-columns:repeat(2,1fr);} }
+</style>
+</head>
+<body>
+<nav class="top-nav">
+  <a href="index.html" class="logo"><span>易</span>经本体论</a>
+  <div class="nav-links">
+    <a href="index.html">总览</a>
+    <a href="reader.html">经文阅读</a>
+    <a href="shiyi.html">十翼</a>
+    <a href="yitu.html">易图</a>
+    <a href="yanjiu.html" style="color:var(--accent);font-weight:600">研究</a>
+  </div>
+</nav>
+
+<div class="container">
+  <a href="index.html" class="back-link">← 返回首页</a>
+  <div class="page-title">
+    <h1>易 学 研 究</h1>
+    <p>爻变推演 · 八宫卦序 · 卦爻统计 · 易学人物 · 历代注疏 · 序卦流转</p>
+  </div>
+
+  <div class="tabs">
+    <div class="tab active" data-tab="shifa">🔮 爻变推演</div>
+    <div class="tab" data-tab="bagong">🏯 八宫卦序</div>
+    <div class="tab" data-tab="stats">📊 卦爻统计</div>
+    <div class="tab" data-tab="renwu">🌐 易学人物</div>
+    <div class="tab" data-tab="zhushu">📚 历代注疏</div>
+    <div class="tab" data-tab="xugua">🗺️ 序卦流转</div>
+  </div>
+
+  <!-- 爻变推演（大衍筮法） -->
+  <div class="tab-content active" id="shifa">
+    <div class="card">
+      <h3>大衍筮法 · 模拟占筮</h3>
+      <p style="margin-bottom:15px">大衍之数五十，其用四十有九。分而为二以象两，挂一以象三，揲之以四以象四时，归奇于扐以象闰。模拟古法蓍草起卦，得本卦、变卦。</p>
+      <button class="btn" onclick="doShiYi()">开始起卦</button>
+      <button class="btn btn-gold" onclick="clearResult()">重置</button>
+      <div id="shifaResult"></div>
+    </div>
+  </div>
+
+  <!-- 八宫卦序 -->
+  <div class="tab-content" id="bagong">
+    <div class="card">
+      <h3>京房八宫卦序</h3>
+      <p>汉·京房所创八宫卦体系，以八纯卦为宫首，一世至五世、游魂、归魂，每宫八卦，共六十四卦。</p>
+      <table class="gong-table">
+        <tr><th>八宫</th><th>上世</th><th>一世</th><th>二世</th><th>三世</th><th>四世</th><th>五世</th><th>游魂</th><th>归魂</th></tr>
+        <tr><td>乾宫</td><td>䷀ 乾</td><td>䷫ 姤</td><td>䷠ 遁</td><td>䷋ 否</td><td>䷓ 观</td><td>䷖ 剥</td><td>䷢ 晋</td><td>䷣ 大有</td></tr>
+        <tr><td>震宫</td><td>䷲ 震</td><td>䷧ 豫</td><td>䷏ 解</td><td>䷟ 恒</td><td>䷯ 升</td><td>䷛ 井</td><td>䷐ 大过</td><td>䷮ 随</td></tr>
+        <tr><td>坎宫</td><td>䷜ 坎</td><td>䷻ 节</td><td>䷺ 屯</td><td>䷂ 既济</td><td>䷘ 革</td><td>䷞ 丰</td><td>䷶ 明夷</td><td>䷇ 师</td></tr>
+        <tr><td>艮宫</td><td>䷳ 艮</td><td>䷔ 贲</td><td>䷷ 大畜</td><td>䷙ 损</td><td>䷨ 睽</td><td>䷤ 履</td><td>䷥ 中孚</td><td>䷴ 渐</td></tr>
+        <tr><td>坤宫</td><td>䷁ 坤</td><td>䷗ 复</td><td>䷒ 临</td><td>䷊ 泰</td><td>䷡ 大壮</td><td>䷪ 夬</td><td>䷄ 需</td><td>䷇ 比</td></tr>
+        <tr><td>巽宫</td><td>䷸ 巽</td><td>䷈ 小畜</td><td>䷈ 家人</td><td>䷨ 益</td><td>䷩ 无妄</td><td>䷘ 噬嗑</td><td>䷭ 颐</td><td>䷬ 蛊</td></tr>
+        <tr><td>离宫</td><td>䷝ 离</td><td>䷱ 旅</td><td>䷮ 鼎</td><td>䷠ 未济</td><td>䷢ 蒙</td><td>䷿ 涣</td><td>䷻ 讼</td><td>䷌ 同人</td></tr>
+        <tr><td>兑宫</td><td>䷹ 兑</td><td>䷫ 困</td><td>䷠ 萃</td><td>䷋ 咸</td><td>䷓ 蹇</td><td>䷖ 谦</td><td>䷢ 小过</td><td>䷣ 归妹</td></tr>
+      </table>
+      <p style="margin-top:12px;font-size:14px;opacity:0.8">变爻规则：一世变初爻，二世变初二，三世变初二三，四世变初二三四，五世变初二三五，游魂变四爻（归位），归魂变回内卦。</p>
+    </div>
+  </div>
+
+  <!-- 卦爻统计 -->
+  <div class="tab-content" id="stats">
+    <div class="card">
+      <h3>卦爻辞吉凶统计</h3>
+      <p>基于《周易》本经卦辞爻辞的吉凶类词频统计：</p>
+      <div class="stats-bar">
+        <div class="stat-item"><div class="stat-num">121</div><div class="stat-label">吉（含"贞吉""大吉"）</div></div>
+        <div class="stat-item"><div class="stat-num">28</div><div class="stat-label">凶（含"贞凶""终凶"）</div></div>
+        <div class="stat-item"><div class="stat-num">13</div><div class="stat-label">悔</div></div>
+        <div class="stat-item"><div class="stat-num">20</div><div class="stat-label">吝</div></div>
+        <div class="stat-item"><div class="stat-num">16</div><div class="stat-label">无咎</div></div>
+        <div class="stat-item"><div class="stat-num">22</div><div class="stat-label">利（利涉大川等）</div></div>
+      </div>
+      <div class="stats-bar">
+        <div class="stat-item"><div class="stat-num">192</div><div class="stat-label">阳爻（—）</div></div>
+        <div class="stat-item"><div class="stat-num">192</div><div class="stat-label">阴爻（- -）</div></div>
+        <div class="stat-item"><div class="stat-num">186</div><div class="stat-label">当位（正位）爻</div></div>
+        <div class="stat-item"><div class="stat-num">128</div><div class="stat-label">中位爻（二五爻）</div></div>
+      </div>
+      <p>统计规律：阳爻居初、三、五为当位，阴爻居二、四、上为当位；二爻居下卦中，五爻居上卦中，中优于正，故易多"中吉"。</p>
+    </div>
+  </div>
+
+  <!-- 易学人物 -->
+  <div class="tab-content" id="renwu">
+    <div class="card">
+      <h3>历代易学人物传承</h3>
+      <div class="person-grid">
+        <div class="person-card"><h4>伏羲</h4><div class="era">上古 · 传说时代</div>仰观俯察，始作八卦，以通神明之德，以类万物之情。</div>
+        <div class="person-card"><h4>周文王（姬昌）</h4><div class="era">西周 · 前11世纪</div>羑里演易，重八卦为六十四卦，作卦辞。</div>
+        <div class="person-card"><h4>周公（姬旦）</h4><div class="era">西周 · 前11世纪</div>作爻辞，完成《易经》本经。</div>
+        <div class="person-card"><h4>孔子</h4><div class="era">春秋 · 前551-前479</div>晚而好易，韦编三绝，作《易传》"十翼"。</div>
+        <div class="person-card"><h4>京房</h4><div class="era">西汉 · 前77-前37</div>创八宫卦序、纳甲筮法，象数易大家。</div>
+        <div class="person-card"><h4>郑玄</h4><div class="era">东汉 · 127-200</div>经学大师，以爻辰说注易，兼采今古文。</div>
+        <div class="person-card"><h4>王弼</h4><div class="era">曹魏 · 226-249</div>扫象阐理，以老庄解易，义理派开山。</div>
+        <div class="person-card"><h4>孔颖达</h4><div class="era">唐 · 574-648</div>撰《周易正义》，科举标准，王注孔疏一统。</div>
+        <div class="person-card"><h4>李鼎祚</h4><div class="era">唐</div>辑《周易集解》，存汉易35家，象数宝库。</div>
+        <div class="person-card"><h4>邵雍</h4><div class="era">北宋 · 1011-1077</div>创先天学，梅花易数，象数之集大成者。</div>
+        <div class="person-card"><h4>程颐</h4><div class="era">北宋 · 1033-1107</div>《伊川易传》，理学义理派巅峰。</div>
+        <div class="person-card"><h4>朱熹</h4><div class="era">南宋 · 1130-1200</div>《周易本义》，恢复易本为卜筮之书，科举定本。</div>
+        <div class="person-card"><h4>来知德</h4><div class="era">明 · 1525-1604</div>《周易集注》，错综说，明代易学第一人。</div>
+        <div class="person-card"><h4>王夫之</h4><div class="era">明末清初 · 1619-1692</div>《周易内传》《外传》，以易释哲学。</div>
+        <div class="person-card"><h4>尚秉和</h4><div class="era">清末民初 · 1870-1950</div>《周易尚氏学》，以象解易，近代象数大家。</div>
+        <div class="person-card"><h4>高亨</h4><div class="era">近现代 · 1900-1986</div>《周易古经今注》，以经观经、以传观传，考据派代表。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 历代注疏 -->
+  <div class="tab-content" id="zhushu">
+    <div class="card">
+      <h3>历代重要注本</h3>
+      <table class="gong-table">
+        <tr><th>书名</th><th>作者</th><th>时代</th><th>流派</th><th>地位</th></tr>
+        <tr><td>《易传》（十翼）</td><td>孔子及后学</td><td>战国</td><td>—</td><td>最古注本，易之义理源头</td></tr>
+        <tr><td>《周易注》</td><td>王弼、韩康伯</td><td>魏晋</td><td>义理</td><td>扫象言理，唐代官方正统</td></tr>
+        <tr><td>《周易正义》</td><td>孔颖达</td><td>唐</td><td>义理</td><td>五经正义之一，王注孔疏</td></tr>
+        <tr><td>《周易集解》</td><td>李鼎祚</td><td>唐</td><td>象数</td><td>保存汉易35家，象数渊薮</td></tr>
+        <tr><td>《皇极经世书》</td><td>邵雍</td><td>北宋</td><td>象数</td><td>先天易学，元会运世</td></tr>
+        <tr><td>《伊川易传》</td><td>程颐</td><td>北宋</td><td>义理</td><td>理学解易巅峰</td></tr>
+        <tr><td>《周易本义》</td><td>朱熹</td><td>南宋</td><td>兼采</td><td>元明清科举标准</td></tr>
+        <tr><td>《周易集注》</td><td>来知德</td><td>明</td><td>错综</td><td>明代易学绝作</td></tr>
+        <tr><td>《周易内传》</td><td>王夫之</td><td>明末清初</td><td>义理</td><td>船山易学，哲学易代表作</td></tr>
+        <tr><td>《御纂周易折中》</td><td>李光地等</td><td>清</td><td>折中</td><td>集宋易之大成，程朱并尊</td></tr>
+        <tr><td>《易汉学》</td><td>惠栋</td><td>清</td><td>汉学</td><td>清代汉易复兴代表作</td></tr>
+        <tr><td>《周易尚氏学》</td><td>尚秉和</td><td>民国</td><td>象数</td><td>近代以象解易第一书</td></tr>
+        <tr><td>《周易古经今注》</td><td>高亨</td><td>现代</td><td>考据</td><td>现代经学派代表作</td></tr>
+        <tr><td>《易学哲学史》</td><td>朱伯崑</td><td>当代</td><td>哲学</td><td>易学哲学通史权威著作</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- 序卦流转 -->
+  <div class="tab-content" id="xugua">
+    <div class="card">
+      <h3>《序卦传》卦序流转逻辑</h3>
+      <p>六十四卦两两相偶，"二二相耦，非覆即变"：覆即卦体颠倒，变即阴阳全反。上经三十卦始于乾坤、终于坎离，明天地之道；下经三十四卦始于咸恒、终于既济未济，明人伦之事。</p>
+      <div style="padding:20px;background:#fff;border-radius:4px;line-height:2.6;font-size:15px;">
+        <strong style="color:var(--accent)">上经流转：</strong><br>
+        乾坤→屯→蒙→需→讼→师→比→小畜→履→<strong style="color:var(--gold)">泰⇄否</strong>→同人→大有→谦→豫→随→蛊→临→观→噬嗑→贲→剥→复→无妄→大畜→颐→大过→<strong style="color:var(--gold)">坎⇄离</strong><br><br>
+        <strong style="color:var(--accent)">下经流转：</strong><br>
+        咸→恒→遁→大壮→晋→明夷→家人→睽→蹇→解→损→益→夬→姤→萃→升→困→井→革→鼎→<strong style="color:var(--gold)">震⇄艮</strong>→渐→归妹→丰→旅→巽→兑→涣→节→中孚→小过→<strong style="color:var(--gold)">既济⇄未济</strong>
+      </div>
+      <p style="margin-top:16px">上经30卦、下经34卦，两两一对共36对。既济为事之已成，未济为事之未成，终而复始，即易"穷则变，变则通，通则久"之义。</p>
+    </div>
+  </div>
+</div>
+
+<script>
+// 根据hash自动打开对应tab
+const hash = window.location.hash.replace('#','');
+if(hash) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  const target = document.querySelector(`.tab[data-tab="${hash}"]`);
+  const content = document.getElementById(hash);
+  if(target && content) {
+    target.classList.add('active');
+    content.classList.add('active');
+  }
+}
+
+// Tab切换
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById(tab.dataset.tab).classList.add('active');
+  });
+});
+
+// 大衍筮法模拟
+function daYan() {
+  let n = 49;
+  for(let i=0;i<3;i++) {
+    const left = Math.floor(Math.random()*(n-2))+1;
+    const right = n - left - 1;
+    const lrem = left%4 || 4;
+    const rrem = right%4 || 4;
+    n = n - 1 - lrem - rrem;
+  }
+  return n/4; // 6/7/8/9
+}
+const yaoMap = {6:'老阴（×）变阳',7:'少阳（—）',8:'少阴（- -）',9:'老阳（○）变阴'};
+const yaoSym = {6:'- -',7:'——',8:'- -',9:'——'};
+function doShiYi() {
+  let yaos = [];
+  for(let i=0;i<6;i++) yaos.push(daYan());
+  yaos = yaos.reverse(); // 初爻到上爻
+  let benGua = '';
+  let bianGua = '';
+  let bianYao = [];
+  yaos.forEach((y,i) => {
+    benGua += yaoSym[y];
+    if(y===6||y===9) {
+      bianYao.push(i+1);
+      bianGua += (y===6)?'——':'- -';
+    } else {
+      bianGua += yaoSym[y];
+    }
+    benGua += '<br>';
+    bianGua += '<br>';
+  });
+  document.getElementById('shifaResult').innerHTML = `
+    <div class="shi-yi-box">
+      本卦（初→上）<br>${benGua.replace(/<br>$/,'')}
+      ${bianYao.length?`<br><br>变卦（变爻第${bianYao.join('、')}爻）<br>${bianGua.replace(/<br>$/,'')}`:'<br>无动爻，以本卦卦辞断'}
+    </div>
+    <div class="shi-yi-result">
+      <strong>六爻：</strong>初${yaoMap[yaos[0]]}、二${yaoMap[yaos[1]]}、三${yaoMap[yaos[2]]}、四${yaoMap[yaos[3]]}、五${yaoMap[yaos[4]]}、上${yaoMap[yaos[5]]}<br>
+      <strong>断法参考：</strong>${bianYao.length===0?'本卦卦辞为断':bianYao.length===1?'以本卦变爻爻辞断':bianYao.length===2?'以本卦两变爻爻辞断，上者为主':bianYao.length===3?'以本卦卦辞+变卦卦辞合断，本卦为主':'多数变爻以变卦卦辞为主'}
+    </div>
+  `;
+}
+function clearResult() { document.getElementById('shifaResult').innerHTML = ''; }
+</script>
+</body>
+</html>

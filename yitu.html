@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>易图体系 | 易经本体论</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f4ecd8;
+  --text: #2b1810;
+  --accent: #8b0000;
+  --gold: #b8860b;
+  --border: #d4c5a3;
+  --card: #faf6ed;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: 'Noto Serif SC', serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 2;
+  padding-top: 70px;
+}
+.top-nav {
+  position: fixed; top:0; left:0; right:0;
+  height: 70px;
+  background: var(--card);
+  border-bottom: 2px solid var(--border);
+  z-index: 1000;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 30px;
+}
+.logo { font-size:20px; font-weight:700; color:var(--text); text-decoration:none; }
+.logo span { color: var(--accent); font-size:26px; }
+.nav-links a { margin-left:24px; color:var(--text); text-decoration:none; font-size:15px; }
+.nav-links a:hover { color:var(--accent); }
+.container { max-width:1100px; margin:40px auto; padding:0 40px; }
+.back-link { display:inline-block; margin-bottom:30px; color:var(--accent); text-decoration:none; }
+.page-title { text-align:center; margin-bottom:40px; }
+.page-title h1 { font-size:42px; color:var(--accent); letter-spacing:8px; margin-bottom:8px; }
+.page-title p { color:var(--gold); font-size:16px; }
+.tuxi-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:30px; }
+.tuxi-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding:30px;
+  text-align:center;
+}
+.tuxi-card svg { margin:20px auto; display:block; }
+.tuxi-card h3 { font-size:22px; color:var(--accent); margin-bottom:12px; }
+.tuxi-card p { text-align:left; line-height:2; font-size:15px; opacity:0.9; }
+@media(max-width:768px) { .tuxi-grid { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<nav class="top-nav">
+  <a href="index.html" class="logo"><span>易</span>经本体论</a>
+  <div class="nav-links">
+    <a href="index.html">总览</a>
+    <a href="reader.html">经文阅读</a>
+    <a href="shiyi.html">易传十翼</a>
+    <a href="yitu.html" style="color:var(--accent);font-weight:600">易图体系</a>
+    <a href="index.html#yixue">历代易学</a>
+  </div>
+</nav>
+
+<div class="container">
+  <a href="index.html" class="back-link">← 返回首页</a>
+  <div class="page-title">
+    <h1>易 图 体 系</h1>
+    <p>太极、两仪、四象、八卦、河图洛书、方圆图</p>
+  </div>
+
+  <div class="tuxi-grid">
+    <!-- 太极图 -->
+    <div class="tuxi-card">
+      <h3>太 极 图</h3>
+      <svg width="220" height="220" viewBox="0 0 220 220">
+        <circle cx="110" cy="110" r="100" fill="#fff" stroke="#000" stroke-width="2"/>
+        <path d="M110,10 A100,100 0 0,1 110,210 A50,50 0 0,0 110,110 A50,50 0 0,1 110,10 Z" fill="#000"/>
+        <circle cx="110" cy="60" r="15" fill="#fff"/>
+        <circle cx="110" cy="160" r="15" fill="#000"/>
+      </svg>
+      <p>又称"阴阳鱼太极图"，相传为宋·陈抟所传。太极动而生阳，静而生阴，阴阳互根，动静相涵。白为阳、黑为阴，白中黑点为阳中有阴，黑中白点为阴中有阳，阴阳相互包含、循环往复。</p>
+    </div>
+
+    <!-- 先天八卦 -->
+    <div class="tuxi-card">
+      <h3>先天八卦图（伏羲八卦）</h3>
+      <svg width="220" height="220" viewBox="0 0 220 220">
+        <circle cx="110" cy="110" r="100" fill="none" stroke="#8b0000" stroke-width="1.5"/>
+        <text x="110" y="30" text-anchor="middle" font-size="28">☰</text>
+        <text x="180" y="65" text-anchor="middle" font-size="28">☱</text>
+        <text x="200" y="120" text-anchor="middle" font-size="28">☲</text>
+        <text x="180" y="175" text-anchor="middle" font-size="28">☳</text>
+        <text x="110" y="200" text-anchor="middle" font-size="28">☷</text>
+        <text x="40" y="175" text-anchor="middle" font-size="28">☶</text>
+        <text x="20" y="120" text-anchor="middle" font-size="28">☵</text>
+        <text x="40" y="65" text-anchor="middle" font-size="28">☴</text>
+        <text x="110" y="118" text-anchor="middle" fill="#8b0000" font-weight="700" font-size="14">太极</text>
+      </svg>
+      <p>邵雍先天学：乾南坤北，离东坎西，兑东南、震东北、巽西南、艮西北。"天地定位，山泽通气，雷风相薄，水火不相射"，讲阴阳对待，为体。</p>
+    </div>
+
+    <!-- 后天八卦 -->
+    <div class="tuxi-card">
+      <h3>后天八卦图（文王八卦）</h3>
+      <svg width="220" height="220" viewBox="0 0 220 220">
+        <circle cx="110" cy="110" r="100" fill="none" stroke="#8b0000" stroke-width="1.5"/>
+        <text x="110" y="30" text-anchor="middle" font-size="28">☲</text>
+        <text x="180" y="65" text-anchor="middle" font-size="28">☴</text>
+        <text x="200" y="120" text-anchor="middle" font-size="28">☳</text>
+        <text x="180" y="175" text-anchor="middle" font-size="28">☷</text>
+        <text x="110" y="200" text-anchor="middle" font-size="28">☵</text>
+        <text x="40" y="175" text-anchor="middle" font-size="28">☰</text>
+        <text x="20" y="120" text-anchor="middle" font-size="28">☱</text>
+        <text x="40" y="65" text-anchor="middle" font-size="28">☶</text>
+        <text x="110" y="118" text-anchor="middle" fill="#8b0000" font-weight="700" font-size="14">中宫</text>
+      </svg>
+      <p>震东、兑西、离南、坎北、巽东南、乾西北、坤西南、艮东北。"帝出乎震，齐乎巽，相见乎离，致役乎坤，说言乎兑，战乎乾，劳乎坎，成言乎艮"，讲五行流行，为用。</p>
+    </div>
+
+    <!-- 河图 -->
+    <div class="tuxi-card">
+      <h3>河 图</h3>
+      <svg width="220" height="220" viewBox="0 0 220 220">
+        <!-- 白点阳，黑点阴 -->
+        <!-- 北1/6 -->
+        <circle cx="110" cy="180" r="6" fill="#fff" stroke="#000"/>
+        <circle cx="100" cy="165" r="6" fill="#000"/><circle cx="120" cy="165" r="6" fill="#000"/>
+        <circle cx="90" cy="175" r="6" fill="#000"/><circle cx="130" cy="175" r="6" fill="#000"/>
+        <circle cx="90" cy="185" r="6" fill="#000"/><circle cx="130" cy="185" r="6" fill="#000"/>
+        <!-- 南2/7 -->
+        <circle cx="100" cy="55" r="6" fill="#000"/><circle cx="120" cy="55" r="6" fill="#000"/>
+        <circle cx="90" cy="45" r="6" fill="#fff" stroke="#000"/><circle cx="110" cy="45" r="6" fill="#fff"/><circle cx="130" cy="45" r="6" fill="#fff"/>
+        <circle cx="90" cy="55" r="6" fill="#fff"/><circle cx="130" cy="55" r="6" fill="#fff"/>
+        <circle cx="90" cy="65" r="6" fill="#fff"/><circle cx="130" cy="65" r="6" fill="#fff"/>
+        <!-- 东3/8 -->
+        <circle cx="40" cy="110" r="6" fill="#fff" stroke="#000"/><circle cx="55" cy="100" r="6" fill="#fff"/><circle cx="55" cy="120" r="6" fill="#fff"/>
+        <circle cx="30" cy="100" r="6" fill="#000"/><circle cx="30" cy="120" r="6" fill="#000"/>
+        <circle cx="45" cy="90" r="6" fill="#000"/><circle cx="45" cy="130" r="6" fill="#000"/>
+        <circle cx="60" cy="95" r="6" fill="#000"/><circle cx="60" cy="125" r="6" fill="#000"/>
+        <circle cx="70" cy="100" r="6" fill="#000"/><circle cx="70" cy="120" r="6" fill="#000"/>
+        <!-- 西4/9 -->
+        <circle cx="180" cy="110" r="6" fill="#000"/><circle cx="165" cy="100" r="6" fill="#000"/><circle cx="165" cy="120" r="6" fill="#000"/>
+        <circle cx="195" cy="100" r="6" fill="#000"/><circle cx="195" cy="120" r="6" fill="#000"/>
+        <circle cx="180" cy="90" r="6" fill="#fff" stroke="#000"/><circle cx="180" cy="130" r="6" fill="#fff"/>
+        <circle cx="165" cy="90" r="6" fill="#fff"/><circle cx="165" cy="130" r="6" fill="#fff"/>
+        <circle cx="195" cy="90" r="6" fill="#fff"/><circle cx="195" cy="130" r="6" fill="#fff"/>
+        <circle cx="150" cy="100" r="6" fill="#fff"/><circle cx="150" cy="120" r="6" fill="#fff"/>
+        <circle cx="180" cy="110" r="3" fill="#000"/>
+        <!-- 中5/10 -->
+        <circle cx="110" cy="110" r="6" fill="#fff" stroke="#000"/>
+        <circle cx="100" cy="100" r="6" fill="#fff"/><circle cx="120" cy="100" r="6" fill="#fff"/>
+        <circle cx="100" cy="120" r="6" fill="#fff"/><circle cx="120" cy="120" r="6" fill="#fff"/>
+        <circle cx="90" cy="110" r="6" fill="#000"/><circle cx="130" cy="110" r="6" fill="#000"/>
+        <circle cx="100" cy="90" r="6" fill="#000"/><circle cx="120" cy="90" r="6" fill="#000"/>
+        <circle cx="100" cy="130" r="6" fill="#000"/><circle cx="120" cy="130" r="6" fill="#000"/>
+      </svg>
+      <p>"天一生水，地六成之；地二生火，天七成之；天三生木，地八成之；地四生金，天九成之；天五生土，地十成之。"白点为阳（奇数），黑点为阴（偶数），五行生成数之图。</p>
+    </div>
+
+    <!-- 洛书 -->
+    <div class="tuxi-card">
+      <h3>洛 书</h3>
+      <svg width="220" height="220" viewBox="0 0 220 220">
+        <text x="110" y="40" text-anchor="middle" font-size="14" fill="#000">●●●●●●●●● (9)</text>
+        <text x="40" y="115" text-anchor="start" font-size="14">●●●● (4)</text>
+        <text x="110" y="118" text-anchor="middle" font-size="14" fill="#8b0000">○○○○○ (5)</text>
+        <text x="180" y="115" text-anchor="end" font-size="14">●● (2)</text>
+        <text x="40" y="190" text-anchor="start" font-size="14" fill="#000">○○○○○○○○ (8)</text>
+        <text x="110" y="190" text-anchor="middle" font-size="14">○ (1)</text>
+        <text x="180" y="190" text-anchor="end" font-size="14">○○○○○○ (6)</text>
+        <text x="40" y="65" text-anchor="start" font-size="14">○○○○○○○○ (8上)</text>
+        <text x="180" y="65" text-anchor="end" font-size="14">●●● (3)</text>
+        <text x="110" y="70" text-anchor="middle" font-size="12" fill="#666">戴九履一，左三右七，二四为肩，六八为足，五居中央</text>
+      </svg>
+      <p>九宫数：纵横斜相加皆为十五。"戴九履一，左三右七，二四为肩，六八为足，五居中央"，大禹据此定九畴，为后天八卦、奇门遁甲之源。</p>
+    </div>
+
+    <!-- 六十四卦方圆图 -->
+    <div class="tuxi-card" style="grid-column: span 2">
+      <h3>六十四卦方圆图（伏羲先天图）</h3>
+      <svg width="500" height="280" viewBox="0 0 500 280">
+        <!-- 圆图（先天64卦） -->
+        <circle cx="140" cy="140" r="100" fill="none" stroke="#8b0000"/>
+        <text x="140" y="45" text-anchor="middle" font-size="20">䷀</text>
+        <text x="210" y="85" text-anchor="middle" font-size="20">䷫</text>
+        <text x="240" cy="140" text-anchor="middle" font-size="20">䷊</text>
+        <text x="210" y="195" text-anchor="middle" font-size="20">䷗</text>
+        <text x="140" y="235" text-anchor="middle" font-size="20">䷁</text>
+        <text x="70" y="195" text-anchor="middle" font-size="20">䷒</text>
+        <text x="40" y="140" text-anchor="middle" font-size="20">䷋</text>
+        <text x="70" y="85" text-anchor="middle" font-size="20">䷠</text>
+        <text x="140" y="148" text-anchor="middle" font-size="12" fill="#8b0000">圆图·天</text>
+
+        <!-- 方图（地） -->
+        <rect x="280" y="40" width="200" height="200" fill="none" stroke="#8b0000"/>
+        <text x="300" y="60" font-size="16">䷀</text><text x="325" y="60" font-size="16">䷫</text><text x="350" y="60" font-size="16">䷠</text><text x="375" y="60" font-size="16">䷋</text><text x="400" y="60" font-size="16">䷓</text><text x="425" y="60" font-size="16">䷖</text><text x="450" y="60" font-size="16">䷢</text><text x="475" y="60" font-size="16">䷣</text>
+        <text x="300" y="85" font-size="16">䷪</text><text x="325" y="85" font-size="16">䷰</text><text x="350" y="85" font-size="16">䷥</text><text x="375" y="85" font-size="16">䷦</text><text x="400" y="85" font-size="16">䷴</text><text x="425" y="85" font-size="16">䷵</text><text x="450" y="85" font-size="16">䷸</text><text x="475" y="85" font-size="16">䷹</text>
+        <text x="300" y="110" font-size="16">䷡</text><text x="325" y="110" font-size="16">䷩</text><text x="350" y="110" font-size="16">䷷</text><text x="375" y="110" font-size="16">䷶</text><text x="400" y="110" font-size="16">䷸</text><text x="425" y="110" font-size="16">䷷</text><text x="450" y="110" font-size="16">䷯</text><text x="475" y="110" font-size="16">䷮</text>
+        <text x="300" y="135" font-size="16">䷄</text><text x="325" y="135" font-size="16">䷊</text><text x="350" y="135" font-size="16">䷙</text><text x="375" y="135" font-size="16">䷚</text><text x="400" y="135" font-size="16">䷳</text><text x="425" y="135" font-size="16">䷷</text><text x="450" y="135" font-size="16">䷭</text><text x="475" y="135" font-size="16">䷬</text>
+        <text x="380" y="255" text-anchor="middle" font-size="12" fill="#8b0000">方图·地</text>
+      </svg>
+      <p>圆图象天，方图象地。圆图按乾一兑二离三震四巽五坎六艮七坤八排列，阳生于子、阴生于午，讲阴阳消长；方图自西北至东南排列，讲地之定位。圆外方内，即天圆地方。</p>
+    </div>
+  </div>
+</div>
+</body>
+</html>
