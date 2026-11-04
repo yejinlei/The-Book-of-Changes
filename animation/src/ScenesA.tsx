@@ -81,10 +81,12 @@ export const SceneTaiji: React.FC = () => {
               opacity={swirl}
               transform={`rotate(${(1 - swirl) * -120} ${cx} ${cy})`}
             />
-            {/* 黑鱼白眼 */}
+            {/* 黑鱼白眼（阴中有阳） */}
             <circle cx={cx} cy={cy - R / 2} r={R / 8} fill={COLORS.ink} opacity={swirl} />
-            {/* 白鱼黑眼 */}
+            <circle cx={cx} cy={cy - R / 2} r={R / 20} fill="#f4ecd8" opacity={swirl} />
+            {/* 白鱼黑眼（阳中有阴） */}
             <circle cx={cx} cy={cy + R / 2} r={R / 8} fill="#f4ecd8" opacity={swirl} />
+            <circle cx={cx} cy={cy + R / 2} r={R / 20} fill={COLORS.ink} opacity={swirl} />
           </g>
           {/* 外圈 */}
           <circle cx={cx} cy={cy} r={rOuter} fill="none" stroke={COLORS.jin} strokeWidth={2} opacity={0.5 * swirl} />
