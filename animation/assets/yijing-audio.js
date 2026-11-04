@@ -171,13 +171,39 @@
       this.sfxGain = this.ctx.createGain();
       this.sfxGain.gain.value = 0.7;        // 音效稍突出
       this.sfxGain.connect(this.master);
-      this.enabled = true;
-      this.startPad();
+      // 如果之前被要求静音，立即应用
+      if (this._mutedPending) {
+        this.master.gain.value = 0;
+        this.enabled = false;
+      } else {
+        this.enabled = true;
+        this.startPad();
+      }
     }
 
     stop() {
       this.enabled = false;
       this.fadePad(0.3);
+    }
+
+    setMuted(muted) {
+      // 静音 / 取消静音：通过控制 master gain 实现
+      if (!this.ctx || !this.master) {
+        // AudioContext 还没初始化（用户没点播放），只记状态
+        this._mutedPending = !!muted;
+        return;
+      }
+      const now = this.ctx.currentTime;
+      const target = muted ? 0 : 0.85;
+      this.master.gain.cancelScheduledValues(now);
+      this.master.gain.linearRampToValueAtTime(target, now + 0.2);
+      if (muted) {
+        this.enabled = false;
+        this.fadePad(0.2);
+      } else {
+        this.enabled = true;
+        this.resumePad();
+      }
     }
 
     // ——— 古琴风持续垫音：五声音阶随机泛音叠加 + 慢 LFO ———
