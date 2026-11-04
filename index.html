@@ -5,7 +5,23 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>易经本体论 | The Book of Changes Ontology</title>
-<script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+<!-- ECharts 本地优先 + 多重CDN兜底 -->
+<script src="js/echarts.min.js" onerror="this.onerror=null;this.src='https://lib.baomitu.com/echarts/5.4.3/echarts.min.js';"></script>
+<script>
+// 加载兜底检测，确保echarts一定可用
+window.addEventListener('load', function() {
+  if (typeof echarts === 'undefined') {
+    console.warn('本地ECharts加载失败，尝试备用CDN...');
+    var script = document.createElement('script');
+    script.src = 'https://unpkg.com/echarts@5.4.3/dist/echarts.min.js';
+    script.onload = function() {
+      console.log('备用CDN ECharts加载成功');
+      if (typeof renderChart === 'function') renderChart();
+    };
+    document.head.appendChild(script);
+  }
+});
+</script>
 <style>
 :root {
   --bg: #f4ecd8;
@@ -855,8 +871,18 @@ function renderChart(){
     if(dom) dom.innerHTML='<div style="padding:100px;text-align:center;color:#8b0000;">知识图谱加载失败: '+e.message+'</div>';
   }
 }
-// 页面加载后延迟初始化
-window.addEventListener('load', () => { setTimeout(renderChart, 300); });
+// 页面加载后延迟初始化，最多重试5次
+let chartRetryCount = 0;
+function initChartWithRetry() {
+  if (typeof echarts === 'undefined' && chartRetryCount < 5) {
+    chartRetryCount++;
+    console.log(`等待ECharts加载，第${chartRetryCount}次重试...`);
+    setTimeout(initChartWithRetry, 500);
+    return;
+  }
+  renderChart();
+}
+window.addEventListener('load', () => { setTimeout(initChartWithRetry, 300); });
 
 // ===== 十翼 / 易图：均为独立页面，见 shiyi.html、yitu.html =====
 
