@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>易之变 · 从一道到万象 — Remotion 动画</title>
+<script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.13/dist/hls.min.js"></script>
 <style>
   :root {
     --paper: #f4ecd8;
@@ -40,6 +41,16 @@
   h1 { font-size: 38px; text-align: center; color: var(--zhu); margin: 30px 0 6px; letter-spacing: 8px; }
   .sub { text-align: center; color: #7a5a3a; font-size: 15px; letter-spacing: 2px; margin-bottom: 30px; }
   .sub .tech { color: var(--gold); }
+  .hls-badge {
+    display: inline-block;
+    background: var(--jade);
+    color: #f4ecd8;
+    padding: 2px 8px;
+    border-radius: 2px;
+    font-size: 12px;
+    margin-left: 8px;
+    letter-spacing: 1px;
+  }
 
   /* 播放器区 */
   .player-box {
@@ -74,15 +85,18 @@
     transition: background .2s;
   }
   .controls-bar button:hover { background: #a61c1c; }
-  .controls-bar .q-btn {
+  .controls-bar .mode-btn {
     background: transparent; color: #8a7a5a; border: 1px solid #d8c8a8;
     padding: 4px 10px; font-size: 12px; margin: 0 4px; border-radius: 2px;
   }
-  .controls-bar .q-btn:hover { background: #e8d8b8; color: #5a3a1a; }
-  .controls-bar .q-btn.q-active { background: #b8860b; color: #fffaf0; border-color:#b8860b; }
-  .controls-bar .q-btn.q-highlight { border-color: #a52a2a; color: #a52a2a; }
-  .controls-bar .q-btn.q-highlight.q-active { background: #a52a2a; color: #fffaf0; border-color:#a52a2a; }
+  .controls-bar .mode-btn:hover { background: #e8d8b8; color: #5a3a1a; }
+  .controls-bar .mode-btn.active { background: #3d6b5c; color: #fffaf0; border-color:#3d6b5c; }
   .controls-bar .time { margin-left: auto; color: #c8a878; font-variant-numeric: tabular-nums; }
+  .loading {
+    color: var(--gold);
+    font-size: 12px;
+    margin-left: 8px;
+  }
 
   /* 场景时间轴 */
   .chapter-bar {
@@ -202,46 +216,46 @@
 <nav class="topbar">
   <span class="brand">☯ 易经本体论</span>
   <span class="dot">·</span>
-  <a href="index.html">首页</a>
-  <a href="gua.html">六十四卦</a>
-  <a href="reader.html">经文汇评</a>
-  <a href="shiyi.html">十翼</a>
-  <a href="yitu.html">易图互动</a>
-  <a href="animation/index.html" class="active">易之变 · 动画</a>
+  <a href="../index.html">首页</a>
+  <a href="../gua.html">六十四卦</a>
+  <a href="../reader.html">经文汇评</a>
+  <a href="../shiyi.html">十翼</a>
+  <a href="../yitu.html">易图互动</a>
+  <a href="index.html" class="active">易之变 · 动画</a>
 </nav>
 
 <div class="wrap">
   <h1>易 之 变</h1>
-  <p class="sub">从一道到万象 · <span class="tech">Remotion · Three.js · SVG</span> · 全 14 场</p>
+  <p class="sub">从一道到万象 · <span class="tech">Remotion · Three.js · SVG</span> · 全 14 场 · <span class="hls-badge">⚡ HLS 边下边播</span></p>
 
   <!-- 播放器 -->
   <div class="player-box">
     <video id="video" preload="auto" controls playsinline poster="assets/contact-sheet.png">
-      <source id="videoSrc" src="assets/yizhibian-voice-720p.mp4" type="video/mp4">
       您的浏览器不支持 video 标签。
     </video>
     <div class="controls-bar">
       <button id="btnPlay" onclick="play()">▶ 播放</button>
       <button onclick="pause()">⏸ 暂停</button>
       <button onclick="restart()">↺ 重播</button>
-      <span style="margin-left:6px;color:#8a7a5a;font-size:12px;">版本：</span>
-      <button id="q720" onclick="switchQuality('720p')" class="q-btn">🎵 古琴版 720p · 4.2MB</button>
-      <button id="q1080" onclick="switchQuality('1080p')" class="q-btn">🎵 古琴版 1080p · 7.2MB</button>
-      <button id="qVoice720" onclick="switchQuality('voice720')" class="q-btn q-highlight q-active">🎙 人声解说 720p · 4.1MB</button>
-      <button id="qVoice1080" onclick="switchQuality('voice1080')" class="q-btn q-highlight">🎙 人声解说 1080p · 6.9MB</button>
-      <button id="qOrig" onclick="switchQuality('orig')" class="q-btn">🔇 无声版 · 17MB</button>
-      <a href="assets/yizhibian-voice-720p.mp4" id="dlLink" download style="margin-left:8px;color:#b8860b;font-size:13px;text-decoration:none;">⬇ 下载当前版本</a>
+      <span style="margin-left:6px;color:#8a7a5a;font-size:12px;">播放模式：</span>
+      <button id="modeHls" onclick="switchMode('hls')" class="mode-btn active">⚡ HLS 边下边播（推荐）</button>
+      <button id="modeMp4" onclick="switchMode('mp4')" class="mode-btn">🎞 MP4 完整文件</button>
+      <a href="assets/yizhibian-narration.mp4" id="dlLink" download style="margin-left:8px;color:#b8860b;font-size:13px;text-decoration:none;">⬇ 下载完整版 MP4 (46MB)</a>
+      <span id="loadStatus" class="loading"></span>
       <span class="time" id="time">00:00 / 00:00</span>
     </div>
     <div class="chapter-bar" id="chapterBar"></div>
-    <p style="text-align:center;color:#8a7a5a;font-size:12px;margin:8px 0 0;">提示：已开启 moov 前置，可随时拖拽进度条。「🎙 人声解说版」含中文旁白+古琴背景乐，适合首次观看；「🎵 古琴版」为纯音乐版，适合循环播放。</p>
+    <p style="text-align:center;color:#8a7a5a;font-size:12px;margin:8px 0 0;">
+      ⚡ HLS 模式：打开即可播放，边下边播、任意位置拖拽 seek，无需等待完整下载；适合网络较慢场景。
+      🎙 中文旁白由 edge-tts 云希男声合成，搭配古琴五声音阶背景乐，人声时段BGM自动压低。
+    </p>
   </div>
 
   <!-- 当前场景说明 -->
   <div class="scene-card" id="sceneInfo">
-    <h3 id="sceneTitle">第一幕 · 混沌虚空 <span>00:00 – 00:10</span></h3>
-    <p id="sceneDesc">幕起。宣纸底色如晨雾未散，墨色星尘在无何有之乡缓缓游移。中央微茫一点，即是"道"——视之不见名曰夷，听之不闻名曰希。</p>
-    <div class="quote" id="sceneQuote">「有物混成，先天地生。寂兮寥兮，独立而不改，周行而不殆。」——《道德经》第二十五章</div>
+    <h3 id="sceneTitle">第一幕 · 太虚 <span>00:00 – 00:15</span></h3>
+    <p id="sceneDesc">幕起。全黑寂静，中央一点微光缓缓浮起，像夜空中第一颗将亮未亮的星——这是"道"，无名无象，万物之始。</p>
+    <div class="quote" id="sceneQuote">「有物混成，先天地生。寂兮寥兮，独立而不改，周行而不殆，可以为天下母。」——《道德经》第二十五章</div>
   </div>
 
   <!-- 信息卡 -->
@@ -250,20 +264,21 @@
       <h4>📐 技术栈</h4>
       <ul>
         <li><b>Remotion</b>：帧精确合成与批量渲染</li>
-        <li><b>Three.js</b>：3D 粒子/星云/旋转太极</li>
+        <li><b>Three.js</b>：3D 粒子星云、核心光球</li>
         <li><b>SVG</b>：爻线、卦形、八卦符号（矢量精确）</li>
-        <li><b>React</b>：声明式场景组件</li>
+        <li><b>edge-tts</b>：云希男声中文旁白合成</li>
+        <li><b>HLS</b>：自适应流式播放，边下边播、可拖拽</li>
       </ul>
     </div>
     <div class="meta-card">
       <h4>🎞 影片规格</h4>
       <ul>
-        <li>分辨率：1920 × 1080 / 1280 × 720（可切换）</li>
-        <li>帧率：30 fps · 时长：2 分 54 秒</li>
-        <li>编码：H.264 + AAC · <b>moov 已前置，支持即时拖拽</b></li>
-        <li>文件大小：4.1 MB（人声解说 720p）/ 6.9 MB（人声解说 1080p）/ 4.2 MB（古琴版 720p）/ 7.2 MB（古琴版 1080p）/ 17 MB（原版无声）</li>
-        <li>人声解说：由 edge-tts 合成（YunyangNeural 男声），文言旁白逐场对应</li>
-        <li>背景乐：古琴五声音阶（宫商角徵羽），含磬/钟/拨弦，人声时段自动压低</li>
+        <li>分辨率：1920 × 1080 · 帧率：30 fps</li>
+        <li>时长：<b>6 分 49 秒 · 14 场完整剧情</b></li>
+        <li>编码：H.264 + AAC · <b>HLS 分片 8 秒，moov 前置</b></li>
+        <li>人声：edge-tts YunxiNeural（云希男声），语速-8%，适配古风旁白</li>
+        <li>BGM：古琴五声音阶（宫商角徵羽），含磬/钟/拨弦，人声时段自动压限</li>
+        <li>字幕：逐句显示，位于画面最底部，不遮挡主体卦象</li>
       </ul>
     </div>
     <div class="meta-card">
@@ -272,8 +287,8 @@
         <li>道 → 太极 → 两仪 → 四象 → 八卦</li>
         <li>八卦重为六十四卦（伏羲方圆图）</li>
         <li>错卦 · 综卦 · 互卦 · 之卦</li>
-        <li>十二消息卦 · 大衍筮法 · 三易</li>
-        <li>「万物归一，一归太虚」循环</li>
+        <li>十二消息卦 · 卦序 · 大衍筮法</li>
+        <li>三易（变易·简易·不易）· 万物归一</li>
       </ul>
     </div>
     <div class="meta-card">
@@ -283,6 +298,7 @@
         <li>源码：Remotion 全部 React/TSX 组件</li>
         <li>共 12 个源文件 · 场景分为 4 组</li>
         <li>所有卦象/爻位数据取自本体数据层</li>
+        <li>HLS 播放列表 + 51 个 ts 分片</li>
       </ul>
     </div>
   </div>
@@ -307,50 +323,64 @@
 </div>
 
 <script>
-// 14 场分镜时间点（秒）——根据实际 seg1+seg2 总长度 174s（2:54）合理分配
+// 14 场分镜时间点（秒）——匹配 edge-tts 人声版 6分49秒时长
 const scenes = [
-  { id:1,  title:'第一幕 · 混沌虚空',     start:0,   end:10,  file:'scene-1.png',
-    desc:'幕起。宣纸底色如晨雾未散，墨色星尘在无何有之乡缓缓游移。中央微茫一点，即是"道"。',
-    quote:'「有物混成，先天地生。寂兮寥兮，独立而不改，周行而不殆。」——《道德经》第二十五章' },
-  { id:2,  title:'第二幕 · 道生一 · 太极', start:10,  end:22,  file:'scene-2.png',
-    desc:'一点微光爆裂旋出，阴阳二鱼首尾相衔，朱红鎏金二气缠绕，太极自虚无中诞生，缓缓旋动。',
-    quote:'「易有太极，是生两仪。」——《易传·系辞上》' },
-  { id:3,  title:'第三幕 · 一生二 · 两仪', start:22,  end:34,  file:'scene-3.png',
-    desc:'太极动而生阳，静而生阴。左出朱红阳爻 ⚊，右出鎏金阴爻 ⚋，阴阳分位，天地始判。',
-    quote:'「一阴一阳之谓道。」——《易传·系辞上》' },
-  { id:4,  title:'第四幕 · 二生三 · 四象', start:34,  end:46,  file:'scene-4.png',
-    desc:'两仪之上再生一爻，太阳、少阴、少阳、太阴四象依次铺展，老阳老阴、少阳少阴各就其位。',
-    quote:'「两仪生四象。」——《易传·系辞上》' },
-  { id:5,  title:'第五幕 · 三生万物 · 八卦', start:46,  end:60, file:'scene-5.png',
-    desc:'四象各生一爻而成八卦——乾兑离震巽坎艮坤，按先天方位环形排列，天地雷风水火山泽各归其位。',
-    quote:'「四象生八卦，八卦定吉凶，吉凶生大业。」——《易传·系辞上》' },
-  { id:6,  title:'第六幕 · 八卦相重 · 六十四卦', start:60, end:78, file:'scene-6.png',
-    desc:'八卦两两相重，8×8 方阵逐格展开，伏羲六十四卦方圆图成——圆象天、方象地。',
-    quote:'「八卦成列，象在其中矣；因而重之，爻在其中矣。」——《易传·系辞下》' },
-  { id:7,  title:'第七幕 · 错卦 · 阴阳对翻', start:78, end:90, file:'scene-7.png',
-    desc:'六爻同时翻转，阳变阴、阴变阳，乾变坤、坎变离……每卦皆有其错，天地定位，山泽通气。',
-    quote:'「错者，阴阳相对也。」——来知德《周易集注》' },
-  { id:8,  title:'第八幕 · 综卦 · 上下倒置', start:90, end:102,file:'scene-8.png',
-    desc:'卦象倒转 180°，泰变为否、损变为益……从颠倒中见天地之反覆，悟祸福之相倚。',
-    quote:'「综者，上下相倒也。」——来知德《周易集注》' },
-  { id:9,  title:'第九幕 · 互卦 · 中藏二卦', start:102,end:114,file:'scene-9.png',
-    desc:'取二、三、四爻为下互，三、四、五爻为上互，一卦之中又藏二卦——卦中有卦，象中生象。',
-    quote:'「互卦者，中四爻交互成卦也。」——《易学启蒙》' },
-  { id:10, title:'第十幕 · 之卦 · 动爻生变', start:114,end:126,file:'scene-10.png',
-    desc:'老阳变阴、老阴变阳，一爻动则成之卦。演示乾卦初九动成姤、五爻动成剥、六爻皆动成坤。',
-    quote:'「爻者，言乎变者也。」——《易传·系辞上》' },
-  { id:11, title:'第十一幕 · 十二消息卦',     start:126,end:138,file:'scene-11.png',
-    desc:'自复卦一阳生起，经临、泰、大壮、夬而至乾；再自姤一阴生，经遁、否、观、剥而至坤。十二月卦气流转。',
-    quote:'「消息卦者，阴阳之消长，一岁之运也。」——孟喜卦气说' },
-  { id:12, title:'第十二幕 · 大衍筮法 · 四营成易', start:138,end:150,file:'scene-12.png',
-    desc:'五十策蓍草，分二、挂一、揲四、归奇，四营而成易，十有八变而成卦。演示一卦之起。',
-    quote:'「大衍之数五十，其用四十有九……」——《易传·系辞上》' },
-  { id:13, title:'第十三幕 · 三易 · 变易·简易·不易', start:150,end:162,file:'scene-13.png',
-    desc:'三易同现——变易（万物流转）、简易（一阴一阳）、不易（道体恒常），三道并行而不悖。',
-    quote:'「易一名而含三义：易简一也，变易二也，不易三也。」——《易纬·乾凿度》' },
-  { id:14, title:'第十四幕 · 万物归一',     start:162,end:174,file:'scene-14.png',
-    desc:'六十四卦向中心汇聚，万化归太极，太极归一道；一道又散为虚空——循环往复，周行不殆。',
-    quote:'「万物芸芸，各复归其根。归根曰静，静曰复命。」——《道德经》第十六章' }
+  { id:1,  title:'第一幕 · 太虚',           start:0,    end:15,   file:'scene-1.png',
+    desc:'幕起。全黑寂静，中央一点微光缓缓浮起，像夜空中将亮未亮的第一颗星——这是"道"，无名无象，万物之始。',
+    quote:'「有物混成，先天地生。寂兮寥兮，独立而不改，周行而不殆，可以为天下母。」——《道德经》第二十五章',
+    narr:'在一切开始之前，没有天，没有地，没有形，也没有名。中国人把这不可言说的起点，叫做——道。' },
+  { id:2,  title:'第二幕 · 道生一 · 太极',   start:15,   end:36.3, file:'scene-2.png',
+    desc:'道生一，是为太极。光点晕开成浑圆白光，墨色从边缘渗入，旋成首尾相抱的阴阳双鱼——白鱼黑眼，黑鱼白眼，太极图成。',
+    quote:'「易有太极，是生两仪。太极动而生阳，静而生阴。」——《易传·系辞上》',
+    narr:'道生一。这一，便是太极。混沌未分，万物未判，一切可能都含在这一团圆融之中。太极动而生阳，静而生阴。一动一静之间，阴阳二气已在其中孕育。' },
+  { id:3,  title:'第三幕 · 一生二 · 两仪',   start:36.3, end:60.4, file:'scene-3.png',
+    desc:'S线剖分阴阳，清阳上升为天、浊阴下降为地。白气凝为阳爻 ⚊，黑气裂为阴爻 ⚋，一横一断，是易最根本的两个符号。',
+    quote:'「一阴一阳之谓道。」——《易传·系辞上》',
+    narr:'一生二。太极分判，清阳上升为天，浊阴下降为地，是为两仪。阳画一，阴画两断，一横一断，便是易最根本的两个符号。' },
+  { id:4,  title:'第四幕 · 二生三 · 四象',   start:60.4, end:85.3, file:'scene-4.png',
+    desc:'阴阳之上复生阴阳：阳阳为太阳、阳阴为少阴、阴阳为少阳、阴阴为太阴，四象立则春夏秋冬、东南西北、生长收藏之框架成。',
+    quote:'「两仪生四象。」——《易传·系辞上》',
+    narr:'二生三，三生万物。阴阳之上又复生阴阳——阳阳为太阳，阳阴为少阴，阴阳为少阳，阴阴为太阴，是为四象。' },
+  { id:5,  title:'第五幕 · 三生万物 · 八卦', start:85.3, end:118.7,file:'scene-5.png',
+    desc:'四象各加一爻成八卦：乾三连，坤六断，震仰盂，艮覆碗，离中虚，坎中满，兑上缺，巽下断。天地雷风水火山泽，八种基本物象环列先天方位。',
+    quote:'「四象生八卦，八卦定吉凶，吉凶生大业。」——《易传·系辞上》',
+    narr:'四象之上再加一爻，三爻成卦，便生出八卦——乾三连，坤六断，震仰盂，艮覆碗，离中虚，坎中满，兑上缺，巽下断。' },
+  { id:6,  title:'第六幕 · 八卦相重 · 六十四卦', start:118.7, end:161,file:'scene-6.png',
+    desc:'八卦两两相重，八八六十四卦依次浮现：外排列伏羲六十四卦圆图象天，内铺八行八列方图象地，天地万物变化秩序尽收眼底。',
+    quote:'「八卦成列，象在其中矣；因而重之，爻在其中矣。」——《易传·系辞下》',
+    narr:'八卦两两相重，八八六十四——六爻成卦，是为六十四卦。伏羲画卦，以圆图象天、方图象地，一卦即一太极，万物各自圆成。' },
+  { id:7,  title:'第七幕 · 错卦 · 阴阳对翻', start:161,  end:186.1,file:'scene-7.png',
+    desc:'六爻同时翻转，阳变阴、阴变阳：乾错坤、坎错离、颐错大过、中孚错小过，三十二对错卦如三十二对镜像分立两侧。',
+    quote:'「错者，阴阳相对也，交相错杂。」——来知德《周易集注》',
+    narr:'卦与卦之间，第一种变化叫错——把一个卦的每一个阳爻变阴、阴爻变阳，就得到它的错卦。乾错坤，坎错离。' },
+  { id:8,  title:'第八幕 · 综卦 · 上下倒置', start:186.1,end:212,  file:'scene-8.png',
+    desc:'卦象倒转180度：屯倒为蒙，需倒为讼，泰倒与否……如同印章翻过来盖在纸上，看到事物的背面与对面立场。',
+    quote:'「综者，上下相倒也，一卦翻成两卦。」——来知德《周易集注》',
+    narr:'第二种变化叫综——把一个卦整个倒过来，从下往上翻一个身，就得到它的综卦。屯倒为蒙，需倒为讼，泰倒为否。' },
+  { id:9,  title:'第九幕 · 互卦 · 中藏二卦', start:212,  end:240.2,file:'scene-9.png',
+    desc:'取二三四爻为下互、三四五爻为上互，一卦之中又藏二卦：如噬嗑互出贲，泰互出归妹；乾坤纯而互不变。卦中藏卦，象中藏象。',
+    quote:'「互卦者，中四爻交互成卦，揭示卦中隐含之意。」——《易学启蒙》',
+    narr:'第三种变化藏在卦的内部，叫互卦。取一个六爻卦的二、三、四爻作下卦，三、四、五爻作上卦，就是互卦——卦里藏着卦，象里藏着象。' },
+  { id:10, title:'第十幕 · 之卦 · 动爻生变', start:240.2,end:268.2,file:'scene-10.png',
+    desc:'老阳变阴、老阴变阳，一爻动则全卦随之变。演示乾卦六爻逐动：初爻成姤、二爻同人……上爻成夬。一爻之动，即机锋所在、命运转折。',
+    quote:'「爻者，言乎变者也。吉凶悔吝生乎动。」——《易传·系辞上》',
+    narr:'第四种变化，也是筮法最核心的变化——爻变，古称之卦。一爻动则全卦随之而变，动一爻生一卦，吉凶悔吝生乎动。' },
+  { id:11, title:'第十一幕 · 十二消息卦',     start:268.2,end:306.8,file:'scene-11.png',
+    desc:'一年环序：冬至复卦一阳生，经临、泰、大壮、夬至四月乾卦六爻皆阳；阳极阴生，姤卦一阴生，经遁、否、观、剥至十月坤卦六爻皆阴。十二月卦气周流。',
+    quote:'「消息卦者，阴阳之消长，一岁之运也。」——孟喜卦气说',
+    narr:'第五种变化叫消息。从冬至一阳生的复卦开始，阳长阴消到乾，再阴长阳消到坤，对应一年十二月、一日十二时辰、人事盛衰起伏。' },
+  { id:12, title:'第十二幕 · 卦序与大衍筮法', start:306.8,end:360.5,file:'scene-12.png',
+    desc:'通行本周易卦序长卷展开：乾坤开篇，两两相综相错环环相生，至未济收束——万物永在途中。随后演示大衍筮法：五十策蓍草，分二、挂一、揲四、归奇，三变成爻、十八变成卦。',
+    quote:'「大衍之数五十，其用四十有九……十有八变而成卦。」——《易传·系辞上》',
+    narr:'六十四卦并非无序排列，以乾坤开篇，至未济终——万物永远在变化途中。大衍筮法：五十策蓍草，三变成一爻，十八变成一卦。' },
+  { id:13, title:'第十三幕 · 三易 · 变易·简易·不易', start:360.5,end:396.6,file:'scene-13.png',
+    desc:'六十四卦、八卦、四象、两仪、太极依次虚化回退，最终聚为一点微光。三行字浮现：变易（万物流转）、简易（一阴一阳）、不易（变本身恒常）。',
+    quote:'「易一名而含三义：易简一也，变易二也，不易三也。」——《易纬·乾凿度》',
+    narr:'易讲的无非一个变字。变中有三义：变易者万象流转，简易者一阴一阳，不易者变本身万古不变。动的背后，是那从未言说、却始终如一的——道。' },
+  { id:14, title:'第十四幕 · 万物归一',     start:396.6,end:409.3,file:'scene-14.png',
+    desc:'微光归于全黑，浮现古语"天下同归而殊途，一致而百虑"，画面缓缓淡去。易道周流，生生不息。',
+    quote:'「易，穷则变，变则通，通则久。」——《易传·系辞下》',
+    narr:'易，穷则变，变则通，通则久。天下同归而殊途，一致而百虑。' }
 ];
 
 const video = document.getElementById('video');
@@ -358,17 +388,79 @@ const timeEl = document.getElementById('time');
 const chapterBar = document.getElementById('chapterBar');
 const sceneInfo = document.getElementById('sceneInfo');
 const sceneList = document.getElementById('sceneList');
+const loadStatus = document.getElementById('loadStatus');
+let hls = null;
+let currentMode = 'hls';
+
+const HLS_URL = 'assets/hls/playlist.m3u8';
+const MP4_URL = 'assets/yizhibian-narration.mp4';
 
 function fmt(s){ s=Math.max(0,Math.floor(s)); return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0'); }
 
+// HLS 初始化
+function loadHLS() {
+  loadStatus.textContent = '⚡ HLS 加载中...';
+  if (hls) { hls.destroy(); hls = null; }
+  if (Hls.isSupported()) {
+    hls = new Hls({
+      enableWorker: true,
+      lowLatencyMode: false,
+      maxBufferLength: 30,
+      maxMaxBufferLength: 60,
+    });
+    hls.loadSource(HLS_URL);
+    hls.attachMedia(video);
+    hls.on(Hls.Events.MANIFEST_PARSED, () => {
+      loadStatus.textContent = '✅ HLS 就绪';
+      setTimeout(()=>loadStatus.textContent='', 2000);
+    });
+    hls.on(Hls.Events.ERROR, (event, data) => {
+      if (data.fatal) {
+        loadStatus.textContent = '⚠ HLS 加载失败，自动切换到MP4';
+        setTimeout(()=>switchMode('mp4'), 1500);
+      }
+    });
+  } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+    // Safari 原生支持HLS
+    video.src = HLS_URL;
+    loadStatus.textContent = '✅ 原生 HLS 就绪（Safari）';
+    setTimeout(()=>loadStatus.textContent='', 2000);
+  } else {
+    loadStatus.textContent = '⚠ 浏览器不支持HLS，自动切换到MP4';
+    setTimeout(()=>switchMode('mp4'), 1500);
+  }
+}
+
+function loadMP4() {
+  loadStatus.textContent = '🎞 MP4 加载中...';
+  if (hls) { hls.destroy(); hls = null; }
+  video.src = MP4_URL;
+  video.addEventListener('loadedmetadata', ()=>{
+    loadStatus.textContent = '✅ MP4 就绪';
+    setTimeout(()=>loadStatus.textContent='', 2000);
+  }, { once: true });
+}
+
+function switchMode(mode) {
+  currentMode = mode;
+  const curTime = video.currentTime;
+  const wasPlaying = !video.paused;
+  document.getElementById('modeHls').classList.toggle('active', mode==='hls');
+  document.getElementById('modeMp4').classList.toggle('active', mode==='mp4');
+  if (mode === 'hls') loadHLS();
+  else loadMP4();
+  video.addEventListener('loadedmetadata', ()=>{
+    video.currentTime = Math.min(curTime, video.duration-1);
+    if (wasPlaying) video.play();
+  }, { once: true });
+}
+
 video.addEventListener('timeupdate', ()=>{
-  timeEl.textContent = fmt(video.currentTime)+' / '+fmt(video.duration||174);
+  timeEl.textContent = fmt(video.currentTime)+' / '+fmt(video.duration||409);
   const cur = scenes.find(s => video.currentTime >= s.start && video.currentTime < s.end) || scenes[scenes.length-1];
-  // 更新高亮
   chapterBar.querySelectorAll('div').forEach((el,i)=>{
     el.classList.toggle('active', scenes[i].id===cur.id);
   });
-  // 更新场景卡（只在切换时）
   if(sceneInfo.dataset.curId !== String(cur.id)){
     sceneInfo.dataset.curId = cur.id;
     document.getElementById('sceneTitle').innerHTML = cur.title+' <span>'+fmt(cur.start)+' – '+fmt(cur.end)+'</span>';
@@ -383,7 +475,7 @@ video.addEventListener('loadedmetadata', ()=>{
 
 function play(){ video.play(); }
 function pause(){ video.pause(); }
-function toggleMute(){ video.muted = !video.muted; }
+function restart(){ video.currentTime = 0; video.play(); }
 
 // 生成时间轴
 scenes.forEach((s,i)=>{
@@ -398,124 +490,50 @@ scenes.forEach((s,i)=>{
 scenes.forEach(s=>{
   const card = document.createElement('div');
   card.className = 'scene-card';
-  card.innerHTML =
-    '<h3>'+s.title+' <span>'+fmt(s.start)+' – '+fmt(s.end)+'</span></h3>'+
-    '<img src="assets/scenes/'+s.file+'" alt="'+s.title+'" style="width:100%;max-width:480px;border-radius:2px;margin:10px 0;border:1px solid #d8c8a8;" loading="lazy">'+
-    '<p>'+s.desc+'</p>'+
-    '<div class="quote">'+s.quote+'</div>'+
-    '<button onclick="document.getElementById(\'video\').currentTime='+s.start+'.1;document.getElementById(\'video\').play();document.getElementById(\'video\').scrollIntoView({behavior:\'smooth\',block:\'center\'});" style="margin-top:10px;background:var(--zhu);color:var(--paper);border:none;padding:6px 14px;border-radius:2px;cursor:pointer;font-family:inherit;">▶ 跳到此幕</button>';
+  card.innerHTML = `
+    <h3>${s.title} <span>${fmt(s.start)} – ${fmt(s.end)}</span></h3>
+    <p>${s.desc}</p>
+    <div class="quote">${s.quote}</div>
+  `;
+  card.style.cursor = 'pointer';
+  card.onclick = ()=>{ video.currentTime = s.start+0.1; video.play(); window.scrollTo({top: document.querySelector('.player-box').offsetTop-20, behavior:'smooth'}); };
   sceneList.appendChild(card);
 });
 
-// 加载剧本
-fetch('易之变——从一道到万象（第1版）.md').then(r=>r.text()).then(md=>{
-  // 简单 markdown → HTML（只处理 #、##、###、> 引文、普通段落）
-  const html = md
-    .replace(/^### (.+)$/gm,'<h4>$1</h4>')
-    .replace(/^## (.+)$/gm,'<h4 style="color:var(--gold);">$1</h4>')
-    .replace(/^# (.+)$/gm,'<h4 style="color:var(--zhu);font-size:18px;">$1</h4>')
-    .replace(/^△ (.+)$/gm,'<p class="direction">△ $1</p>')
-    .replace(/^> (.+)$/gm,'<p style="color:var(--gold);font-style:italic;margin-left:1em;">$1</p>')
-    .replace(/\n\n/g,'</p><p>')
-    .replace(/^([^<].*)$/gm,'<p>$1</p>');
-  document.getElementById('scriptBox').innerHTML = html;
-}).catch(()=>{
-  document.getElementById('scriptBox').textContent = '剧本加载失败，请直接打开 易之变——从一道到万象（第1版）.md 查看。';
-});
+// 生成剧本
+const scriptBox = document.getElementById('scriptBox');
+scriptBox.innerHTML = scenes.map(s => `
+  <h4>${s.title}</h4>
+  <div class="direction">△ ${s.desc}</div>
+  <p><b>旁白：</b>${s.narr}</p>
+  <p style="color:#6a4c2a;font-style:italic;margin-top:6px;">${s.quote}</p>
+`).join('<hr style="border:none;border-top:1px dashed #c8b088;margin:12px 0;">');
 
-// 源码文件列表（从 package.json 提取？直接枚举）
+// 源码列表
 const files = [
-  { name:'package.json', size:'2KB',    href:'package.json' },
-  { name:'tsconfig.json', size:'500B',   href:'tsconfig.json' },
-  { name:'remotion.config.ts', size:'300B', href:'remotion.config.ts' },
-  { name:'src/index.ts', size:'1KB',     href:'src/index.ts' },
-  { name:'src/Root.tsx', size:'2KB',     href:'src/Root.tsx' },
-  { name:'src/RemotionRoot.tsx', size:'3KB', href:'src/RemotionRoot.tsx' },
-  { name:'src/scenes.ts', size:'4KB',    href:'src/scenes.ts' },
-  { name:'src/data.ts', size:'6KB',      href:'src/data.ts' },
-  { name:'src/Common.tsx', size:'5KB',   href:'src/Common.tsx' },
-  { name:'src/Yao.tsx', size:'3KB',      href:'src/Yao.tsx' },
-  { name:'src/ThreeDust.tsx', size:'5KB', href:'src/ThreeDust.tsx' },
-  { name:'src/ScenesA.tsx (幕1–4)', size:'10KB', href:'src/ScenesA.tsx' },
-  { name:'src/ScenesB.tsx (幕5–7)', size:'12KB', href:'src/ScenesB.tsx' },
-  { name:'src/ScenesC.tsx (幕8–11)', size:'11KB', href:'src/ScenesC.tsx' },
-  { name:'src/ScenesD.tsx (幕12–14)', size:'9KB', href:'src/ScenesD.tsx' },
-  { name:'剧本-易道生化.md（第1版）', size:'8KB', href:'剧本-易道生化.md' },
-  { name:'易之变——从一道到万象（第1版）.md（完整版）', size:'20KB', href:'易之变——从一道到万象（第1版）.md' },
-  { name:'assets/yizhibian-720p.mp4（古琴版 720p，AAC音轨，moov前置）', size:'4.2MB', href:'assets/yizhibian-720p.mp4' },
-  { name:'assets/yizhibian-1080p.mp4（古琴版 1080p，AAC音轨，moov前置）', size:'7.2MB', href:'assets/yizhibian-1080p.mp4' },
-  { name:'assets/yizhibian-voice-720p.mp4（人声解说 720p，edge-tts旁白+古琴BGM）', size:'4.1MB', href:'assets/yizhibian-voice-720p.mp4' },
-  { name:'assets/yizhibian-voice-1080p.mp4（人声解说 1080p，edge-tts旁白+古琴BGM）', size:'6.9MB', href:'assets/yizhibian-voice-1080p.mp4' },
-  { name:'assets/yizhibian-full.mp4（原版无声，moov前置）', size:'17MB', href:'assets/yizhibian-full.mp4' },
+  ['src/Root.tsx', '主入口组件，串联14场', '1.1KB'],
+  ['src/scenes.ts', '分镜数据：时长、旁白、场景类型', '12KB'],
+  ['src/data.ts', '卦象、爻位、颜色、八卦数据', '9.5KB'],
+  ['src/Common.tsx', '字幕、宣纸背景、章节标签组件', '5.8KB'],
+  ['src/Yao.tsx', '爻、卦、太极SVG绘制组件', '5.3KB'],
+  ['src/ThreeDust.tsx', 'Three.js 3D粒子星云组件', '3KB'],
+  ['src/ScenesA-D.tsx', '14场场景绘制组件（4组）', '45KB'],
+  ['剧本-易道生化.md（第1版）', '早期9场剧本', '8KB'],
+  ['易之变——从一道到万象（第1版）.md', '完整14场分镜剧本', '14KB'],
+  ['assets/hls/playlist.m3u8', 'HLS播放列表', '1.6KB'],
+  ['assets/hls/seg_000~050.ts', 'HLS分片（51个，共46MB）', '8秒/片'],
+  ['assets/yizhibian-narration.mp4', '完整MP4母版（edge-tts人声+古琴BGM）', '46MB'],
 ];
-const fl = document.getElementById('fileList');
-files.forEach(f=>{
+const fileList = document.getElementById('fileList');
+files.forEach(([name, desc, size])=>{
   const li = document.createElement('li');
-  li.innerHTML = '<span class="fname">📄 '+f.name+'</span><span class="fsize">'+f.size+'</span><a href="'+f.href+'" target="_blank">查看</a>';
-  fl.appendChild(li);
+  const url = name.startsWith('src/') ? name : 'assets/'+name;
+  li.innerHTML = `<span class="fname">${name}</span><span>${desc}</span><span class="fsize">${size}</span><a href="${url}" download>下载/查看</a>`;
+  fileList.appendChild(li);
 });
-</script>
-<!-- 清晰度切换 + 音轨引擎（Web Audio API 实时合成古琴垫+磬+钟+爻弹+变卦锣，与内嵌音轨互不干扰） -->
-<script defer src="assets/yijing-audio.js?v=2"></script>
-<script>
-const QUALITIES = {
-  '720p':      { src:'assets/yizhibian-720p.mp4',       size:'4.2MB', btn:'q720',      hasWebAudio:true,  voice:false },
-  '1080p':     { src:'assets/yizhibian-1080p.mp4',      size:'7.2MB', btn:'q1080',     hasWebAudio:true,  voice:false },
-  'voice720':  { src:'assets/yizhibian-voice-720p.mp4', size:'4.1MB', btn:'qVoice720', hasWebAudio:false, voice:true },
-  'voice1080': { src:'assets/yizhibian-voice-1080p.mp4',size:'6.9MB', btn:'qVoice1080',hasWebAudio:false, voice:true },
-  'orig':      { src:'assets/yizhibian-full.mp4',       size:'17MB',  btn:'qOrig',     hasWebAudio:false, voice:false }
-};
-let curQuality = 'voice720';
-function switchQuality(q){
-  if (!QUALITIES[q]) return;
-  const wasPlaying = !video.paused;
-  const t = video.currentTime;
-  curQuality = q;
-  const cfg = QUALITIES[q];
-  // 人声解说版自带完整音轨（旁白+BGM），关掉 Web Audio 实时琴音避免叠声
-  if (window.YijingAudio) {
-    if (cfg.hasWebAudio) { YijingAudio.setMuted(false); }
-    else { YijingAudio.stop(); YijingAudio.setMuted(true); }
-  }
-  video.src = cfg.src;
-  video.load();
-  Object.keys(QUALITIES).forEach(k=>{
-    document.getElementById(QUALITIES[k].btn).classList.toggle('q-active', k===q);
-  });
-  document.getElementById('dlLink').href = cfg.src;
-  video.addEventListener('loadedmetadata', function once(){
-    video.currentTime = Math.min(t, video.duration-0.1);
-    if (wasPlaying) video.play().catch(()=>{});
-    video.removeEventListener('loadedmetadata', once);
-  });
-}
 
-// 控制按钮
-const btnSound = document.getElementById('btnSound');
-let soundOn = false;
-
-async function play(){
-  // 视频本身带 AAC 音轨，直接播放即可；若用户额外开启 Web Audio 实时音轨则叠加
-  try { await video.play(); } catch(e){ /* 自动播放被拦截时由用户点击触发 */ }
-}
-function pause(){ video.pause(); if (window.YijingAudio) YijingAudio.stop(); }
-function restart(){
-  if (window.YijingAudio) YijingAudio.resetCues();
-  video.currentTime = 0;
-  play();
-}
-// 视频音轨默认**开**（因为现在 MP4 内带 AAC）
-video.muted = false;
-
-// Web Audio 实时音轨作为可选叠加层（默认静音，等用户切到古琴版才开启）
-if (btnSound) btnSound.style.display = 'none'; // 暂时隐藏，因为内嵌音轨已覆盖
-(function waitAudio(){
-  if (window.YijingAudio && typeof YijingAudio.setMuted === 'function') {
-    YijingAudio.setMuted(true);
-  } else {
-    setTimeout(waitAudio, 50);
-  }
-})();
+// 默认加载HLS
+loadHLS();
 </script>
 </body>
 </html>
