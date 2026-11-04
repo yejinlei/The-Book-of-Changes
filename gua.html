@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>卦爻详解 | 易经本体论</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#f4ecd8; --paper:#faf6ed; --text:#2b1810; --accent:#8b0000; --gold:#b8860b;
+  --ink:#1a1a2e; --blue:#1e3a8a; --green:#14532d; --border:#d4c5a3;
+  --shadow:rgba(139,0,0,0.08);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Noto Serif SC',serif; background:var(--bg); color:var(--text); line-height:2; }
+.top-nav {
+  position:fixed; top:0; left:0; right:0; height:64px; background:var(--paper);
+  border-bottom:2px solid var(--border); z-index:1000; display:flex; align-items:center; justify-content:space-between;
+  padding:0 30px; box-shadow:0 2px 8px var(--shadow);
+}
+.logo { font-size:20px; font-weight:700; color:var(--ink); text-decoration:none; }
+.logo .taiji { color:var(--accent); font-size:26px; }
+.nav-links { display:flex; gap:18px; flex-wrap:wrap; }
+.nav-links a { color:var(--text); text-decoration:none; font-size:14px; font-weight:500; }
+.nav-links a:hover { color:var(--accent); }
+.nav-links a.active { color:var(--accent); font-weight:700; }
+
+.layout { display:grid; grid-template-columns:88px 1fr; max-width:1200px; margin:64px auto 0; }
+/* 侧边卦目 */
+.side {
+  position:sticky; top:80px; align-self:start; height:calc(100vh - 96px); overflow-y:auto;
+  border-right:1px solid var(--border); padding:16px 8px;
+}
+.side h4 { font-size:12px; color:var(--gold); text-align:center; margin-bottom:10px; letter-spacing:2px; }
+.side-item {
+  display:block; text-align:center; text-decoration:none; color:var(--text);
+  padding:5px 2px; border-radius:4px; font-size:12px; margin-bottom:2px;
+}
+.side-item .sym { font-size:18px; display:block; line-height:1.2; }
+.side-item:hover { background:var(--accent); color:#fff; }
+.side-item.active { background:var(--accent); color:#fff; }
+
+.main { padding:36px 44px 80px; min-width:0; }
+.back-link { display:inline-block; color:var(--accent); text-decoration:none; font-size:14px; margin-bottom:18px; }
+.back-link:hover { text-decoration:underline; }
+.gua-head { text-align:center; margin-bottom:30px; }
+.gua-symbol { font-size:96px; line-height:1; color:var(--ink); }
+.gua-title { font-size:40px; color:var(--accent); letter-spacing:6px; margin:8px 0; }
+.gua-meta { color:var(--gold); font-size:14px; }
+.tag-incomplete { color:var(--accent); font-size:13px; border:1px dashed var(--accent); border-radius:3px; padding:1px 8px; margin-left:8px; }
+
+.block { background:var(--paper); border:1px solid var(--border); border-radius:6px; padding:20px 24px; margin-bottom:16px; }
+.block-title { font-size:15px; color:var(--accent); font-weight:700; margin-bottom:10px; padding-bottom:6px; border-bottom:1px solid var(--border); letter-spacing:1px; }
+.block-content { font-size:16px; line-height:2.1; }
+
+.yao-list { margin-top:6px; }
+.yao-item { background:var(--bg); padding:16px 20px; border-radius:6px; margin-bottom:12px; border-left:4px solid var(--gold); }
+.yao-head { display:flex; align-items:baseline; gap:10px; margin-bottom:6px; }
+.yao-pos { font-weight:700; color:var(--accent); font-size:15px; }
+.yao-wei { font-size:12px; color:var(--gold); }
+.yao-text { font-size:16px; margin:4px 0; }
+.yao-xx { font-size:13px; color:var(--blue); font-style:italic; margin-top:4px; }
+.yao-explain { font-size:14px; color:#5a4a3a; margin-top:6px; line-height:1.9; }
+
+.pager { display:flex; justify-content:space-between; margin-top:34px; }
+.pager a { text-decoration:none; color:var(--accent); border:1px solid var(--border); background:var(--paper); border-radius:4px; padding:10px 20px; font-size:14px; }
+.pager a:hover { background:var(--accent); color:#fff; }
+.pager a.disabled { opacity:.4; pointer-events:none; }
+
+.gua-nav-grid { display:grid; grid-template-columns:repeat(8,1fr); gap:6px; margin-top:30px; }
+.gua-nav-grid a { text-decoration:none; color:var(--text); text-align:center; font-size:11px; border:1px solid var(--border); border-radius:4px; padding:6px 2px; background:var(--paper); }
+.gua-nav-grid a:hover { background:var(--accent); color:#fff; }
+.gua-nav-grid a.active { background:var(--accent); color:#fff; }
+
+@media (max-width:900px) {
+  .layout { grid-template-columns:1fr; }
+  .side { display:none; }
+  .main { padding:24px 18px 60px; }
+  .gua-symbol { font-size:72px; }
+  .gua-title { font-size:30px; }
+  .gua-nav-grid { grid-template-columns:repeat(5,1fr); }
+}
+</style>
+</head>
+<body>
+<nav class="top-nav">
+  <a href="index.html" class="logo"><span class="taiji">☯</span>易经本体论</a>
+  <div class="nav-links">
+    <a href="index.html">总览</a>
+    <a href="reader.html">经文阅读</a>
+    <a href="shiyi.html">十翼</a>
+    <a href="yitu.html">易图</a>
+    <a href="yanjiu.html">研究</a>
+    <a href="index.html#masters">历代易学</a>
+  </div>
+</nav>
+
+<div class="layout">
+  <aside class="side" id="sideList"></aside>
+  <div class="main" id="guaContent"></div>
+</div>
+
+<script src="data/yijing-ontology.js"></script>
+<script>
+const ONT = window.YJ_ONT;
+const YAO_WEI = {
+  '初':'初爻·始 · 潜藏发端，位卑力弱',
+  '二':'二爻·下卦中位 · 得中，多誉',
+  '三':'三爻·下卦之极 · 多凶，履险',
+  '四':'四爻·上卦之初 · 多惧，近君',
+  '五':'五爻·上卦中位 · 得中得正，多功，君位',
+  '上':'上爻·一卦之极 · 亢极则悔，贵而无位'
+};
+
+function getHashName() {
+  const h = decodeURIComponent(location.hash.replace('#',''));
+  return ONT.guaMap[h] ? h : '乾';
+}
+function yaoWeiDesc(pos) {
+  for (const k in YAO_WEI) if (pos.startsWith(k) || pos.includes(k)) return YAO_WEI[k];
+  return '';
+}
+function renderSide(cur) {
+  document.getElementById('sideList').innerHTML =
+    '<h4>六十四卦</h4>' +
+    ONT.liushisigua.map(g => `
+      <a class="side-item ${g.name===cur?'active':''}" href="gua.html#${g.name}" title="${g.num}.${g.name}">
+        <span class="sym">${g.symbol}</span>${g.num}
+      </a>`).join('');
+}
+function renderGua(name) {
+  const g = ONT.guaMap[name];
+  if (!g) return;
+  const sg = ONT.baguaMap[g.shang], bg = ONT.baguaMap[g.xia];
+  const idx = ONT.liushisigua.findIndex(x => x.name === name);
+  const prev = ONT.liushisigua[idx-1], next = ONT.liushisigua[idx+1];
+
+  const yaoHtml = (g.yao||[]).map(y => `
+    <div class="yao-item">
+      <div class="yao-head">
+        <span class="yao-pos">${y.pos}</span>
+        <span class="yao-wei">${y.yinYang}爻 · ${yaoWeiDesc(y.pos)}</span>
+      </div>
+      <div class="yao-text">${y.text}</div>
+      ${y.xiaoxiang?`<div class="yao-xx">《象》曰：${y.xiaoxiang}</div>`:''}
+      ${y.explain?`<div class="yao-explain">释：${y.explain}</div>`:''}
+    </div>`).join('');
+
+  const incomplete = g._incomplete ? '<span class="tag-incomplete">本体框架已建，全文补录中</span>' : '';
+
+  document.getElementById('guaContent').innerHTML = `
+    <a class="back-link" href="index.html">← 返回首页</a>
+    <div class="gua-head">
+      <div class="gua-symbol">${g.symbol}</div>
+      <div class="gua-title">${g.num}. ${g.name}卦${incomplete}</div>
+      <div class="gua-meta">第${g.num}卦 · ${g.jing} · ${g.shang}上${g.xia}下 · ${sg.symbol}${bg.symbol} · ${g.gong}宫 · ${g.wuxing}行</div>
+    </div>
+
+    <div class="block">
+      <div class="block-title">【卦辞】</div>
+      <div class="block-content">${g.guaci||'（卦辞补录中）'}</div>
+    </div>
+    <div class="block">
+      <div class="block-title">【彖传】</div>
+      <div class="block-content">${g.tuan||'（彖传补录中）'}</div>
+    </div>
+    <div class="block">
+      <div class="block-title">【象传·大象】</div>
+      <div class="block-content">${g.xiang||'（象传补录中）'}</div>
+    </div>
+    ${g.wenyan?`<div class="block"><div class="block-title">【文言传】</div><div class="block-content">${g.wenyan}</div></div>`:''}
+    <div class="block">
+      <div class="block-title">【六爻详解】</div>
+      <div class="yao-list">${yaoHtml||'（爻辞补录中）'}</div>
+    </div>
+    ${g.yong?`<div class="block"><div class="block-title">【用爻】</div><div class="block-content">${g.yong}</div></div>`:''}
+
+    <div class="pager">
+      ${prev?`<a href="gua.html#${prev.name}">← ${prev.num}.${prev.name}卦</a>`:'<span></span>'}
+      ${next?`<a href="gua.html#${next.name}">${next.num}.${next.name}卦 →</a>`:'<span></span>'}
+    </div>
+
+    <div class="gua-nav-grid">
+      ${ONT.liushisigua.map(x=>`<a class="${x.name===name?'active':''}" href="gua.html#${x.name}">${x.name}</a>`).join('')}
+    </div>
+  `;
+  document.title = `${g.num}.${g.name}卦 · 卦爻详解 | 易经本体论`;
+}
+function update() {
+  const name = getHashName();
+  renderSide(name);
+  renderGua(name);
+  window.scrollTo(0,0);
+}
+window.addEventListener('hashchange', update);
+window.addEventListener('DOMContentLoaded', update);
+document.addEventListener('keydown', e => {
+  const name = getHashName();
+  const idx = ONT.liushisigua.findIndex(x => x.name === name);
+  if (e.key === 'ArrowLeft' && idx > 0) location.hash = ONT.liushisigua[idx-1].name;
+  if (e.key === 'ArrowRight' && idx < ONT.liushisigua.length-1) location.hash = ONT.liushisigua[idx+1].name;
+});
+</script>
+</body>
+</html>

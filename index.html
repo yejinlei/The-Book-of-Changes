@@ -117,6 +117,7 @@ main { padding-top:64px; }
   aspect-ratio:1; background:var(--paper); border:1px solid var(--border); border-radius:4px;
   display:flex; flex-direction:column; align-items:center; justify-content:center;
   cursor:pointer; transition:.2s; font-family:serif; padding:4px;
+  text-decoration:none; color:inherit;
 }
 .gua-cell:hover { background:var(--accent); color:#fff; border-color:var(--accent); transform:scale(1.1); z-index:2; }
 .gua-cell .sym { font-size:28px; line-height:1; }
@@ -201,33 +202,6 @@ footer {
   text-align:center; padding:40px; background:var(--ink); color:#aaa; font-size:13px; line-height:2;
 }
 footer .ont-note { color:var(--gold); font-size:12px; margin-top:8px; }
-/* 弹窗 */
-.modal-overlay {
-  display:none; position:fixed; inset:0; background:rgba(0,0,0,.6); z-index:2000;
-  align-items:center; justify-content:center; padding:20px;
-}
-.modal-overlay.show { display:flex; }
-.modal-box {
-  background:var(--paper); border-radius:8px; max-width:900px; width:100%; max-height:90vh;
-  overflow-y:auto; padding:40px; position:relative;
-}
-.modal-close {
-  position:absolute; top:16px; right:20px; font-size:24px; cursor:pointer; color:var(--text);
-  background:none; border:none; font-family:inherit;
-}
-.modal-title { font-size:28px; color:var(--accent); text-align:center; margin-bottom:8px; letter-spacing:4px; }
-.modal-subtitle { text-align:center; color:var(--gold); font-size:14px; margin-bottom:28px; }
-/* 卦详情 */
-.gua-detail-symbol { text-align:center; font-size:100px; margin:10px 0; color:var(--ink); line-height:1; }
-.gua-detail-meta { text-align:center; color:var(--gold); margin-bottom:24px; font-size:14px; }
-.gua-section { margin-bottom:20px; }
-.gua-section-title { font-size:15px; color:var(--accent); font-weight:700; margin-bottom:8px; padding-bottom:4px; border-bottom:1px solid var(--border); }
-.gua-section-content { font-size:15px; line-height:2; color:var(--text); }
-.yao-item { background:var(--bg); padding:14px 18px; border-radius:6px; margin-bottom:10px; border-left:3px solid var(--gold); }
-.yao-pos { font-weight:700; color:var(--accent); font-size:14px; }
-.yao-text { font-size:15px; margin:4px 0; }
-.yao-xx { font-size:13px; color:var(--blue); font-style:italic; }
-.yao-explain { font-size:13px; color:#5a4a3a; margin-top:4px; }
 /* 响应式 */
 @media (max-width:900px) {
   .stats-grid { grid-template-columns:repeat(3,1fr); }
@@ -246,16 +220,18 @@ footer .ont-note { color:var(--gold); font-size:12px; margin-top:8px; }
 <body>
 <!-- 导航 -->
 <nav class="top-nav">
-  <a href="#" class="logo"><span class="taiji">☯</span>易经本体论<small>ONTOLOGY</small></a>
+  <a href="index.html" class="logo"><span class="taiji">☯</span>易经本体论<small>ONTOLOGY</small></a>
   <div class="nav-links">
-    <a href="#overview">总览</a>
-    <a href="#bagua">八卦</a>
-    <a href="#liushisigua">六十四卦</a>
-    <a href="#texts">经文</a>
-    <a href="#masters">历代易学</a>
-    <a href="#chart">知识图谱</a>
-    <a href="#lineage">传承</a>
-    <a href="reader.html" class="btn-reader" target="_blank">📖 经文批注阅读</a>
+    <a href="index.html#overview">总览</a>
+    <a href="index.html#bagua">八卦</a>
+    <a href="index.html#liushisigua">六十四卦</a>
+    <a href="reader.html">经文</a>
+    <a href="shiyi.html">十翼</a>
+    <a href="yitu.html">易图</a>
+    <a href="yanjiu.html">研究</a>
+    <a href="index.html#chart">图谱</a>
+    <a href="index.html#masters">历代易学</a>
+    <a href="reader.html" class="btn-reader">📖 经文批注阅读</a>
   </div>
 </nav>
 
@@ -353,21 +329,21 @@ footer .ont-note { color:var(--gold); font-size:12px; margin-top:8px; }
     <p>CLASSIC TEXTS · 经传易图</p>
   </div>
   <div class="text-module-grid">
-    <div class="text-card" onclick="location.href='reader.html'">
+    <a class="text-card" href="reader.html">
       <div class="icon">📖</div>
       <h3>易经全文 · 历代批注</h3>
       <p>64卦卦爻辞 +《周易集解》汉唐注 +《周易折中》程传/本义/历代集说，仿脂批段间嵌入阅读</p>
-    </div>
-    <div class="text-card" onclick="showShiyi()">
+    </a>
+    <a class="text-card" href="shiyi.html">
       <div class="icon">📜</div>
       <h3>易传（十翼）</h3>
       <p>彖传、象传、系辞、文言、说卦、序卦、杂卦——孔子所作十翼全文，义理之渊薮</p>
-    </div>
-    <div class="text-card" onclick="showYitu()">
+    </a>
+    <a class="text-card" href="yitu.html">
       <div class="icon">🌀</div>
       <h3>易图体系</h3>
       <p>河图、洛书、太极图、先天八卦、后天八卦、六十四卦方圆图、十二消息卦图</p>
-    </div>
+    </a>
   </div>
 </section>
 
@@ -412,29 +388,6 @@ footer .ont-note { color:var(--gold); font-size:12px; margin-top:8px; }
   <div>以本体论方法构建易经知识库 · 所有数据以本体实例建模，网页仅为渲染视图</div>
   <div class="ont-note">数据来源：李鼎祚《周易集解》、李光地《御纂周易折中》、朱熹《周易本义》、程颐《伊川易传》等</div>
 </footer>
-
-<!-- 卦详情弹窗 -->
-<div class="modal-overlay" id="guaModal">
-  <div class="modal-box" id="guaModalBox"></div>
-</div>
-<!-- 十翼弹窗 -->
-<div class="modal-overlay" id="shiyiModal">
-  <div class="modal-box" id="shiyiModalBox">
-    <button class="modal-close" onclick="closeModal('shiyiModal')">×</button>
-    <div class="modal-title">易 传 · 十 翼</div>
-    <div class="modal-subtitle">TEN WINGS · 孔子为易作传</div>
-    <div id="shiyiContent"></div>
-  </div>
-</div>
-<!-- 易图弹窗 -->
-<div class="modal-overlay" id="yituModal">
-  <div class="modal-box" id="yituModalBox">
-    <button class="modal-close" onclick="closeModal('yituModal')">×</button>
-    <div class="modal-title">易 图 体 系</div>
-    <div class="modal-subtitle">YI-DIAGRAMS · 河图洛书·太极·先后天</div>
-    <div id="yituContent"></div>
-  </div>
-</div>
 
 <script src="data/yijing-ontology.js"></script>
 <script>
@@ -485,11 +438,11 @@ function render64Gua() {
   let list = ONT.liushisigua;
   if (currentJing !== 'all') list = list.filter(g => g.jing === currentJing);
   const html = list.map(g => `
-    <div class="gua-cell ${g.jing==='上经'?'jing-shang':'jing-xia'}" onclick="showGua('${g.name}')" title="${g.num}.${g.name}：${g.guaci}">
+    <a class="gua-cell ${g.jing==='上经'?'jing-shang':'jing-xia'}" href="reader.html#${g.name}" title="${g.num}.${g.name}：${g.guaci||''}">
       <span class="sym">${g.symbol}</span>
       <span class="name">${g.name}</span>
       <span class="num">${g.num}</span>
-    </div>
+    </a>
   `).join('');
   document.getElementById('gua64Grid').innerHTML = html;
 }
@@ -502,55 +455,8 @@ document.querySelectorAll('.jing-toggle button').forEach(btn => {
   });
 });
 
-// 显示卦详情
-function showGua(name) {
-  const g = ONT.guaMap[name];
-  if (!g) return;
-  const bg = ONT.baguaMap[g.xia];
-  const sg = ONT.baguaMap[g.shang];
-  const yaoHtml = g.yao.map(y => `
-    <div class="yao-item">
-      <div class="yao-pos">${y.pos} · ${y.yinYang}爻</div>
-      <div class="yao-text">${y.text}</div>
-      <div class="yao-xx">《象》曰：${y.xiaoxiang.replace(y.pos+'，','')}</div>
-      <div class="yao-explain">${y.explain}</div>
-    </div>
-  `).join('');
-  const incompleteTag = g._incomplete ? '<span style="color:var(--gold);font-size:12px;margin-left:8px;">（基础本体框架，爻辞补全中）</span>' : '';
-  const html = `
-    <button class="modal-close" onclick="closeModal('guaModal')">×</button>
-    <div class="gua-detail-symbol">${g.symbol}</div>
-    <div class="modal-title">${g.num}. ${g.name}卦${incompleteTag}</div>
-    <div class="gua-detail-meta">${g.jing} · ${g.shang}上${g.xia}下 · ${sg.symbol}${bg.symbol} · ${g.gong}宫 · ${g.wuxing}行</div>
-    <div class="gua-section">
-      <div class="gua-section-title">【卦辞】</div>
-      <div class="gua-section-content">${g.guaci}</div>
-    </div>
-    <div class="gua-section">
-      <div class="gua-section-title">【彖传】</div>
-      <div class="gua-section-content">${g.tuan}</div>
-    </div>
-    <div class="gua-section">
-      <div class="gua-section-title">【象传（大象）】</div>
-      <div class="gua-section-content">${g.xiang}</div>
-    </div>
-    ${g.wenyan?`<div class="gua-section">
-      <div class="gua-section-title">【文言传】</div>
-      <div class="gua-section-content">${g.wenyan}</div>
-    </div>`:''}
-    <div class="gua-section">
-      <div class="gua-section-title">【六爻详解】</div>
-      ${yaoHtml}
-    </div>
-    ${g.yong?`<div class="gua-section"><div class="gua-section-title">【用爻】</div><div class="gua-section-content">${g.yong}</div></div>`:''}
-  `;
-  document.getElementById('guaModalBox').innerHTML = html;
-  document.getElementById('guaModal').classList.add('show');
-}
-function closeModal(id) { document.getElementById(id).classList.remove('show'); }
-document.querySelectorAll('.modal-overlay').forEach(m => {
-  m.addEventListener('click', (e) => { if (e.target === m) m.classList.remove('show'); });
-});
+// 显示卦详情：跳转到独立页面 gua.html
+// （原来为首页浮层弹窗，现改为独立页面渲染，符合"网页仅为本体渲染视图"原则）
 
 // ===== 渲染流派 =====
 function renderSchools() {
@@ -624,89 +530,193 @@ function renderTimeline() {
 }
 
 // ===== 渲染知识图谱 =====
+let chartInstance = null;
 function renderChart() {
-  document.getElementById('tripleCount').textContent = ONT.triples.length;
-  const chart = echarts.init(document.getElementById('ontoChart'));
-  // 取核心节点：八卦+16完整卦+主要注家
-  const nodes = [];
-  const nodeSet = new Set();
-  function addNode(id, name, cat, size) {
-    if (nodeSet.has(id)) return;
-    nodeSet.add(id);
-    const catColor = {bagua:'#8b0000', gua:'#b8860b', zhujia:'#1e3a8a', jing:'#14532d', yuan:'#4c1d95'};
-    nodes.push({ id, name, category:cat, symbolSize:size, itemStyle:{color:catColor[cat]||'#888'}, label:{show:size>25, fontSize:12} });
-  }
-  addNode('Taiji','太极','yuan',40);
-  addNode('Bagua','八卦','yuan',30);
-  addNode('Jing','易经本经','jing',30);
-  ONT.bagua.forEach(g => addNode(g.id, g.name+g.symbol, 'bagua', 28));
-  ONT.liushisigua.filter(g=>!g._incomplete).forEach(g => addNode(g.id, g.name+g.symbol, 'gua', 20));
-  ['zj_kongzi','zj_wangbi','zj_kongyingda','zj_lidingzuo','zj_chengyi','zj_zhuxi','zj_liguangdi','zj_shangbinghe','zj_gaoheng'].forEach(id => {
-    const z = ONT.zhujiaMap[Object.values(ONT.zhujiaMap).find(z=>z.id===id)?.name];
-    if (z) addNode(z.id, z.name, 'zhujia', 22);
-  });
-  // 边
-  const links = [];
-  ONT.triples.forEach(t => {
-    if (nodeSet.has(t.subject) && nodeSet.has(t.object)) {
-      links.push({ source:t.subject, target:t.object, label:{show:false,formatter:t.predicate} });
+  try {
+    document.getElementById('tripleCount').textContent = ONT.triples.length;
+    const dom = document.getElementById('ontoChart');
+    if (!dom) { console.error('图谱容器不存在'); return; }
+    // 确保容器有明确高度
+    dom.style.height = '650px';
+    dom.style.width = '100%';
+    
+    if (!chartInstance) {
+      chartInstance = echarts.init(dom);
+    } else {
+      chartInstance.resize();
     }
-  });
-  chart.setOption({
-    tooltip:{ formatter: p => p.dataType==='node'?p.name:'' },
-    legend:[{ data:['本体核心','八卦','卦','注家','经文'], textStyle:{fontFamily:'Noto Serif SC'} }],
-    series:[{
-      type:'graph', layout:'force', roam:true, draggable:true,
-      data:nodes, links:links,
-      categories:[{name:'本体核心'},{name:'八卦'},{name:'卦'},{name:'注家'},{name:'经文'}],
-      force:{ repulsion:300, edgeLength:[60,120], gravity:0.1 },
-      label:{fontFamily:'Noto Serif SC'},
-      lineStyle:{opacity:0.4, width:1, color:'#b8860b', curveness:0.1},
-      emphasis:{ focus:'adjacency', lineStyle:{width:3,opacity:1} },
-    }]
-  });
-  window.addEventListener('resize', () => chart.resize());
+    
+    // 取核心节点
+    const nodes = [];
+    const nodeSet = new Set();
+    function addNode(id, name, cat, size) {
+      if (!id || nodeSet.has(id)) return;
+      nodeSet.add(id);
+      const catColor = {bagua:'#8b0000', gua:'#b8860b', zhujia:'#1e3a8a', jing:'#14532d', yuan:'#4c1d95'};
+      nodes.push({ 
+        id, name, category:cat, symbolSize:size, 
+        itemStyle:{color:catColor[cat]||'#888'}, 
+        label:{show:size>=22, fontSize:12, fontFamily:'Noto Serif SC'} 
+      });
+    }
+    
+    // 本体核心（匹配triples中的真实id）
+    addNode('Dao','道','yuan',50);
+    addNode('Taiji','太极','yuan',45);
+    addNode('YinYang','两仪','yuan',30);
+    addNode('Sixiang','四象','yuan',28);
+    addNode('Bagua','八卦','yuan',35);
+    addNode('Jing','易经本经','jing',35);
+    addNode('Shiyi','十翼','jing',28);
+    addNode('Yitu','易图','jing',28);
+    
+    // 八卦（id格式是 gua_qian）
+    ONT.bagua.forEach(g => addNode(g.id, g.name+g.symbol, 'bagua', 26));
+    
+    // 64卦（id格式是 g01-g64）
+    ONT.liushisigua.slice(0, 24).forEach(g => addNode(g.id, g.num+'.'+g.name+g.symbol, 'gua', 16));
+    
+    // 主要注家
+    const mainZhujiaIds = ['zj_fuxi','zj_wenwang','zj_zhougong','zj_kongzi',
+                           'zj_jingfang','zj_zhengxuan','zj_yufan','zj_wangbi',
+                           'zj_kongyingda','zj_lidingzuo','zj_shaoyong','zj_chengyi',
+                           'zj_zhuxi','zj_liguangdi','zj_shangbinghe','zj_gaoheng'];
+    const zhujiaList = Object.values(ONT.zhujiaMap);
+    mainZhujiaIds.forEach(id => {
+      const z = zhujiaList.find(z => z.id === id);
+      if (z) addNode(z.id, z.name, 'zhujia', 18);
+    });
+    
+    // 边：先加本体核心的结构边（保证连通），再从triples匹配
+    const links = [];
+    const linkSet = new Set();
+    function addLink(s, o, p) {
+      if (!nodeSet.has(s) || !nodeSet.has(o)) return;
+      const key = s + '->' + o;
+      if (linkSet.has(key)) return;
+      linkSet.add(key);
+      links.push({ source:s, target:o, label:{show:false,formatter:p,fontSize:10} });
+    }
+    // 手动补充核心结构边（本体数据里缺失的传承关系）
+    addLink('Bagua','Jing','生成本经');
+    addLink('Jing','Shiyi','孔子作十翼传');
+    addLink('Jing','Yitu','易图图解');
+    // 注家与传承关系
+    addLink('zj_fuxi','Taiji','画八卦');
+    addLink('zj_wenwang','Bagua','演六十四卦');
+    addLink('zj_zhougong','Jing','作爻辞');
+    addLink('zj_kongzi','Shiyi','作十翼');
+    addLink('zj_jingfang','Bagua','创八宫纳甲');
+    addLink('zj_zhengxuan','Jing','爻辰注易');
+    addLink('zj_yufan','Bagua','象数集大成');
+    addLink('zj_wangbi','Jing','扫象言理');
+    addLink('zj_kongyingda','Jing','作正义');
+    addLink('zj_lidingzuo','Jing','撰集解');
+    addLink('zj_shaoyong','Bagua','先天学');
+    addLink('zj_chengyi','Jing','伊川易传');
+    addLink('zj_zhuxi','Jing','作本义');
+    addLink('zj_liguangdi','Jing','御纂折中');
+    addLink('zj_shangbinghe','Jing','尚氏学');
+    addLink('zj_gaoheng','Jing','现代考据');
+    // 师承/传承链
+    addLink('zj_fuxi','zj_wenwang','传承');
+    addLink('zj_wenwang','zj_zhougong','传承');
+    addLink('zj_zhougong','zj_kongzi','传承');
+    addLink('zj_kongzi','zj_jingfang','汉易传承');
+    addLink('zj_jingfang','zj_yufan','传承');
+    addLink('zj_zhengxuan','zj_wangbi','传承');
+    addLink('zj_wangbi','zj_kongyingda','传承');
+    addLink('zj_kongyingda','zj_chengyi','传承');
+    addLink('zj_lidingzuo','zj_shaoyong','传承');
+    addLink('zj_chengyi','zj_zhuxi','传承');
+    addLink('zj_zhuxi','zj_liguangdi','传承');
+    addLink('zj_liguangdi','zj_shangbinghe','传承');
+    addLink('zj_shangbinghe','zj_gaoheng','近现代传承');
+    
+    // 从本体triples中匹配边
+    ONT.triples.forEach(t => addLink(t.subject, t.object, t.predicate));
+    
+    console.log(`图谱节点数: ${nodes.length}, 边数: ${links.length}`);
+    
+    chartInstance.setOption({
+      backgroundColor: 'transparent',
+      tooltip: { 
+        trigger: 'item',
+        formatter: p => {
+          if (p.dataType === 'node') return `<b>${p.name}</b>`;
+          if (p.dataType === 'edge') return `${p.data.source} → ${p.data.target}`;
+          return '';
+        }
+      },
+      legend: [{ 
+        data: ['本体核心','八卦','卦','注家','经文'], 
+        top: 10,
+        textStyle: {fontFamily:'Noto Serif SC', fontSize: 12, color:'#3a2a1a'}
+      }],
+      series: [{
+        type: 'graph',
+        layout: 'force',
+        roam: true,
+        draggable: true,
+        data: nodes,
+        links: links,
+        categories: [
+          {name:'本体核心'}, {name:'八卦'}, {name:'卦'}, {name:'注家'}, {name:'经文'}
+        ],
+        force: { 
+          repulsion: 400, 
+          edgeLength: [80, 150], 
+          gravity: 0.08,
+          initLayout: 'circular'
+        },
+        label: {
+          position: 'right',
+          fontFamily:'Noto Serif SC',
+          fontSize: 11
+        },
+        lineStyle: {
+          opacity: 0.5,
+          width: 1,
+          color: '#b8860b',
+          curveness: 0.1
+        },
+        emphasis: {
+          focus: 'adjacency',
+          lineStyle: {width: 2.5, opacity: 1},
+          label: {fontSize: 14, fontWeight: 'bold'}
+        },
+        animationDuration: 1500,
+        animationEasingUpdate: 'quinticInOut'
+      }]
+    }, true);
+    
+    // 监听窗口resize
+    window.addEventListener('resize', () => {
+      if (chartInstance) chartInstance.resize();
+    });
+    
+    // IntersectionObserver：滚动到图谱区域时resize，解决高度为0问题
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && chartInstance) {
+          setTimeout(() => chartInstance.resize(), 100);
+        }
+      });
+    }, { threshold: 0.1 });
+    observer.observe(dom);
+    
+  } catch(e) {
+    console.error('知识图谱渲染失败:', e);
+    document.getElementById('ontoChart').innerHTML = 
+      '<div style="padding:100px;text-align:center;color:#8b0000;">知识图谱加载失败: ' + e.message + '</div>';
+  }
 }
+// 页面加载后延迟一点初始化，确保echarts库已完全加载
+window.addEventListener('load', () => {
+  setTimeout(renderChart, 300);
+});
 
-// ===== 十翼弹窗 =====
-function showShiyi() {
-  const html = ONT.shiyi.map(p => `
-    <div class="gua-section">
-      <div class="gua-section-title">${p.name}</div>
-      <div class="gua-section-content" style="font-size:13px;color:var(--gold);margin-bottom:8px;">
-        ${p.author} · ${p.juan} · ${p.pian}篇
-      </div>
-      <div class="gua-section-content">${p.desc}</div>
-    </div>
-  `).join('');
-  document.getElementById('shiyiContent').innerHTML = html + `
-    <div class="gua-section" style="margin-top:20px;">
-      <div class="gua-section-title">【系辞传选】</div>
-      <div class="gua-section-content" style="font-size:14px;">
-        ${ONT.yizhuanTexts.xici_shang.map(t=>`<p style="margin-bottom:12px;"><b>${t.title}：</b>${t.text}</p>`).join('')}
-      </div>
-    </div>
-    <div style="text-align:center;margin-top:20px;">
-      <a href="reader.html" target="_blank" style="color:var(--accent);font-weight:600;">进入完整经文批注阅读器 →</a>
-    </div>
-  `;
-  document.getElementById('shiyiModal').classList.add('show');
-}
-
-// ===== 易图弹窗 =====
-function showYitu() {
-  const html = ONT.yitu.map(t => `
-    <div class="gua-section">
-      <div class="gua-section-title">${t.name}</div>
-      <div class="gua-section-content" style="font-size:13px;color:var(--gold);margin-bottom:8px;">
-        ${t.dynasty} · ${t.author} · ${t.xuepai}
-      </div>
-      <div class="gua-section-content">${t.desc}</div>
-    </div>
-  `).join('');
-  document.getElementById('yituContent').innerHTML = html;
-  document.getElementById('yituModal').classList.add('show');
-}
+// ===== 十翼 / 易图：均为独立页面，见 shiyi.html、yitu.html =====
 
 // ===== 初始化 =====
 document.addEventListener('DOMContentLoaded', () => {
@@ -717,7 +727,7 @@ document.addEventListener('DOMContentLoaded', () => {
   renderMasters();
   renderBooks();
   renderTimeline();
-  renderChart();
+  // renderChart 改为 window.load 后延迟初始化，保证echarts与容器都就绪
 });
 </script>
 </body>
