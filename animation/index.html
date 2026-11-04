@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>易之变 · 从一道到万象 — Remotion 动画</title>
+<style>
+  :root {
+    --paper: #f4ecd8;
+    --paper2: #ede3c9;
+    --ink: #2c1810;
+    --zhu: #8b0000;
+    --gold: #b8860b;
+    --jade: #3d6b5c;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Songti SC","STSong","SimSun","Noto Serif SC",serif;
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.8;
+  }
+  /* 顶部导航 */
+  .topbar {
+    background: rgba(244,236,216,.95);
+    border-bottom: 2px solid var(--zhu);
+    padding: 14px 32px;
+    display: flex; align-items: center; gap: 24px;
+    position: sticky; top: 0; z-index: 10; backdrop-filter: blur(6px);
+  }
+  .topbar a { color: var(--ink); text-decoration: none; font-size: 15px; }
+  .topbar a.active { color: var(--zhu); font-weight: bold; }
+  .topbar .brand { font-size: 20px; font-weight: bold; color: var(--zhu); }
+  .topbar .dot { color: var(--gold); margin: 0 6px; }
+
+  /* 主容器 */
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 24px 24px 80px; }
+
+  /* 标题 */
+  h1 { font-size: 38px; text-align: center; color: var(--zhu); margin: 30px 0 6px; letter-spacing: 8px; }
+  .sub { text-align: center; color: #7a5a3a; font-size: 15px; letter-spacing: 2px; margin-bottom: 30px; }
+  .sub .tech { color: var(--gold); }
+
+  /* 播放器区 */
+  .player-box {
+    background: #1a1108;
+    border-radius: 4px;
+    padding: 10px;
+    box-shadow: 0 8px 32px rgba(139,0,0,.2);
+    margin-bottom: 24px;
+  }
+  video {
+    width: 100%;
+    display: block;
+    background: #000;
+    border-radius: 2px;
+  }
+  .controls-bar {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    padding: 12px 8px 4px;
+    color: #e8d9b0;
+    font-size: 13px;
+    align-items: center;
+  }
+  .controls-bar button {
+    background: var(--zhu);
+    color: #f4ecd8;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 2px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 13px;
+    transition: background .2s;
+  }
+  .controls-bar button:hover { background: #a61c1c; }
+  .controls-bar .time { margin-left: auto; color: #c8a878; font-variant-numeric: tabular-nums; }
+
+  /* 场景时间轴 */
+  .chapter-bar {
+    display: grid;
+    grid-template-columns: repeat(14, 1fr);
+    gap: 2px;
+    margin: 10px 0 0;
+    padding: 0 4px;
+  }
+  .chapter-bar div {
+    height: 28px;
+    background: rgba(255,255,255,.08);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; color: #a88858; cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all .2s;
+  }
+  .chapter-bar div:hover { background: rgba(184,134,11,.25); color: var(--gold); }
+  .chapter-bar div.active { border-bottom-color: var(--zhu); color: var(--zhu); background: rgba(139,0,0,.15); }
+
+  /* 章节信息卡 */
+  .scene-card {
+    background: var(--paper2);
+    border-left: 4px solid var(--zhu);
+    padding: 16px 22px;
+    margin-bottom: 18px;
+    border-radius: 0 4px 4px 0;
+  }
+  .scene-card h3 { color: var(--zhu); font-size: 18px; margin-bottom: 8px; letter-spacing: 2px; }
+  .scene-card h3 span { color: var(--gold); font-size: 13px; margin-left: 10px; font-weight: normal; }
+  .scene-card p { font-size: 15px; color: #4a3420; }
+  .scene-card .quote { margin-top: 8px; color: #6a4c2a; font-style: italic; font-size: 14px; border-top: 1px dashed #c8b088; padding-top: 8px; }
+
+  /* 信息区 */
+  .meta-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px,1fr));
+    gap: 16px;
+    margin: 30px 0;
+  }
+  .meta-card {
+    background: var(--paper2);
+    padding: 18px;
+    border-top: 3px solid var(--gold);
+    border-radius: 2px;
+  }
+  .meta-card h4 { color: var(--zhu); font-size: 16px; margin-bottom: 10px; }
+  .meta-card p, .meta-card li { font-size: 14px; color: #5a4028; }
+  .meta-card ul { padding-left: 20px; }
+
+  /* 源码区 */
+  .section-title {
+    font-size: 22px;
+    color: var(--zhu);
+    border-bottom: 2px double var(--gold);
+    padding-bottom: 8px;
+    margin: 40px 0 18px;
+    letter-spacing: 4px;
+  }
+  .file-list { list-style: none; }
+  .file-list li {
+    padding: 10px 14px;
+    background: var(--paper2);
+    margin-bottom: 6px;
+    border-left: 3px solid var(--jade);
+    display: flex; align-items: center; gap: 12px;
+    font-family: "Menlo","Consolas",monospace;
+    font-size: 13px;
+  }
+  .file-list li .fname { color: var(--ink); flex: 1; }
+  .file-list li .fsize { color: #8a6a48; font-size: 12px; }
+  .file-list li a {
+    color: var(--zhu); text-decoration: none;
+    padding: 3px 10px;
+    border: 1px solid var(--zhu);
+    border-radius: 2px;
+    font-family: inherit;
+    font-size: 12px;
+  }
+  .file-list li a:hover { background: var(--zhu); color: var(--paper); }
+
+  .script-box {
+    background: var(--paper2);
+    padding: 24px 28px;
+    border-radius: 2px;
+    white-space: pre-wrap;
+    font-size: 15px;
+    line-height: 2;
+    color: #3a2818;
+    max-height: 600px;
+    overflow-y: auto;
+    border: 1px solid #d8c8a8;
+  }
+  .script-box h4 { color: var(--zhu); margin: 18px 0 6px; font-size: 16px; letter-spacing: 2px; }
+  .script-box h4:first-child { margin-top: 0; }
+  .script-box .direction { color: var(--jade); font-size: 14px; margin-left: 1em; }
+
+  footer {
+    text-align: center;
+    margin-top: 60px;
+    padding-top: 20px;
+    border-top: 1px solid #c8b088;
+    color: #8a6a48;
+    font-size: 13px;
+  }
+  footer a { color: var(--zhu); text-decoration: none; }
+
+  @media (max-width: 720px) {
+    h1 { font-size: 26px; letter-spacing: 4px; }
+    .chapter-bar { grid-template-columns: repeat(7, 1fr); }
+    .chapter-bar div:nth-child(n+8) { margin-top: 2px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="topbar">
+  <span class="brand">☯ 易经本体论</span>
+  <span class="dot">·</span>
+  <a href="index.html">首页</a>
+  <a href="gua.html">六十四卦</a>
+  <a href="reader.html">经文汇评</a>
+  <a href="shiyi.html">十翼</a>
+  <a href="yitu.html">易图互动</a>
+  <a href="animation/index.html" class="active">易之变 · 动画</a>
+</nav>
+
+<div class="wrap">
+  <h1>易 之 变</h1>
+  <p class="sub">从一道到万象 · <span class="tech">Remotion · Three.js · SVG</span> · 全 14 场</p>
+
+  <!-- 播放器 -->
+  <div class="player-box">
+    <video id="video" preload="metadata" controls poster="assets/contact-sheet.png">
+      <source src="assets/yizhibian-full.mp4" type="video/mp4">
+      您的浏览器不支持 video 标签。
+    </video>
+    <div class="controls-bar">
+      <button onclick="play()">▶ 播放</button>
+      <button onclick="pause()">⏸ 暂停</button>
+      <button onclick="toggleMute()">🔊 静音</button>
+      <button onclick="video.currentTime = 0; video.play()">↺ 重播</button>
+      <a href="assets/yizhibian-full.mp4" download style="margin-left:8px;color:#b8860b;font-size:13px;text-decoration:none;">⬇ 下载 MP4</a>
+      <span class="time" id="time">00:00 / 00:00</span>
+    </div>
+    <div class="chapter-bar" id="chapterBar"></div>
+  </div>
+
+  <!-- 当前场景说明 -->
+  <div class="scene-card" id="sceneInfo">
+    <h3 id="sceneTitle">第一幕 · 混沌虚空 <span>00:00 – 00:10</span></h3>
+    <p id="sceneDesc">幕起。宣纸底色如晨雾未散，墨色星尘在无何有之乡缓缓游移。中央微茫一点，即是"道"——视之不见名曰夷，听之不闻名曰希。</p>
+    <div class="quote" id="sceneQuote">「有物混成，先天地生。寂兮寥兮，独立而不改，周行而不殆。」——《道德经》第二十五章</div>
+  </div>
+
+  <!-- 信息卡 -->
+  <div class="meta-grid">
+    <div class="meta-card">
+      <h4>📐 技术栈</h4>
+      <ul>
+        <li><b>Remotion</b>：帧精确合成与批量渲染</li>
+        <li><b>Three.js</b>：3D 粒子/星云/旋转太极</li>
+        <li><b>SVG</b>：爻线、卦形、八卦符号（矢量精确）</li>
+        <li><b>React</b>：声明式场景组件</li>
+      </ul>
+    </div>
+    <div class="meta-card">
+      <h4>🎞 影片规格</h4>
+      <ul>
+        <li>分辨率：1920 × 1080（1080p）</li>
+        <li>帧率：30 fps</li>
+        <li>时长：2 分 54 秒（共 14 幕）</li>
+        <li>文件大小：约 17 MB（H.264）</li>
+        <li>渲染时长：约 4 分钟 / 幕</li>
+      </ul>
+    </div>
+    <div class="meta-card">
+      <h4>☯ 哲学骨架</h4>
+      <ul>
+        <li>道 → 太极 → 两仪 → 四象 → 八卦</li>
+        <li>八卦重为六十四卦（伏羲方圆图）</li>
+        <li>错卦 · 综卦 · 互卦 · 之卦</li>
+        <li>十二消息卦 · 大衍筮法 · 三易</li>
+        <li>「万物归一，一归太虚」循环</li>
+      </ul>
+    </div>
+    <div class="meta-card">
+      <h4>📁 源码 & 剧本</h4>
+      <ul>
+        <li>剧本文件：14 场分镜完整文档</li>
+        <li>源码：Remotion 全部 React/TSX 组件</li>
+        <li>共 12 个源文件 · 场景分为 4 组</li>
+        <li>所有卦象/爻位数据取自本体数据层</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 分幕列表 -->
+  <h2 class="section-title">十 四 场 分 幕</h2>
+  <div id="sceneList"></div>
+
+  <!-- 剧本 -->
+  <h2 class="section-title">剧 本 原 文</h2>
+  <div class="script-box" id="scriptBox">加载剧本中…</div>
+
+  <!-- 源码文件列表 -->
+  <h2 class="section-title">源 码 文 件</h2>
+  <ul class="file-list" id="fileList"></ul>
+
+  <footer>
+    <p>《易之变 · 从一道到万象》· Remotion + Three.js + SVG 动画 ·
+       <a href="../">返回《易经》本体论主页</a></p>
+    <p style="margin-top:8px;">本体论驱动 · 所有卦象变化均由数据层驱动渲染 · 2026</p>
+  </footer>
+</div>
+
+<script>
+// 14 场分镜时间点（秒）——根据实际 seg1+seg2 总长度 174s（2:54）合理分配
+const scenes = [
+  { id:1,  title:'第一幕 · 混沌虚空',     start:0,   end:10,  file:'scene-1.png',
+    desc:'幕起。宣纸底色如晨雾未散，墨色星尘在无何有之乡缓缓游移。中央微茫一点，即是"道"。',
+    quote:'「有物混成，先天地生。寂兮寥兮，独立而不改，周行而不殆。」——《道德经》第二十五章' },
+  { id:2,  title:'第二幕 · 道生一 · 太极', start:10,  end:22,  file:'scene-2.png',
+    desc:'一点微光爆裂旋出，阴阳二鱼首尾相衔，朱红鎏金二气缠绕，太极自虚无中诞生，缓缓旋动。',
+    quote:'「易有太极，是生两仪。」——《易传·系辞上》' },
+  { id:3,  title:'第三幕 · 一生二 · 两仪', start:22,  end:34,  file:'scene-3.png',
+    desc:'太极动而生阳，静而生阴。左出朱红阳爻 ⚊，右出鎏金阴爻 ⚋，阴阳分位，天地始判。',
+    quote:'「一阴一阳之谓道。」——《易传·系辞上》' },
+  { id:4,  title:'第四幕 · 二生三 · 四象', start:34,  end:46,  file:'scene-4.png',
+    desc:'两仪之上再生一爻，太阳、少阴、少阳、太阴四象依次铺展，老阳老阴、少阳少阴各就其位。',
+    quote:'「两仪生四象。」——《易传·系辞上》' },
+  { id:5,  title:'第五幕 · 三生万物 · 八卦', start:46,  end:60, file:'scene-5.png',
+    desc:'四象各生一爻而成八卦——乾兑离震巽坎艮坤，按先天方位环形排列，天地雷风水火山泽各归其位。',
+    quote:'「四象生八卦，八卦定吉凶，吉凶生大业。」——《易传·系辞上》' },
+  { id:6,  title:'第六幕 · 八卦相重 · 六十四卦', start:60, end:78, file:'scene-6.png',
+    desc:'八卦两两相重，8×8 方阵逐格展开，伏羲六十四卦方圆图成——圆象天、方象地。',
+    quote:'「八卦成列，象在其中矣；因而重之，爻在其中矣。」——《易传·系辞下》' },
+  { id:7,  title:'第七幕 · 错卦 · 阴阳对翻', start:78, end:90, file:'scene-7.png',
+    desc:'六爻同时翻转，阳变阴、阴变阳，乾变坤、坎变离……每卦皆有其错，天地定位，山泽通气。',
+    quote:'「错者，阴阳相对也。」——来知德《周易集注》' },
+  { id:8,  title:'第八幕 · 综卦 · 上下倒置', start:90, end:102,file:'scene-8.png',
+    desc:'卦象倒转 180°，泰变为否、损变为益……从颠倒中见天地之反覆，悟祸福之相倚。',
+    quote:'「综者，上下相倒也。」——来知德《周易集注》' },
+  { id:9,  title:'第九幕 · 互卦 · 中藏二卦', start:102,end:114,file:'scene-9.png',
+    desc:'取二、三、四爻为下互，三、四、五爻为上互，一卦之中又藏二卦——卦中有卦，象中生象。',
+    quote:'「互卦者，中四爻交互成卦也。」——《易学启蒙》' },
+  { id:10, title:'第十幕 · 之卦 · 动爻生变', start:114,end:126,file:'scene-10.png',
+    desc:'老阳变阴、老阴变阳，一爻动则成之卦。演示乾卦初九动成姤、五爻动成剥、六爻皆动成坤。',
+    quote:'「爻者，言乎变者也。」——《易传·系辞上》' },
+  { id:11, title:'第十一幕 · 十二消息卦',     start:126,end:138,file:'scene-11.png',
+    desc:'自复卦一阳生起，经临、泰、大壮、夬而至乾；再自姤一阴生，经遁、否、观、剥而至坤。十二月卦气流转。',
+    quote:'「消息卦者，阴阳之消长，一岁之运也。」——孟喜卦气说' },
+  { id:12, title:'第十二幕 · 大衍筮法 · 四营成易', start:138,end:150,file:'scene-12.png',
+    desc:'五十策蓍草，分二、挂一、揲四、归奇，四营而成易，十有八变而成卦。演示一卦之起。',
+    quote:'「大衍之数五十，其用四十有九……」——《易传·系辞上》' },
+  { id:13, title:'第十三幕 · 三易 · 变易·简易·不易', start:150,end:162,file:'scene-13.png',
+    desc:'三易同现——变易（万物流转）、简易（一阴一阳）、不易（道体恒常），三道并行而不悖。',
+    quote:'「易一名而含三义：易简一也，变易二也，不易三也。」——《易纬·乾凿度》' },
+  { id:14, title:'第十四幕 · 万物归一',     start:162,end:174,file:'scene-14.png',
+    desc:'六十四卦向中心汇聚，万化归太极，太极归一道；一道又散为虚空——循环往复，周行不殆。',
+    quote:'「万物芸芸，各复归其根。归根曰静，静曰复命。」——《道德经》第十六章' }
+];
+
+const video = document.getElementById('video');
+const timeEl = document.getElementById('time');
+const chapterBar = document.getElementById('chapterBar');
+const sceneInfo = document.getElementById('sceneInfo');
+const sceneList = document.getElementById('sceneList');
+
+function fmt(s){ s=Math.max(0,Math.floor(s)); return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0'); }
+
+video.addEventListener('timeupdate', ()=>{
+  timeEl.textContent = fmt(video.currentTime)+' / '+fmt(video.duration||174);
+  const cur = scenes.find(s => video.currentTime >= s.start && video.currentTime < s.end) || scenes[scenes.length-1];
+  // 更新高亮
+  chapterBar.querySelectorAll('div').forEach((el,i)=>{
+    el.classList.toggle('active', scenes[i].id===cur.id);
+  });
+  // 更新场景卡（只在切换时）
+  if(sceneInfo.dataset.curId !== String(cur.id)){
+    sceneInfo.dataset.curId = cur.id;
+    document.getElementById('sceneTitle').innerHTML = cur.title+' <span>'+fmt(cur.start)+' – '+fmt(cur.end)+'</span>';
+    document.getElementById('sceneDesc').textContent = cur.desc;
+    document.getElementById('sceneQuote').textContent = cur.quote;
+  }
+});
+
+video.addEventListener('loadedmetadata', ()=>{
+  timeEl.textContent = '00:00 / '+fmt(video.duration);
+});
+
+function play(){ video.play(); }
+function pause(){ video.pause(); }
+function toggleMute(){ video.muted = !video.muted; }
+
+// 生成时间轴
+scenes.forEach((s,i)=>{
+  const d = document.createElement('div');
+  d.textContent = s.id;
+  d.title = s.title;
+  d.onclick = ()=>{ video.currentTime = s.start+0.1; video.play(); };
+  chapterBar.appendChild(d);
+});
+
+// 生成分幕列表
+scenes.forEach(s=>{
+  const card = document.createElement('div');
+  card.className = 'scene-card';
+  card.innerHTML =
+    '<h3>'+s.title+' <span>'+fmt(s.start)+' – '+fmt(s.end)+'</span></h3>'+
+    '<img src="assets/scenes/'+s.file+'" alt="'+s.title+'" style="width:100%;max-width:480px;border-radius:2px;margin:10px 0;border:1px solid #d8c8a8;" loading="lazy">'+
+    '<p>'+s.desc+'</p>'+
+    '<div class="quote">'+s.quote+'</div>'+
+    '<button onclick="document.getElementById(\'video\').currentTime='+s.start+'.1;document.getElementById(\'video\').play();document.getElementById(\'video\').scrollIntoView({behavior:\'smooth\',block:\'center\'});" style="margin-top:10px;background:var(--zhu);color:var(--paper);border:none;padding:6px 14px;border-radius:2px;cursor:pointer;font-family:inherit;">▶ 跳到此幕</button>';
+  sceneList.appendChild(card);
+});
+
+// 加载剧本
+fetch('易之变——从一道到万象（第1版）.md').then(r=>r.text()).then(md=>{
+  // 简单 markdown → HTML（只处理 #、##、###、> 引文、普通段落）
+  const html = md
+    .replace(/^### (.+)$/gm,'<h4>$1</h4>')
+    .replace(/^## (.+)$/gm,'<h4 style="color:var(--gold);">$1</h4>')
+    .replace(/^# (.+)$/gm,'<h4 style="color:var(--zhu);font-size:18px;">$1</h4>')
+    .replace(/^△ (.+)$/gm,'<p class="direction">△ $1</p>')
+    .replace(/^> (.+)$/gm,'<p style="color:var(--gold);font-style:italic;margin-left:1em;">$1</p>')
+    .replace(/\n\n/g,'</p><p>')
+    .replace(/^([^<].*)$/gm,'<p>$1</p>');
+  document.getElementById('scriptBox').innerHTML = html;
+}).catch(()=>{
+  document.getElementById('scriptBox').textContent = '剧本加载失败，请直接打开 易之变——从一道到万象（第1版）.md 查看。';
+});
+
+// 源码文件列表（从 package.json 提取？直接枚举）
+const files = [
+  { name:'package.json', size:'2KB',    href:'package.json' },
+  { name:'tsconfig.json', size:'500B',   href:'tsconfig.json' },
+  { name:'remotion.config.ts', size:'300B', href:'remotion.config.ts' },
+  { name:'src/index.ts', size:'1KB',     href:'src/index.ts' },
+  { name:'src/Root.tsx', size:'2KB',     href:'src/Root.tsx' },
+  { name:'src/RemotionRoot.tsx', size:'3KB', href:'src/RemotionRoot.tsx' },
+  { name:'src/scenes.ts', size:'4KB',    href:'src/scenes.ts' },
+  { name:'src/data.ts', size:'6KB',      href:'src/data.ts' },
+  { name:'src/Common.tsx', size:'5KB',   href:'src/Common.tsx' },
+  { name:'src/Yao.tsx', size:'3KB',      href:'src/Yao.tsx' },
+  { name:'src/ThreeDust.tsx', size:'5KB', href:'src/ThreeDust.tsx' },
+  { name:'src/ScenesA.tsx (幕1–4)', size:'10KB', href:'src/ScenesA.tsx' },
+  { name:'src/ScenesB.tsx (幕5–7)', size:'12KB', href:'src/ScenesB.tsx' },
+  { name:'src/ScenesC.tsx (幕8–11)', size:'11KB', href:'src/ScenesC.tsx' },
+  { name:'src/ScenesD.tsx (幕12–14)', size:'9KB', href:'src/ScenesD.tsx' },
+  { name:'剧本-易道生化.md（第1版）', size:'8KB', href:'剧本-易道生化.md' },
+  { name:'易之变——从一道到万象（第1版）.md（完整版）', size:'20KB', href:'易之变——从一道到万象（第1版）.md' },
+  { name:'assets/yizhibian-full.mp4（成片）', size:'17MB', href:'assets/yizhibian-full.mp4' },
+];
+const fl = document.getElementById('fileList');
+files.forEach(f=>{
+  const li = document.createElement('li');
+  li.innerHTML = '<span class="fname">📄 '+f.name+'</span><span class="fsize">'+f.size+'</span><a href="'+f.href+'" target="_blank">查看</a>';
+  fl.appendChild(li);
+});
+</script>
+</body>
+</html>
