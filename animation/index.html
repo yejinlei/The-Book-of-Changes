@@ -456,7 +456,7 @@ files.forEach(f=>{
 });
 </script>
 <!-- 清晰度切换 + 音轨引擎（Web Audio API 实时合成古琴垫+磬+钟+爻弹+变卦锣，与内嵌音轨互不干扰） -->
-<script src="assets/yijing-audio.js"></script>
+<script defer src="assets/yijing-audio.js?v=2"></script>
 <script>
 const QUALITIES = {
   '720p':      { src:'assets/yizhibian-720p.mp4',       size:'4.2MB', btn:'q720',      hasWebAudio:true,  voice:false },
@@ -509,7 +509,13 @@ video.muted = false;
 
 // Web Audio 实时音轨作为可选叠加层（默认静音，等用户切到古琴版才开启）
 if (btnSound) btnSound.style.display = 'none'; // 暂时隐藏，因为内嵌音轨已覆盖
-if (window.YijingAudio) { YijingAudio.setMuted(true); }
+(function waitAudio(){
+  if (window.YijingAudio && typeof YijingAudio.setMuted === 'function') {
+    YijingAudio.setMuted(true);
+  } else {
+    setTimeout(waitAudio, 50);
+  }
+})();
 </script>
 </body>
 </html>
