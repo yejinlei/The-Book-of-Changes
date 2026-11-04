@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>易经本体论 | The Book of Changes Ontology</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
 <style>
 :root {
@@ -22,7 +21,7 @@
 }
 * { margin:0; padding:0; box-sizing:border-box; }
 body {
-  font-family: 'Noto Serif SC', serif;
+  font-family: 'Songti SC','STSong','SimSun','Noto Serif CJK SC','Source Han Serif SC','Noto Serif SC',serif;
   background: var(--bg);
   color: var(--text);
   line-height: 1.8;
@@ -438,7 +437,7 @@ function render64Gua() {
   let list = ONT.liushisigua;
   if (currentJing !== 'all') list = list.filter(g => g.jing === currentJing);
   const html = list.map(g => `
-    <a class="gua-cell ${g.jing==='上经'?'jing-shang':'jing-xia'}" href="reader.html#${g.name}" title="${g.num}.${g.name}：${g.guaci||''}">
+    <a class="gua-cell ${g.jing==='上经'?'jing-shang':'jing-xia'}" href="gua.html#${g.name}" title="${g.num}.${g.name}：${g.guaci||''}">
       <span class="sym">${g.symbol}</span>
       <span class="name">${g.name}</span>
       <span class="num">${g.num}</span>
@@ -556,7 +555,7 @@ function renderChart() {
       nodes.push({ 
         id, name, category:cat, symbolSize:size, 
         itemStyle:{color:catColor[cat]||'#888'}, 
-        label:{show:size>=22, fontSize:12, fontFamily:'Noto Serif SC'} 
+        label:{show:size>=22, fontSize:12, fontFamily:'Songti SC,SimSun,serif'} 
       });
     }
     
@@ -651,7 +650,7 @@ function renderChart() {
       legend: [{ 
         data: ['本体核心','八卦','卦','注家','经文'], 
         top: 10,
-        textStyle: {fontFamily:'Noto Serif SC', fontSize: 12, color:'#3a2a1a'}
+        textStyle: {fontFamily:'Songti SC,SimSun,serif', fontSize: 12, color:'#3a2a1a'}
       }],
       series: [{
         type: 'graph',
@@ -671,7 +670,7 @@ function renderChart() {
         },
         label: {
           position: 'right',
-          fontFamily:'Noto Serif SC',
+          fontFamily:'Songti SC,SimSun,serif',
           fontSize: 11
         },
         lineStyle: {
