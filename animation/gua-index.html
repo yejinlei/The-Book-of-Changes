@@ -3,42 +3,540 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>六十四卦讲解 · 易经 The Book of Changes</title>
+<title>64卦讲解全集 · 《易经》数字人文研究平台</title>
+<link rel="stylesheet" href="style.css">
 <style>
-body { background:#f4ecd8; font-family:"Noto Serif SC","Songti SC","STSong",serif; color:#3b2c1a; margin:0; padding:0; }
-.header { background:linear-gradient(135deg,#f9f2df,#f4ecd8); padding:48px 20px 28px; text-align:center; border-bottom:2px solid #c9a04d33; }
-.header h1 { font-size:clamp(22px,4vw,36px); color:#7a2420; margin:0 0 8px; letter-spacing:0.25em; font-weight:700; }
-.header p { color:#8b6d3f; margin:4px 0; font-size:14px; }
-.progress { background:#fff8e7; max-width:720px; margin:16px auto; padding:12px 20px; border-radius:8px; border:1px solid #d4b37a; font-size:14px; }
-.progress .bar { height:8px; background:#e8d8b0; border-radius:4px; margin:8px 0 4px; overflow:hidden; }
-.progress .fill { height:100%; background:linear-gradient(90deg,#b83a35,#d4a548); width:1.6%; transition:width 0.4s; }
-.progress .num { font-weight:600; color:#7a2420; }
-.content { max-width:1180px; margin:0 auto; padding:32px 20px 60px; }
-.palace { margin-bottom:36px; }
-.palace-title { font-size:17px; color:#7a2420; border-left:4px solid #b83a35; padding-left:10px; margin:0 0 14px; letter-spacing:0.1em; }
-.grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(128px,1fr)); gap:12px; }
-.card { display:block; background:#fffdf7; border:1px solid #e0d0a8; border-radius:8px; padding:14px 10px; text-align:center; text-decoration:none; color:inherit; transition:all 0.25s; }
-.card:hover { transform:translateY(-3px); box-shadow:0 8px 24px #7a242022; border-color:#b83a35; }
-.card.pending { opacity:0.55; cursor:not-allowed; }
-.card.pending:hover { transform:none; box-shadow:none; }
-.gua-symbol { font-size:13px; line-height:1.25; color:#3b2c1a; font-weight:700; letter-spacing:3px; margin-bottom:8px; min-height:82px; display:flex; align-items:center; justify-content:center; }
-.gua-title { font-size:14px; font-weight:600; color:#7a2420; }
-.gua-status { font-size:11px; margin-top:6px; color:#a89070; }
-.done-badge { color:#3a7a3a; font-weight:600; }
-.back { max-width:1180px; margin:24px auto 0; padding:0 20px; }
-.back a { color:#7a2420; text-decoration:none; font-size:14px; }
-.note { max-width:720px; margin:0 auto; color:#8b6d3f; font-size:12px; line-height:1.7; }
-@media (max-width:640px) { .grid { grid-template-columns:repeat(auto-fill,minmax(96px,1fr)); gap:8px; } .gua-symbol { font-size:11px; min-height:68px; letter-spacing:2px; } }
+body{background:#f4ecd8;color:#2a2418;font-family:'Noto Serif CJK SC','Songti SC',serif;margin:0}
+.topbar{background:rgba(40,28,16,.94);padding:14px 0;position:sticky;top:0;z-index:10;backdrop-filter:blur(6px)}
+.nav{max-width:1280px;margin:0 auto;padding:0 24px;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.nav a{color:#d9c6a0;text-decoration:none;padding:6px 12px;border-radius:4px;font-size:15px;letter-spacing:1px;transition:all .2s}
+.nav a:hover{background:rgba(217,198,160,.15);color:#f0dbb0}
+.nav .sep{width:1px;height:20px;background:rgba(217,198,160,.3);margin:0 4px}
+.wrap{max-width:1280px;margin:0 auto;padding:30px 24px 80px}
+h1{font-size:clamp(28px,4.5vw,48px);text-align:center;color:#8b2525;letter-spacing:12px;margin:10px 0 6px}
+.subtitle{text-align:center;color:#9a8f78;font-size:17px;letter-spacing:4px;margin-bottom:14px}
+.progress{text-align:center;color:#8b2525;font-size:16px;letter-spacing:3px;margin-bottom:40px}
+.progress bar{display:block;width:360px;max-width:90%;height:8px;background:rgba(139,37,37,.15);border-radius:4px;margin:12px auto 0;overflow:hidden}
+.progress fill{display:block;height:100%;background:#8b2525;border-radius:4px;width:1.6%;transition:width .5s}
+.gong-section{margin:40px 0}
+.gong-title{font-size:24px;color:#8b2525;letter-spacing:6px;border-bottom:2px solid #8b2525;padding-bottom:8px;margin:0 0 20px}
+.gua-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:14px}
+.gua-card{background:rgba(255,253,245,.75);border:1px solid rgba(139,37,37,.2);border-radius:8px;padding:20px 14px;text-align:center;text-decoration:none;color:inherit;transition:all .25s cubic-bezier(.4,0,.2,1);cursor:pointer;position:relative;overflow:hidden}
+.gua-card:hover{transform:translateY(-4px);box-shadow:0 8px 24px rgba(139,37,37,.18);border-color:#8b2525;background:#fffdf0}
+.gua-card.done{border-color:rgba(139,37,37,.5)}
+.gua-card.pending{filter:grayscale(.5)}
+.gua-num{font-size:13px;color:#9a8f78;letter-spacing:2px;margin-bottom:6px}
+.gua-symbol{font-size:44px;color:#2a2418;line-height:1;margin:4px 0 6px}
+.gua-name{font-size:26px;color:#8b2525;letter-spacing:4px;font-weight:600;margin-bottom:6px}
+.gua-desc{font-size:13px;color:#9a8f78;letter-spacing:1px;margin-bottom:8px}
+.gua-dur{font-size:12px;color:#8b2525;letter-spacing:2px;padding:3px 8px;border:1px solid rgba(139,37,37,.3);border-radius:12px;display:inline-block}
+.gua-card.pending .gua-dur{color:#9a8f78;border-color:rgba(154,143,120,.3)}
+.footer{text-align:center;padding:30px;color:#9a8f78;font-size:14px;letter-spacing:2px;border-top:1px solid rgba(139,37,37,.15);margin-top:40px}
+@media(max-width:640px){.gua-grid{grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:10px}.gua-card{padding:14px 8px}.gua-symbol{font-size:32px}.gua-name{font-size:20px}}
 </style>
 </head>
 <body>
-<div class="back"><a href="./">← 返回《易经》动画总览</a></div>
-<div class="header">
+<div class="topbar"><nav class="nav">
+<a href="../index.html">首页</a><span class="sep"></span>
+<a href="index.html">易之变</a><a href="qian.html">乾卦讲解</a><a href="gua-index.html" style="background:rgba(217,198,160,.18);color:#f0dbb0">64卦讲解</a>
+<span class="sep"></span><a href="../yijing.html">易经本体</a><a href="../guaming.html">卦名索引</a><a href="../yao.html">爻位体系</a><a href="../shifa.html">筮法推演</a><a href="../tushu.html">图书源流</a><a href="../zhushu.html">注疏汇评</a>
+</nav></div>
+<div class="wrap">
 <h1>六 十 四 卦 讲 解</h1>
-<p>从乾卦开始，一卦一解；人声解说 · 爻位动画 · 古琴背景</p>
-<div class="progress">制作进度：<span class="num">1 / 64</span> 卦已上线<div class="bar"><div class="fill"></div></div></div>
-<p class="note">按八宫卦序排列，每一卦独立成片（约 3 分钟），含卦辞原文、白话释义、彖传象传、六爻逐一讲解、用世要义小结。已完成卦可直接点击观看，其余卦正在逐卦制作中，分批上线。</p>
+<div class="subtitle">本体驱动 · 人声讲解 · 逐卦动画</div>
+<div class="progress">
+已完成 1 / 64 卦<bar><fill></fill></bar>
 </div>
-<div class="content"><div class="palace"><h3 class="palace-title">乾宫·属金</h3><div class="grid"><div class="card pending"><div class="gua-symbol">▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀</div><div class="gua-title">乾为天<span style="font-size:11px;color:#a89070;font-weight:400;margin-left:4px;">乾上乾下</span></div><div class="gua-status">制作中</div></div><div class="card pending"><div class="gua-symbol">▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀</div><div class="gua-title">天风姤<span style="font-size:11px;color:#a89070;font-weight:400;margin-left:4px;">乾上巽下</span></div><div class="gua-status">制作中</div></div><div class="card pending"><div class="gua-symbol">▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀</div><div class="gua-title">天山遁<span style="font-size:11px;color:#a89070;font-weight:400;margin-left:4px;">乾上艮下</span></div><div class="gua-status">制作中</div></div><div class="card pending"><div class="gua-symbol">▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀</div><div class="gua-title">天地否<span style="font-size:11px;color:#a89070;font-weight:400;margin-left:4px;">乾上坤下</span></div><div class="gua-status">制作中</div></div><div class="card pending"><div class="gua-symbol">▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀</div><div class="gua-title">风地观<span style="font-size:11px;color:#a89070;font-weight:400;margin-left:4px;">巽上坤下</span></div><div class="gua-status">制作中</div></div><div class="card pending"><div class="gua-symbol">▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀</div><div class="gua-title">山地剥<span style="font-size:11px;color:#a89070;font-weight:400;margin-left:4px;">艮上坤下</span></div><div class="gua-status">制作中</div></div><div class="card pending"><div class="gua-symbol">▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀</div><div class="gua-title">火地晋<span style="font-size:11px;color:#a89070;font-weight:400;margin-left:4px;">离上坤下</span></div><div class="gua-status">制作中</div></div><div class="card pending"><div class="gua-symbol">?</div><div class="gua-title">火天大有</div><div class="gua-status">制作中</div></div></div></div><div class="palace"><h3 class="palace-title">坎宫·属水</h3><div class="grid"><div class="card pending"><div class="gua-symbol">▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀</div><div class="gua-title">坎为水<span style="font-size:11px;color:#a89070;font-weight:400;margin-left:4px;">坎上坎下</span></div><div class="gua-status">制作中</div></div><div class="card pending"><div class="gua-symbol">▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀</div><div class="gua-title">水泽节<span style="font-size:11px;color:#a89070;font-weight:400;margin-left:4px;">坎上兑下</span></div><div class="gua-status">制作中</div></div><div class="card pending"><div class="gua-symbol">▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀</div><div class="gua-title">水雷屯<span style="font-size:11px;color:#a89070;font-weight:400;margin-left:4px;">坎上震下</span></div><div class="gua-status">制作中</div></div><div class="card pending"><div class="gua-symbol">?</div><div class="gua-title">水火既济</div><div class="gua-status">制作中</div></div><div class="card pending"><div class="gua-symbol">▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀</div><div class="gua-title">泽火革<span style="font-size:11px;color:#a89070;font-weight:400;margin-left:4px;">兑上离下</span></div><div class="gua-status">制作中</div></div><div class="card pending"><div class="gua-symbol">▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀</div><div class="gua-title">雷火丰<span style="font-size:11px;color:#a89070;font-weight:400;margin-left:4px;">震上离下</span></div><div class="gua-status">制作中</div></div><div class="card pending"><div class="gua-symbol">?</div><div class="gua-title">地火明夷</div><div class="gua-status">制作中</div></div><div class="card pending"><div class="gua-symbol">▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀</div><div class="gua-title">地水师<span style="font-size:11px;color:#a89070;font-weight:400;margin-left:4px;">坤上坎下</span></div><div class="gua-status">制作中</div></div></div></div><div class="palace"><h3 class="palace-title">艮宫·属土</h3><div class="grid"><div class="card pending"><div class="gua-symbol">▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀</div><div class="gua-title">艮为山<span style="font-size:11px;color:#a89070;font-weight:400;margin-left:4px;">艮上艮下</span></div><div class="gua-status">制作中</div></div><div class="card pending"><div class="gua-symbol">▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀</div><div class="gua-title">山火贲<span style="font-size:11px;color:#a89070;font-weight:400;margin-left:4px;">艮上离下</span></div><div class="gua-status">制作中</div></div><div class="card pending"><div class="gua-symbol">?</div><div class="gua-title">山天大畜</div><div class="gua-status">制作中</div></div><div class="card pending"><div class="gua-symbol">▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀</div><div class="gua-title">山泽损<span style="font-size:11px;color:#a89070;font-weight:400;margin-left:4px;">艮上兑下</span></div><div class="gua-status">制作中</div></div><div class="card pending"><div class="gua-symbol">▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀</div><div class="gua-title">火泽睽<span style="font-size:11px;color:#a89070;font-weight:400;margin-left:4px;">离上兑下</span></div><div class="gua-status">制作中</div></div><div class="card pending"><div class="gua-symbol">▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀</div><div class="gua-title">天泽履<span style="font-size:11px;color:#a89070;font-weight:400;margin-left:4px;">乾上兑下</span></div><div class="gua-status">制作中</div></div><div class="card pending"><div class="gua-symbol">?</div><div class="gua-title">风泽中孚</div><div class="gua-status">制作中</div></div><div class="card pending"><div class="gua-symbol">▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀</div><div class="gua-title">风山渐<span style="font-size:11px;color:#a89070;font-weight:400;margin-left:4px;">巽上艮下</span></div><div class="gua-status">制作中</div></div></div></div><div class="palace"><h3 class="palace-title">震宫·属木</h3><div class="grid"><div class="card pending"><div class="gua-symbol">▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀</div><div class="gua-title">震为雷<span style="font-size:11px;color:#a89070;font-weight:400;margin-left:4px;">震上震下</span></div><div class="gua-status">制作中</div></div><div class="card pending"><div class="gua-symbol">▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀</div><div class="gua-title">雷地豫<span style="font-size:11px;color:#a89070;font-weight:400;margin-left:4px;">震上坤下</span></div><div class="gua-status">制作中</div></div><div class="card pending"><div class="gua-symbol">▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀</div><div class="gua-title">雷水解<span style="font-size:11px;color:#a89070;font-weight:400;margin-left:4px;">震上坎下</span></div><div class="gua-status">制作中</div></div><div class="card pending"><div class="gua-symbol">▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀</div><div class="gua-title">雷风恒<span style="font-size:11px;color:#a89070;font-weight:400;margin-left:4px;">震上巽下</span></div><div class="gua-status">制作中</div></div><div class="card pending"><div class="gua-symbol">▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀</div><div class="gua-title">地风升<span style="font-size:11px;color:#a89070;font-weight:400;margin-left:4px;">坤上巽下</span></div><div class="gua-status">制作中</div></div><div class="card pending"><div class="gua-symbol">▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀</div><div class="gua-title">水风井<span style="font-size:11px;color:#a89070;font-weight:400;margin-left:4px;">坎上巽下</span></div><div class="gua-status">制作中</div></div><div class="card pending"><div class="gua-symbol">?</div><div class="gua-title">泽风大过</div><div class="gua-status">制作中</div></div><div class="card pending"><div class="gua-symbol">▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀</div><div class="gua-title">泽雷随<span style="font-size:11px;color:#a89070;font-weight:400;margin-left:4px;">兑上震下</span></div><div class="gua-status">制作中</div></div></div></div><div class="palace"><h3 class="palace-title">巽宫·属木</h3><div class="grid"><div class="card pending"><div class="gua-symbol">▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀</div><div class="gua-title">巽为风<span style="font-size:11px;color:#a89070;font-weight:400;margin-left:4px;">巽上巽下</span></div><div class="gua-status">制作中</div></div><div class="card pending"><div class="gua-symbol">?</div><div class="gua-title">风天小畜</div><div class="gua-status">制作中</div></div><div class="card pending"><div class="gua-symbol">?</div><div class="gua-title">风火家人</div><div class="gua-status">制作中</div></div><div class="card pending"><div class="gua-symbol">▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀</div><div class="gua-title">风雷益<span style="font-size:11px;color:#a89070;font-weight:400;margin-left:4px;">巽上震下</span></div><div class="gua-status">制作中</div></div><div class="card pending"><div class="gua-symbol">?</div><div class="gua-title">天雷无妄</div><div class="gua-status">制作中</div></div><div class="card pending"><div class="gua-symbol">?</div><div class="gua-title">火雷噬嗑</div><div class="gua-status">制作中</div></div><div class="card pending"><div class="gua-symbol">▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀</div><div class="gua-title">山雷颐<span style="font-size:11px;color:#a89070;font-weight:400;margin-left:4px;">艮上震下</span></div><div class="gua-status">制作中</div></div><div class="card pending"><div class="gua-symbol">▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀</div><div class="gua-title">山风蛊<span style="font-size:11px;color:#a89070;font-weight:400;margin-left:4px;">艮上巽下</span></div><div class="gua-status">制作中</div></div></div></div><div class="palace"><h3 class="palace-title">离宫·属火</h3><div class="grid"><div class="card pending"><div class="gua-symbol">▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀</div><div class="gua-title">离为火<span style="font-size:11px;color:#a89070;font-weight:400;margin-left:4px;">离上离下</span></div><div class="gua-status">制作中</div></div><div class="card pending"><div class="gua-symbol">▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀</div><div class="gua-title">火山旅<span style="font-size:11px;color:#a89070;font-weight:400;margin-left:4px;">离上艮下</span></div><div class="gua-status">制作中</div></div><div class="card pending"><div class="gua-symbol">▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀</div><div class="gua-title">火风鼎<span style="font-size:11px;color:#a89070;font-weight:400;margin-left:4px;">离上巽下</span></div><div class="gua-status">制作中</div></div><div class="card pending"><div class="gua-symbol">?</div><div class="gua-title">火水未济</div><div class="gua-status">制作中</div></div><div class="card pending"><div class="gua-symbol">▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀</div><div class="gua-title">山水蒙<span style="font-size:11px;color:#a89070;font-weight:400;margin-left:4px;">艮上坎下</span></div><div class="gua-status">制作中</div></div><div class="card pending"><div class="gua-symbol">▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀</div><div class="gua-title">风水涣<span style="font-size:11px;color:#a89070;font-weight:400;margin-left:4px;">巽上坎下</span></div><div class="gua-status">制作中</div></div><div class="card pending"><div class="gua-symbol">▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀</div><div class="gua-title">天水讼<span style="font-size:11px;color:#a89070;font-weight:400;margin-left:4px;">乾上坎下</span></div><div class="gua-status">制作中</div></div><div class="card pending"><div class="gua-symbol">?</div><div class="gua-title">天火同人</div><div class="gua-status">制作中</div></div></div></div><div class="palace"><h3 class="palace-title">坤宫·属土</h3><div class="grid"><div class="card pending"><div class="gua-symbol">▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀</div><div class="gua-title">坤为地<span style="font-size:11px;color:#a89070;font-weight:400;margin-left:4px;">坤上坤下</span></div><div class="gua-status">制作中</div></div><div class="card pending"><div class="gua-symbol">▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀</div><div class="gua-title">地雷复<span style="font-size:11px;color:#a89070;font-weight:400;margin-left:4px;">坤上震下</span></div><div class="gua-status">制作中</div></div><div class="card pending"><div class="gua-symbol">▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀</div><div class="gua-title">地泽临<span style="font-size:11px;color:#a89070;font-weight:400;margin-left:4px;">坤上兑下</span></div><div class="gua-status">制作中</div></div><div class="card pending"><div class="gua-symbol">▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀</div><div class="gua-title">地天泰<span style="font-size:11px;color:#a89070;font-weight:400;margin-left:4px;">坤上乾下</span></div><div class="gua-status">制作中</div></div><div class="card pending"><div class="gua-symbol">?</div><div class="gua-title">雷天大壮</div><div class="gua-status">制作中</div></div><div class="card pending"><div class="gua-symbol">▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀</div><div class="gua-title">泽天夬<span style="font-size:11px;color:#a89070;font-weight:400;margin-left:4px;">兑上乾下</span></div><div class="gua-status">制作中</div></div><div class="card pending"><div class="gua-symbol">▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀</div><div class="gua-title">水天需<span style="font-size:11px;color:#a89070;font-weight:400;margin-left:4px;">坎上乾下</span></div><div class="gua-status">制作中</div></div><div class="card pending"><div class="gua-symbol">▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀</div><div class="gua-title">水地比<span style="font-size:11px;color:#a89070;font-weight:400;margin-left:4px;">坎上坤下</span></div><div class="gua-status">制作中</div></div></div></div><div class="palace"><h3 class="palace-title">兑宫·属金</h3><div class="grid"><div class="card pending"><div class="gua-symbol">▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀</div><div class="gua-title">兑为泽<span style="font-size:11px;color:#a89070;font-weight:400;margin-left:4px;">兑上兑下</span></div><div class="gua-status">制作中</div></div><div class="card pending"><div class="gua-symbol">▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀</div><div class="gua-title">泽水困<span style="font-size:11px;color:#a89070;font-weight:400;margin-left:4px;">兑上坎下</span></div><div class="gua-status">制作中</div></div><div class="card pending"><div class="gua-symbol">▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀</div><div class="gua-title">泽地萃<span style="font-size:11px;color:#a89070;font-weight:400;margin-left:4px;">兑上坤下</span></div><div class="gua-status">制作中</div></div><div class="card pending"><div class="gua-symbol">▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀</div><div class="gua-title">泽山咸<span style="font-size:11px;color:#a89070;font-weight:400;margin-left:4px;">兑上艮下</span></div><div class="gua-status">制作中</div></div><div class="card pending"><div class="gua-symbol">▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀</div><div class="gua-title">水山蹇<span style="font-size:11px;color:#a89070;font-weight:400;margin-left:4px;">坎上艮下</span></div><div class="gua-status">制作中</div></div><div class="card pending"><div class="gua-symbol">▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀<br>▀ ▀</div><div class="gua-title">地山谦<span style="font-size:11px;color:#a89070;font-weight:400;margin-left:4px;">坤上艮下</span></div><div class="gua-status">制作中</div></div><div class="card pending"><div class="gua-symbol">?</div><div class="gua-title">雷山小过</div><div class="gua-status">制作中</div></div><div class="card pending"><div class="gua-symbol">?</div><div class="gua-title">雷泽归妹</div><div class="gua-status">制作中</div></div></div></div></div>
+
+      <section class="gong-section">
+        <h2 class="gong-title">乾宫八卦（金）</h2>
+        <div class="gua-grid">
+          <a class="gua-card done" href="gua-00.html" >
+            <div class="gua-num">01</div>
+            <div class="gua-symbol">䷀</div>
+            <div class="gua-name">乾</div>
+            <div class="gua-desc">乾下乾上</div>
+            <div class="gua-dur">2分59秒</div>
+          </a>
+          <a class="gua-card pending" href="#" style="pointer-events:none;opacity:.6">
+            <div class="gua-num">44</div>
+            <div class="gua-symbol">䷫</div>
+            <div class="gua-name">姤</div>
+            <div class="gua-desc">巽下乾上</div>
+            <div class="gua-dur">制作中</div>
+          </a>
+          <a class="gua-card pending" href="#" style="pointer-events:none;opacity:.6">
+            <div class="gua-num">33</div>
+            <div class="gua-symbol">䷠</div>
+            <div class="gua-name">遁</div>
+            <div class="gua-desc">艮下乾上</div>
+            <div class="gua-dur">制作中</div>
+          </a>
+          <a class="gua-card pending" href="#" style="pointer-events:none;opacity:.6">
+            <div class="gua-num">12</div>
+            <div class="gua-symbol">䷋</div>
+            <div class="gua-name">否</div>
+            <div class="gua-desc">坤下乾上</div>
+            <div class="gua-dur">制作中</div>
+          </a>
+          <a class="gua-card pending" href="#" style="pointer-events:none;opacity:.6">
+            <div class="gua-num">20</div>
+            <div class="gua-symbol">䷓</div>
+            <div class="gua-name">观</div>
+            <div class="gua-desc">坤下巽上</div>
+            <div class="gua-dur">制作中</div>
+          </a>
+          <a class="gua-card pending" href="#" style="pointer-events:none;opacity:.6">
+            <div class="gua-num">23</div>
+            <div class="gua-symbol">䷖</div>
+            <div class="gua-name">剥</div>
+            <div class="gua-desc">坤下艮上</div>
+            <div class="gua-dur">制作中</div>
+          </a>
+          <a class="gua-card pending" href="#" style="pointer-events:none;opacity:.6">
+            <div class="gua-num">35</div>
+            <div class="gua-symbol">䷢</div>
+            <div class="gua-name">晋</div>
+            <div class="gua-desc">坤下离上</div>
+            <div class="gua-dur">制作中</div>
+          </a>
+          <a class="gua-card pending" href="#" style="pointer-events:none;opacity:.6">
+            <div class="gua-num">14</div>
+            <div class="gua-symbol">䷍</div>
+            <div class="gua-name">大有</div>
+            <div class="gua-desc">乾下离上</div>
+            <div class="gua-dur">制作中</div>
+          </a>
+        </div>
+      </section>
+      <section class="gong-section">
+        <h2 class="gong-title">坎宫八卦（水）</h2>
+        <div class="gua-grid">
+          <a class="gua-card pending" href="#" style="pointer-events:none;opacity:.6">
+            <div class="gua-num">29</div>
+            <div class="gua-symbol">䷜</div>
+            <div class="gua-name">坎</div>
+            <div class="gua-desc">坎下坎上</div>
+            <div class="gua-dur">制作中</div>
+          </a>
+          <a class="gua-card pending" href="#" style="pointer-events:none;opacity:.6">
+            <div class="gua-num">60</div>
+            <div class="gua-symbol">䷻</div>
+            <div class="gua-name">节</div>
+            <div class="gua-desc">兑下坎上</div>
+            <div class="gua-dur">制作中</div>
+          </a>
+          <a class="gua-card pending" href="#" style="pointer-events:none;opacity:.6">
+            <div class="gua-num">03</div>
+            <div class="gua-symbol">䷂</div>
+            <div class="gua-name">屯</div>
+            <div class="gua-desc">震下坎上</div>
+            <div class="gua-dur">制作中</div>
+          </a>
+          <a class="gua-card pending" href="#" style="pointer-events:none;opacity:.6">
+            <div class="gua-num">63</div>
+            <div class="gua-symbol">䷾</div>
+            <div class="gua-name">既济</div>
+            <div class="gua-desc">离下坎上</div>
+            <div class="gua-dur">制作中</div>
+          </a>
+          <a class="gua-card pending" href="#" style="pointer-events:none;opacity:.6">
+            <div class="gua-num">49</div>
+            <div class="gua-symbol">䷰</div>
+            <div class="gua-name">革</div>
+            <div class="gua-desc">离下兑上</div>
+            <div class="gua-dur">制作中</div>
+          </a>
+          <a class="gua-card pending" href="#" style="pointer-events:none;opacity:.6">
+            <div class="gua-num">55</div>
+            <div class="gua-symbol">䷶</div>
+            <div class="gua-name">丰</div>
+            <div class="gua-desc">离下震上</div>
+            <div class="gua-dur">制作中</div>
+          </a>
+          <a class="gua-card pending" href="#" style="pointer-events:none;opacity:.6">
+            <div class="gua-num">36</div>
+            <div class="gua-symbol">䷣</div>
+            <div class="gua-name">明夷</div>
+            <div class="gua-desc">离下坤上</div>
+            <div class="gua-dur">制作中</div>
+          </a>
+          <a class="gua-card pending" href="#" style="pointer-events:none;opacity:.6">
+            <div class="gua-num">07</div>
+            <div class="gua-symbol">䷆</div>
+            <div class="gua-name">师</div>
+            <div class="gua-desc">坎下坤上</div>
+            <div class="gua-dur">制作中</div>
+          </a>
+        </div>
+      </section>
+      <section class="gong-section">
+        <h2 class="gong-title">艮宫八卦（土）</h2>
+        <div class="gua-grid">
+          <a class="gua-card pending" href="#" style="pointer-events:none;opacity:.6">
+            <div class="gua-num">52</div>
+            <div class="gua-symbol">䷳</div>
+            <div class="gua-name">艮</div>
+            <div class="gua-desc">艮下艮上</div>
+            <div class="gua-dur">制作中</div>
+          </a>
+          <a class="gua-card pending" href="#" style="pointer-events:none;opacity:.6">
+            <div class="gua-num">22</div>
+            <div class="gua-symbol">䷕</div>
+            <div class="gua-name">贲</div>
+            <div class="gua-desc">离下艮上</div>
+            <div class="gua-dur">制作中</div>
+          </a>
+          <a class="gua-card pending" href="#" style="pointer-events:none;opacity:.6">
+            <div class="gua-num">26</div>
+            <div class="gua-symbol">䷙</div>
+            <div class="gua-name">大畜</div>
+            <div class="gua-desc">乾下艮上</div>
+            <div class="gua-dur">制作中</div>
+          </a>
+          <a class="gua-card pending" href="#" style="pointer-events:none;opacity:.6">
+            <div class="gua-num">41</div>
+            <div class="gua-symbol">䷨</div>
+            <div class="gua-name">损</div>
+            <div class="gua-desc">兑下艮上</div>
+            <div class="gua-dur">制作中</div>
+          </a>
+          <a class="gua-card pending" href="#" style="pointer-events:none;opacity:.6">
+            <div class="gua-num">38</div>
+            <div class="gua-symbol">䷥</div>
+            <div class="gua-name">睽</div>
+            <div class="gua-desc">兑下离上</div>
+            <div class="gua-dur">制作中</div>
+          </a>
+          <a class="gua-card pending" href="#" style="pointer-events:none;opacity:.6">
+            <div class="gua-num">10</div>
+            <div class="gua-symbol">䷉</div>
+            <div class="gua-name">履</div>
+            <div class="gua-desc">兑下乾上</div>
+            <div class="gua-dur">制作中</div>
+          </a>
+          <a class="gua-card pending" href="#" style="pointer-events:none;opacity:.6">
+            <div class="gua-num">61</div>
+            <div class="gua-symbol">䷼</div>
+            <div class="gua-name">中孚</div>
+            <div class="gua-desc">兑下巽上</div>
+            <div class="gua-dur">制作中</div>
+          </a>
+          <a class="gua-card pending" href="#" style="pointer-events:none;opacity:.6">
+            <div class="gua-num">53</div>
+            <div class="gua-symbol">䷴</div>
+            <div class="gua-name">渐</div>
+            <div class="gua-desc">艮下巽上</div>
+            <div class="gua-dur">制作中</div>
+          </a>
+        </div>
+      </section>
+      <section class="gong-section">
+        <h2 class="gong-title">震宫八卦（木）</h2>
+        <div class="gua-grid">
+          <a class="gua-card pending" href="#" style="pointer-events:none;opacity:.6">
+            <div class="gua-num">51</div>
+            <div class="gua-symbol">䷲</div>
+            <div class="gua-name">震</div>
+            <div class="gua-desc">震下震上</div>
+            <div class="gua-dur">制作中</div>
+          </a>
+          <a class="gua-card pending" href="#" style="pointer-events:none;opacity:.6">
+            <div class="gua-num">16</div>
+            <div class="gua-symbol">䷏</div>
+            <div class="gua-name">豫</div>
+            <div class="gua-desc">坤下震上</div>
+            <div class="gua-dur">制作中</div>
+          </a>
+          <a class="gua-card pending" href="#" style="pointer-events:none;opacity:.6">
+            <div class="gua-num">40</div>
+            <div class="gua-symbol">䷧</div>
+            <div class="gua-name">解</div>
+            <div class="gua-desc">坎下震上</div>
+            <div class="gua-dur">制作中</div>
+          </a>
+          <a class="gua-card pending" href="#" style="pointer-events:none;opacity:.6">
+            <div class="gua-num">32</div>
+            <div class="gua-symbol">䷟</div>
+            <div class="gua-name">恒</div>
+            <div class="gua-desc">巽下震上</div>
+            <div class="gua-dur">制作中</div>
+          </a>
+          <a class="gua-card pending" href="#" style="pointer-events:none;opacity:.6">
+            <div class="gua-num">46</div>
+            <div class="gua-symbol">䷭</div>
+            <div class="gua-name">升</div>
+            <div class="gua-desc">巽下坤上</div>
+            <div class="gua-dur">制作中</div>
+          </a>
+          <a class="gua-card pending" href="#" style="pointer-events:none;opacity:.6">
+            <div class="gua-num">48</div>
+            <div class="gua-symbol">䷯</div>
+            <div class="gua-name">井</div>
+            <div class="gua-desc">巽下坎上</div>
+            <div class="gua-dur">制作中</div>
+          </a>
+          <a class="gua-card pending" href="#" style="pointer-events:none;opacity:.6">
+            <div class="gua-num">28</div>
+            <div class="gua-symbol">䷛</div>
+            <div class="gua-name">大过</div>
+            <div class="gua-desc">巽下兑上</div>
+            <div class="gua-dur">制作中</div>
+          </a>
+          <a class="gua-card pending" href="#" style="pointer-events:none;opacity:.6">
+            <div class="gua-num">17</div>
+            <div class="gua-symbol">䷐</div>
+            <div class="gua-name">随</div>
+            <div class="gua-desc">震下兑上</div>
+            <div class="gua-dur">制作中</div>
+          </a>
+        </div>
+      </section>
+      <section class="gong-section">
+        <h2 class="gong-title">巽宫八卦（木）</h2>
+        <div class="gua-grid">
+          <a class="gua-card pending" href="#" style="pointer-events:none;opacity:.6">
+            <div class="gua-num">57</div>
+            <div class="gua-symbol">䷸</div>
+            <div class="gua-name">巽</div>
+            <div class="gua-desc">巽下巽上</div>
+            <div class="gua-dur">制作中</div>
+          </a>
+          <a class="gua-card pending" href="#" style="pointer-events:none;opacity:.6">
+            <div class="gua-num">09</div>
+            <div class="gua-symbol">䷈</div>
+            <div class="gua-name">小畜</div>
+            <div class="gua-desc">乾下巽上</div>
+            <div class="gua-dur">制作中</div>
+          </a>
+          <a class="gua-card pending" href="#" style="pointer-events:none;opacity:.6">
+            <div class="gua-num">37</div>
+            <div class="gua-symbol">䷤</div>
+            <div class="gua-name">家人</div>
+            <div class="gua-desc">离下巽上</div>
+            <div class="gua-dur">制作中</div>
+          </a>
+          <a class="gua-card pending" href="#" style="pointer-events:none;opacity:.6">
+            <div class="gua-num">42</div>
+            <div class="gua-symbol">䷩</div>
+            <div class="gua-name">益</div>
+            <div class="gua-desc">震下巽上</div>
+            <div class="gua-dur">制作中</div>
+          </a>
+          <a class="gua-card pending" href="#" style="pointer-events:none;opacity:.6">
+            <div class="gua-num">25</div>
+            <div class="gua-symbol">䷘</div>
+            <div class="gua-name">无妄</div>
+            <div class="gua-desc">震下乾上</div>
+            <div class="gua-dur">制作中</div>
+          </a>
+          <a class="gua-card pending" href="#" style="pointer-events:none;opacity:.6">
+            <div class="gua-num">21</div>
+            <div class="gua-symbol">䷔</div>
+            <div class="gua-name">噬嗑</div>
+            <div class="gua-desc">震下离上</div>
+            <div class="gua-dur">制作中</div>
+          </a>
+          <a class="gua-card pending" href="#" style="pointer-events:none;opacity:.6">
+            <div class="gua-num">27</div>
+            <div class="gua-symbol">䷚</div>
+            <div class="gua-name">颐</div>
+            <div class="gua-desc">震下艮上</div>
+            <div class="gua-dur">制作中</div>
+          </a>
+          <a class="gua-card pending" href="#" style="pointer-events:none;opacity:.6">
+            <div class="gua-num">18</div>
+            <div class="gua-symbol">䷑</div>
+            <div class="gua-name">蛊</div>
+            <div class="gua-desc">巽下艮上</div>
+            <div class="gua-dur">制作中</div>
+          </a>
+        </div>
+      </section>
+      <section class="gong-section">
+        <h2 class="gong-title">离宫八卦（火）</h2>
+        <div class="gua-grid">
+          <a class="gua-card pending" href="#" style="pointer-events:none;opacity:.6">
+            <div class="gua-num">30</div>
+            <div class="gua-symbol">䷝</div>
+            <div class="gua-name">离</div>
+            <div class="gua-desc">离下离上</div>
+            <div class="gua-dur">制作中</div>
+          </a>
+          <a class="gua-card pending" href="#" style="pointer-events:none;opacity:.6">
+            <div class="gua-num">56</div>
+            <div class="gua-symbol">䷷</div>
+            <div class="gua-name">旅</div>
+            <div class="gua-desc">艮下离上</div>
+            <div class="gua-dur">制作中</div>
+          </a>
+          <a class="gua-card pending" href="#" style="pointer-events:none;opacity:.6">
+            <div class="gua-num">50</div>
+            <div class="gua-symbol">䷱</div>
+            <div class="gua-name">鼎</div>
+            <div class="gua-desc">巽下离上</div>
+            <div class="gua-dur">制作中</div>
+          </a>
+          <a class="gua-card pending" href="#" style="pointer-events:none;opacity:.6">
+            <div class="gua-num">64</div>
+            <div class="gua-symbol">䷿</div>
+            <div class="gua-name">未济</div>
+            <div class="gua-desc">坎下离上</div>
+            <div class="gua-dur">制作中</div>
+          </a>
+          <a class="gua-card pending" href="#" style="pointer-events:none;opacity:.6">
+            <div class="gua-num">04</div>
+            <div class="gua-symbol">䷃</div>
+            <div class="gua-name">蒙</div>
+            <div class="gua-desc">坎下艮上</div>
+            <div class="gua-dur">制作中</div>
+          </a>
+          <a class="gua-card pending" href="#" style="pointer-events:none;opacity:.6">
+            <div class="gua-num">59</div>
+            <div class="gua-symbol">䷺</div>
+            <div class="gua-name">涣</div>
+            <div class="gua-desc">坎下巽上</div>
+            <div class="gua-dur">制作中</div>
+          </a>
+          <a class="gua-card pending" href="#" style="pointer-events:none;opacity:.6">
+            <div class="gua-num">06</div>
+            <div class="gua-symbol">䷅</div>
+            <div class="gua-name">讼</div>
+            <div class="gua-desc">坎下乾上</div>
+            <div class="gua-dur">制作中</div>
+          </a>
+          <a class="gua-card pending" href="#" style="pointer-events:none;opacity:.6">
+            <div class="gua-num">13</div>
+            <div class="gua-symbol">䷌</div>
+            <div class="gua-name">同人</div>
+            <div class="gua-desc">离下乾上</div>
+            <div class="gua-dur">制作中</div>
+          </a>
+        </div>
+      </section>
+      <section class="gong-section">
+        <h2 class="gong-title">坤宫八卦（土）</h2>
+        <div class="gua-grid">
+          <a class="gua-card pending" href="#" style="pointer-events:none;opacity:.6">
+            <div class="gua-num">02</div>
+            <div class="gua-symbol">䷁</div>
+            <div class="gua-name">坤</div>
+            <div class="gua-desc">坤下坤上</div>
+            <div class="gua-dur">制作中</div>
+          </a>
+          <a class="gua-card pending" href="#" style="pointer-events:none;opacity:.6">
+            <div class="gua-num">24</div>
+            <div class="gua-symbol">䷗</div>
+            <div class="gua-name">复</div>
+            <div class="gua-desc">震下坤上</div>
+            <div class="gua-dur">制作中</div>
+          </a>
+          <a class="gua-card pending" href="#" style="pointer-events:none;opacity:.6">
+            <div class="gua-num">19</div>
+            <div class="gua-symbol">䷒</div>
+            <div class="gua-name">临</div>
+            <div class="gua-desc">兑下坤上</div>
+            <div class="gua-dur">制作中</div>
+          </a>
+          <a class="gua-card pending" href="#" style="pointer-events:none;opacity:.6">
+            <div class="gua-num">11</div>
+            <div class="gua-symbol">䷊</div>
+            <div class="gua-name">泰</div>
+            <div class="gua-desc">乾下坤上</div>
+            <div class="gua-dur">制作中</div>
+          </a>
+          <a class="gua-card pending" href="#" style="pointer-events:none;opacity:.6">
+            <div class="gua-num">34</div>
+            <div class="gua-symbol">䷡</div>
+            <div class="gua-name">大壮</div>
+            <div class="gua-desc">乾下震上</div>
+            <div class="gua-dur">制作中</div>
+          </a>
+          <a class="gua-card pending" href="#" style="pointer-events:none;opacity:.6">
+            <div class="gua-num">43</div>
+            <div class="gua-symbol">䷪</div>
+            <div class="gua-name">夬</div>
+            <div class="gua-desc">乾下兑上</div>
+            <div class="gua-dur">制作中</div>
+          </a>
+          <a class="gua-card pending" href="#" style="pointer-events:none;opacity:.6">
+            <div class="gua-num">05</div>
+            <div class="gua-symbol">䷄</div>
+            <div class="gua-name">需</div>
+            <div class="gua-desc">乾下坎上</div>
+            <div class="gua-dur">制作中</div>
+          </a>
+          <a class="gua-card pending" href="#" style="pointer-events:none;opacity:.6">
+            <div class="gua-num">08</div>
+            <div class="gua-symbol">䷇</div>
+            <div class="gua-name">比</div>
+            <div class="gua-desc">坤下坎上</div>
+            <div class="gua-dur">制作中</div>
+          </a>
+        </div>
+      </section>
+      <section class="gong-section">
+        <h2 class="gong-title">兑宫八卦（金）</h2>
+        <div class="gua-grid">
+          <a class="gua-card pending" href="#" style="pointer-events:none;opacity:.6">
+            <div class="gua-num">58</div>
+            <div class="gua-symbol">䷹</div>
+            <div class="gua-name">兑</div>
+            <div class="gua-desc">兑下兑上</div>
+            <div class="gua-dur">制作中</div>
+          </a>
+          <a class="gua-card pending" href="#" style="pointer-events:none;opacity:.6">
+            <div class="gua-num">47</div>
+            <div class="gua-symbol">䷮</div>
+            <div class="gua-name">困</div>
+            <div class="gua-desc">坎下兑上</div>
+            <div class="gua-dur">制作中</div>
+          </a>
+          <a class="gua-card pending" href="#" style="pointer-events:none;opacity:.6">
+            <div class="gua-num">45</div>
+            <div class="gua-symbol">䷬</div>
+            <div class="gua-name">萃</div>
+            <div class="gua-desc">坤下兑上</div>
+            <div class="gua-dur">制作中</div>
+          </a>
+          <a class="gua-card pending" href="#" style="pointer-events:none;opacity:.6">
+            <div class="gua-num">31</div>
+            <div class="gua-symbol">䷞</div>
+            <div class="gua-name">咸</div>
+            <div class="gua-desc">艮下兑上</div>
+            <div class="gua-dur">制作中</div>
+          </a>
+          <a class="gua-card pending" href="#" style="pointer-events:none;opacity:.6">
+            <div class="gua-num">39</div>
+            <div class="gua-symbol">䷦</div>
+            <div class="gua-name">蹇</div>
+            <div class="gua-desc">艮下坎上</div>
+            <div class="gua-dur">制作中</div>
+          </a>
+          <a class="gua-card pending" href="#" style="pointer-events:none;opacity:.6">
+            <div class="gua-num">15</div>
+            <div class="gua-symbol">䷎</div>
+            <div class="gua-name">谦</div>
+            <div class="gua-desc">艮下坤上</div>
+            <div class="gua-dur">制作中</div>
+          </a>
+          <a class="gua-card pending" href="#" style="pointer-events:none;opacity:.6">
+            <div class="gua-num">62</div>
+            <div class="gua-symbol">䷽</div>
+            <div class="gua-name">小过</div>
+            <div class="gua-desc">艮下震上</div>
+            <div class="gua-dur">制作中</div>
+          </a>
+          <a class="gua-card pending" href="#" style="pointer-events:none;opacity:.6">
+            <div class="gua-num">54</div>
+            <div class="gua-symbol">䷵</div>
+            <div class="gua-name">归妹</div>
+            <div class="gua-desc">兑下震上</div>
+            <div class="gua-dur">制作中</div>
+          </a>
+        </div>
+      </section>
+<div class="footer">基于本体数据驱动 · 人声：云希（edge-tts） · 古琴BGM合成 · © 易之变 · 数字人文研究</div>
+</div>
 </body>
 </html>

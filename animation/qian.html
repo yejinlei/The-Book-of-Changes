@@ -1,344 +1,61 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Expires" content="0">
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>乾卦 · 深度讲解 — 六十四卦第一卦</title>
-<script src="assets/hls.min.js"></script>
-<script>if(typeof Hls==='undefined'){document.write('<scr'+'ipt src="https://cdn.jsdelivr.net/npm/hls.js@1.5.13/dist/hls.min.js"><\/scr'+'ipt>');}</script>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1">
+<title>第1卦 乾 · 易·讲解动画</title>
+<link rel="stylesheet" href="../style.css">
+<script src="https://cdn.jsdelivr.net/npm/hls.js@1.5"></script>
 <style>
-  :root {
-    --paper: #f4ecd8; --paper2: #ede3c9; --ink: #2c1810;
-    --zhu: #8b0000; --gold: #b8860b; --jade: #3d6b5c;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: "Songti SC","STSong","SimSun","Noto Serif SC",serif; background: var(--paper); color: var(--ink); line-height: 1.8; }
-  .topbar { background: rgba(244,236,216,.95); border-bottom: 2px solid var(--zhu); padding: 14px 32px; display: flex; flex-wrap: wrap; align-items: center; gap: 16px 24px; position: sticky; top: 0; z-index: 10; backdrop-filter: blur(6px); }
-  .topbar a { color: var(--ink); text-decoration: none; font-size: 15px; }
-  .topbar a.active { color: var(--zhu); font-weight: bold; }
-  .topbar .brand { font-size: 20px; font-weight: bold; color: var(--zhu); }
-  .wrap { max-width: 1180px; margin: 0 auto; padding: 24px 24px 80px; }
-  h1 { font-size: 38px; text-align: center; color: var(--zhu); margin: 30px 0 6px; letter-spacing: 8px; }
-  .sub { text-align: center; color: #7a5a3a; font-size: 15px; letter-spacing: 2px; margin-bottom: 30px; }
-  .sub .tech { color: var(--gold); }
-  .hls-badge { display: inline-block; background: var(--jade); color: #f4ecd8; padding: 2px 8px; border-radius: 2px; font-size: 12px; margin-left: 8px; letter-spacing: 1px; }
-  .player-box { background: #1a1108; border-radius: 4px; padding: 10px; box-shadow: 0 8px 32px rgba(139,0,0,.2); margin-bottom: 24px; }
-  video { width: 100%; display: block; background: #000; border-radius: 2px; }
-  .controls-bar { display: flex; flex-wrap: wrap; gap: 8px; padding: 12px 8px 4px; color: #e8d9b0; font-size: 13px; align-items: center; }
-  .controls-bar button { background: var(--zhu); color: #f4ecd8; border: none; padding: 6px 14px; border-radius: 2px; cursor: pointer; font-family: inherit; font-size: 13px; transition: background .2s; }
-  .controls-bar button:hover { background: #a61c1c; }
-  .controls-bar .mode-btn { background: transparent; color: #8a7a5a; border: 1px solid #d8c8a8; padding: 4px 10px; font-size: 12px; margin: 0 4px; border-radius: 2px; }
-  .controls-bar .mode-btn.active { background: #3d6b5c; color: #fffaf0; border-color:#3d6b5c; }
-  .controls-bar .time { margin-left: auto; color: #c8a878; font-variant-numeric: tabular-nums; }
-  .loading { color: var(--gold); font-size: 12px; margin-left: 8px; }
-  .chapter-bar { display: grid; grid-template-columns: repeat(9, 1fr); gap: 2px; margin: 10px 0 0; padding: 0 4px; }
-  .chapter-bar div { height: 28px; background: rgba(255,255,255,.08); display: flex; align-items: center; justify-content: center; font-size: 11px; color: #a88858; cursor: pointer; border-bottom: 2px solid transparent; transition: all .2s; }
-  .chapter-bar div:hover { background: rgba(184,134,11,.25); color: var(--gold); }
-  .chapter-bar div.active { border-bottom-color: var(--zhu); color: var(--zhu); background: rgba(139,0,0,.15); }
-  .scene-card { background: var(--paper2); border-left: 4px solid var(--zhu); padding: 16px 22px; margin-bottom: 18px; border-radius: 0 4px 4px 0; }
-  .scene-card h3 { color: var(--zhu); font-size: 18px; margin-bottom: 8px; letter-spacing: 2px; }
-  .scene-card h3 span { color: var(--gold); font-size: 13px; margin-left: 10px; font-weight: normal; }
-  .scene-card p { font-size: 15px; color: #4a3420; }
-  .scene-card .quote { margin-top: 8px; color: #6a4c2a; font-style: italic; font-size: 14px; border-top: 1px dashed #c8b088; padding-top: 8px; }
-  .meta-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap: 16px; margin: 30px 0; }
-  .meta-card { background: var(--paper2); padding: 18px; border-top: 3px solid var(--gold); border-radius: 2px; }
-  .meta-card h4 { color: var(--zhu); font-size: 16px; margin-bottom: 10px; }
-  .meta-card p, .meta-card li { font-size: 14px; color: #5a4028; }
-  .meta-card ul { padding-left: 20px; }
-  .section-title { font-size: 22px; color: var(--zhu); border-bottom: 2px double var(--gold); padding-bottom: 8px; margin: 40px 0 18px; letter-spacing: 4px; }
-  .file-list { list-style: none; }
-  .file-list li { padding: 10px 14px; background: var(--paper2); margin-bottom: 6px; border-left: 3px solid var(--jade); display: flex; align-items: center; gap: 12px; font-family: "Menlo","Consolas",monospace; font-size: 13px; }
-  .file-list li .fname { color: var(--ink); flex: 1; }
-  .file-list li .fsize { color: #8a6a48; font-size: 12px; }
-  .file-list li a { color: var(--zhu); text-decoration: none; padding: 3px 10px; border: 1px solid var(--zhu); border-radius: 2px; font-family: inherit; font-size: 12px; }
-  .file-list li a:hover { background: var(--zhu); color: var(--paper); }
-  .script-box { background: var(--paper2); padding: 24px 28px; border-radius: 2px; white-space: pre-wrap; font-size: 15px; line-height: 2; color: #3a2818; max-height: 600px; overflow-y: auto; border: 1px solid #d8c8a8; }
-  .script-box h4 { color: var(--zhu); margin: 18px 0 6px; font-size: 16px; letter-spacing: 2px; }
-  .script-box h4:first-child { margin-top: 0; }
-  .script-box .direction { color: var(--jade); font-size: 14px; margin-left: 1em; }
-  footer { text-align: center; margin-top: 60px; padding-top: 20px; border-top: 1px solid #c8b088; color: #8a6a48; font-size: 13px; }
-  footer a { color: var(--zhu); text-decoration: none; }
-  @media (max-width: 720px) {
-    h1 { font-size: 26px; letter-spacing: 4px; }
-    .topbar { padding: 12px 16px; gap: 10px 16px; } .topbar a { font-size: 14px; } .topbar .brand { font-size: 17px; }
-    .chapter-bar { grid-template-columns: repeat(5, 1fr); }
-    .wrap { padding: 16px 14px 60px; }
-  }
+body{background:#f3ead8;margin:0;font-family:"Noto Serif SC","Source Han Serif SC",serif;color:#3a2a16}
+nav{background:#8B1A1A;color:#f3ead8;padding:14px 24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap}
+nav a{color:#f3ead8;text-decoration:none;margin:0 10px;font-size:15px}
+.wrap{max-width:900px;margin:0 auto;padding:24px 16px}
+h1{font-size:28px;color:#8B1A1A;border-bottom:2px solid #8B1A1A;padding-bottom:10px;margin:10px 0 16px}
+.player{background:#000;border-radius:8px;overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,.25);position:relative;padding-bottom:56.25%;height:0}
+video{position:absolute;top:0;left:0;width:100%;height:100%;background:#000}
+.meta{background:#faf4e2;border:1px solid #d9c79a;border-radius:6px;padding:16px 20px;margin:20px 0;line-height:2}
+.meta .k{color:#8B1A1A;font-weight:bold}
+.guaci{background:#fff;border-left:4px solid #8B1A1A;padding:14px 20px;margin:16px 0;border-radius:4px;line-height:2;font-size:17px}
+.back{display:inline-block;margin-top:16px;color:#8B1A1A;text-decoration:none;border:1px solid #8B1A1A;padding:8px 20px;border-radius:4px}
+.back:hover{background:#8B1A1A;color:#f3ead8}
+.badge{display:inline-block;background:#8B1A1A;color:#f3ead8;padding:2px 8px;border-radius:3px;font-size:12px;margin-left:8px;vertical-align:middle}
+.yao-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px;margin-top:12px}
+.yao-item{background:#faf4e2;border:1px solid #d9c79a;border-radius:4px;padding:10px 14px}
+.yao-item .pos{color:#8B1A1A;font-weight:bold}
 </style>
 </head>
 <body>
-
-<nav class="topbar"><a href="../index.html">首页</a>
-    <a href="../gua.html">六十四卦</a>
-    <a href="../reader.html">经文汇评</a>
-    <a href="../shiyi.html">十翼</a>
-    <a href="../yitu.html">易图互动</a>
-    <a href="../bianhua.html">变化</a>
-    <a href="index.html">易之变 · 动画</a>
-    <a href="qian.html" class="active">乾卦讲解</a>
-    <a href="../yanjiu.html">研究</a>
-  </nav>
-
+<nav>
+  <div><strong>易 · The Book of Changes</strong></div>
+  <div><a href="../">首页</a><a href="index.html">动画总览</a><a href="gua-index.html">64卦列表</a></div>
+</nav>
 <div class="wrap">
-  <h1>乾 卦</h1>
-  <p class="sub">六十四卦第一卦 · 深度讲解 · <span class="tech">Remotion · edge-tts 云希男声</span> · 全 9 场 · <span class="hls-badge">⚡ HLS 边下边播</span></p>
-
-  <div class="player-box">
-    <video id="video" preload="auto" controls playsinline>
-      您的浏览器不支持 video 标签。
-    </video>
-    <div class="controls-bar">
-      <button id="btnPlay" onclick="play()">▶ 播放</button>
-      <button onclick="pause()">⏸ 暂停</button>
-      <button onclick="restart()">↺ 重播</button>
-      <span style="margin-left:6px;color:#8a7a5a;font-size:12px;">播放模式：</span>
-      <button id="modeHls" onclick="switchMode('hls')" class="mode-btn active">⚡ HLS 边下边播（人声讲解）</button>
-      <a href="assets/qian-full.mp4" download style="margin-left:8px;color:#b8860b;font-size:13px;text-decoration:none;">⬇ 下载完整 MP4</a>
-      <span id="loadStatus" class="loading"></span>
-      <span class="time" id="time">00:00 / 00:00</span>
-    </div>
-    <div class="chapter-bar" id="chapterBar"></div>
-    <p style="text-align:center;color:#8a7a5a;font-size:12px;margin:8px 0 0;">
-      ⚡ HLS 模式（默认）：打开即可播放，边下边播、任意位置拖拽 seek，无需等待完整下载。
-      🎙 中文讲解由 edge-tts 云希男声合成，搭配古琴五声音阶背景乐，人声时段 BGM 自动压低。
-    </p>
+  <h1>第1卦 乾<span class="badge">女声版 · HLS</span></h1>
+  <div class="player"><video id="v" controls playsinline></video></div>
+  <div class="meta">
+    <p><span class="k">卦象：</span>䷀ 上乾下乾　<span class="k">宫位：</span>宫　<span class="k">时长：</span>2分59秒</p>
+    <p><span class="k">配音：</span>晓晓（zh-CN-XiaoxiaoNeural）女声 · 神经语音合成　<span class="k">背景音乐：</span>古琴泛音垫音</p>
   </div>
-
-  <div class="scene-card" id="sceneInfo">
-    <h3 id="sceneTitle">第一幕 · 乾卦立象 <span>00:00 – 00:12</span></h3>
-    <p id="sceneDesc">虚空之中星尘聚合，六道阳爻自下而上依次画出，纯阳成乾。乾者，健也——天行刚健，运转不息。</p>
-    <div class="quote" id="sceneQuote">「乾，健也。言天之体以健为用，运行不息，应化无穷。」——《周易·说卦》</div>
+  <div class="guaci">
+    <strong>卦辞：</strong>乾：元、享、利、贞。<br>
+    <strong>白话：</strong>乾卦象征纯粹的阳刚与创造力，是万物生发的本源。它具备开创、通达、适宜、坚守四种德性，只要行得正、守得住，事情就能顺利展开。总体大吉，但前提是刚健而不骄亢。
   </div>
-
-  <div class="meta-grid">
-    <div class="meta-card">
-      <h4>📐 技术栈</h4>
-      <ul>
-        <li><b>Remotion</b>：帧精确合成与批量渲染</li>
-        <li><b>SVG</b>：爻线、卦形、乾卦六爻（矢量精确）</li>
-        <li><b>Three.js</b>：星尘粒子背景</li>
-        <li><b>edge-tts</b>：云希男声中文讲解合成</li>
-        <li><b>HLS</b>：自适应流式播放，边下边播、可拖拽</li>
-      </ul>
-    </div>
-    <div class="meta-card">
-      <h4>🎞 影片规格</h4>
-      <ul>
-        <li>分辨率：1920 × 1080 · 帧率：30 fps</li>
-        <li>时长：<b>3 分钟 · 9 场完整讲解</b></li>
-        <li>编码：H.264 + AAC · HLS 分片 6 秒</li>
-        <li>人声：edge-tts YunxiNeural（云希男声），语速 -8%</li>
-        <li>BGM：古琴五声音阶，含钟声换景，人声时段自动压限</li>
-        <li>字幕：逐句显示，位于画面最底部，不遮挡主体卦象</li>
-      </ul>
-    </div>
-    <div class="meta-card">
-      <h4>☯ 讲解骨架</h4>
-      <ul>
-        <li>立象：六爻皆阳，其象为天</li>
-        <li>卦辞四德：元 · 亨 · 利 · 贞</li>
-        <li>彖传 · 象传：大哉乾元 / 天行健</li>
-        <li>六爻总览：潜→见→勤→跃→飞→亢</li>
-        <li>逐爻详解 · 用九群龙无首</li>
-        <li>注家分歧（子夏·王弼·程颐·朱熹）· 用世之要</li>
-      </ul>
-    </div>
-    <div class="meta-card">
-      <h4>📁 源码 & 数据</h4>
-      <ul>
-        <li>分镜数据：qian-scenes.ts（9 场）</li>
-        <li>场景组件：ScenesQian.tsx</li>
-        <li>组装：QianRoot.tsx</li>
-        <li>配音：tts_qian.py（edge-tts）</li>
-        <li>混音：gen_qian_mix.py</li>
-        <li>HLS 播放列表 + ts 分片</li>
-      </ul>
-    </div>
+  <h3 style="color:#8B1A1A;margin-top:24px">六爻</h3>
+  <div class="yao-list">
+    <div class="yao-item"><span class="pos">初九</span>：潜龙勿用。<br><small>如潜藏的龙，时机未到，力量尚在积蓄。此时不宜轻举妄动、急于出头，应沉住气修养自己，等待条件成熟再行动。</small></div>
+    <div class="yao-item"><span class="pos">九二</span>：见龙在田，利见大人。<br><small>如龙出现在田野，才华开始显露，也遇到可依靠的贵人。宜主动寻求贤明者的提携，在合适的位置上施展本领。</small></div>
+    <div class="yao-item"><span class="pos">九三</span>：君子终日乾乾，夕惕，若厉，无咎。<br><small>君子整天勤勉不懈，到夜晚仍警惕自省，处境看似危险却能有惊无险。关键在于自强不息、随时戒惧，方能免于过失。</small></div>
+    <div class="yao-item"><span class="pos">九四</span>：或跃在渊，无咎。<br><small>如龙在深渊边跃跃欲试，进退未定。此时可以尝试进取，只要审时度势、量力而行，就不会有过错。</small></div>
+    <div class="yao-item"><span class="pos">九五</span>：飞龙在天，利见大人。<br><small>如龙飞腾于天，事业达到鼎盛，正是大展宏图、与贤者共成大事的时候。宜把握时机，以德居高位。</small></div>
+    <div class="yao-item"><span class="pos">上九</span>：亢龙有悔。<br><small>如龙飞得过高，物极必反，必有悔恨。提醒人勿因成功而骄矜膨胀，懂得收势退让才能保全。</small></div>
   </div>
-
-  <h2 class="section-title">九 场 分 幕</h2>
-  <div id="sceneList"></div>
-
-  <h2 class="section-title">讲 解 剧 本</h2>
-  <div class="script-box" id="scriptBox">加载中…</div>
-
-  <h2 class="section-title">资 源 文 件</h2>
-  <ul class="file-list" id="fileList"></ul>
-
-  <footer>
-    <p>《乾卦 · 深度讲解》· Remotion + SVG + edge-tts · 六十四卦深度讲解第一卦 ·
-       <a href="../">返回《易经》本体论主页</a></p>
-    <p style="margin-top:8px;">本体论驱动 · 卦辞爻辞取自本体数据层 · 2026</p>
-  </footer>
+  <a class="back" href="gua-index.html">← 返回64卦列表</a>
 </div>
-
 <script>
-// 9 场分镜时间点（秒）——匹配 edge-tts 人声版 3分00秒时长
-const scenes = [
-  { id:1, title:'第一幕 · 乾卦立象', start:0, end:12.64,
-    desc:'虚空之中星尘聚合，六道阳爻自下而上依次画出，纯阳成乾。乾者，健也——天行刚健，运转不息。',
-    quote:'「乾，健也。言天之体以健为用，运行不息，应化无穷。」——《周易·说卦》',
-    narr:'周易六十四卦，第一卦是乾。六爻皆阳，其象为天。乾者，健也——天行刚健，运转不息。' },
-  { id:2, title:'第二幕 · 卦辞四德', start:12.64, end:33.49,
-    desc:'竖排「元 亨 利 贞」四德自右向左依次亮起，每字之下配以小注：善之长 / 嘉之会 / 义之和 / 事之干。',
-    quote:'「元者，善之长也；亨者，嘉之会也；利者，义之和也；贞者，事之干也。」——《乾·文言》',
-    narr:'乾：元、亨、利、贞。此四字，古人称为乾之四德。元者善之长，万象发端；亨者嘉之会，众美会通；利者义之和，万物得宜；贞者事之干，守正有成。' },
-  { id:3, title:'第三幕 · 彖传象传', start:33.49, end:54.10,
-    desc:'上半幅云纹舒卷、雨丝垂落，浮出「大哉乾元，万物资始」；下半幅金环周天运转，环心浮出「天行健，君子以自强不息」。',
-    quote:'「大哉乾元，万物资始，乃统天。」「天行健，君子以自强不息。」——《乾·彖传》《乾·象传》',
-    narr:'彖传说：大哉乾元，万物资始，乃统天。云行雨施，品物流形。象传则说：天行健，君子以自强不息。天体刚健不息，君子取法于天，当终日勤勉，永不懈怠。' },
-  { id:4, title:'第四幕 · 六爻总览', start:54.10, end:71.54,
-    desc:'中央立一大乾卦，六爻自下而上逐一亮起，每爻之侧浮出爻题与成语；末尾一条朱红曲线自左下贯右上又回落，喻其盛衰曲线。',
-    quote:'「六爻发挥，旁通情也。时乘六龙，以御天也。」——《乾·文言》',
-    narr:'乾卦六爻，皆以龙为象——潜龙勿用、见龙在田、终日乾乾、或跃在渊、飞龙在天、亢龙有悔。自下而上，是一条从潜藏到极盛、终至物极必反的曲线。' },
-  { id:5, title:'第五幕 · 初九 · 九二', start:71.54, end:92.44,
-    desc:'大乾卦居中，初九高亮如龙潜渊，继而九二高亮如龙现田野，右侧逐条展开爻辞与白话。',
-    quote:'「初九：潜龙勿用。」「九二：见龙在田，利见大人。」——《乾》',
-    narr:'初九：潜龙勿用。阳在最初，如龙潜渊，力量尚在积蓄，时机未至，当沉潜修养。九二：见龙在田，利见大人。才华初显，又遇贵人——此时宜主动求贤，施展本领。' },
-  { id:6, title:'第六幕 · 九三 · 九四', start:92.44, end:114.51,
-    desc:'九三高亮，昼夜光轮轮转，一勤一惕，是「终日乾乾」；继而九四高亮，爻位悬于渊上作欲跃之态。',
-    quote:'「九三：君子终日乾乾，夕惕若厉，无咎。」「九四：或跃在渊，无咎。」——《乾》',
-    narr:'九三：君子终日乾乾，夕惕若厉，无咎。终日勤勉，入夜仍自省，虽危而无咎。九四：或跃在渊，无咎。如龙在渊边欲跃，进退未定——只要审时度势、量力而行，便无过错。' },
-  { id:7, title:'第七幕 · 九五 · 上九', start:114.51, end:135.00,
-    desc:'九五高亮，金红大放，如龙腾云托举；继而高亮移至上九，光色转赭，一枚落叶垂坠，暗示盈不可久。',
-    quote:'「九五：飞龙在天，利见大人。」「上九：亢龙有悔。」——《乾》',
-    narr:'九五：飞龙在天，利见大人。如龙腾飞于天，事业臻于鼎盛，正是大展宏图之时。上九：亢龙有悔。龙飞过高，物极必反——盛极之时，尤须懂得收势退让，方能长久。' },
-  { id:8, title:'第八幕 · 用九 · 群龙无首', start:135.00, end:151.91,
-    desc:'六道阳爻自卦中散开，绕中心排成一环，如六龙并起、首尾相衔而无尊卑，环心浮出「见群龙无首，吉」。',
-    quote:'「用九：见群龙无首，吉。」——《乾》',
-    narr:'乾卦独有用九：见群龙无首，吉。群龙并起而不争首领，各自守分、彼此成全，是吉利的。最理想的阳刚，不在争强，而在刚而能柔。' },
-  { id:9, title:'第九幕 · 注家分歧 · 用世之要', start:151.91, end:179.93,
-    desc:'左侧四家名号与主张依次亮起（子夏传 / 王弼 / 程颐 / 朱熹），右侧一方朱印「自强不息 · 知进退存亡而不失其正」。',
-    quote:'「知进退存亡而不失其正者，其唯圣人乎！」——《乾·文言》',
-    narr:'同样一句元亨利贞，解读历来不同：子夏传以为四德，王弼重其刚健，程颐、朱熹更以四德配仁、义、礼、智。一卦之辞，千年众说纷纭。而就人生而言，乾卦示人自强不息之路，又以亢龙有悔留下戒惧——知进退存亡而不失其正，方是乾道之极。' }
-];
-
-const video = document.getElementById('video');
-const timeEl = document.getElementById('time');
-const chapterBar = document.getElementById('chapterBar');
-const sceneInfo = document.getElementById('sceneInfo');
-const sceneList = document.getElementById('sceneList');
-const loadStatus = document.getElementById('loadStatus');
-let hls = null;
-let currentMode = 'hls';
-
-const HLS_URL = 'assets/qian-hls/playlist.m3u8';
-const MP4_URL = 'assets/qian-full.mp4';
-
-function fmt(s){ s=Math.max(0,Math.floor(s)); return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0'); }
-
-function loadHLS() {
-  loadStatus.textContent = '⚡ HLS 加载中...';
-  if (hls) { hls.destroy(); hls = null; }
-  if (typeof Hls !== 'undefined' && Hls.isSupported()) {
-    hls = new Hls({ enableWorker: true, lowLatencyMode: false, maxBufferLength: 30, maxMaxBufferLength: 60 });
-    hls.loadSource(HLS_URL);
-    hls.attachMedia(video);
-    hls.on(Hls.Events.MANIFEST_PARSED, () => {
-      loadStatus.textContent = '✅ HLS 就绪';
-      setTimeout(()=>loadStatus.textContent='', 2000);
-    });
-    hls.on(Hls.Events.ERROR, (event, data) => {
-      if (data.fatal) {
-        loadStatus.textContent = '⚠ HLS 加载失败，自动切换到 MP4';
-        setTimeout(()=>switchMode('mp4'), 1500);
-      }
-    });
-  } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-    video.src = HLS_URL;
-    loadStatus.textContent = '✅ 原生 HLS 就绪（Safari）';
-    setTimeout(()=>loadStatus.textContent='', 2000);
-  } else {
-    loadStatus.textContent = '⚠ 浏览器不支持 HLS，自动切换到 MP4';
-    setTimeout(()=>switchMode('mp4'), 1500);
-  }
-}
-
-function loadMP4() {
-  loadStatus.textContent = '🎞 MP4 加载中...';
-  if (hls) { hls.destroy(); hls = null; }
-  video.src = MP4_URL;
-  video.addEventListener('loadedmetadata', ()=>{
-    loadStatus.textContent = '✅ MP4 就绪';
-    setTimeout(()=>loadStatus.textContent='', 2000);
-  }, { once: true });
-}
-
-function switchMode(mode) {
-  currentMode = mode;
-  const curTime = video.currentTime;
-  const wasPlaying = !video.paused;
-  document.getElementById('modeHls').classList.toggle('active', mode==='hls');
-  if (mode === 'hls') loadHLS(); else loadMP4();
-  video.addEventListener('loadedmetadata', ()=>{
-    video.currentTime = Math.min(curTime, video.duration-1);
-    if (wasPlaying) video.play();
-  }, { once: true });
-}
-
-video.addEventListener('timeupdate', ()=>{
-  timeEl.textContent = fmt(video.currentTime)+' / '+fmt(video.duration||180);
-  const cur = scenes.find(s => video.currentTime >= s.start && video.currentTime < s.end) || scenes[scenes.length-1];
-  chapterBar.querySelectorAll('div').forEach((el,i)=>{
-    el.classList.toggle('active', scenes[i].id===cur.id);
-  });
-  if(sceneInfo.dataset.curId !== String(cur.id)){
-    sceneInfo.dataset.curId = cur.id;
-    document.getElementById('sceneTitle').innerHTML = cur.title+' <span>'+fmt(cur.start)+' – '+fmt(cur.end)+'</span>';
-    document.getElementById('sceneDesc').textContent = cur.desc;
-    document.getElementById('sceneQuote').textContent = cur.quote;
-  }
-});
-
-video.addEventListener('loadedmetadata', ()=>{
-  timeEl.textContent = '00:00 / '+fmt(video.duration);
-});
-
-function play(){ video.play(); }
-function pause(){ video.pause(); }
-function restart(){ video.currentTime = 0; video.play(); }
-
-scenes.forEach((s,i)=>{
-  const d = document.createElement('div');
-  d.textContent = s.id;
-  d.title = s.title;
-  d.onclick = ()=>{ video.currentTime = s.start+0.1; video.play(); };
-  chapterBar.appendChild(d);
-});
-
-scenes.forEach(s=>{
-  const card = document.createElement('div');
-  card.className = 'scene-card';
-  card.innerHTML = `<h3>${s.title} <span>${fmt(s.start)} – ${fmt(s.end)}</span></h3><p>${s.desc}</p><div class="quote">${s.quote}</div>`;
-  card.style.cursor = 'pointer';
-  card.onclick = ()=>{ video.currentTime = s.start+0.1; video.play(); window.scrollTo({top: document.querySelector('.player-box').offsetTop-20, behavior:'smooth'}); };
-  sceneList.appendChild(card);
-});
-
-const scriptBox = document.getElementById('scriptBox');
-scriptBox.innerHTML = scenes.map(s => `
-  <h4>${s.title}</h4>
-  <div class="direction">△ ${s.desc}</div>
-  <p><b>旁白：</b>${s.narr}</p>
-  <p style="color:#6a4c2a;font-style:italic;margin-top:6px;">${s.quote}</p>
-`).join('<hr style="border:none;border-top:1px dashed #c8b088;margin:12px 0;">');
-
-const files = [
-  ['assets/qian-hls/playlist.m3u8', 'HLS 播放列表（乾卦讲解人声版）', '1 KB'],
-  ['assets/qian-hls/seg_000~.ts', 'HLS 分片（6 秒/片）', '—'],
-  ['assets/qian-full.mp4', '完整 MP4（人声讲解 · 1080p）', '—']
-];
-const fileList = document.getElementById('fileList');
-files.forEach(([name, desc, size])=>{
-  const li = document.createElement('li');
-  li.innerHTML = `<span class="fname">${name}</span><span>${desc}</span><span class="fsize">${size}</span><a href="${name}" download>下载/查看</a>`;
-  fileList.appendChild(li);
-});
-
-loadHLS();
+var video=document.getElementById("v");
+var src="assets/gua-hls/00-乾/index.m3u8";
+if(Hls.isSupported()){var hls=new Hls({maxBufferLength:20,maxMaxBufferLength:60});hls.loadSource(src);hls.attachMedia(video);}
+else if(video.canPlayType("application/vnd.apple.mpegurl")){video.src=src;}
 </script>
-</body>
-</html>
+</body></html>
