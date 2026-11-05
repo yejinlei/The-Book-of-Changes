@@ -246,31 +246,6 @@ footer .ont-note { color:var(--gold); font-size:12px; margin-top:8px; }
   .top-nav { padding:0 16px; }
   .section { padding:40px 20px; }
 }
-/* ===== 《易·化》变化剧本 动画 ===== */
-.change-anim { background:var(--paper); border:1px solid var(--border); border-radius:10px; overflow:hidden; box-shadow:0 6px 24px var(--shadow); }
-.change-anim .ca-stage { position:relative; width:100%; aspect-ratio:960/520; background:radial-gradient(circle at 50% 45%, #fbf7ee 0%, var(--bg) 70%); overflow:hidden; }
-.change-anim .ca-gl-canvas { position:absolute; inset:0; z-index:1; }
-.change-anim .ca-svg-holder { position:absolute; inset:0; z-index:2; }
-.change-anim .ca-svg-holder svg { width:100%; height:100%; display:block; }
-.change-anim .ca-caption { position:absolute; right:18px; bottom:16px; z-index:3; max-width:60%; text-align:right;
-  font-size:14px; color:var(--ink); letter-spacing:2px; font-style:italic; opacity:0; transition:opacity .4s;
-  background:rgba(250,246,237,.72); padding:4px 10px; border-radius:4px; pointer-events:none; }
-.change-anim .ca-bar { display:flex; align-items:center; gap:12px; padding:12px 16px; background:var(--bg); border-top:1px solid var(--border); }
-.change-anim .ca-btn { width:36px; height:36px; flex:0 0 36px; border-radius:50%; border:1px solid var(--accent);
-  background:var(--paper); color:var(--accent); font-size:15px; cursor:pointer; display:flex; align-items:center; justify-content:center;
-  transition:.2s; line-height:1; }
-.change-anim .ca-btn:hover { background:var(--accent); color:#fff; }
-.change-anim .ca-track { position:relative; flex:1; height:6px; border-radius:3px; background:#e2d8c0; cursor:pointer; }
-.change-anim .ca-fill { position:absolute; left:0; top:0; height:100%; border-radius:3px; background:linear-gradient(90deg,var(--accent),var(--gold)); width:0; }
-.change-anim .ca-dots { position:absolute; inset:0; }
-.change-anim .ca-dot { position:absolute; top:50%; width:7px; height:7px; margin:-3.5px 0 0 -3.5px; border-radius:50%; background:var(--accent); opacity:.55; }
-.change-anim .ca-time { font-size:12px; color:var(--gold); flex:0 0 auto; font-variant-numeric:tabular-nums; min-width:70px; text-align:center; }
-.change-anim .ca-scenes { display:flex; flex-wrap:wrap; gap:8px; padding:0 16px 14px; }
-.change-anim .ca-scene-btn { border:1px solid var(--border); background:var(--paper); color:var(--text); font-family:inherit;
-  font-size:12.5px; padding:5px 12px; border-radius:20px; cursor:pointer; transition:.2s; }
-.change-anim .ca-scene-btn:hover { border-color:var(--accent); color:var(--accent); }
-.change-anim .ca-scene-btn.active { background:var(--accent); color:#fff; border-color:var(--accent); }
-@media (max-width:900px) { .change-anim .ca-time { display:none; } .change-anim .ca-caption { font-size:12px; } }
 </style>
 </head>
 <body>
@@ -296,19 +271,7 @@ footer .ont-note { color:var(--gold); font-size:12px; margin-top:8px; }
   <div class="stats-grid" id="statsGrid"></div>
 </section>
 
-<!-- 《易·化》变化剧本 动画 -->
-<section class="section" id="change-anim-section" style="max-width:1100px;">
-  <div class="section-title">
-    <h2>易 化</h2>
-    <p>道生一二三 · 阴阳两仪 · 四象八卦 · 六十四卦 · 错综互化</p>
-  </div>
-  <div id="change-anim" style="position:relative;max-width:1100px;margin:0 auto;background:var(--paper);border:1px solid var(--border);border-radius:4px;box-shadow:0 2px 12px var(--shadow);overflow:hidden;">
-    <canvas id="daosheng-canvas" style="display:block;width:100%;"></canvas>
-    <div style="position:absolute;left:14px;bottom:10px;font-size:12px;color:var(--text);opacity:.55;font-family:'Kaiti SC','STKaiti',serif;pointer-events:none;">道生一 · 一生二 · 二生三 · 三生万物 ── 36s 循环</div>
-  </div>
-</section>
-
-<!-- 易之变 · 动态影像（Remotion + three.js + SVG） -->
+<!-- 易之变 · 动态影像（Remotion + three.js + SVG · 人声旁白版 · HLS 边下边播） -->
 <section class="section" id="yi-film-section" style="max-width:1100px;">
   <div class="section-title">
     <h2>易 之 变</h2>
@@ -316,22 +279,23 @@ footer .ont-note { color:var(--gold); font-size:12px; margin-top:8px; }
   </div>
   <div id="yi-film" style="position:relative;max-width:1100px;margin:0 auto;background:#0b0b10;border:1px solid var(--border);border-radius:6px;box-shadow:0 4px 24px rgba(0,0,0,.35);overflow:hidden;">
     <video id="yi-film-video" controls preload="metadata" playsinline
-           poster="media/易之变-封面.jpg"
+           poster="animation/assets/易之变-封面.jpg"
            style="display:block;width:100%;background:#000;"
-           src="media/易之变-易之变.mp4">
+           src="animation/assets/yizhibian-full.mp4">
       您的浏览器不支持视频播放。
     </video>
-    <div style="position:absolute;left:14px;top:12px;font-size:12px;color:#d4a017;opacity:.85;font-family:'Kaiti SC','STKaiti',serif;pointer-events:none;letter-spacing:1px;">易之变 · 十四幕 · 五分钟左右 · 道生一 → 一生二 → 二生三 → 三生万物 → 错·综·互·变 → 万变归一</div>
+    <div style="position:absolute;left:14px;top:12px;font-size:12px;color:#d4a017;opacity:.85;font-family:'Kaiti SC','STKaiti',serif;pointer-events:none;letter-spacing:1px;">易之变 · 十四幕 · 人声旁白版 · 近七分钟 · 道生一 → 一生二 → 二生三 → 三生万物 → 错·综·互·变 → 万变归一</div>
+    <a href="animation/index.html" style="position:absolute;right:14px;top:12px;padding:4px 12px;background:var(--accent);color:#fff;border-radius:3px;text-decoration:none;font-size:12px;font-family:'Noto Serif SC','Source Han Serif SC',serif;letter-spacing:1px;">⚡ HLS 边下边播</a>
   </div>
 
   <!-- 十四幕章节导航 -->
   <div id="yi-film-chapters" style="max-width:1100px;margin:16px auto 0;display:grid;grid-template-columns:repeat(auto-fill,minmax(158px,1fr));gap:8px;"></div>
   <p style="max-width:1100px;margin:12px auto 0;font-size:12.5px;color:var(--text);opacity:.62;text-align:center;line-height:1.8;">
-    本片由 Remotion 逐帧渲染，画面以 SVG 绘制经传卦象、three.js 生成三维星尘、Remotion 编排时间轴与旁白 ——
-    完整呈现《易经》的宇宙生成链与错、综、互、变、消息、卦序六种卦变。<br>
-    <a href="media/易之变-易之变.mp4" download style="color:var(--accent);text-decoration:none;">↓ 下载全片 MP4</a>
+    本片由 Remotion 逐帧渲染，画面以 SVG 绘制经传卦象、three.js 生成三维星尘、Remotion 编排时间轴，edge-tts 云希男声旁白 + 古琴垫音 ——
+    完整呈现《易经》的宇宙生成链与错、综、互、变、消息、卦序六种卦变。默认加载为 HLS 流媒体，可边下边播、任意拖拽。<br>
+    <a href="animation/assets/yizhibian-full.mp4" download style="color:var(--accent);text-decoration:none;">↓ 下载全片 MP4 (48MB)</a>
     &nbsp;·&nbsp;
-    <a href="yijing-yi.html" style="color:var(--accent);text-decoration:none;">进入独立放映页 →</a>
+    <a href="animation/index.html" style="color:var(--accent);text-decoration:none;">进入独立放映页（HLS） →</a>
   </p>
 </section>
 
@@ -894,8 +858,6 @@ document.addEventListener('DOMContentLoaded', () => {
   // renderChart 改为 window.load 后延迟初始化，保证echarts与容器都就绪
 });
 </script>
-<!-- 道生万物 · 易经演化动画（独立 Canvas 模块，0 依赖）-->
-<script src="data/daosheng-anim.js"></script>
 <!-- 易之变 · 影片章节导航 -->
 <script>
 (function(){
@@ -903,11 +865,11 @@ document.addEventListener('DOMContentLoaded', () => {
     [1,"太虚","道生一之前"], [2,"太极之境","道生一"], [3,"两仪之境","一生二"],
     [4,"四象之境","二生三"], [5,"八卦之境","四象生八卦"], [6,"重卦之境","八卦重六十四卦"],
     [7,"错卦之境","阴阳全反"], [8,"综卦之境","上下倒置"], [9,"互卦之境","卦中有卦"],
-    [10,"变卦之境","爻变之卦"], [11,"消息之境","十二消息卦"], [12,"卦序之境","序卦传"],
-    [13,"筮法之境","大衍之数"], [14,"易理之境","万变归一"]
+    [10,"变卦之境","爻变之卦"], [11,"消息之境","十二消息卦"], [12,"卦序筮法","序卦传·大衍之数"],
+    [13,"三易之境","变易·简易·不易"], [14,"归藏之境","万物归一"]
   ];
-  // 各幕起始秒数（按剧本时长累计，与视频一致）
-  var starts = [0,12,30,52,74,100,130,152,174,196,220,246,272,302];
+  // 各幕起始秒数（人声旁白版 6分49秒）
+  var starts = [0,10.5,28.5,49.2,70.8,100.4,138.7,160.3,182.9,207.5,236.0,270.7,317.0,353.9];
   var box = document.getElementById('yi-film-chapters');
   var vid = document.getElementById('yi-film-video');
   if(!box || !vid) return;
