@@ -242,16 +242,14 @@
       <button onclick="pause()">⏸ 暂停</button>
       <button onclick="restart()">↺ 重播</button>
       <span style="margin-left:6px;color:#8a7a5a;font-size:12px;">播放模式：</span>
-      <button id="modeHls" onclick="switchMode('hls')" class="mode-btn" title="HLS 分片为旧版，建议直接 MP4">⚡ HLS 边下边播（旧版）</button>
-      <button id="modeMp4" onclick="switchMode('mp4')" class="mode-btn active">🎞 MP4 完整文件（字幕已优化）</button>
-      <a href="assets/yizhibian-720p.mp4" id="dlLink" download style="margin-left:8px;color:#b8860b;font-size:13px;text-decoration:none;">⬇ 下载 720p (6.5MB)</a>
-      <a href="assets/yizhibian-1080p.mp4" download style="margin-left:8px;color:#b8860b;font-size:13px;text-decoration:none;">⬇ 下载 1080p (18MB)</a>
+      <button id="modeHls" onclick="switchMode('hls')" class="mode-btn active">⚡ HLS 边下边播（人声旁白）</button>
+      <a href="assets/yizhibian-full.mp4" download style="margin-left:8px;color:#b8860b;font-size:13px;text-decoration:none;">⬇ 下载完整 MP4 (48MB)</a>
       <span id="loadStatus" class="loading"></span>
       <span class="time" id="time">00:00 / 00:00</span>
     </div>
     <div class="chapter-bar" id="chapterBar"></div>
     <p style="text-align:center;color:#8a7a5a;font-size:12px;margin:8px 0 0;">
-      ⚡ HLS 模式：打开即可播放，边下边播、任意位置拖拽 seek，无需等待完整下载；适合网络较慢场景。
+      ⚡ HLS 模式（默认）：打开即可播放，边下边播、任意位置拖拽 seek，无需等待完整下载。
       🎙 中文旁白由 edge-tts 云希男声合成，搭配古琴五声音阶背景乐，人声时段BGM自动压低。
     </p>
   </div>
@@ -398,7 +396,7 @@ let hls = null;
 let currentMode = 'hls';
 
 const HLS_URL = 'assets/hls/playlist.m3u8';
-const MP4_URL = 'assets/yizhibian-720p.mp4';
+const MP4_URL = 'assets/yizhibian-full.mp4';
 
 function fmt(s){ s=Math.max(0,Math.floor(s)); return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0'); }
 
@@ -451,7 +449,6 @@ function switchMode(mode) {
   const curTime = video.currentTime;
   const wasPlaying = !video.paused;
   document.getElementById('modeHls').classList.toggle('active', mode==='hls');
-  document.getElementById('modeMp4').classList.toggle('active', mode==='mp4');
   if (mode === 'hls') loadHLS();
   else loadMP4();
   video.addEventListener('loadedmetadata', ()=>{
@@ -525,10 +522,9 @@ const files = [
   ['src/ScenesA-D.tsx', '14场场景绘制组件（4组）', '45KB'],
   ['剧本-易道生化.md（第1版）', '早期9场剧本', '8KB'],
   ['易之变——从一道到万象（第1版）.md', '完整14场分镜剧本', '14KB'],
-  ['assets/hls/playlist.m3u8', 'HLS播放列表', '1.6KB'],
-  ['assets/hls/seg_000~050.ts', 'HLS分片（51个，共46MB）', '8秒/片'],
-  ['assets/yizhibian-narration.mp4', '完整MP4（720p · 字幕贴底 · 古琴BGM）', '6.5MB'],
-  ['assets/yizhibian-1080p.mp4', '完整MP4（1080p 高清版）', '18MB']
+  ['assets/hls/playlist.m3u8', 'HLS播放列表（人声旁白版）', '1.6KB'],
+  ['assets/hls/seg_000~051.ts', 'HLS分片（52个，共50MB）', '8秒/片'],
+  ['assets/yizhibian-full.mp4', '完整MP4（人声旁白 · 1080p）', '48MB']
 ];
 const fileList = document.getElementById('fileList');
 files.forEach(([name, desc, size])=>{
