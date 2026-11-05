@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>䷂ 屯卦 · 易经讲解 | 易经本体论研究</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.13/dist/hls.min.js"></script>
+<style>
+body { background:#f4ecd8; font-family:"Noto Serif SC","Songti SC",serif; color:#2a2520; margin:0; padding:24px; }
+.wrap { max-width:960px; margin:0 auto; }
+.top { display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:10px; }
+.back { color:#a03c20; text-decoration:none; font-size:15px; }
+.back:hover { text-decoration:underline; }
+h1 { color:#8b2c1c; font-size:28px; margin:12px 0 6px; }
+.sub { color:#8a7a65; font-size:14px; margin-bottom:18px; }
+.video-box { background:#1a1410; border-radius:6px; overflow:hidden; box-shadow:0 4px 20px rgba(0,0,0,.25); margin-bottom:20px; }
+video { width:100%; display:block; aspect-ratio:16/9; background:#000; }
+.card { background:#fff; border:1px solid #d9c9a8; border-radius:4px; padding:20px 24px; margin-bottom:16px; }
+.card h2 { color:#8b2c1c; font-size:18px; margin:0 0 10px; border-left:3px solid #a03c20; padding-left:10px; }
+.guaci { font-size:16px; line-height:1.9; color:#2a2520; }
+.bai { color:#5c4d3a; line-height:1.8; font-size:15px; margin-top:8px; padding-top:8px; border-top:1px dashed #d9c9a8; }
+.yao-list { margin:0; padding:0; list-style:none; }
+.yao-list li { padding:8px 0; border-bottom:1px dashed #e9ddc4; font-size:14px; line-height:1.8; }
+.yao-list li:last-child { border-bottom:none; }
+.yao-list .yao-ti { color:#8b2c1c; font-weight:bold; margin-right:8px; }
+.hls-badge { display:inline-block; background:#a03c20; color:#fff; font-size:11px; padding:2px 6px; border-radius:2px; margin-left:8px; vertical-align:middle; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <a class="back" href="index.html">← 动画总入口</a>
+    <a class="back" href="gua-index.html">← 64卦讲解</a>
+  </div>
+  <h1>䷂ 屯卦<span class="hls-badge">女声配音</span></h1>
+  <div class="sub">约 2.0 分钟 · 第3卦 · 上坎下震（上经）</div>
+  <div class="video-box">
+    <video id="v" controls playsinline preload="metadata" poster=""></video>
+  </div>
+  <div class="card">
+    <h2>卦辞</h2>
+    <div class="guaci">屯：元、亨、利、贞。</div>
+    <div class="bai">屯卦象征万物初生时的艰难，如草木刚破土而萌芽。它本是亨通的，但起步阶段充满阻力，宜守正待时。此时适合确立根基、召集帮手，切不可因急躁而乱了阵脚。</div>
+  </div>
+  <div class="card">
+    <h2>爻辞</h2>
+    <ul class="yao-list">
+      <li><span class="yao-ti">初九</span>盘桓，利居贞，利建侯。 —— 起步时徘徊犹豫，宜安守正道、不可冒进，同时着手建立自己的班底与人脉基础，为将来铺路。</li>
+      <li><span class="yao-ti">六二</span>屯如邅如，乘马班加。匪寇婚媾，女子贞不字，十年乃字。 —— 处境艰难、进退受阻，犹如骑马踌躇不前。看似有阻挠者，实则是来求合的缘分；宁可守节等待，久后终有转机。</li>
+      <li><span class="yao-ti">六三</span>即鹿无虞，惟入于林中，君子几，不如舍，往吝。 —— 没有向导就贸然进山逐鹿，只会迷失林中。君子应懂得见机而止，不如放弃；勉强前往必致困窘。</li>
+      <li><span class="yao-ti">六四</span>乘马班如，求婚媾，往吉，无不利。 —— 骑马徘徊、心中犹豫，宜主动寻求结伴婚姻式的合作。积极去促成结合，前往行事吉利，无所不利。</li>
+      <li><span class="yao-ti">九五</span>屯其膏，小贞吉，大贞凶。 —— 恩泽无法顺利施予，力量受到约束。此时小事守正可获吉，若强求大动作则有凶险，宜量力而为。</li>
+      <li><span class="yao-ti">上六</span>乘马班如，泣血涟如。 —— 进退两难、徘徊无依，以至悲泣流血。说明困顿至极而无人相助，应及早反思求助，不可一味苦撑。</li>
+    </ul>
+  </div>
+</div>
+<script>
+(function(){
+  var v = document.getElementById('v');
+  var srcM3u8 = 'assets/gua-hls/02-屯/playlist.m3u8';
+  var srcMp4 = 'assets/gua-mp4/02-屯.mp4';
+  if (window.Hls && Hls.isSupported()) {
+    var hls = new Hls({maxBufferLength:15,maxMaxBufferLength:60});
+    hls.loadSource(srcM3u8);
+    hls.attachMedia(v);
+  } else if (v.canPlayType('application/vnd.apple.mpegurl')) {
+    v.src = srcM3u8;
+  } else {
+    v.src = srcMp4;
+  }
+})();
+</script>
+</body>
+</html>
