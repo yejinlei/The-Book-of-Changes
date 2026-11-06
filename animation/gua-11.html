@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>䷋ 否卦 · 易经讲解 | 易经本体论研究</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.13/dist/hls.min.js"></script>
+<style>
+body { background:#f4ecd8; font-family:"Noto Serif SC","Songti SC",serif; color:#2a2520; margin:0; padding:24px; }
+.wrap { max-width:960px; margin:0 auto; }
+.top { display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:10px; }
+.back { color:#a03c20; text-decoration:none; font-size:15px; }
+.back:hover { text-decoration:underline; }
+h1 { color:#8b2c1c; font-size:28px; margin:12px 0 6px; }
+.sub { color:#8a7a65; font-size:14px; margin-bottom:18px; }
+.video-box { background:#1a1410; border-radius:6px; overflow:hidden; box-shadow:0 4px 20px rgba(0,0,0,.25); margin-bottom:20px; }
+video { width:100%; display:block; aspect-ratio:16/9; background:#000; }
+.card { background:#fff; border:1px solid #d9c9a8; border-radius:4px; padding:20px 24px; margin-bottom:16px; }
+.card h2 { color:#8b2c1c; font-size:18px; margin:0 0 10px; border-left:3px solid #a03c20; padding-left:10px; }
+.guaci { font-size:16px; line-height:1.9; color:#2a2520; }
+.bai { color:#5c4d3a; line-height:1.8; font-size:15px; margin-top:8px; padding-top:8px; border-top:1px dashed #d9c9a8; }
+.yao-list { margin:0; padding:0; list-style:none; }
+.yao-list li { padding:8px 0; border-bottom:1px dashed #e9ddc4; font-size:14px; line-height:1.8; }
+.yao-list li:last-child { border-bottom:none; }
+.yao-list .yao-ti { color:#8b2c1c; font-weight:bold; margin-right:8px; }
+.hls-badge { display:inline-block; background:#a03c20; color:#fff; font-size:11px; padding:2px 6px; border-radius:2px; margin-left:8px; vertical-align:middle; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <a class="back" href="index.html">← 动画总入口</a>
+    <a class="back" href="gua-index.html">← 64卦讲解</a>
+  </div>
+  <h1>䷋ 否卦<span class="hls-badge">女声配音</span></h1>
+  <div class="sub">约 2.9 分钟 · 第12卦 · 上乾下坤（上经）</div>
+  <div class="video-box">
+    <video id="v" controls playsinline preload="metadata" poster=""></video>
+  </div>
+  <div class="card">
+    <h2>卦辞</h2>
+    <div class="guaci">否：否之匪人，不利君子贞，大往小来。</div>
+    <div class="bai">否是闭塞、不通。奸邪当道，对君子守正不利；大的离去、小的到来，天地不交、上下隔绝。此卦象征小人得势、正道受阻的衰败之象，宜俭德避难、静待时转。</div>
+  </div>
+  <div class="card">
+    <h2>爻辞</h2>
+    <ul class="yao-list">
+      <li><span class="yao-ti">初六</span>拔茅茹以其汇，贞吉，亨。 —— 如同拔起茅草连根带类一起拔，与同道者一同守正，吉祥而亨通。说明在闭塞之世，志同者应相互结伴、坚守正道以待时机。</li>
+      <li><span class="yao-ti">六二</span>包承，小人吉，大人否，亨。 —— 一味包容承顺，小人以此为吉，君子则拒绝屈从反而亨通。说明面对恶势力，君子当守正不屈，不可曲意逢迎以苟且得利。</li>
+      <li><span class="yao-ti">六三</span>包羞。 —— 为苟且容身而包藏羞耻，内心有愧。此爻警示身处否世却贪图禄位、隐忍含羞，终究于己有损，宜自省所守是否端正。</li>
+      <li><span class="yao-ti">九四</span>有命，无咎，畴离祉。 —— 奉天命而行动，没有过错，同类都能依附而共享福祉。说明时机好转时，顺势而作、带领众人共进，可无咎而有福。</li>
+      <li><span class="yao-ti">九五</span>休否，大人吉。其亡其亡，系于包桑。 —— 使闭塞休止，大人吉祥；但须时时戒惧“快要灭亡了”，如同把命运系于包桑之上般谨慎。说明转机初现时尤须居安思危、慎守其成。</li>
+      <li><span class="yao-ti">上九</span>倾否，先否后喜。 —— 彻底倾覆这闭塞之局，先经艰难而后转为喜乐。说明否极泰来，闭塞到了尽头必被打破，坚持到转机到来便将迎来欢喜。</li>
+    </ul>
+  </div>
+</div>
+<script>
+(function(){
+  var v = document.getElementById('v');
+  var srcM3u8 = 'assets/gua-hls/11-否/playlist.m3u8';
+  var srcMp4 = 'assets/gua-mp4/11-否.mp4';
+  if (window.Hls && Hls.isSupported()) {
+    var hls = new Hls({maxBufferLength:15,maxMaxBufferLength:60});
+    hls.loadSource(srcM3u8);
+    hls.attachMedia(v);
+  } else if (v.canPlayType('application/vnd.apple.mpegurl')) {
+    v.src = srcM3u8;
+  } else {
+    v.src = srcMp4;
+  }
+})();
+</script>
+</body>
+</html>
