@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>䷍ 大有卦 · 易经讲解 | 易经本体论研究</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.13/dist/hls.min.js"></script>
+<style>
+body { background:#f4ecd8; font-family:"Noto Serif SC","Songti SC",serif; color:#2a2520; margin:0; padding:24px; }
+.wrap { max-width:960px; margin:0 auto; }
+.top { display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:10px; }
+.back { color:#a03c20; text-decoration:none; font-size:15px; }
+.back:hover { text-decoration:underline; }
+h1 { color:#8b2c1c; font-size:28px; margin:12px 0 6px; }
+.sub { color:#8a7a65; font-size:14px; margin-bottom:18px; }
+.video-box { background:#1a1410; border-radius:6px; overflow:hidden; box-shadow:0 4px 20px rgba(0,0,0,.25); margin-bottom:20px; }
+video { width:100%; display:block; aspect-ratio:16/9; background:#000; }
+.card { background:#fff; border:1px solid #d9c9a8; border-radius:4px; padding:20px 24px; margin-bottom:16px; }
+.card h2 { color:#8b2c1c; font-size:18px; margin:0 0 10px; border-left:3px solid #a03c20; padding-left:10px; }
+.guaci { font-size:16px; line-height:1.9; color:#2a2520; }
+.bai { color:#5c4d3a; line-height:1.8; font-size:15px; margin-top:8px; padding-top:8px; border-top:1px dashed #d9c9a8; }
+.yao-list { margin:0; padding:0; list-style:none; }
+.yao-list li { padding:8px 0; border-bottom:1px dashed #e9ddc4; font-size:14px; line-height:1.8; }
+.yao-list li:last-child { border-bottom:none; }
+.yao-list .yao-ti { color:#8b2c1c; font-weight:bold; margin-right:8px; }
+.hls-badge { display:inline-block; background:#a03c20; color:#fff; font-size:11px; padding:2px 6px; border-radius:2px; margin-left:8px; vertical-align:middle; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <a class="back" href="index.html">← 动画总入口</a>
+    <a class="back" href="gua-index.html">← 64卦讲解</a>
+  </div>
+  <h1>䷍ 大有卦<span class="hls-badge">女声配音</span></h1>
+  <div class="sub">约 2.8 分钟 · 第14卦 · 上离下乾（上经）</div>
+  <div class="video-box">
+    <video id="v" controls playsinline preload="metadata" poster=""></video>
+  </div>
+  <div class="card">
+    <h2>卦辞</h2>
+    <div class="guaci">大有：元亨。</div>
+    <div class="bai">大有是盛大丰有、大有所获。柔顺之德居尊位，广大中正而上下响应，故大为亨通。此卦象征事业鼎盛、众望所归，宜刚健文明、顺应天时，抑恶扬善以守其盛。</div>
+  </div>
+  <div class="card">
+    <h2>爻辞</h2>
+    <ul class="yao-list">
+      <li><span class="yao-ti">初九</span>无交害，匪咎，艰则无咎。 —— 不与人结怨受害，本身并无过错；但只要知晓艰难、谨慎从事，就能无咎。说明富有之初须远离害端、戒骄慎行，方能保全。</li>
+      <li><span class="yao-ti">九二</span>大车以载，有攸往，无咎。 —— 用大车装载重物，有所前往，不会有过失。说明有实力又有担当，只要方向明确、稳妥装载，就能胜任远行而无咎。</li>
+      <li><span class="yao-ti">九三</span>公用亨于天子，小人弗克。 —— 公侯把财富献给天子，小人则做不到。说明居富盛之时当心怀公义、上奉大局，若为小人之心只顾私利，反受其害。</li>
+      <li><span class="yao-ti">九四</span>匪其尫，无咎。 —— 不夸耀自己的盛美，无咎。说明在富有之时当收敛谦退、不炫耀锋芒，明辨这一分际即可免于过失。</li>
+      <li><span class="yao-ti">六五</span>厥孚交如，威如吉。 —— 以诚信与人交好，并保持威严，吉祥。说明居尊位者待人以诚、立身有威，宽严相济，才能赢得敬服而获吉。</li>
+      <li><span class="yao-ti">上九</span>自天右之，吉，无不利。 —— 有上天保佑，吉祥而无所不利。说明秉承正道、顺应天意，自然得到各方相助，凡事顺遂而无所不利。</li>
+    </ul>
+  </div>
+</div>
+<script>
+(function(){
+  var v = document.getElementById('v');
+  var srcM3u8 = 'assets/gua-hls/13-大有/playlist.m3u8';
+  var srcMp4 = 'assets/gua-mp4/13-大有.mp4';
+  if (window.Hls && Hls.isSupported()) {
+    var hls = new Hls({maxBufferLength:15,maxMaxBufferLength:60});
+    hls.loadSource(srcM3u8);
+    hls.attachMedia(v);
+  } else if (v.canPlayType('application/vnd.apple.mpegurl')) {
+    v.src = srcM3u8;
+  } else {
+    v.src = srcMp4;
+  }
+})();
+</script>
+</body>
+</html>
