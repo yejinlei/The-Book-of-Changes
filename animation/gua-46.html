@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>䷮ 困卦 · 易经讲解 | 易经本体论研究</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.13/dist/hls.min.js"></script>
+<style>
+body { background:#f4ecd8; font-family:"Noto Serif SC","Songti SC",serif; color:#2a2520; margin:0; padding:24px; }
+.wrap { max-width:960px; margin:0 auto; }
+.top { display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:10px; }
+.back { color:#a03c20; text-decoration:none; font-size:15px; }
+.back:hover { text-decoration:underline; }
+h1 { color:#8b2c1c; font-size:28px; margin:12px 0 6px; }
+.sub { color:#8a7a65; font-size:14px; margin-bottom:18px; }
+.video-box { background:#1a1410; border-radius:6px; overflow:hidden; box-shadow:0 4px 20px rgba(0,0,0,.25); margin-bottom:20px; }
+video { width:100%; display:block; aspect-ratio:16/9; background:#000; }
+.card { background:#fff; border:1px solid #d9c9a8; border-radius:4px; padding:20px 24px; margin-bottom:16px; }
+.card h2 { color:#8b2c1c; font-size:18px; margin:0 0 10px; border-left:3px solid #a03c20; padding-left:10px; }
+.guaci { font-size:16px; line-height:1.9; color:#2a2520; }
+.bai { color:#5c4d3a; line-height:1.8; font-size:15px; margin-top:8px; padding-top:8px; border-top:1px dashed #d9c9a8; }
+.yao-list { margin:0; padding:0; list-style:none; }
+.yao-list li { padding:8px 0; border-bottom:1px dashed #e9ddc4; font-size:14px; line-height:1.8; }
+.yao-list li:last-child { border-bottom:none; }
+.yao-list .yao-ti { color:#8b2c1c; font-weight:bold; margin-right:8px; }
+.hls-badge { display:inline-block; background:#a03c20; color:#fff; font-size:11px; padding:2px 6px; border-radius:2px; margin-left:8px; vertical-align:middle; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <a class="back" href="index.html">← 动画总入口</a>
+    <a class="back" href="gua-index.html">← 64卦讲解</a>
+  </div>
+  <h1>䷮ 困卦<span class="hls-badge">女声配音</span></h1>
+  <div class="sub">约 2.9 分钟 · 第47卦 · 上兑下坎（下经）</div>
+  <div class="video-box">
+    <video id="v" controls playsinline preload="metadata" poster=""></video>
+  </div>
+  <div class="card">
+    <h2>卦辞</h2>
+    <div class="guaci">困：亨，</div>
+    <div class="bai">困卦讲的是困穷、被困的处境。虽处险境而心怀和悦，困顿之中仍不失其亨通，这唯有君子才能做到。守正的大人吉祥，因为内有刚健中正之德；多言巧辩，反而会陷入更深的困窘。</div>
+  </div>
+  <div class="card">
+    <h2>爻辞</h2>
+    <ul class="yao-list">
+      <li><span class="yao-ti">初六</span>臀困于株木。入于幽谷，三岁不觌。 —— 像臀部困坐在枯树桩上一样，进退不得，又陷入幽深山谷，三年也见不到人。处境极为闭塞，当耐心等待。</li>
+      <li><span class="yao-ti">九二</span>困于酒食，朱绂方来，利用享祀，征凶。无咎。 —— 困于酒食之中，朱红的官服正要送来，宜祭祀祈福，但贸然出征则有凶险，然若能守正，也可免咎。</li>
+      <li><span class="yao-ti">六三</span>困于石，据于蒺藜，入于其宫，不见其妻，凶。 —— 困在坚石之下，手抓蒺藜之上，进入家中又见不到妻子，凶险。进退失据、内外无援，最为凶险。</li>
+      <li><span class="yao-ti">九四</span>来荼荼，困于金车，吝，有终。 —— 来势迟缓蹒跚，又困于金车的阻隔，处境艰难令人惜，但最终尚能收场。虽受制于人，仍可徐图出路。</li>
+      <li><span class="yao-ti">九五</span>劓刖，困于赤绂，乃徐有说，利用祭祀。 —— 遭受劓、刖一样的挫伤，受困于赤绂之下，但慢慢会得到解脱，宜祭祀祈福。中正之德终能施予于人、受福于人。</li>
+      <li><span class="yao-ti">上六</span>困于葛藟，于臲兀，曰动悔有悔，征吉。 —— 被葛藤缠困，处境动摇不安。若能觉悟到妄动招悔，便可知悔而改、前往则吉。困极思变，及时行动便可脱困。</li>
+    </ul>
+  </div>
+</div>
+<script>
+(function(){
+  var v = document.getElementById('v');
+  var srcM3u8 = 'assets/gua-hls/46-困/playlist.m3u8';
+  var srcMp4 = 'assets/gua-mp4/46-困.mp4';
+  if (window.Hls && Hls.isSupported()) {
+    var hls = new Hls({maxBufferLength:15,maxMaxBufferLength:60});
+    hls.loadSource(srcM3u8);
+    hls.attachMedia(v);
+  } else if (v.canPlayType('application/vnd.apple.mpegurl')) {
+    v.src = srcM3u8;
+  } else {
+    v.src = srcMp4;
+  }
+})();
+</script>
+</body>
+</html>
