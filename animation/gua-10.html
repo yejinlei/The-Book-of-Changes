@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>䷊ 泰卦 · 易经讲解 | 易经本体论研究</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.13/dist/hls.min.js"></script>
+<style>
+body { background:#f4ecd8; font-family:"Noto Serif SC","Songti SC",serif; color:#2a2520; margin:0; padding:24px; }
+.wrap { max-width:960px; margin:0 auto; }
+.top { display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:10px; }
+.back { color:#a03c20; text-decoration:none; font-size:15px; }
+.back:hover { text-decoration:underline; }
+h1 { color:#8b2c1c; font-size:28px; margin:12px 0 6px; }
+.sub { color:#8a7a65; font-size:14px; margin-bottom:18px; }
+.video-box { background:#1a1410; border-radius:6px; overflow:hidden; box-shadow:0 4px 20px rgba(0,0,0,.25); margin-bottom:20px; }
+video { width:100%; display:block; aspect-ratio:16/9; background:#000; }
+.card { background:#fff; border:1px solid #d9c9a8; border-radius:4px; padding:20px 24px; margin-bottom:16px; }
+.card h2 { color:#8b2c1c; font-size:18px; margin:0 0 10px; border-left:3px solid #a03c20; padding-left:10px; }
+.guaci { font-size:16px; line-height:1.9; color:#2a2520; }
+.bai { color:#5c4d3a; line-height:1.8; font-size:15px; margin-top:8px; padding-top:8px; border-top:1px dashed #d9c9a8; }
+.yao-list { margin:0; padding:0; list-style:none; }
+.yao-list li { padding:8px 0; border-bottom:1px dashed #e9ddc4; font-size:14px; line-height:1.8; }
+.yao-list li:last-child { border-bottom:none; }
+.yao-list .yao-ti { color:#8b2c1c; font-weight:bold; margin-right:8px; }
+.hls-badge { display:inline-block; background:#a03c20; color:#fff; font-size:11px; padding:2px 6px; border-radius:2px; margin-left:8px; vertical-align:middle; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <a class="back" href="index.html">← 动画总入口</a>
+    <a class="back" href="gua-index.html">← 64卦讲解</a>
+  </div>
+  <h1>䷊ 泰卦<span class="hls-badge">女声配音</span></h1>
+  <div class="sub">约 3.0 分钟 · 第11卦 · 上坤下乾（上经）</div>
+  <div class="video-box">
+    <video id="v" controls playsinline preload="metadata" poster=""></video>
+  </div>
+  <div class="card">
+    <h2>卦辞</h2>
+    <div class="guaci">泰：小往大来，吉、亨。</div>
+    <div class="bai">泰是通泰、安宁。小的离去、大的到来，天地交感、上下沟通，故吉祥而亨通。此卦象征阴阳和顺、政通人和的太平之象，此时宜顺时而为、促成上下交融。</div>
+  </div>
+  <div class="card">
+    <h2>爻辞</h2>
+    <ul class="yao-list">
+      <li><span class="yao-ti">初九</span>拔茅茹，以其汇，征吉。 —— 拔起茅草连根带同类一同而起，象征贤者相聚、同心而出，前往行动吉祥。说明此时宜与志同者结伴进发，共同成就事业。</li>
+      <li><span class="yao-ti">九二</span>包荒，用冯河，不遐遗。朋亡，得尚于中行。 —— 胸怀宽宏包容荒秽，敢于涉水渡河，不遗弃远方的贤才；不结私党，走中正之道而受重用。说明居高位者当包容、尚贤、去私，方能符合中道。</li>
+      <li><span class="yao-ti">九三</span>无平不陂，无往不复。艰贞无咎。勿恤其孚，于食有福。 —— 没有永远的平坦，也没有只去不返的事物；在艰难中守正即可无咎。不必忧虑诚信不足，衣食自有福分。说明世事有起有伏，守正守恒方能安然。</li>
+      <li><span class="yao-ti">六四</span>翩翩，不富以其邻，不戒以孚。 —— 轻快向下，不炫富而善待邻里，也不待告诫就自然诚信。说明内心真诚、谦和待邻，无需勉强就能获得信任。</li>
+      <li><span class="yao-ti">六五</span>帝乙归妹，以祉元吉。 —— 帝乙嫁出女儿，因这份福祉而大吉。说明居尊位者以谦下、联姻之道与人结好，能广结良缘、获致大吉。</li>
+      <li><span class="yao-ti">上六</span>城复于隍，勿用师，自邑告命，贞吝。 —— 城墙倾倒回壕沟，象征局面由泰转否、时势逆转。此时不可动用兵师，只能在自己城邑内发布告令，守正也难免艰吝。警示盛极须防倾覆。</li>
+    </ul>
+  </div>
+</div>
+<script>
+(function(){
+  var v = document.getElementById('v');
+  var srcM3u8 = 'assets/gua-hls/10-泰/playlist.m3u8';
+  var srcMp4 = 'assets/gua-mp4/10-泰.mp4';
+  if (window.Hls && Hls.isSupported()) {
+    var hls = new Hls({maxBufferLength:15,maxMaxBufferLength:60});
+    hls.loadSource(srcM3u8);
+    hls.attachMedia(v);
+  } else if (v.canPlayType('application/vnd.apple.mpegurl')) {
+    v.src = srcM3u8;
+  } else {
+    v.src = srcMp4;
+  }
+})();
+</script>
+</body>
+</html>
