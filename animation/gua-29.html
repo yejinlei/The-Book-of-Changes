@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>䷝ 离卦 · 易经讲解 | 易经本体论研究</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.13/dist/hls.min.js"></script>
+<style>
+body { background:#f4ecd8; font-family:"Noto Serif SC","Songti SC",serif; color:#2a2520; margin:0; padding:24px; }
+.wrap { max-width:960px; margin:0 auto; }
+.top { display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:10px; }
+.back { color:#a03c20; text-decoration:none; font-size:15px; }
+.back:hover { text-decoration:underline; }
+h1 { color:#8b2c1c; font-size:28px; margin:12px 0 6px; }
+.sub { color:#8a7a65; font-size:14px; margin-bottom:18px; }
+.video-box { background:#1a1410; border-radius:6px; overflow:hidden; box-shadow:0 4px 20px rgba(0,0,0,.25); margin-bottom:20px; }
+video { width:100%; display:block; aspect-ratio:16/9; background:#000; }
+.card { background:#fff; border:1px solid #d9c9a8; border-radius:4px; padding:20px 24px; margin-bottom:16px; }
+.card h2 { color:#8b2c1c; font-size:18px; margin:0 0 10px; border-left:3px solid #a03c20; padding-left:10px; }
+.guaci { font-size:16px; line-height:1.9; color:#2a2520; }
+.bai { color:#5c4d3a; line-height:1.8; font-size:15px; margin-top:8px; padding-top:8px; border-top:1px dashed #d9c9a8; }
+.yao-list { margin:0; padding:0; list-style:none; }
+.yao-list li { padding:8px 0; border-bottom:1px dashed #e9ddc4; font-size:14px; line-height:1.8; }
+.yao-list li:last-child { border-bottom:none; }
+.yao-list .yao-ti { color:#8b2c1c; font-weight:bold; margin-right:8px; }
+.hls-badge { display:inline-block; background:#a03c20; color:#fff; font-size:11px; padding:2px 6px; border-radius:2px; margin-left:8px; vertical-align:middle; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <a class="back" href="index.html">← 动画总入口</a>
+    <a class="back" href="gua-index.html">← 64卦讲解</a>
+  </div>
+  <h1>䷝ 离卦<span class="hls-badge">女声配音</span></h1>
+  <div class="sub">约 2.9 分钟 · 第30卦 · 上离下离（上经）</div>
+  <div class="video-box">
+    <video id="v" controls playsinline preload="metadata" poster=""></video>
+  </div>
+  <div class="card">
+    <h2>卦辞</h2>
+    <div class="guaci">离：利贞，亨。</div>
+    <div class="bai">离意为附丽、明亮，如日月附丽于天。利于守持正道，故能亨通。此时宜以柔顺之德附着于中正之道，如畜养母牛般温顺持正，则明而不烈、顺而得吉。</div>
+  </div>
+  <div class="card">
+    <h2>爻辞</h2>
+    <ul class="yao-list">
+      <li><span class="yao-ti">初九</span>履错然，敬之，无咎。 —— 脚步交错杂乱之际，心存敬慎，没有灾咎。此爻喻事情初起纷杂、头绪未清，只要怀着恭敬谨慎之心，处处留心，就能避开过失。</li>
+      <li><span class="yao-ti">六二</span>黄离，元吉。 —— 黄色的光明，大吉。黄为中正之色，此爻喻以中道守正、明而不失其度，柔顺居中而知分寸，因此最为吉祥，是光明正道的最佳状态。</li>
+      <li><span class="yao-ti">九三</span>日昃之离，不鼓缶而歌，则大耋之嗟，凶。 —— 夕阳西下的光明已近黄昏，若不能击缶而歌、坦然自乐，就只能发出龙钟老迈的悲叹，凶险。此爻喻盛极将衰，宜乐观自处、通达顺变，不可一味哀叹。</li>
+      <li><span class="yao-ti">九四</span>突如，其来如，焚如，死如，弃如。 —— 突然而来，猝然降临，如烈火焚烧，如死亡，如被弃置。此爻喻躁进妄动、来势凶暴而无所容身，警示人行事不可突兀莽撞，否则自取灭亡。</li>
+      <li><span class="yao-ti">六五</span>出涕沱若，戚嗟若，吉。 —— 泪流满面，忧伤悲叹，反而吉利。此爻喻身处危境而能心怀忧惧、反省戒惧，正因常怀忧患之心而终获吉祥，宜保持警惕。</li>
+      <li><span class="yao-ti">上九</span>王用出征，有嘉折首，获匪其丑，无咎。 —— 君王出兵征伐，斩获首恶之功，俘获的不是自己的同类，没有灾咎。此爻喻以明正之道讨伐乱者、分清敌我、只惩首恶，如此行事可无过失。</li>
+    </ul>
+  </div>
+</div>
+<script>
+(function(){
+  var v = document.getElementById('v');
+  var srcM3u8 = 'assets/gua-hls/29-离/playlist.m3u8';
+  var srcMp4 = 'assets/gua-mp4/29-离.mp4';
+  if (window.Hls && Hls.isSupported()) {
+    var hls = new Hls({maxBufferLength:15,maxMaxBufferLength:60});
+    hls.loadSource(srcM3u8);
+    hls.attachMedia(v);
+  } else if (v.canPlayType('application/vnd.apple.mpegurl')) {
+    v.src = srcM3u8;
+  } else {
+    v.src = srcMp4;
+  }
+})();
+</script>
+</body>
+</html>
