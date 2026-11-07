@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>䷘ 无妄卦 · 易经讲解 | 易经本体论研究</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.13/dist/hls.min.js"></script>
+<style>
+body { background:#f4ecd8; font-family:"Noto Serif SC","Songti SC",serif; color:#2a2520; margin:0; padding:24px; }
+.wrap { max-width:960px; margin:0 auto; }
+.top { display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:10px; }
+.back { color:#a03c20; text-decoration:none; font-size:15px; }
+.back:hover { text-decoration:underline; }
+h1 { color:#8b2c1c; font-size:28px; margin:12px 0 6px; }
+.sub { color:#8a7a65; font-size:14px; margin-bottom:18px; }
+.video-box { background:#1a1410; border-radius:6px; overflow:hidden; box-shadow:0 4px 20px rgba(0,0,0,.25); margin-bottom:20px; }
+video { width:100%; display:block; aspect-ratio:16/9; background:#000; }
+.card { background:#fff; border:1px solid #d9c9a8; border-radius:4px; padding:20px 24px; margin-bottom:16px; }
+.card h2 { color:#8b2c1c; font-size:18px; margin:0 0 10px; border-left:3px solid #a03c20; padding-left:10px; }
+.guaci { font-size:16px; line-height:1.9; color:#2a2520; }
+.bai { color:#5c4d3a; line-height:1.8; font-size:15px; margin-top:8px; padding-top:8px; border-top:1px dashed #d9c9a8; }
+.yao-list { margin:0; padding:0; list-style:none; }
+.yao-list li { padding:8px 0; border-bottom:1px dashed #e9ddc4; font-size:14px; line-height:1.8; }
+.yao-list li:last-child { border-bottom:none; }
+.yao-list .yao-ti { color:#8b2c1c; font-weight:bold; margin-right:8px; }
+.hls-badge { display:inline-block; background:#a03c20; color:#fff; font-size:11px; padding:2px 6px; border-radius:2px; margin-left:8px; vertical-align:middle; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <a class="back" href="index.html">← 动画总入口</a>
+    <a class="back" href="gua-index.html">← 64卦讲解</a>
+  </div>
+  <h1>䷘ 无妄卦<span class="hls-badge">女声配音</span></h1>
+  <div class="sub">约 2.7 分钟 · 第25卦 · 上乾下震（上经）</div>
+  <div class="video-box">
+    <video id="v" controls playsinline preload="metadata" poster=""></video>
+  </div>
+  <div class="card">
+    <h2>卦辞</h2>
+    <div class="guaci">无妄。</div>
+    <div class="bai">无妄意为不虚妄、不妄为，凡事依循本分与正道而行，不存非分之想，自然亨通。此时宜守正勿贪、顺天而动；若心存邪妄、强行妄动，反会招致灾祸，不宜有所前往。</div>
+  </div>
+  <div class="card">
+    <h2>爻辞</h2>
+    <ul class="yao-list">
+      <li><span class="yao-ti">初九</span>无妄，往吉。 —— 处在无妄之初，心志纯正、动机无邪，此时前往行事最为吉利。只要怀着一颗没有私欲杂念的诚心起步，前路自然通畅，宜果断行动而不必多虑。</li>
+      <li><span class="yao-ti">六二</span>不耕获，不菑畲，则利有攸往。 —— 不贪图耕作收获，不急着开垦新田，先耕耘不问结果，反而利于前行。此爻教人做事只问耕耘不问收获，顺其自然地把本分事情做好，机缘到时自有回报。</li>
+      <li><span class="yao-ti">六三</span>无妄之灾，或系之牛。行人之得，邑人之灾。 —— 无妄之灾意外降临，如同有人把牛拴在路边，过路人牵走了牛，却让无辜的邑人蒙受灾殃。此爻喻祸从天降、非己之过，宜冷静承受，不必自责，也不要慌乱妄动。</li>
+      <li><span class="yao-ti">九四</span>可贞，无咎。 —— 可以固守正道，因此没有灾咎。此爻处境虽有牵制，但只要能守住本心和原则，不为外物所动，就能平安无事，关键在于贞定自守。</li>
+      <li><span class="yao-ti">九五</span>无妄之疾，勿药有喜。 —— 无妄之疾无须用药，自然会有喜。此爻指身染小病或遇小患，并非自己行为有失，只要不去胡乱医治、妄加干预，静养自愈，反而吉利。</li>
+      <li><span class="yao-ti">上九</span>无妄行，有眚，无攸利。 —— 已经到了无妄之极，若再勉强前行，必生灾患，没有什么好处。此爻警示人在极盛或无事之时强行作为，反会招祸，宜安分守静、及时收手。</li>
+    </ul>
+  </div>
+</div>
+<script>
+(function(){
+  var v = document.getElementById('v');
+  var srcM3u8 = 'assets/gua-hls/24-无妄/playlist.m3u8';
+  var srcMp4 = 'assets/gua-mp4/24-无妄.mp4';
+  if (window.Hls && Hls.isSupported()) {
+    var hls = new Hls({maxBufferLength:15,maxMaxBufferLength:60});
+    hls.loadSource(srcM3u8);
+    hls.attachMedia(v);
+  } else if (v.canPlayType('application/vnd.apple.mpegurl')) {
+    v.src = srcM3u8;
+  } else {
+    v.src = srcMp4;
+  }
+})();
+</script>
+</body>
+</html>
