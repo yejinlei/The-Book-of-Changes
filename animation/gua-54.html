@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>䷶ 丰卦 · 易经讲解 | 易经本体论研究</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.13/dist/hls.min.js"></script>
+<style>
+body { background:#f4ecd8; font-family:"Noto Serif SC","Songti SC",serif; color:#2a2520; margin:0; padding:24px; }
+.wrap { max-width:960px; margin:0 auto; }
+.top { display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:10px; }
+.back { color:#a03c20; text-decoration:none; font-size:15px; }
+.back:hover { text-decoration:underline; }
+h1 { color:#8b2c1c; font-size:28px; margin:12px 0 6px; }
+.sub { color:#8a7a65; font-size:14px; margin-bottom:18px; }
+.video-box { background:#1a1410; border-radius:6px; overflow:hidden; box-shadow:0 4px 20px rgba(0,0,0,.25); margin-bottom:20px; }
+video { width:100%; display:block; aspect-ratio:16/9; background:#000; }
+.card { background:#fff; border:1px solid #d9c9a8; border-radius:4px; padding:20px 24px; margin-bottom:16px; }
+.card h2 { color:#8b2c1c; font-size:18px; margin:0 0 10px; border-left:3px solid #a03c20; padding-left:10px; }
+.guaci { font-size:16px; line-height:1.9; color:#2a2520; }
+.bai { color:#5c4d3a; line-height:1.8; font-size:15px; margin-top:8px; padding-top:8px; border-top:1px dashed #d9c9a8; }
+.yao-list { margin:0; padding:0; list-style:none; }
+.yao-list li { padding:8px 0; border-bottom:1px dashed #e9ddc4; font-size:14px; line-height:1.8; }
+.yao-list li:last-child { border-bottom:none; }
+.yao-list .yao-ti { color:#8b2c1c; font-weight:bold; margin-right:8px; }
+.hls-badge { display:inline-block; background:#a03c20; color:#fff; font-size:11px; padding:2px 6px; border-radius:2px; margin-left:8px; vertical-align:middle; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <a class="back" href="index.html">← 动画总入口</a>
+    <a class="back" href="gua-index.html">← 64卦讲解</a>
+  </div>
+  <h1>䷶ 丰卦<span class="hls-badge">女声配音</span></h1>
+  <div class="sub">约 3.2 分钟 · 第55卦 · 上震下离（下经）</div>
+  <div class="video-box">
+    <video id="v" controls playsinline preload="metadata" poster=""></video>
+  </div>
+  <div class="card">
+    <h2>卦辞</h2>
+    <div class="guaci">丰：亨，</div>
+    <div class="bai">丰卦讲盛大丰足。明而能动，所以丰大。王者到来，崇尚其大，不必忧惧，宜如日中天普照天下。然而日中则斜、月盈则亏，天地尚且随时盈虚消长，何况人与鬼神，故盛大之时尤当戒满。</div>
+  </div>
+  <div class="card">
+    <h2>爻辞</h2>
+    <ul class="yao-list">
+      <li><span class="yao-ti">初九</span>遇其配主，虽旬无咎，往有尚。 —— 遇到与自己相配的主人，虽遇阻碍也无过失，前往必受推崇。找到相合的伙伴共同行事，虽有小阻，仍可成就。</li>
+      <li><span class="yao-ti">六二</span>丰其蔀，日中见斗，往得疑疾。有孚发若，吉。 —— 遮蔽太厚，正午却见北斗星，前往会招来猜疑之疾；若以诚信感发，则吉。被蒙蔽而生疑，唯有用诚意打动，方能化解。</li>
+      <li><span class="yao-ti">九三</span>丰其沛，日中见沫，折其右肱，无咎。折其右肱，无咎。 —— 遮蔽重重，正午只见微光，折伤了右臂，无咎。环境昏暗、得力受损，虽难有大作为，但知难而止可免咎。</li>
+      <li><span class="yao-ti">九四</span>丰其蔀，日中见斗，遇其夷主，吉。按：四处上卦之下，以阳居阴，履非其位，而比于五故曰“遇”也。夷者，伤也。主者，五也。谓四不期相遇，而能上行伤五，则吉。故曰“遇其夷主，吉行也”。 —— 遮蔽太厚，正午见斗，遇到有伤之主，吉。处境昏暗而位不当，能向上遇合，则化险为吉，宜主动寻明主。</li>
+      <li><span class="yao-ti">六五</span>来章，有庆誉，吉。 —— 招来文采彰明之士，有喜庆美誉，吉祥。居尊位而广纳贤才、彰显文明，故有吉庆之声名。</li>
+      <li><span class="yao-ti">上六</span>丰其屋，蔀其家。窥其户，阒其无人。三岁不觌，凶。 —— 使房屋丰大、遮蔽其家，窥其门中却寂静无人。三年不见人影，凶。一味追求排场而众叛亲离，虽盛而无实，终致大凶。</li>
+    </ul>
+  </div>
+</div>
+<script>
+(function(){
+  var v = document.getElementById('v');
+  var srcM3u8 = 'assets/gua-hls/54-丰/playlist.m3u8';
+  var srcMp4 = 'assets/gua-mp4/54-丰.mp4';
+  if (window.Hls && Hls.isSupported()) {
+    var hls = new Hls({maxBufferLength:15,maxMaxBufferLength:60});
+    hls.loadSource(srcM3u8);
+    hls.attachMedia(v);
+  } else if (v.canPlayType('application/vnd.apple.mpegurl')) {
+    v.src = srcM3u8;
+  } else {
+    v.src = srcMp4;
+  }
+})();
+</script>
+</body>
+</html>
