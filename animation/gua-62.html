@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>䷾ 既济卦 · 易经讲解 | 易经本体论研究</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.13/dist/hls.min.js"></script>
+<style>
+body { background:#f4ecd8; font-family:"Noto Serif SC","Songti SC",serif; color:#2a2520; margin:0; padding:24px; }
+.wrap { max-width:960px; margin:0 auto; }
+.top { display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:10px; }
+.back { color:#a03c20; text-decoration:none; font-size:15px; }
+.back:hover { text-decoration:underline; }
+h1 { color:#8b2c1c; font-size:28px; margin:12px 0 6px; }
+.sub { color:#8a7a65; font-size:14px; margin-bottom:18px; }
+.video-box { background:#1a1410; border-radius:6px; overflow:hidden; box-shadow:0 4px 20px rgba(0,0,0,.25); margin-bottom:20px; }
+video { width:100%; display:block; aspect-ratio:16/9; background:#000; }
+.card { background:#fff; border:1px solid #d9c9a8; border-radius:4px; padding:20px 24px; margin-bottom:16px; }
+.card h2 { color:#8b2c1c; font-size:18px; margin:0 0 10px; border-left:3px solid #a03c20; padding-left:10px; }
+.guaci { font-size:16px; line-height:1.9; color:#2a2520; }
+.bai { color:#5c4d3a; line-height:1.8; font-size:15px; margin-top:8px; padding-top:8px; border-top:1px dashed #d9c9a8; }
+.yao-list { margin:0; padding:0; list-style:none; }
+.yao-list li { padding:8px 0; border-bottom:1px dashed #e9ddc4; font-size:14px; line-height:1.8; }
+.yao-list li:last-child { border-bottom:none; }
+.yao-list .yao-ti { color:#8b2c1c; font-weight:bold; margin-right:8px; }
+.hls-badge { display:inline-block; background:#a03c20; color:#fff; font-size:11px; padding:2px 6px; border-radius:2px; margin-left:8px; vertical-align:middle; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <a class="back" href="index.html">← 动画总入口</a>
+    <a class="back" href="gua-index.html">← 64卦讲解</a>
+  </div>
+  <h1>䷾ 既济卦<span class="hls-badge">女声配音</span></h1>
+  <div class="sub">约 2.8 分钟 · 第63卦 · 上坎下离（下经）</div>
+  <div class="video-box">
+    <video id="v" controls playsinline preload="metadata" poster=""></video>
+  </div>
+  <div class="card">
+    <h2>卦辞</h2>
+    <div class="guaci">既济：亨校利贞。</div>
+    <div class="bai">既济为事情已经成就、渡过险难。各爻当位、剛柔得正，故亨通而宜守正。然而成功之初虽吉，若不能谨慎守成，最终终将生乱；成而不思患，则其道穷尽，故须居安思危。</div>
+  </div>
+  <div class="card">
+    <h2>爻辞</h2>
+    <ul class="yao-list">
+      <li><span class="yao-ti">初九</span>曳其轮，濡其尾，无咎。 —— 如同拖住车轮、沾湿尾巴，警示初出之时不可冒进。成功之初宜缓行自持、抑制躁动，如此谨慎，方能无咎。</li>
+      <li><span class="yao-ti">六二</span>妇丧其佛，勿逐，七日得。 —— 柔居中正，如妇人丢失了首饰，不必急着去追寻。守中自持、静待时机，失去的自会在七日后失而复得。</li>
+      <li><span class="yao-ti">九三</span>高宗伐鬼方，三年克之，小人勿用。 —— 如高宗讨伐鬼方，历时三年方才攻克，劳而终成。成事艰难、耗费巨大，故不可任用小人，以免坏乱已成的局面。</li>
+      <li><span class="yao-ti">六四</span>繻有衣袽，终日戒。 —— 如同衣裳破旧、以碎布填补御寒，处境已隐有忧患。此时应终日戒备、时时警惕，防范未然，方能保住成果。</li>
+      <li><span class="yao-ti">九五</span>东邻杀牛，不如西邻之禴祭，实受其福。 —— 东邻杀牛盛祭，不如西邻简朴的禴祭更能实受神福。祭祀贵在诚心而非奢华，守诚务本者，方能真正获得福报。</li>
+      <li><span class="yao-ti">上六</span>濡其首，厉。 —— 身处成功之极，如渡水时沾湿了头，险象已至，危险。成功至极而不戒惧，必将由安逸转入危败，须及早警惕收敛。</li>
+    </ul>
+  </div>
+</div>
+<script>
+(function(){
+  var v = document.getElementById('v');
+  var srcM3u8 = 'assets/gua-hls/62-既济/playlist.m3u8';
+  var srcMp4 = 'assets/gua-mp4/62-既济.mp4';
+  if (window.Hls && Hls.isSupported()) {
+    var hls = new Hls({maxBufferLength:15,maxMaxBufferLength:60});
+    hls.loadSource(srcM3u8);
+    hls.attachMedia(v);
+  } else if (v.canPlayType('application/vnd.apple.mpegurl')) {
+    v.src = srcM3u8;
+  } else {
+    v.src = srcMp4;
+  }
+})();
+</script>
+</body>
+</html>
