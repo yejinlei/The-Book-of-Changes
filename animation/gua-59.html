@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>䷻ 节卦 · 易经讲解 | 易经本体论研究</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.13/dist/hls.min.js"></script>
+<style>
+body { background:#f4ecd8; font-family:"Noto Serif SC","Songti SC",serif; color:#2a2520; margin:0; padding:24px; }
+.wrap { max-width:960px; margin:0 auto; }
+.top { display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:10px; }
+.back { color:#a03c20; text-decoration:none; font-size:15px; }
+.back:hover { text-decoration:underline; }
+h1 { color:#8b2c1c; font-size:28px; margin:12px 0 6px; }
+.sub { color:#8a7a65; font-size:14px; margin-bottom:18px; }
+.video-box { background:#1a1410; border-radius:6px; overflow:hidden; box-shadow:0 4px 20px rgba(0,0,0,.25); margin-bottom:20px; }
+video { width:100%; display:block; aspect-ratio:16/9; background:#000; }
+.card { background:#fff; border:1px solid #d9c9a8; border-radius:4px; padding:20px 24px; margin-bottom:16px; }
+.card h2 { color:#8b2c1c; font-size:18px; margin:0 0 10px; border-left:3px solid #a03c20; padding-left:10px; }
+.guaci { font-size:16px; line-height:1.9; color:#2a2520; }
+.bai { color:#5c4d3a; line-height:1.8; font-size:15px; margin-top:8px; padding-top:8px; border-top:1px dashed #d9c9a8; }
+.yao-list { margin:0; padding:0; list-style:none; }
+.yao-list li { padding:8px 0; border-bottom:1px dashed #e9ddc4; font-size:14px; line-height:1.8; }
+.yao-list li:last-child { border-bottom:none; }
+.yao-list .yao-ti { color:#8b2c1c; font-weight:bold; margin-right:8px; }
+.hls-badge { display:inline-block; background:#a03c20; color:#fff; font-size:11px; padding:2px 6px; border-radius:2px; margin-left:8px; vertical-align:middle; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <a class="back" href="index.html">← 动画总入口</a>
+    <a class="back" href="gua-index.html">← 64卦讲解</a>
+  </div>
+  <h1>䷻ 节卦<span class="hls-badge">女声配音</span></h1>
+  <div class="sub">约 2.7 分钟 · 第60卦 · 上坎下兑（下经）</div>
+  <div class="video-box">
+    <video id="v" controls playsinline preload="metadata" poster=""></video>
+  </div>
+  <div class="card">
+    <h2>卦辞</h2>
+    <div class="guaci">节：亨，</div>
+    <div class="bai">节为节制、节度，如泽上有水、水量有限，象征凡事应有分寸准则。以喜悦之心行于险境，当位而节、中正而通，则亨通顺遂。节制依制度而行，才能不耗财、不扰民，成就长远。</div>
+  </div>
+  <div class="card">
+    <h2>爻辞</h2>
+    <ul class="yao-list">
+      <li><span class="yao-ti">初九</span>不出户庭，无咎。 —— 时机未到、通塞未明，故安守其位、不出户庭。此时收敛谨慎、不轻举妄动，正合时宜，可以避免过失。</li>
+      <li><span class="yao-ti">九二</span>不出门庭，凶。 —— 时机已到、当出而不出，反而闭门不出、固守自封。该行动时却不行动，错失良机，因此有凶。</li>
+      <li><span class="yao-ti">六三</span>不节若，则嗟若，无咎。 —— 不能自我节制、放纵失度，事后便只能叹息懊悔。这声叹息是自取其咎，怨不得别人；但尚未造成大过，故亦无咎。</li>
+      <li><span class="yao-ti">六四</span>安节，亨。 —— 安然守节、顺理而行，恰到好处。因能顺承在上者之道、柔和适度地自制，故获亨通。</li>
+      <li><span class="yao-ti">九五</span>甘节，吉。往有尚。 —— 居中得正，节制而甘美适中，不苦不迫，令人乐意遵守，因此吉祥。如此推行而有作为，必受人崇尚推崇。</li>
+      <li><span class="yao-ti">上六</span>苦节，贞凶，悔亡。 —— 节制过甚，如同苦节，虽守正却令人难以忍受，故有凶险。节制以适中为贵，走到极端便失其道，须及时疏导、悔改自宽。</li>
+    </ul>
+  </div>
+</div>
+<script>
+(function(){
+  var v = document.getElementById('v');
+  var srcM3u8 = 'assets/gua-hls/59-节/playlist.m3u8';
+  var srcMp4 = 'assets/gua-mp4/59-节.mp4';
+  if (window.Hls && Hls.isSupported()) {
+    var hls = new Hls({maxBufferLength:15,maxMaxBufferLength:60});
+    hls.loadSource(srcM3u8);
+    hls.attachMedia(v);
+  } else if (v.canPlayType('application/vnd.apple.mpegurl')) {
+    v.src = srcM3u8;
+  } else {
+    v.src = srcMp4;
+  }
+})();
+</script>
+</body>
+</html>
