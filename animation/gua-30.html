@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>䷞ 咸卦 · 易经讲解 | 易经本体论研究</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.13/dist/hls.min.js"></script>
+<style>
+body { background:#f4ecd8; font-family:"Noto Serif SC","Songti SC",serif; color:#2a2520; margin:0; padding:24px; }
+.wrap { max-width:960px; margin:0 auto; }
+.top { display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:10px; }
+.back { color:#a03c20; text-decoration:none; font-size:15px; }
+.back:hover { text-decoration:underline; }
+h1 { color:#8b2c1c; font-size:28px; margin:12px 0 6px; }
+.sub { color:#8a7a65; font-size:14px; margin-bottom:18px; }
+.video-box { background:#1a1410; border-radius:6px; overflow:hidden; box-shadow:0 4px 20px rgba(0,0,0,.25); margin-bottom:20px; }
+video { width:100%; display:block; aspect-ratio:16/9; background:#000; }
+.card { background:#fff; border:1px solid #d9c9a8; border-radius:4px; padding:20px 24px; margin-bottom:16px; }
+.card h2 { color:#8b2c1c; font-size:18px; margin:0 0 10px; border-left:3px solid #a03c20; padding-left:10px; }
+.guaci { font-size:16px; line-height:1.9; color:#2a2520; }
+.bai { color:#5c4d3a; line-height:1.8; font-size:15px; margin-top:8px; padding-top:8px; border-top:1px dashed #d9c9a8; }
+.yao-list { margin:0; padding:0; list-style:none; }
+.yao-list li { padding:8px 0; border-bottom:1px dashed #e9ddc4; font-size:14px; line-height:1.8; }
+.yao-list li:last-child { border-bottom:none; }
+.yao-list .yao-ti { color:#8b2c1c; font-weight:bold; margin-right:8px; }
+.hls-badge { display:inline-block; background:#a03c20; color:#fff; font-size:11px; padding:2px 6px; border-radius:2px; margin-left:8px; vertical-align:middle; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <a class="back" href="index.html">← 动画总入口</a>
+    <a class="back" href="gua-index.html">← 64卦讲解</a>
+  </div>
+  <h1>䷞ 咸卦<span class="hls-badge">女声配音</span></h1>
+  <div class="sub">约 2.8 分钟 · 第31卦 · 上兑下艮（下经）</div>
+  <div class="video-box">
+    <video id="v" controls playsinline preload="metadata" poster=""></video>
+  </div>
+  <div class="card">
+    <h2>卦辞</h2>
+    <div class="guaci">咸：亨，利贞，取女吉。</div>
+    <div class="bai">咸意为感应，柔上刚下、二气相感而相应，止而悦、男下于女，故亨通而利于守正，娶妻吉利。此爻喻以诚相感、以虚受人，感而通之则天下和顺。</div>
+  </div>
+  <div class="card">
+    <h2>爻辞</h2>
+    <ul class="yao-list">
+      <li><span class="yao-ti">初六</span>咸其母。 —— 感应到脚拇指，刚刚有所触动。此爻喻情感或意念才刚萌动，尚在浅表，宜稳住不急着行动，先辨明真伪再定进退，不要轻率起步。</li>
+      <li><span class="yao-ti">六二</span>咸其腓，凶。居吉。 —— 感应到小腿肚，此时前往凶险，安居不动则吉。此爻喻心思浮动、跃跃欲试而尚不能自主，宜静守待时，不可急进，安处反而吉利。</li>
+      <li><span class="yao-ti">九三</span>咸其股，执其随，往咎。 —— 感应到大腿，只知道一味追随他人，前往则有灾咎。此爻喻随人而动、丧失自主，宜自守本志、明白自己的方向，不可盲从附和。</li>
+      <li><span class="yao-ti">九四</span>贞吉，悔亡。憧憧往来，朋从尔思。 —— 守正则吉，悔恨消除，但心思往来不定，朋友们只是顺着你的想法。此爻喻心念摇摆、感而不专，宜贞定专一，不可犹豫反复，方能无悔。</li>
+      <li><span class="yao-ti">九五</span>咸其脢，无悔。 —— 感应到背脊肉，无所作为，没有悔恨。此爻喻感应不涉私欲、淡然处之，虽无大作为也无悔恨，宜守中自持，不必刻意求感动人。</li>
+      <li><span class="yao-ti">上六</span>咸其辅颊舌。 —— 感应只停留在口舌之间，靠言语哄人。此爻喻以花言巧语取悦于人、感而无实，虽能一时动人却难长久，宜以诚待人，莫徒逞口舌。</li>
+    </ul>
+  </div>
+</div>
+<script>
+(function(){
+  var v = document.getElementById('v');
+  var srcM3u8 = 'assets/gua-hls/30-咸/playlist.m3u8';
+  var srcMp4 = 'assets/gua-mp4/30-咸.mp4';
+  if (window.Hls && Hls.isSupported()) {
+    var hls = new Hls({maxBufferLength:15,maxMaxBufferLength:60});
+    hls.loadSource(srcM3u8);
+    hls.attachMedia(v);
+  } else if (v.canPlayType('application/vnd.apple.mpegurl')) {
+    v.src = srcM3u8;
+  } else {
+    v.src = srcMp4;
+  }
+})();
+</script>
+</body>
+</html>
