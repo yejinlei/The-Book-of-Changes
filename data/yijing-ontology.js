@@ -614,7 +614,21 @@ window.YJ_ONT = (function() {
     {id:'zj_nanhuaijin', name:'南怀瑾', era:'当代', years:'1918-2012', school:'通俗/融会', masterpiece:'易经杂说、易经系传别讲', desc:'台湾著名传统文化传播者，以通俗讲易闻名，影响甚广。'},
     {id:'zj_fupeirong', name:'傅佩荣', era:'当代', years:'1950-', school:'哲学/通俗', masterpiece:'傅佩荣解读易经', desc:'台湾大学哲学系教授，哲学解易，讲解清晰，普及易经有功。'},
     {id:'zj_zengshiqiang', name:'曾仕强', era:'当代', years:'1935-2018', school:'管理/通俗', masterpiece:'易经的奥秘、易经的智慧', desc:'台湾交通大学教授，将易经与管理结合，通过百家讲坛普及易经，影响广泛。'},
-  ];
+      {id:'zj_xunqing', name:'荀卿', era:'战国', years:'前313-前238', school:'儒家', masterpiece:'《荀子》', desc:'名况，又称孙卿，战国赵人。传《易》于浮丘伯，为汉代易学所自出。'},
+    {id:'zj_tianwangsun', name:'田王孙', era:'西汉', years:'约前2世纪', school:'今文·施孟梁丘', masterpiece:'《易》章句', desc:'西汉博士，从丁宽受《易》，授施雠、孟喜、梁丘贺，西汉今文易三家之师。'},
+    {id:'zj_yuxiang', name:'虞歆', era:'东汉', years:'约2世纪', school:'象数·孟氏', masterpiece:'注《易》', desc:'虞翻之父，会稽余姚人，世传孟氏易，虞翻受家学。'},
+    {id:'zj_muyixiu', name:'穆修', era:'北宋', years:'979-1032', school:'图书派', masterpiece:'《穆参军集》', desc:'字伯长，郓州人。从种放学，得陈抟先天图，传李之才、周敦颐，宋易图书学关键传人。'},
+    {id:'zj_liuzhiji', name:'李之才', era:'北宋', years:'?-1045', school:'图书派', masterpiece:'《变卦反对图》', desc:'字挺之，青州人。从穆修受先天图，授邵雍，邵雍先天学之师。'},
+    {id:'zj_youzuo', name:'游酢', era:'北宋', years:'1053-1123', school:'义理·洛学', masterpiece:'《易说》', desc:'字定夫，建阳人，程门四大弟子之一。'},
+    {id:'zj_yangshi', name:'杨时', era:'北宋', years:'1053-1135', school:'义理·洛学', masterpiece:'《龟山易说》', desc:'字中立，号龟山，将乐人。程门立雪，传程氏之学于罗从彦，道南一脉关键。'},
+    {id:'zj_lijingde', name:'黎靖德', era:'南宋', years:'约13世纪', school:'朱子学', masterpiece:'《朱子语类》', desc:'南宋永嘉人，编《朱子语类》一百四十卷，集朱熹语录之大成。'},
+    {id:'zj_zhengzhong', name:'郑众', era:'东汉', years:'?-83', school:'古文经学', masterpiece:'《周礼注》引易', desc:'字仲师，称"先郑"，传费氏易，注经多引易象。'},
+    {id:'zj_liubiao', name:'刘表', era:'东汉', years:'142-208', school:'荆州学派', masterpiece:'《易章句》', desc:'字景升，牧荆州时开立学官，集宋衷等撰《五经章句》，荆州学派为魏晋玄学先导，王弼为其外孙。'},
+    {id:'zj_zhuzhen', name:'朱震', era:'南宋', years:'1072-1138', school:'象数·图书', masterpiece:'《汉上易传》', desc:'字子发，号汉上，荆门军人。合程氏义理与邵雍图书、汉易象数，宋代象数易集大成。'},
+    {id:'zj_ouyangxiu', name:'欧阳修', era:'北宋', years:'1007-1072', school:'义理·疑经', masterpiece:'《易童子问》', desc:'字永叔，号醉翁，庐陵人。著《易童子问》，始疑《系辞》以下非孔子所作，开宋代疑经之风。'},
+    {id:'zj_wucheng', name:'吴澄', era:'元', years:'1249-1333', school:'汇通·朱陆', masterpiece:'《易纂言》《易纂言外翼》', desc:'字幼清，号草庐，抚州人。元代大儒，折衷朱陆，《易纂言》重订经传，考证古本。'},
+    {id:'zj_caiqing', name:'蔡清', era:'明', years:'1453-1508', school:'朱子学', masterpiece:'《易经蒙引》', desc:'字介夫，号虚斋，晋江人。明代朱学后劲，《蒙引》申朱子《本义》，为明代科举易学范本。'},
+];
 
   // 注家索引
   const ZhuJiaMap = {};

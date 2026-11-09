@@ -9,6 +9,7 @@
 <script src="data/gua-full-data.js"></script>
 <script src="data/yijing-ontology-enhance.js"></script>
 <script src="data/yijing-zhujia-texts.js"></script>
+<script src="data/yijing-zhujia-relations.js"></script>
 <script src="js/ontology-linker.js"></script>
 </head>
 <body data-page="yanjiu">
@@ -251,6 +252,54 @@
 
     const worksHTML = (z.works||[]).length ? `<div class="z-meta-row"><b>代表作：</b>${z.works.map(w=>`<span class="work-tag">${w}</span>`).join('')}</div>` : '';
 
+    // ---------- 学术关系网络 ----------
+    const R = window.YJ_ZHUJIA_RELATIONS || {byZhujia:{}, typeMeta:{}};
+    const myRels = R.byZhujia[z.id] || {};
+    const TM = R.typeMeta || {};
+    // 正向关系（我→他人）：师承、宗述、引述、驳斥、评议
+    const forwardGroups = [
+      {key:'shicheng', label:'受学于', cls:'rel-shicheng'},
+      {key:'zongshu',  label:'宗述',   cls:'rel-zongshu'},
+      {key:'cite',     label:'引述',   cls:'rel-cite'},
+      {key:'refute',   label:'驳斥',   cls:'rel-refute'},
+      {key:'ping',     label:'评议',   cls:'rel-ping'},
+    ];
+    // 反向关系（他人→我）：弟子、被宗、被引、被驳
+    const backwardGroups = [
+      {key:'dizi',    label:'弟子/传人', cls:'rel-shicheng'},
+      {key:'bezong',  label:'被宗述',   cls:'rel-zongshu'},
+      {key:'beiyin',  label:'被引述',   cls:'rel-cite'},
+      {key:'beibo',   label:'被驳斥',   cls:'rel-refute'},
+    ];
+    function relGroupHTML(groups, dir) {
+      return groups.map(g => {
+        const arr = (myRels[g.key]||[]).slice(0, 12);
+        if (!arr.length) return '';
+        return `<div class="rel-group ${g.cls}">
+          <span class="rel-label">${g.label}</span>
+          <span class="rel-targets">${arr.map(r => {
+            const tz = T.zhujia.find(x=>x.id===r.to);
+            const tname = tz ? tz.name : r.to;
+            const star = r.source==='xueshushi' ? '<span class="rel-star" title="学术史公认传承">★</span>' : '';
+            return `<span class="rel-chip" data-zid="${r.to}" title="${r.evidence}">${tname}${star}</span>`;
+          }).join('')}${(myRels[g.key]||[]).length>12?`<span class="rel-more">等${(myRels[g.key]||[]).length}人</span>`:''}</span>
+        </div>`;
+      }).join('');
+    }
+    const totalRelCount = Object.values(myRels).reduce((s,a)=>s+a.length, 0);
+    const relHTML = totalRelCount ? `<div class="zhu-relations">
+      <h3>学术关系网络 <span class="rel-total">共 ${totalRelCount} 条关联</span></h3>
+      <p class="rel-legend"><span class="rel-star">★</span> 学术史公认传承（师承/宗述），其余为从注文原文自动挖掘</p>
+      <div class="rel-section">
+        <div class="rel-section-title">← 学术渊源（我承何人）</div>
+        ${relGroupHTML(forwardGroups, 'fwd') || '<div class="rel-empty">暂未录入直接师承/宗述关系</div>'}
+      </div>
+      <div class="rel-section">
+        <div class="rel-section-title">→ 学术影响（何人承我）</div>
+        ${relGroupHTML(backwardGroups, 'bwd') || '<div class="rel-empty">暂无明确传人记录</div>'}
+      </div>
+    </div>` : '';
+
     body.innerHTML = `
       <div class="zhu-head">
         <div class="zhu-badge">${z.dynasty||'?'}</div>
@@ -265,9 +314,17 @@
         <span>《周易折中》引 <b>${z.stats.zhezhong}</b> 处</span>
         <span>合计 <b>${z.stats.total}</b> 处原文</span>
       </div>
+      ${relHTML}
       ${z.samples.length?`<h3>《周易集解》注文选录（共涉及 ${Object.keys(jijieByGua).length} 卦）</h3>${guaListHTML}`:''}
       ${zzHTML}
     `;
+    // 关系芯片点击跳转到对应注家
+    body.querySelectorAll('.rel-chip').forEach(chip=>{
+      chip.addEventListener('click', ()=>{
+        const tzid = chip.dataset.zid;
+        showZhu(tzid);
+      });
+    });
     document.getElementById('zhuDetail').classList.add('open');
     document.body.style.overflow='hidden';
   }
@@ -389,11 +446,35 @@ details summary{cursor:pointer;color:var(--zhu);font-size:12px;}
   .stat-grid{grid-template-columns:repeat(3,1fr);}
   .zhujia-search{width:100%;margin-left:0;}
 }
+/* 学术关系网络 */
+.zhu-relations{background:#fff8e7;border:1px solid #e8dcc0;border-radius:8px;padding:16px 18px;margin:16px 0;}
+.zhu-relations h3{border:none;padding:0;margin:0 0 6px;font-size:16px;color:var(--ink);display:flex;align-items:baseline;gap:10px;}
+.rel-total{font-size:12px;color:#8a7a5f;font-weight:400;}
+.rel-legend{font-size:11px;color:#a89878;margin:0 0 12px;}
+.rel-star{color:var(--gold);margin-left:2px;}
+.rel-section{margin-bottom:10px;}
+.rel-section:last-child{margin-bottom:0;}
+.rel-section-title{font-size:12px;color:var(--zhu);letter-spacing:2px;margin:8px 0 6px;border-bottom:1px dashed #e8dcc0;padding-bottom:4px;}
+.rel-group{display:flex;align-items:flex-start;gap:8px;padding:4px 0;font-size:13px;line-height:1.9;}
+.rel-label{min-width:82px;color:#6b5a3a;font-size:12px;padding-top:2px;flex-shrink:0;}
+.rel-targets{flex:1;display:flex;flex-wrap:wrap;gap:5px;}
+.rel-chip{display:inline-block;background:#f0e4c2;color:#5a4a2a;font-size:12px;padding:2px 10px;border-radius:12px;cursor:pointer;transition:all .15s;border:1px solid transparent;}
+.rel-chip:hover{background:var(--zhu);color:#fff;border-color:var(--zhu);}
+.rel-more{font-size:11px;color:#a89878;padding:2px 4px;}
+.rel-empty{font-size:12px;color:#a89878;font-style:italic;padding:4px 0;}
+.rel-shicheng .rel-chip{border-left:2px solid #2d6a4f;}
+.rel-zongshu  .rel-chip{border-left:2px solid #a87f3a;}
+.rel-cite     .rel-chip{border-left:2px solid #4a6fa5;}
+.rel-refute   .rel-chip{border-left:2px solid #9c2a2a;}
+.rel-ping     .rel-chip{border-left:2px solid #6b5b8a;}
+
 @media (max-width: 600px){
   .dynasty-timeline{grid-template-columns:1fr;}
   .section-hero h1{font-size:32px;}
   .stat-grid{grid-template-columns:1fr 1fr 1fr;gap:8px;}
   .stat-card .n{font-size:22px;}
+  .rel-group{flex-direction:column;gap:2px;}
+  .rel-label{min-width:auto;}
 }
 </style>
 <script src="js/apply-shell.js" data-page="yanjiu"></script>
