@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>卦气爻辰·天文历算 - 本体论驱动的《易经》研究</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23f7f1e1' stroke='%239c2a2a' stroke-width='3'/%3E%3Cpath d='M32 8a24 24 0 1 0 24 24 24 24 0 0 1-24-24z' fill='%231f1a14'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="css/yijing.css">
+<script src="data/yijing-ontology.js"></script>
+<script src="data/yijing-ontology-enhance.js"></script>
+<script src="data/yijing-guaqi.js"></script>
+<script src="js/ontology-linker.js"></script>
+<style>
+.guaqi-hero{padding:30px 0 20px;text-align:center;border-bottom:2px solid var(--gold, #a87f3a);margin-bottom:24px;position:relative}
+.guaqi-hero::before{content:"☰ ☱ ☲ ☳ ☴ ☵ ☶ ☷";position:absolute;top:8px;left:50%;transform:translateX(-50%);font-size:14px;color:var(--gold, #a87f3a);letter-spacing:8px;opacity:.6}
+.guaqi-title{font-family:'STKaiti','KaiTi',serif;font-size:36px;color:var(--zhu, #9c2a2a);margin:30px 0 8px;letter-spacing:6px}
+.guaqi-subtitle{font-size:15px;color:var(--ink, #1f1a14);opacity:.75;letter-spacing:2px}
+.guaqi-desc{max-width:820px;margin:16px auto 0;font-size:14px;color:var(--ink, #1f1a14);line-height:1.9;opacity:.82}
+.tabs{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:20px 0 28px}
+.tab-btn{padding:8px 18px;background:var(--paper,#f7f1e1);border:1.5px solid var(--zhu,#9c2a2a);color:var(--zhu,#9c2a2a);border-radius:2px;font-family:'STKaiti',serif;font-size:15px;cursor:pointer;transition:all .25s;letter-spacing:2px}
+.tab-btn:hover{background:rgba(156,42,42,.08)}
+.tab-btn.active{background:var(--zhu,#9c2a2a);color:#fff;box-shadow:0 2px 8px rgba(156,42,42,.25)}
+.tab-panel{display:none;animation:fadeIn .4s ease}
+.tab-panel.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.card-section{background:rgba(255,255,255,.4);border:1px solid rgba(168,127,58,.3);border-radius:4px;padding:24px;margin-bottom:24px}
+.card-title{font-family:'STKaiti',serif;font-size:22px;color:var(--zhu,#9c2a2a);margin-bottom:6px;text-align:center;letter-spacing:3px;position:relative;padding-bottom:8px}
+.card-title::after{content:"";position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:80px;height:1.5px;background:var(--gold,#a87f3a)}
+.card-sub{text-align:center;font-size:13px;color:var(--ink,#1f1a14);opacity:.65;margin:8px 0 20px;letter-spacing:1px}
+.sizheng-wrap{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;max-width:1000px;margin:0 auto}
+.sizheng-card{background:#fff;border:1.5px solid var(--gold,#a87f3a);border-radius:4px;padding:16px;text-align:center;position:relative;overflow:hidden}
+.sizheng-card.season-dong{border-top:4px solid #2c5d8a}
+.sizheng-card.season-chun{border-top:4px solid #4a8c3f}
+.sizheng-card.season-xia{border-top:4px solid #c0392b}
+.sizheng-card.season-qiu{border-top:4px solid #b8860b}
+.sizheng-symbol{font-size:48px;margin:8px 0;line-height:1;color:var(--ink,#1f1a14);font-family:serif}
+.sizheng-name{font-family:'STKaiti',serif;font-size:22px;color:var(--zhu,#9c2a2a);margin-bottom:4px;letter-spacing:2px}
+.sizheng-role{font-size:12px;color:var(--gold,#a87f3a);margin-bottom:10px;letter-spacing:1px}
+.sizheng-jieqi{display:flex;flex-direction:column;gap:4px}
+.jq-item{font-size:13px;padding:5px 8px;background:var(--paper,#f7f1e1);border-radius:2px;display:flex;justify-content:space-between;border-left:3px solid var(--zhu,#9c2a2a)}
+.jq-yao{font-size:11px;color:var(--gold,#a87f3a)}
+/* 消息卦 */
+.xiaoxi-wrap{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;max-width:1100px;margin:0 auto}
+.xx-card{background:#fff;border:1px solid rgba(168,127,58,.4);border-radius:3px;padding:12px 8px;text-align:center;position:relative}
+.xx-card.yang{border-left:3px solid #c0392b}
+.xx-card.yin{border-left:3px solid #2c5d8a}
+.xx-symbol{font-size:32px;line-height:1;margin:6px 0;font-family:serif}
+.xx-name{font-family:'STKaiti',serif;font-size:17px;color:var(--zhu,#9c2a2a);letter-spacing:1px}
+.xx-meta{font-size:11px;color:var(--gold,#a87f3a);margin:4px 0}
+.xx-lv{font-size:12px;color:var(--ink,#1f1a14);opacity:.8;margin-top:4px}
+.xx-yangyao{display:flex;justify-content:center;gap:1px;margin-top:6px}
+.yang-bar{width:12px;height:3px;background:#c0392b}
+.yin-bar{width:5px;height:3px;background:#2c5d8a}
+/* 月体纳甲 */
+.moon-phase-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;max-width:1000px;margin:0 auto}
+.moon-card{background:#fff;border:1px solid rgba(168,127,58,.3);border-radius:4px;padding:16px;text-align:center;position:relative}
+.moon-svg{width:70px;height:70px;margin:8px auto;display:block}
+.moon-day{font-family:'STKaiti',serif;font-size:20px;color:var(--zhu,#9c2a2a)}
+.moon-xiang{font-size:13px;color:var(--ink,#1f1a14);margin:4px 0}
+.moon-fang{font-size:12px;color:var(--gold,#a87f3a)}
+.moon-gan{display:inline-block;padding:2px 8px;background:var(--zhu,#9c2a2a);color:#fff;border-radius:2px;font-size:12px;margin-top:6px;letter-spacing:2px}
+.moon-desc{font-size:11px;color:var(--ink,#1f1a14);opacity:.7;margin-top:8px;line-height:1.5;font-style:italic}
+/* 爻辰表 */
+.yaochen-table{max-width:1100px;margin:0 auto;width:100%;border-collapse:collapse;background:#fff}
+.yaochen-table th,.yaochen-table td{border:1px solid rgba(168,127,58,.3);padding:8px 12px;text-align:center;font-size:13px}
+.yaochen-table th{background:var(--zhu,#9c2a2a);color:#fff;font-family:'STKaiti',serif;letter-spacing:2px;font-weight:normal;font-size:14px}
+.yaochen-table tr:nth-child(even){background:rgba(247,241,225,.5)}
+.yaochen-table .yao-sym{font-size:18px;font-family:serif}
+.yaochen-table .chen-char{font-family:'STKaiti',serif;font-size:18px;color:var(--zhu,#9c2a2a)}
+/* 六日七分 */
+.ri-table-wrap{max-width:1200px;margin:0 auto;overflow-x:auto}
+.liuri-table{width:100%;border-collapse:collapse;background:#fff;font-size:13px}
+.liuri-table th,.liuri-table td{border:1px solid rgba(168,127,58,.3);padding:6px 10px;text-align:center}
+.liuri-table th{background:var(--zhu,#9c2a2a);color:#fff;font-family:'STKaiti',serif;letter-spacing:1px}
+.liuri-table tr:nth-child(even){background:rgba(247,241,225,.5)}
+.role-gong{color:#b8860b;font-weight:bold}
+.role-pi{color:var(--zhu,#9c2a2a);font-weight:bold}
+.role-qing{color:#2c5d8a;font-weight:bold}
+.role-dafu{color:#4a8c3f;font-weight:bold}
+.role-hou{color:#8e44ad;font-weight:bold}
+/* 七十二候 */
+.hou-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;max-width:1200px;margin:0 auto}
+.hou-card{background:#fff;border:1px solid rgba(168,127,58,.3);border-radius:3px;padding:10px;font-size:12px;line-height:1.6}
+.hou-jq{color:var(--gold,#a87f3a);font-size:11px;letter-spacing:1px}
+.hou-name{font-family:'STKaiti',serif;font-size:15px;color:var(--zhu,#9c2a2a);margin:3px 0;letter-spacing:1px}
+.hou-pi{font-size:11px;color:var(--ink,#1f1a14);opacity:.7}
+/* 常数 */
+.const-wrap{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;max-width:1000px;margin:0 auto}
+.const-item{background:#fff;border:1px solid rgba(168,127,58,.3);border-radius:3px;padding:14px;text-align:center}
+.const-num{font-family:'STKaiti',serif;font-size:28px;color:var(--zhu,#9c2a2a)}
+.const-label{font-size:13px;color:var(--ink,#1f1a14);margin-top:4px}
+.const-formula{font-size:11px;color:var(--gold,#a87f3a);margin-top:4px;font-family:monospace}
+/* 文献 */
+.source-list{max-width:800px;margin:0 auto;font-size:13px;line-height:2;color:var(--ink,#1f1a14);opacity:.85;list-style:none;padding:0}
+.source-list li::before{content:"◆ ";color:var(--zhu,#9c2a2a);font-size:10px;margin-right:6px}
+@media(max-width:768px){
+  .sizheng-wrap,.moon-phase-grid,.xiaoxi-wrap,.hou-grid{grid-template-columns:repeat(2,1fr)}
+  .guaqi-title{font-size:28px;letter-spacing:3px}
+  .tabs{gap:4px}
+  .tab-btn{padding:6px 12px;font-size:13px}
+}
+</style>
+</head>
+<body>
+<div id="topbar-slot"></div>
+<div class="shell">
+<div id="sidebar-slot"></div>
+<main class="content">
+
+<div class="guaqi-hero">
+  <div class="guaqi-title">卦气爻辰 · 天文历算</div>
+  <div class="guaqi-subtitle">汉易象数宇宙论 · 可计算形式化</div>
+  <div class="guaqi-desc">
+    西汉孟喜首倡「卦气说」，以六十四卦配四时、十二月、二十四节气、七十二候、三百六十五日四分日之一；郑玄承京房、《易纬》立「爻辰说」，以乾坤十二爻配十二辰、十二律吕、二十八宿；东汉魏伯阳《周易参同契》融月相入纳甲，以朔望月之盈亏明八卦阴阳消长。此三者共同构成汉易宇宙论的数理骨架，将《易》与天文历法、星象月相熔铸为一。本页将三大体系以可计算本体形式化呈现。
+  </div>
+</div>
+
+<div class="tabs">
+  <button class="tab-btn active" data-tab="overview">概览</button>
+  <button class="tab-btn" data-tab="sizheng">四正卦·二十四节气</button>
+  <button class="tab-btn" data-tab="xiaoxi">十二消息卦·律吕</button>
+  <button class="tab-btn" data-tab="yuexiang">月体纳甲·朔望月相</button>
+  <button class="tab-btn" data-tab="yaochen">爻辰·二十八宿</button>
+  <button class="tab-btn" data-tab="liuri">六日七分值日</button>
+  <button class="tab-btn" data-tab="qihou">七十二候</button>
+  <button class="tab-btn" data-tab="sources">文献依据</button>
+</div>
+
+<!-- 概览 -->
+<div class="tab-panel active" id="panel-overview">
+  <div class="card-section">
+    <div class="card-title">卦气常数</div>
+    <div class="card-sub">《易纬·稽览图》、孟喜六日七分法核心常数</div>
+    <div class="const-wrap" id="constWrap"></div>
+  </div>
+  <div class="card-section">
+    <div class="card-title">三层结构</div>
+    <div class="card-sub">卦气说的三层历法配卦体系</div>
+    <div style="max-width:800px;margin:0 auto;font-size:14px;line-height:2;color:var(--ink,#1f1a14)">
+      <p><strong style="color:var(--zhu,#9c2a2a);font-family:STKaiti,serif;font-size:16px">方伯层·四正卦</strong>：坎北、震东、离南、兑西，分主冬春夏秋四时；每卦六爻主六节气，<strong>4×6=24爻主二十四节气</strong>。四正卦不参与值日，如方伯监临四方。</p>
+      <p><strong style="color:var(--zhu,#9c2a2a);font-family:STKaiti,serif;font-size:16px">君位层·十二辟卦</strong>：复、临、泰、大壮、夬、乾、姤、遁、否、观、剥、坤，又称十二消息卦，阳长为息、阴长为消；每卦主一月一月之政，<strong>12×6=72爻主七十二候</strong>。辟者，君也。</p>
+      <p><strong style="color:var(--zhu,#9c2a2a);font-family:STKaiti,serif;font-size:16px">臣位层·六十杂卦</strong>：六十四卦去四正卦，余六十卦，依公、辟、侯、大夫、卿五等爵位循环排列，配入十二月；<strong>每卦主6又7/80日（六日七分），60×6=360爻主360日+420分=365¼日</strong>，合四分历周天。</p>
+      <p style="text-align:center;margin-top:20px;font-family:STKaiti,serif;font-size:16px;color:var(--zhu,#9c2a2a);letter-spacing:4px">
+        卦气起中孚 · 坎初为冬至 · 六十卦周 · 岁功成矣
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- 四正卦二十四节气 -->
+<div class="tab-panel" id="panel-sizheng">
+  <div class="card-section">
+    <div class="card-title">四正卦 · 二十四节气</div>
+    <div class="card-sub">坎离震兑为方伯，各主一时，爻主一气</div>
+    <div class="sizheng-wrap" id="sizhengWrap"></div>
+  </div>
+</div>
+
+<!-- 十二消息卦 -->
+<div class="tab-panel" id="panel-xiaoxi">
+  <div class="card-section">
+    <div class="card-title">十二消息卦 · 十二律吕</div>
+    <div class="card-sub">阳长为息（复→乾）、阴长为消（姤→坤），配十二月、十二辰、十二律</div>
+    <div class="xiaoxi-wrap" id="xiaoxiWrap"></div>
+    <div style="max-width:900px;margin:24px auto 0;font-size:13px;line-height:1.9;color:var(--ink,#1f1a14);opacity:.85">
+      <p style="text-align:center;font-family:STKaiti,serif;font-size:15px;color:var(--zhu,#9c2a2a);letter-spacing:2px;margin-bottom:12px">十二律吕简介</p>
+      <div id="lvlvWrap" style="display:grid;grid-template-columns:repeat(2,1fr);gap:6px 20px"></div>
+    </div>
+  </div>
+</div>
+
+<!-- 月体纳甲 -->
+<div class="tab-panel" id="panel-yuexiang">
+  <div class="card-section">
+    <div class="card-title">《周易参同契》月体纳甲</div>
+    <div class="card-sub">初三震庚 → 初八兑丁 → 十五乾甲 → 十六巽辛 → 廿三艮丙 → 三十坤乙</div>
+    <p style="max-width:800px;margin:0 auto 20px;font-size:13px;line-height:1.9;color:var(--ink,#1f1a14);opacity:.85;text-align:center">
+      魏伯阳曰：「三日出为爽，震受庚西方；八日兑受丁，上弦平如绳；十五乾体就，盛满甲东方；十六转受统，巽辛见平明；艮直于丙南，下弦二十三；坤乙三十日，东北丧其明。」以一月之月相盈亏，象八卦阴阳消长，丹道火候即法此。坎为月纳戊、离为日纳己，日月为易，居中宫。
+    </p>
+    <div class="moon-phase-grid" id="moonGrid"></div>
+    <div style="max-width:800px;margin:24px auto 0;background:#fff;border:1px solid rgba(168,127,58,.3);border-radius:4px;padding:16px">
+      <p style="text-align:center;font-family:STKaiti,serif;font-size:16px;color:var(--zhu,#9c2a2a);letter-spacing:2px;margin-bottom:10px">京房八卦纳甲全表</p>
+      <table class="liuri-table" style="max-width:600px;margin:0 auto">
+        <tr><th>八卦</th><th>纳干</th><th>阴阳</th><th>方位</th><th>备注</th></tr>
+        <tbody id="najiaBaguaTbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- 爻辰二十八宿 -->
+<div class="tab-panel" id="panel-yaochen">
+  <div class="card-section">
+    <div class="card-title">郑玄爻辰说 · 二十八宿</div>
+    <div class="card-sub">乾贞于子左行 · 坤贞于未右行 · 爻上值宿</div>
+    <p style="max-width:800px;margin:0 auto 20px;font-size:13px;line-height:1.9;color:var(--ink,#1f1a14);opacity:.85;text-align:center">
+      《易纬·乾凿度》：「乾贞于十一月子，左行阳时六；坤贞于六月未，右行阴时六。」郑玄以乾坤十二爻配十二辰、十二律吕、二十八宿，凡阳爻从乾辰、阴爻从坤辰。比卦初六「有孚盈缶」郑注：「爻辰在未，上值东井。井之水人所汲用缶。」即此义。
+    </p>
+    <h4 style="text-align:center;font-family:STKaiti,serif;color:var(--zhu,#9c2a2a);margin:20px 0 10px;letter-spacing:2px">乾卦六爻爻辰（阳爻法此）</h4>
+    <table class="yaochen-table" id="qianChenTable"></table>
+    <h4 style="text-align:center;font-family:STKaiti,serif;color:var(--zhu,#9c2a2a);margin:30px 0 10px;letter-spacing:2px">坤卦六爻爻辰（阴爻法此）</h4>
+    <table class="yaochen-table" id="kunChenTable"></table>
+    <h4 style="text-align:center;font-family:STKaiti,serif;color:var(--zhu,#9c2a2a);margin:30px 0 10px;letter-spacing:2px">十二辰·十二次·二十八宿对照</h4>
+    <table class="yaochen-table" id="chenXiuTable"></table>
+  </div>
+</div>
+
+<!-- 六日七分 -->
+<div class="tab-panel" id="panel-liuri">
+  <div class="card-section">
+    <div class="card-title">六十卦六日七分值日</div>
+    <div class="card-sub">公、辟、侯、大夫、卿五等爵位月配五卦，合周天365¼日</div>
+    <p style="max-width:800px;margin:0 auto 16px;font-size:13px;line-height:1.9;color:var(--ink,#1f1a14);opacity:.85;text-align:center">
+      一岁十二月，每月五卦（侯卦拆为内外两卦，分跨两月），五日一候、一月六候、一年七十二候。每卦主六日七分（六十卦合365¼日），每爻主一日余。<span class="role-gong">公</span>（金黄）<span class="role-pi">辟</span>（朱红）<span class="role-qing">卿</span>（靛蓝）<span class="role-dafu">大夫</span>（松绿）<span class="role-hou">侯</span>（紫）五等爵位循环。
+    </p>
+    <div class="ri-table-wrap">
+      <table class="liuri-table" id="liuriTable"></table>
+    </div>
+  </div>
+</div>
+
+<!-- 七十二候 -->
+<div class="tab-panel" id="panel-qihou">
+  <div class="card-section">
+    <div class="card-title">卦气七十二候</div>
+    <div class="card-sub">五日为候，三候为气，六气为时，四时为岁；辟卦七十二爻主之</div>
+    <div class="hou-grid" id="houGrid"></div>
+  </div>
+</div>
+
+<!-- 文献 -->
+<div class="tab-panel" id="panel-sources">
+  <div class="card-section">
+    <div class="card-title">文献依据</div>
+    <div class="card-sub">本本体数据来源</div>
+    <ul class="source-list" id="sourceList"></ul>
+  </div>
+</div>
+
+</main>
+</div>
+<div id="footer-slot"></div>
+
+<script>
+(function(){
+  if(!window.YJ_GUAQI){ console.error('卦气数据未加载'); return; }
+  var Q = window.YJ_GUAQI;
+
+  // 工具：卦名id→中文名
+  var GUA_NAME = (function(){
+    var m={};
+    (window.YJ_ONTOLOGY_ENHANCE.guaMap||{}).forEach(function(g){ m[g.id]=g.name; });
+    // 补一些id→名
+    var extra={zhongfu:'中孚',qianwenyan:'谦',xiaoguo:'小过',dayou:'大有',
+      jie:'解',lv:'旅',daxu:'大畜',ben:'贲',guimei:'归妹',wuwang:'无妄',
+      kun4:'困',jiji:'既济',shihe:'噬嗑',daguo:'大过',weiji:'未济',
+      jian2:'蹇',yi2:'颐',xiaoxu:'小畜',jie2:'节',feng:'丰',
+      tongren:'同人',cui:'萃',huan:'涣',heng:'恒',sun:'损',
+      xun:'巽',mingyi:'明夷',jian:'渐',sheng:'升',xu:'需'};
+    for(var k in extra) if(!m[k]) m[k]=extra[k];
+    return m;
+  })();
+  function gn(id){
+    if(!id) return '';
+    id=id.replace(/_nei$/,'').replace(/_wai$/,'');
+    return GUA_NAME[id] || id;
+  }
+  function guaSym(id){
+    var g = (window.YJ_ONTOLOGY_ENHANCE.guaMap||[]).find(function(x){return x.id===id;});
+    return g?g.symbol:'☷';
+  }
+
+  // 卦符号函数 - 简化为使用本体数据中的symbol
+  // 若数据未提供，则按id构造
+  // 已在本体enhance里有 symbol 字段
+
+  // Tabs
+  document.querySelectorAll('.tab-btn').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active')});
+      document.querySelectorAll('.tab-panel').forEach(function(p){p.classList.remove('active')});
+      btn.classList.add('active');
+      document.getElementById('panel-'+btn.dataset.tab).classList.add('active');
+    });
+  });
+
+  // ------- 概览常数 -------
+  var constData = [
+    {n:Q.constants.riPerGua.toFixed(4),l:'每卦值日',f:'6 + 7/80 日'},
+    {n:Q.constants.daysPerYear,l:'周岁之日',f:'365¼日（四分历）'},
+    {n:Q.constants.liushiGua,l:'值日卦数',f:'去四正卦（坎离震兑）'},
+    {n:Q.constants.totalYao,l:'总爻数',f:'60卦×6爻=360'},
+    {n:'24',l:'二十四节气',f:'四正卦24爻主之'},
+    {n:'72',l:'七十二候',f:'十二辟卦72爻主之'},
+    {n:'12',l:'十二辟卦',f:'消息卦，阳息阴消'},
+    {n:'6又7/80',l:'每卦分值',f:'六日七分（80分为日）'}
+  ];
+  document.getElementById('constWrap').innerHTML = constData.map(function(c){
+    return '<div class="const-item"><div class="const-num">'+c.n+'</div><div class="const-label">'+c.l+'</div><div class="const-formula">'+c.f+'</div></div>';
+  }).join('');
+
+  // ------- 四正卦 -------
+  var seasonMap = {kan:{s:'冬',c:'season-dong',t:'冬至·坎北'},zhen:{s:'春',c:'season-chun',t:'春分·震东'},
+                   li:{s:'夏',c:'season-xia',t:'夏至·离南'},dui:{s:'秋',c:'season-qiu',t:'秋分·兑西'}};
+  var roleMap = {kan:'坎为水·方伯',zhen:'震为雷·方伯',li:'离为火·方伯',dui:'兑为泽·方伯'};
+  var jqByGua = {};
+  Q.jieqi24.forEach(function(j){(jqByGua[j.gua]=jqByGua[j.gua]||[]).push(j)});
+  document.getElementById('sizhengWrap').innerHTML = ['kan','zhen','li','dui'].map(function(g){
+    var sm=seasonMap[g];
+    return '<div class="sizheng-card '+sm.c+'">'+
+      '<div class="sizheng-symbol">'+guaSym(g)+'</div>'+
+      '<div class="sizheng-name">'+(GUA_NAME[g]||g)+'</div>'+
+      '<div class="sizheng-role">'+roleMap[g]+'</div>'+
+      '<div class="sizheng-jieqi">'+
+      jqByGua[g].map(function(j){
+        return '<div class="jq-item"><span>'+j.name+'</span><span class="jq-yao">'+['初','二','三','四','五','上'][j.yao-1]+'爻·'+j.chen+'月</span></div>';
+      }).join('')+
+      '</div></div>';
+  }).join('');
+
+  // ------- 十二消息卦 -------
+  document.getElementById('xiaoxiWrap').innerHTML = Q.xiaoxi.map(function(x){
+    var bars='';
+    for(var i=1;i<=6;i++){
+      if(i<=6-x.yangYao) bars+='<span class="yin-bar"></span>';
+      else bars+='<span class="yang-bar"></span>';
+    }
+    return '<div class="xx-card '+(x.yangYao>=3?'yang':'yin')+'">'+
+      '<div class="xx-symbol">'+guaSym(x.gua)+'</div>'+
+      '<div class="xx-name">'+(GUA_NAME[x.gua]||x.gua)+'</div>'+
+      '<div class="xx-meta">'+x.chen+'月·'+x.yinyang+'</div>'+
+      '<div class="xx-lv">'+x.lv+'（'+x.yue+'月）</div>'+
+      '<div class="xx-yangyao">'+bars+'</div>'+
+      '</div>';
+  }).join('');
+
+  document.getElementById('lvlvWrap').innerHTML = Q.lvlv.map(function(l){
+    return '<div><strong style="color:var(--zhu,#9c2a2a);font-family:STKaiti,serif">'+l.lv+'</strong>（'+l.chen+'·'+l.yue+'月）：'+l.desc+'</div>';
+  }).join('');
+
+  // ------- 月相 -------
+  function moonSVG(yangxian, colorY, colorN){
+    var cy=colorY||'#1f1a14', cn=colorN||'#f7f1e1', r=28, cx=35, cy2=35;
+    // 简单画月相：阳爻数0-3，0=全黑（坤），1=娥眉（震），2=上弦（兑），3=满月（乾）
+    // 阴生（巽=2阴1阳、艮=1阴2阳）从另侧
+    var fill = cn, stroke=cy;
+    var extra='';
+    if(yangxian===3){ // 满月
+      return '<svg class="moon-svg" viewBox="0 0 70 70"><circle cx="'+cx+'" cy="'+cy2+'" r="'+r+'" fill="'+cy+'" stroke="'+stroke+'" stroke-width="1.5"/></svg>';
+    } else if(yangxian===0){ // 晦
+      return '<svg class="moon-svg" viewBox="0 0 70 70"><circle cx="'+cx+'" cy="'+cy2+'" r="'+r+'" fill="'+cn+'" stroke="'+stroke+'" stroke-width="1.5" stroke-dasharray="2,2"/></svg>';
+    } else if(yangxian===1){ // 娥眉/下弦后残
+      return '<svg class="moon-svg" viewBox="0 0 70 70"><circle cx="'+cx+'" cy="'+cy2+'" r="'+r+'" fill="'+cn+'" stroke="'+stroke+'" stroke-width="1.5"/><path d="M'+cx+' '+(cy2-r)+' A20 '+r+' 0 0 1 '+cx+' '+(cy2+r)+' A'+r+' '+r+' 0 0 0 '+cx+' '+(cy2-r)+' Z" fill="'+cy+'"/></svg>';
+    } else if(yangxian===2){ // 上弦/下弦半月
+      return '<svg class="moon-svg" viewBox="0 0 70 70"><circle cx="'+cx+'" cy="'+cy2+'" r="'+r+'" fill="'+cn+'" stroke="'+stroke+'" stroke-width="1.5"/><path d="M'+cx+' '+(cy2-r)+' L'+cx+' '+(cy2+r)+' A'+r+' '+r+' 0 0 0 '+cx+' '+(cy2-r)+' Z" fill="'+cy+'"/></svg>';
+    }
+    return '';
+  }
+  document.getElementById('moonGrid').innerHTML = Q.yuexiangNajia.slice(0,6).map(function(m){
+    return '<div class="moon-card">'+
+      moonSVG(m.yangxian)+
+      '<div class="moon-day">'+(typeof m.day==='number'?(m.day===0?'晦·三十':m.day+'日'):m.day+'干')+'</div>'+
+      '<div class="moon-xiang">'+m.yuexiang+'</div>'+
+      '<div class="moon-fang">'+m.fangwei+' · '+m.time+'</div>'+
+      '<div class="moon-gan">'+(GUA_NAME[m.gua]||m.gua)+' 纳 '+m.gan.toUpperCase()+'</div>'+
+      '<div class="moon-desc">「'+m.desc+'」</div>'+
+      '</div>';
+  }).join('');
+
+  document.getElementById('najiaBaguaTbody').innerHTML = Q.najiaBagua.map(function(n){
+    return '<tr><td style="font-family:serif;font-size:20px">'+guaSym(n.gua)+' '+
+      (GUA_NAME[n.gua]||n.gua)+'</td><td style="color:var(--zhu,#9c2a2a);font-weight:bold">'+n.gan+'</td>'+
+      '<td>'+n.yinyang+'</td><td>'+n.fangwei+'</td><td style="font-size:12px">'+n.desc+'</td></tr>';
+  }).join('');
+
+  // ------- 爻辰表 -------
+  var yaoNames=['初','二','三','四','五','上'];
+  function chenTable(arr, isQian){
+    var rows='<tr><th>爻位</th><th>爻象</th><th>爻辰</th><th>十二次</th><th>二十八宿</th><th>四象</th><th>方位</th><th>律吕</th><th>说明</th></tr>';
+    arr.forEach(function(c,i){
+      var xi=Q.chenXiu[c];
+      var yaoSym = isQian?'▅▅▅▅▅':'▅▅ ▅▅';
+      rows+='<tr><td>'+yaoNames[i]+'爻</td>'+
+        '<td class="yao-sym">'+yaoSym+'</td>'+
+        '<td class="chen-char">'+c+'</td>'+
+        '<td>'+xi.xingci+'</td>'+
+        '<td>'+xi.xiu+'</td>'+
+        '<td>'+xi.animal+'</td>'+
+        '<td>'+xi.fangwei+'</td>'+
+        '<td>'+Q.chenLv[c]+'</td>'+
+        '<td style="text-align:left;font-size:12px">'+xi.desc+'</td></tr>';
+    });
+    return rows;
+  }
+  document.getElementById('qianChenTable').innerHTML = chenTable(Q.qianYaoChen,true);
+  document.getElementById('kunChenTable').innerHTML = chenTable(Q.kunYaoChen,false);
+
+  // 十二辰二十八宿总表
+  var chenOrder = ['zi','chou','yin','mao','chen','si','wu','wei','shen','you','xu','hai'];
+  var crows='<tr><th>十二辰</th><th>月建</th><th>十二次</th><th>二十八宿</th><th>四象</th><th>方位</th><th>律吕</th></tr>';
+  var yueMap={zi:'十一月',chou:'十二月',yin:'正月',mao:'二月',chen:'三月',si:'四月',wu:'五月',wei:'六月',shen:'七月',you:'八月',xu:'九月',hai:'十月'};
+  chenOrder.forEach(function(c){var xi=Q.chenXiu[c];
+    crows+='<tr><td class="chen-char">'+c+'</td><td>'+yueMap[c]+'</td><td>'+xi.xingci+'</td><td>'+xi.xiu+'</td><td>'+xi.animal+'</td><td>'+xi.fangwei+'</td><td>'+Q.chenLv[c]+'</td></tr>';
+  });
+  document.getElementById('chenXiuTable').innerHTML=crows;
+
+  // ------- 六日七分表 -------
+  var roleName={gong:'公',pi:'辟',hou:'侯',hou_wai:'侯(外)',dafu:'大夫',qing:'卿'};
+  var roleClass={gong:'role-gong',pi:'role-pi',hou:'role-hou',hou_wai:'role-hou',dafu:'role-dafu',qing:'role-qing'};
+  var yueName={1:'正月',2:'二月',3:'三月',4:'四月',5:'五月',6:'六月',7:'七月',8:'八月',9:'九月',10:'十月',11:'十一月',12:'十二月'};
+  var lt='<tr><th>月</th><th>爵位</th><th>卦名</th><th>卦象</th><th>卦ID</th>'+
+    '<th>值日日数</th></tr>';
+  Q.liushigualist.forEach(function(g){
+    lt+='<tr><td>'+yueName[g.yue]+'</td>'+
+      '<td class="'+roleClass[g.role]+'">'+roleName[g.role]+'</td>'+
+      '<td style="font-family:STKaiti,serif;color:var(--zhu,#9c2a2a)">'+gn(g.hou)+(g.note?'（'+g.note+'）':'')+'</td>'+
+      '<td style="font-family:serif;font-size:20px">'+guaSym(g.hou.replace(/_nei|_wai/g,''))+'</td>'+
+      '<td style="font-size:11px;opacity:.7">'+g.hou+'</td>'+
+      '<td>'+(g.role==='hou_wai'||g.role==='hou'?'3日(候) + 3日(侯卦)':Q.constants.riPerGua.toFixed(4)+' 日')+'</td></tr>';
+  });
+  document.getElementById('liuriTable').innerHTML = lt;
+
+  // ------- 七十二候 -------
+  document.getElementById('houGrid').innerHTML = Q.qihou72.map(function(h){
+    return '<div class="hou-card">'+
+      '<div class="hou-jq">'+h.jieqi+'</div>'+
+      '<div class="hou-name">'+h.hou+'</div>'+
+      '<div class="hou-pi">'+(GUA_NAME[h.pi]||h.pi)+'·'+['初','二','三','四','五','上'][h.yao-1]+'爻'+(h.note?' · '+h.note:'')+'</div>'+
+      '</div>';
+  }).join('');
+
+  // ------- 文献 -------
+  document.getElementById('sourceList').innerHTML = Q.meta.sources.map(function(s){
+    return '<li>'+s+'</li>';
+  }).join('');
+
+  // YJ_Link 实体标签化（页面渲染完后）
+  if(window.YJ_Link && YJ_Link.tagAll){ setTimeout(YJ_Link.tagAll, 100); }
+})();
+</script>
+<script src="js/apply-shell.js" data-page="guaqi"></script>
+</body>
+</html>
