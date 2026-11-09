@@ -3,162 +3,110 @@
  * 纳甲筮法·断卦推理层
  * 功能：用神/原神/忌神/仇神自动判定 + 旺衰分析 + 动变生克 + 吉凶推理
  * 配套 yijing-najia-data.js / yijing-najia-engine.js 使用
+ * 
+ * 字段约定（对应 engine 返回的 pan）：
+ *  pan.yaos[i] = {pos, yinyang, gan, zhi, wuxing(jin/mu/shui/huo/tu), liuqin:{key,name,...}, shi, ying, value, dong, liushen, kong, yueEffect, riEffect, wangshuai, changsheng}
+ *  pan.bian 无yaos（变卦需从 dongList 取对应爻变化；这里简化：变爻按变值6↔9重算）
  */
 (function(global){
   'use strict';
 
+  // 内部使用中文五行名（与duangua逻辑一致），做一个 wuxing 缩写→中文映射
+  const WX_MAP = { jin:'金', mu:'木', shui:'水', huo:'火', tu:'土' };
   const WX = '金木水火土';
-  // 五行生克
-  const SHENG = { 金: '水', 木: '火', 水: '木', 火: '土', 土: '金' }; // X生Y
-  const KE   = { 金: '木', 木: '土', 水: '火', 火: '金', 土: '水' }; // X克Y
-  function sheng(a,b){ return SHENG[a]===b; }
-  function ke(a,b){ return KE[a]===b; }
+  const SHENG = { '金':'水', '木':'火', '水':'木', '火':'土', '土':'金' }; // X生Y
+  const KE   = { '金':'木', '木':'土', '水':'火', '火':'金', '土':'水' }; // X克Y
+  const sheng = (a,b)=>SHENG[a]===b;
+  const ke    = (a,b)=>KE[a]===b;
+
+  const DZ_WX = { 子:'水', 丑:'土', 寅:'木', 卯:'木', 辰:'土', 巳:'火', 午:'火', 未:'土', 申:'金', 酉:'金', 戌:'土', 亥:'水' };
+  const CHONG = { 子:'午', 午:'子', 丑:'未', 未:'丑', 寅:'申', 申:'寅', 卯:'酉', 酉:'卯', 辰:'戌', 戌:'辰', 巳:'亥', 亥:'巳' };
+  const LIUHE= { 子:'丑', 丑:'子', 寅:'亥', 亥:'寅', 卯:'戌', 戌:'卯', 辰:'酉', 酉:'辰', 巳:'申', 申:'巳', 午:'未', 未:'午' };
+
+  const POS_NAME = {1:'初',2:'二',3:'三',4:'四',5:'五',6:'上'};
 
   /**
-   * 六亲名称（给定"我"的五行与对方五行）
-   */
-  function liuqin(wx_wo, wx_other){
-    if(wx_wo===wx_other) return '兄弟';
-    if(sheng(wx_wo, wx_other)) return '子孙';     // 我生
-    if(ke(wx_wo, wx_other)) return '妻财';        // 我克
-    if(sheng(wx_other, wx_wo)) return '父母';     // 生我
-    if(ke(wx_other, wx_wo)) return '官鬼';        // 克我
-    return '';
-  }
-
-  /**
-   * 占事分类 → 用神规则
-   * 参考《卜筮正宗》《增删卜易》《黄金策》
+   * 占事分类 → 用神规则（参考《卜筮正宗》《增删卜易》《黄金策》）
    */
   const YONGSHEN_RULES = [
     { id:'zizhan',   name:'自占（问自身命运/近期整体运势）',   main:'世爻',         desc:'以世爻为用神，占己身之休咎' },
-    { id:'qiancai',  name:'求财/问买卖/问生意',              main:'妻财',         desc:'妻财为用；子孙为原神（财源），兄弟为忌神（劫财），官鬼为仇神（泄财、招非）' },
-    { id:'guanming', name:'问官运/功名/事业/升迁',           main:'官鬼',         desc:'官鬼为用；妻财为原神（财可生官），子孙为忌神（剥官之煞），兄弟为仇神（克财破官之源）' },
-    { id:'hunyin',   name:'问婚姻/感情',                     main:{nan:'妻财', nv:'官鬼'}, desc:'男占婚以妻财为用，女占婚以官鬼为用；父母为忌神（文书、阻隔）' },
-    { id:'fumu',     name:'问父母/长辈/师长/文书/家宅',     main:'父母',         desc:'父母为用；官鬼为原神（生父母），妻财为忌神（克父母），子孙为仇神（生财克父）' },
-    { id:'zinü',     name:'问子女/晚辈/医药/僧道/六畜',     main:'子孙',         desc:'子孙为用；兄弟为原神，父母为忌神，官鬼为仇神' },
-    { id:'xiongdi',  name:'问兄弟/朋友/同行/伙伴/竞争',     main:'兄弟',         desc:'兄弟为用；父母为原神，官鬼为忌神，妻财为仇神' },
-    { id:'jibing',   name:'问疾病/健康',                     main:{zizhan:'世爻', wenren:'应爻'}, special:'官鬼为病症', desc:'自占以世爻为身、官鬼为病、子孙为药；代人占以应爻为病人' },
-    { id:'songshi',  name:'问官讼/是非',                     main:{zizhan:'世爻', duifang:'应爻'}, special:'官鬼为讼事', desc:'世为我，应为对方，官鬼为官府讼事；父母为文书证据' },
-    { id:'chuxing', name:'问出行/行人/失物',               main:{zizhan:'世爻', xingren:'应爻', shiwu:'妻财'}, desc:'出行看世爻旺衰；行人看应爻；失物贵重看妻财' },
-    { id:'kaoshi',   name:'问考试/学业/文书',               main:{chengji:'父母', luqu:'官鬼'}, desc:'父母为试卷/文书，官鬼为功名/录取；财动克父母则文章不利' },
-    { id:'jiazhai',  name:'问家宅/建房/搬迁',               main:{zhai:'父母', ren:'世爻'}, desc:'父母为房屋，世为居者；财为宅中之财，官为宅中之祟' },
-    { id:'siyu',     name:'问生育/怀孕/胎产',               main:'子孙',         desc:'子孙为胎；胎爻（根据日干支推算）为胎' },
-    { id:'fangshi',  name:'问遗失/寻物',                    main:'妻财',         desc:'财物看妻财，文书看父母；空亡不见，冲合可期' },
+    { id:'qiancai',  name:'求财/问买卖/生意/财运',            main:'妻财',         desc:'妻财为用；子孙为原神（财源），兄弟为忌神（劫财），官鬼为仇神' },
+    { id:'guanming', name:'问官运/功名/事业/升迁/求职',       main:'官鬼',         desc:'官鬼为用；妻财为原神（财可生官），子孙为忌神（剥官之煞）' },
+    { id:'hunyin',   name:'问婚姻/感情',                     main:{nan:'妻财', nv:'官鬼'}, desc:'男占婚以妻财为用，女占婚以官鬼为用' },
+    { id:'fumu',     name:'问父母/长辈/师长/家宅/文书',       main:'父母',         desc:'父母为用；官鬼为原神，妻财为忌神' },
+    { id:'zinü',     name:'问子女/晚辈/医药/僧道/六畜',       main:'子孙',         desc:'子孙为用；兄弟为原神，父母为忌神' },
+    { id:'xiongdi',  name:'问兄弟/朋友/同行/伙伴/竞争',       main:'兄弟',         desc:'兄弟为用；父母为原神，官鬼为忌神' },
+    { id:'jibing',   name:'问疾病/健康',                     main:{zizhan:'世爻'}, special:'官鬼为病、子孙为药', desc:'自占以世爻为身，官鬼为病症，子孙为医药；世爻旺而有制则愈' },
+    { id:'songshi',  name:'问官讼/是非/纠纷',                main:{zizhan:'世爻', duifang:'应爻'}, special:'官鬼为官府', desc:'世为我，应为对方，官鬼为讼事；父母为文书证据' },
+    { id:'chuxing',  name:'问出行/行人',                     main:'应爻',         desc:'应爻为行人/目的地；世为行者' },
+    { id:'kaoshi',   name:'问考试/学业/文书',                main:'父母', special:'官鬼为功名录取', desc:'父母为试卷/文书，官鬼为录取；财动克父母不利文章' },
+    { id:'jiazhai',  name:'问家宅/建房/搬迁',                main:{zhai:'父母', ren:'世爻'}, desc:'父母为房屋，世为居者' },
+    { id:'siyu',     name:'问生育/怀孕/胎产',                main:'子孙',         desc:'子孙为胎爻' },
+    { id:'fangshi',  name:'问遗失/寻物',                     main:'妻财',         desc:'财物看妻财，文书看父母' },
   ];
 
-  /**
-   * 六亲万物类象（《卜筮正宗》卷二要略）
-   */
   const LIUQIN_WANWU = {
-    '父母': {
-      yixiang:'庇护我身者',
-      wulei:['父母、长辈、师长、家宅、房屋、城池、舟车、衣服、雨具、文书、契约、合同、文章、考卷、学业、学问、执照、批文、公文、通讯、消息、书信'],
-      renlun:'父母、祖父母、伯叔、师父、长辈亲属、保护我的人',
-      woshi:'父母爻持世：主辛劳、操心、为长辈事、文书事；旺相学业成、文书就，休囚文书不利',
-    },
-    '官鬼': {
-      yixiang:'拘我身者',
-      wulei:['官贵、官府、衙门、功名、官职、事业、职位、升迁、丈夫（女占）、男情人、病症、盗贼、祸殃、邪祟、雷电、官司、诉讼、牢狱、夫星'],
-      renlun:'丈夫、官员、官府中人、拘管我之人',
-      woshi:'官鬼持世：忧疑、疾病、官非；若占功名官贵反为吉；女占婚喜官鬼持世',
-    },
-    '妻财': {
-      yixiang:'我所驱使',
-      wulei:['钱财、粮食、货物、金银、珠宝、财务、利润、薪水、报酬、妻子（男占）、女情人、妻妾、仆人、日用品、嫁妆'],
-      renlun:'妻子、情人、财利',
-      woshi:'妻财持世：财利之事、利求财；但克父母文书、利财不利学不利名',
-    },
-    '子孙': {
-      yixiang:'我之所生者',
-      wulei:['子女、晚辈、徒弟、下属、医药、医生、僧道、六畜、宠物、福神、解忧、喜庆、解灾之神、学生、儿孙、保健品'],
-      renlun:'子女、孙辈、徒弟、下属、医生、僧道',
-      woshi:'子孙持世：无忧无患、诸事吉庆、福神持世解百祸；唯不利官名、不利女占夫（克官鬼）',
-    },
-    '兄弟': {
-      yixiang:'同类相比者',
-      wulei:['兄弟、姊妹、朋友、伙伴、同行、竞争者、阻力、阻隔、破财、劫财、分家、分财、花费、口舌'],
-      renlun:'兄弟姐妹、朋友、同学、同行、合伙人',
-      woshi:'兄弟持世：克妻财、主破财、花费、竞争、口舌；唯利兄弟朋友之事',
-    },
+    '父母': { yixiang:'庇护我身者', wulei:'父母、长辈、师长、家宅、房屋、舟车、衣服、雨具、文书、契约、文章、考卷、学业、执照、批文、公文、书信' },
+    '官鬼': { yixiang:'拘我身者',   wulei:'官贵、官府、功名、职位、升迁、丈夫（女占）、病症、盗贼、祸殃、邪祟、官司、牢狱' },
+    '妻财': { yixiang:'我所驱使',   wulei:'钱财、粮食、货物、金银、薪水、妻子（男占）、情人、仆人、日用品' },
+    '子孙': { yixiang:'我之所生',   wulei:'子女、晚辈、徒弟、下属、医药、医生、僧道、六畜、福神、解忧喜庆、保健品' },
+    '兄弟': { yixiang:'同类相比者', wulei:'兄弟姊妹、朋友伙伴、同行竞争、劫财破耗、口舌分利' },
   };
 
-  /**
-   * 六神类象（《卜筮正宗》）
-   */
   const LIUSHEN_WANWU = {
-    '青龙': { wuxing:'木', fangwei:'东方', haohuai:'吉庆喜庆',
-      lei:['喜庆、婚姻、财喜、酒色、正直、美貌、青龙持世：近贵、有喜庆'] },
-    '朱雀': { wuxing:'火', fangwei:'南方', haohuai:'口舌文书',
-      lei:['文书、书信、消息、口舌、是非、官司、争吵、火灾、声音、飞鸟'] },
-    '勾陈': { wuxing:'土', fangwei:'中央', haohuai:'田土牵连',
-      lei:['田土、房屋、牢狱、迟滞、牵连、旧事、稳重、田产、农事'] },
-    '螣蛇': { wuxing:'火', fangwei:'中央', haohuai:'虚惊怪异',
-      lei:['虚惊、怪梦、缠绕、多疑、惊恐、阴邪、怪事、小人为害、绳索'] },
-    '白虎': { wuxing:'金', fangwei:'西方', haohuai:'凶丧血光',
-      lei:['凶丧、孝服、疾病、死伤、刀兵、血光、车祸、威严、猛将、暴躁'] },
-    '玄武': { wuxing:'水', fangwei:'北方', haohuai:'盗贼阴私',
-      lei:['盗贼、阴私、暧昧、奸邪、色情、隐私、小人、盗贼、失物、水患、阴谋'] },
+    '青龙':{ haohuai:'吉庆喜庆',   lei:'喜庆、婚姻、财喜、酒色、美貌；青龙持世近贵有喜' },
+    '朱雀':{ haohuai:'口舌文书',   lei:'文书书信、消息口舌、是非官司、争吵、火灾、声音' },
+    '勾陈':{ haohuai:'田土牵连',   lei:'田土房屋、牢狱迟滞、牵连旧事、稳重田产' },
+    '螣蛇':{ haohuai:'虚惊怪异',   lei:'虚惊怪梦、缠绕多疑、惊恐阴邪、怪事小人、绳索' },
+    '白虎':{ haohuai:'凶丧血光',   lei:'凶丧孝服、疾病死伤、刀兵血光、车祸、威严暴躁' },
+    '玄武':{ haohuai:'盗贼阴私',   lei:'盗贼阴私、暧昧奸邪、隐私小人、失物水患、阴谋' },
   };
 
   /**
-   * 判断爻的旺衰（结合月建、日辰、动爻）
-   * @param {Object} yao { wx, liuqin, liuShen, isDong, isShi, isYing, kong, ... }
-   * @param {string} yueJian 月建地支 如'子'
-   * @param {string} riChen 日辰地支 如'寅'
-   * @param {Array} dongYaos 所有动爻
-   * @returns {Object} 评级
+   * 旺衰评分（基于 engine 已经给出的 yueEffect/riEffect/kong，这里细化为综合分）
    */
-  function yaowangshuai(yao, yueJian, riChen, dongYaos){
-    const wx = yao.wx;
+  function yaowangshuai(yao, yueDz, riDz, allYaos){
+    const wx = WX_MAP[yao.wuxing];
+    const dz = yao.zhi;
+    const yueWx = DZ_WX[yueDz];
+    const riWx = DZ_WX[riDz];
     const scores = [];
-    let level = '平';
-    let reason = [];
+    const reason = [];
 
-    // 月建旺相休囚死
-    const yueWx = DZ_WX[yueJian];
-    if(yueWx === wx){ scores.push(3); reason.push('临月建'); }          // 临月建
+    // 月建
+    if(dz === yueDz){ scores.push(3); reason.push('临月建'); }
+    else if(yueWx === wx){ scores.push(2); reason.push('月建同气（旺）'); }
     else if(sheng(yueWx, wx)){ scores.push(2); reason.push('月建生扶（相）'); }
     else if(wx === SHENG[yueWx]){ scores.push(-1); reason.push('生月泄气（休）'); }
+    else if(ke(wx, yueWx)){ scores.push(-2); reason.push('我克月（囚/死）'); }
     else if(ke(yueWx, wx)){ scores.push(-2); reason.push('月建克（囚）'); }
-    else if(KE[wx] === yueWx){ scores.push(-3); reason.push('月破（死）'); }
 
-    // 月破：日冲不叫月破，爻支被月建冲叫月破
-    if(CHONG[yueJian] === yao.dz){
-      scores.push(-3);
-      if(!reason.some(r=>r.includes('月破'))) reason.push('月破');
-    }
-    // 月合
-    if(LIUHE[yueJian] === yao.dz){
-      scores.push(1);
-      reason.push('月合');
-    }
+    if(CHONG[yueDz] === dz){ scores.push(-3); if(!reason.some(r=>r.includes('月破'))) reason.push('月破'); }
+    if(LIUHE[yueDz] === dz){ scores.push(1); reason.push('月建合'); }
 
     // 日辰
-    if(riChen === yao.dz){ scores.push(2); reason.push('日临'); }
-    else if(sheng(DZ_WX[riChen], wx)){ scores.push(1); reason.push('日辰生扶'); }
-    else if(ke(DZ_WX[riChen], wx)){ scores.push(-1); reason.push('日辰克'); }
-    if(CHONG[riChen] === yao.dz){
-      if(scores[0] <= -2 || yao.isDong){
-        // 月破/休囚逢日冲为"日破"，动爻逢冲为"暗动"
-        if(yao.isDong){ scores.push(1); reason.push('动逢日冲为暗动/冲起'); }
-        else { scores.push(-2); reason.push('休囚日破'); }
-      } else {
-        scores.push(0);
-        reason.push('日冲（暗动或冲散，需观旺衰）');
-      }
+    if(dz === riDz){ scores.push(2); reason.push('临日辰'); }
+    else if(sheng(riWx, wx)){ scores.push(1); reason.push('日辰生扶'); }
+    else if(ke(riWx, wx)){ scores.push(-1); reason.push('日辰克'); }
+    else if(riWx === wx){ scores.push(1); reason.push('日辰同气'); }
+    if(CHONG[riDz] === dz){
+      if(yao.dong){ scores.push(1); reason.push('动逢日冲为暗动'); }
+      else if(scores.reduce((a,b)=>a+b,0) <= -2){ scores.push(-2); reason.push('休囚逢冲为日破'); }
+      else { scores.push(0); reason.push('日冲（需观旺衰）'); }
     }
-    if(LIUHE[riChen] === yao.dz){ scores.push(1); reason.push('日合'); }
+    if(LIUHE[riDz] === dz){ scores.push(1); reason.push('日辰合'); }
     if(yao.kong){ scores.push(-2); reason.push('旬空'); }
 
-    // 动爻生克
-    for(const d of dongYaos){
-      if(d.idx === yao.idx) continue;
-      if(sheng(d.wx, wx)){ scores.push(1); reason.push(`${d.label}动来生`); }
-      if(ke(d.wx, wx)){ scores.push(-1); reason.push(`${d.label}动来克`); }
+    // 动爻生克（其他动爻）
+    for(const d of allYaos){
+      if(d.pos === yao.pos || !d.dong) continue;
+      const dwx = WX_MAP[d.wuxing];
+      if(sheng(dwx, wx)){ scores.push(1); reason.push(`${POS_NAME[d.pos]}爻动来生`); }
+      if(ke(dwx, wx)){ scores.push(-1); reason.push(`${POS_NAME[d.pos]}爻动来克`); }
     }
 
     const total = scores.reduce((a,b)=>a+b,0);
+    let level = '平';
     if(total >= 5) level='极旺';
     else if(total >= 3) level='旺';
     else if(total >= 1) level='偏旺';
@@ -170,179 +118,225 @@
     return { level, score: total, reason, wx };
   }
 
-  // ======== 辅助：地支→五行、冲合 ========
-  const DZ_WX = { 子:'水', 丑:'土', 寅:'木', 卯:'木', 辰:'土', 巳:'火', 午:'火', 未:'土', 申:'金', 酉:'金', 戌:'土', 亥:'水' };
-  const CHONG = { 子:'午', 午:'子', 丑:'未', 未:'丑', 寅:'申', 申:'寅', 卯:'酉', 酉:'卯', 辰:'戌', 戌:'辰', 巳:'亥', 亥:'巳' };
-  const LIUHE= { 子:'丑', 丑:'子', 寅:'亥', 亥:'寅', 卯:'戌', 戌:'卯', 辰:'酉', 酉:'辰', 巳:'申', 申:'巳', 午:'未', 未:'午' };
+  /**
+   * 根据 value 算出变爻的干支/五行
+   * value 变：6→阳、9→阴；7/8不变
+   * 变爻的纳甲需重新按变卦上下卦算，这里简化：取同一位置变值后、按变卦的纳甲干支；
+   * 为避免复杂的变卦干支推算，我们直接根据engine的findGong结果给出一个简化处理：
+   *  变爻的干支按变卦（翻转后的卦象）重新算，需要najiaForTrigram支持。
+   */
+  function getBianGuaYaos(pan){
+    // 构造变卦 lines：动爻翻转
+    const lines = pan.yaos.map(y=>y.yinyang);
+    pan.yaos.forEach((y,i)=>{ if(y.dong) lines[i] = 1 - lines[i]; });
+    // 把lines映射回yaoValues（1→7,0→8）
+    const vals = lines.map(y=> y?7:8);
+    const eng = global.YJ_NAJIA_ENGINE;
+    const bianPan = eng.zhuangua(vals, {yue: pan.tiaojian.yue, ri: pan.tiaojian.ri});
+    return bianPan.yaos.map(y=>({
+      zhi:y.zhi, wuxing:WX_MAP[y.wuxing], yinyang:y.yinyang,
+    }));
+  }
 
   /**
    * 主断卦函数
-   * @param {Object} pan 排盘结果（najia-engine返回值）
-   * @param {string} wenshi 占问类型 id（YONGSHEN_RULES中id）
-   * @param {string} [gender] 'nan'/'nv'，婚姻/身命用
-   * @returns {Object} 断卦结果
    */
   function duangua(pan, wenshi, gender){
     const rules = YONGSHEN_RULES.find(r=>r.id===wenshi) || YONGSHEN_RULES[0];
     const yongWanted = typeof rules.main==='string' ? rules.main : (rules.main[gender]||rules.main.zizhan||'世爻');
 
-    const yue = pan.yueJian;
-    const ri = pan.riChen;
-    const yaoList = pan.liuyao.map((y,i)=>({...y, idx:i, label:`${i===0?'初':(i===5?'上':(i+1))}${y.isYang?'阳':'阴'}${['爻','爻','二','三','四','五'][i]}`.replace('阳爻','阳').replace('阴爻','阴')}));
-    const dongYaos = yaoList.filter(y=>y.isDong);
+    const yue = pan.tiaojian.yue;
+    const ri = pan.tiaojian.ri.slice(-1); // 取最后一个字为地支
+    const riGan = pan.tiaojian.ri[0];
+    const yaoList = pan.yaos.map(y=>{
+      const wx = WX_MAP[y.wuxing];
+      const pos = y.pos; // 1-6
+      const label = POS_NAME[pos] + (y.yinyang? '阳' : '阴') + '爻';
+      return {
+        idx: pos-1,
+        pos,
+        label,
+        gz: y.gan + y.zhi,
+        dz: y.zhi,
+        wx,
+        gan: y.gan,
+        wuxingRaw: y.wuxing,
+        liuqin: y.liuqin.name,
+        liuqinKey: y.liuqin.key,
+        liuShen: y.liushen,
+        isYang: !!y.yinyang,
+        isDong: !!y.dong,
+        isShi: !!y.shi,
+        isYing: !!y.ying,
+        kong: !!y.kong,
+        value: y.value,
+      };
+    });
+
     const shi = yaoList.find(y=>y.isShi);
     const ying = yaoList.find(y=>y.isYing);
+    const dongYaos = yaoList.filter(y=>y.isDong);
 
-    // ---- 1. 找用神 ----
+    // ===== 找用神 =====
     let yong = null, yongType = '';
-    if(yongWanted === '世爻'){
-      yong = shi; yongType = '世爻（用神）';
-    } else if(yongWanted === '应爻'){
-      yong = ying; yongType = '应爻（用神）';
-    } else {
-      // 按六亲找
-      const candidates = yaoList.filter(y=>y.liuqin===yongWanted && !y.isInBian);
-      // 优先世应上的，再择其旺相者
-      if(candidates.length === 0){
-        // 用神不现 → 取伏神
-        const fushen = pan.fushen.find(f=>f.liuqin===yongWanted);
-        if(fushen){
-          yong = { ...fushen, isFu:true, dz:fushen.dz, wx:fushen.wx, liuqin:fushen.liuqin, label:`伏${fushen.label}` };
-          yongType = `${yongWanted}（伏神）`;
-        }
-      } else {
-        // 两个同六亲时：临世应者优先；旺相者优先
-        yong = candidates.sort((a,b)=>{
+    const LQ_NAME2KEY = {'父母':'父母','官鬼':'官鬼','妻财':'妻财','子孙':'子孙','兄弟':'兄弟'};
+
+    if(yongWanted === '世爻'){ yong = shi; yongType = '世爻（占者自身为用神）'; }
+    else if(yongWanted === '应爻'){ yong = ying; yongType = '应爻（对方/事体为用神）'; }
+    else {
+      const lqName = LQ_NAME2KEY[yongWanted];
+      const candidates = yaoList.filter(y=>y.liuqin===lqName);
+      if(candidates.length>0){
+        // 临世应优先，次则旺相优先
+        candidates.sort((a,b)=>{
           const as = (a.isShi?2:0)+(a.isYing?1:0);
           const bs = (b.isShi?2:0)+(b.isYing?1:0);
           return bs-as;
-        })[0];
-        yongType = `${yongWanted}${yong.isShi?'（临世）':(yong.isYing?'（临应）':'')}（用神）`;
+        });
+        yong = candidates[0];
+        yongType = `${lqName}${yong.isShi?'（临世）':(yong.isYing?'（临应）':'')}（用神）`;
+      } else {
+        // 用神不现 → 从伏神取
+        const fu = (pan.fushen||[]).find(f=>f.liuqin && f.liuqin.name===lqName);
+        if(fu){
+          yong = {
+            idx: fu.feiPos-1, pos: fu.feiPos,
+            label: `伏${POS_NAME[fu.feiPos] || fu.pos}`,
+            gz: (fu.gan||'') + (fu.zhi||''),
+            dz: fu.zhi,
+            wx: WX_MAP[fu.wuxing],
+            liuqin: lqName,
+            liuShen: '',
+            isFu: true,
+            feiIdx: (fu.feiPos-1),
+            kong: false,
+            isDong:false, isShi:false, isYing:false,
+          };
+          yongType = `${lqName}（伏神，伏于${fu.feiPos?POS_NAME[fu.feiPos]+'爻下':'卦中'}`;
+        }
       }
     }
 
     if(!yong){
-      return { error:`用神不现，${yongWanted}爻不上卦且伏神无着，请换占法或重起卦`, rules };
+      return { error:`用神不现，${yongWanted}不上卦且伏神无着，请重起卦或换占法`, rules };
     }
 
-    // ---- 2. 原神、忌神、仇神 ----
-    // 原神：生用神者；忌神：克用神者；仇神：生忌神、克原神者
+    // ===== 原神/忌神/仇神/闲神 =====
     const yongWx = yong.wx;
-    const yuanShenWx = Object.keys(SHENG).find(w=>SHENG[w]===yongWx); // 生用神
-    const jiShenWx   = Object.keys(KE).find(w=>KE[w]===yongWx);      // 克用神
-    const chouShenWx = Object.keys(SHENG).find(w=>SHENG[w]===jiShenWx); // 生忌神
-    const xianShenWx = SHENG[yongWx]; // 用神生的 → 泄气/闲神
+    const yuanShenWx = Object.keys(SHENG).find(w=>SHENG[w]===yongWx);
+    const jiShenWx   = Object.keys(KE).find(w=>KE[w]===yongWx);
+    const chouShenWx = Object.keys(SHENG).find(w=>SHENG[w]===jiShenWx);
+    const xianShenWx = SHENG[yongWx];
 
-    const yuanShen = yaoList.filter(y=>y.wx===yuanShenWx && !y.isFu);
-    const jiShen   = yaoList.filter(y=>y.wx===jiShenWx   && !y.isFu);
-    const chouShen = yaoList.filter(y=>y.wx===chouShenWx && !y.isFu);
+    const filterByWx = (wx, fu) => yaoList.filter(y=>y.wx===wx && !y.isFu);
+    const yuanShen = filterByWx(yuanShenWx);
+    const jiShen   = filterByWx(jiShenWx);
+    const chouShen = filterByWx(chouShenWx);
 
-    // ---- 3. 旺衰分析 ----
-    const yongWS = yaowangshuai(yong, yue, ri, dongYaos);
-    const yuanWS = yuanShen.map(y=>({...yaowangshuai(y,yue,ri,dongYaos), yao:y}));
-    const jiWS   = jiShen.map(y=>({...yaowangshuai(y,yue,ri,dongYaos), yao:y}));
-    const chouWS = chouShen.map(y=>({...yaowangshuai(y,yue,ri,dongYaos), yao:y}));
+    // ===== 旺衰 =====
+    const yongWS = yaowangshuai(yong, yue, ri, yaoList);
+    const yuanWS = yuanShen.map(y=>yaowangshuai(y,yue,ri,yaoList));
+    const jiWS   = jiShen.map(y=>yaowangshuai(y,yue,ri,yaoList));
+    const chouWS = chouShen.map(y=>yaowangshuai(y,yue,ri,yaoList));
 
-    // ---- 4. 动变关系（回头生克、化进化退） ----
+    // ===== 动变（回头生克、化进化退）=====
     const dongbian = [];
+    const bianYaos = getBianGuaYaos(pan);
     for(const d of dongYaos){
-      const bianYao = pan.bian.liuyao[d.idx]; // 变卦对应位
-      if(!bianYao) continue;
+      const bian = bianYaos[d.idx];
+      if(!bian) continue;
       const dWx = d.wx;
-      const bWx = bianYao.wx;
-      if(sheng(bWx, dWx)) dongbian.push({yao:d, type:'化回头生', desc:`${d.label}动化${bianYao.label}，回头生扶，动爻益旺`});
-      else if(ke(bWx, dWx)) dongbian.push({yao:d, type:'化回头克', desc:`${d.label}动化${bianYao.label}，回头克伤，动爻受伤无力`});
-      else if(sheng(dWx, bWx)) dongbian.push({yao:d, type:'化泄', desc:`${d.label}动化${bianYao.label}，动生变，泄气`});
-      else if(ke(dWx, bWx)) dongbian.push({yao:d, type:'化克', desc:`${d.label}动化${bianYao.label}，动克变，事有阻隔`});
+      const bWx = bian.wuxing;
+      let rel = '';
+      if(sheng(bWx, dWx)) rel='化回头生：变爻生扶动爻，动爻益旺';
+      else if(ke(bWx, dWx)) rel='化回头克：变爻克伤动爻，动爻无力';
+      else if(sheng(dWx, bWx)) rel='化泄：动生变，动爻泄气';
+      else if(ke(dWx, bWx)) rel='化克：动克变，事有阻隔';
       else if(bWx===dWx){
-        // 同五行，查进退神（寅→卯/申→酉/丑→辰/未→戌 为进； 卯→寅/酉→申/辰→丑/戌→未 为退）
-        const JIN_MAP = {寅:'卯', 申:'酉', 丑:'辰', 未:'戌', 巳:'午'}; // 简化：只列常见
-        const TUI_MAP = {卯:'寅', 酉:'申', 辰:'丑', 戌:'未', 午:'巳'};
-        if(JIN_MAP[d.dz]===bianYao.dz) dongbian.push({yao:d, type:'化进神', desc:`${d.label}动化进神，力量增强、事态发展`});
-        else if(TUI_MAP[d.dz]===bianYao.dz) dongbian.push({yao:d, type:'化退神', desc:`${d.label}动化退神，力量消退、事情缓散`});
-        else dongbian.push({yao:d, type:'伏吟', desc:`${d.label}动化${bianYao.label}，伏吟呻吟、事多忧疑不决`});
-      }
+        const JIN = {寅:'卯',申:'酉',丑:'辰',未:'戌',巳:'午',亥:'子'};
+        const TUI = {卯:'寅',酉:'申',辰:'丑',戌:'未',午:'巳',子:'亥'};
+        if(JIN[d.dz]===bian.zhi) rel='化进神：力量增强、事态发展';
+        else if(TUI[d.dz]===bian.zhi) rel='化退神：力量消退、事情缓散';
+        else rel='伏吟：同支呻吟，忧疑不决';
+      } else rel='同宫异气';
+      dongbian.push({ yao:d, type:rel.split('：')[0], desc:`${d.label}（${d.gz}·${d.liuqin}）动化${bian.zhi}（${bWx}），${rel}` });
     }
 
-    // 动爻对用神的生克
     const duiYong = [];
     for(const d of dongYaos){
-      if(d.idx === yong.idx) continue;
+      if(d.pos === yong.pos) continue;
       if(sheng(d.wx, yongWx)) duiYong.push({yao:d, type:'动来生用', good:true});
-      if(ke(d.wx, yongWx)) duiYong.push({yao:d, type:'动来克用', good:false});
-      if(yongWx===d.wx) duiYong.push({yao:d, type:'动来比扶', good:true});
+      else if(ke(d.wx, yongWx)) duiYong.push({yao:d, type:'动来克用', good:false});
+      else if(yongWx===d.wx) duiYong.push({yao:d, type:'动来比扶', good:true});
     }
 
-    // ---- 5. 空亡/月破等针对用神 ----
+    // ===== 用神特殊状态 =====
     const yongSpecial = [];
-    if(yong.kong) yongSpecial.push('用神旬空：所问之事目前虚无缥缈、时机未到、或人未露面；旺相待出空则成，休囚终空');
-    if(yongWS.reason.some(r=>r.includes('月破'))) yongSpecial.push('用神月破：用神逢月破，事多破散难成，纵有成亦不久');
+    if(yong.kong) yongSpecial.push('用神旬空：所问之事目前虚无缥缈、时机未到；旺相待出空（冲空、填实）则成，休囚终空');
+    if(yongWS.reason.some(r=>r.includes('月破'))) yongSpecial.push('用神月破：事多破散难成，纵有成亦不久');
     if(yongWS.reason.some(r=>r.includes('日破'))) yongSpecial.push('用神日破：休囚逢冲，事被冲散');
-    if(!yong.kong && !yongWS.reason.some(r=>r.includes('月破')) && yongWS.score>=1){
-      // 用神得地
-    }
     if(yong.isFu){
-      // 伏神：飞生伏/伏克飞为出，飞克伏为压
       const fei = yaoList[yong.feiIdx];
       if(fei){
-        if(sheng(fei.wx, yongWx)) yongSpecial.push(`用神伏藏于${fei.label}下，飞生伏，易得，待引拔之期（冲飞、露伏之日月）`);
-        else if(ke(fei.wx, yongWx)) yongSpecial.push(`用神伏于${fei.label}下，飞来克伏（飞来压伏），事被压不得出，甚凶`);
-        else if(ke(yongWx, fei.wx)) yongSpecial.push(`伏克飞，"伏去克飞为出暴"，事可出但急中有悔`);
-        else if(yongWx===fei.wx) yongSpecial.push(`伏与飞比和，事可自然露出`);
+        const fwx = fei.wx;
+        if(sheng(fwx,yongWx)) yongSpecial.push(`用神伏藏于${fei.label}（${fei.gz}·${fei.liuqin}）下，飞神生伏神，易出，待冲飞、露伏之日月可成`);
+        else if(ke(fwx,yongWx)) yongSpecial.push(`伏于${fei.label}下，飞来克伏（飞来压伏），用神被压不得出，甚凶`);
+        else if(ke(yongWx,fwx)) yongSpecial.push(`伏克飞（伏去克飞为出暴），事可出但急中有悔`);
+        else if(yongWx===fwx) yongSpecial.push(`伏与飞比和，事可自然露出`);
         else yongSpecial.push(`伏生飞，泄气，事难成`);
       }
     }
 
-    // ---- 6. 吉凶判定（简化版，综合规则）----
-    // 核心：用神旺相+原神动来生用=吉；用神休囚+忌神动克+仇神生忌=凶
-    const yuanActive = yuanWS.filter(w=>w.yao.isDong && w.score>=0).length;
-    const jiActive   = jiWS.filter(w=>w.yao.isDong && w.score>=0).length;
-    const chouActive = chouWS.filter(w=>w.yao.isDong && w.score>=0).length;
+    // ===== 吉凶判定 =====
+    const yuanActive = yuanWS.filter((w,i)=>yuanShen[i].isDong && w.score>=0).length;
+    const jiActive   = jiWS.filter((w,i)=>jiShen[i].isDong && w.score>=0).length;
+    const chouActive = chouWS.filter((w,i)=>chouShen[i].isDong && w.score>=0).length;
 
     let jiXiong = '平';
-    let jiXiongReason = [];
+    const jiXiongReason = [];
 
-    if(yongWS.score >= 3 && jiActive===0){ jiXiong='大吉'; jiXiongReason.push('用神旺相，无动克，诸事顺遂'); }
+    if(yongWS.score >= 3 && jiActive===0){ jiXiong='大吉'; jiXiongReason.push('用神旺相，无动爻来克，诸事顺遂'); }
     else if(yongWS.score >= 1 && yuanActive>0 && jiActive===0){ jiXiong='吉'; jiXiongReason.push('用神旺相，原神发动来生，事可成'); }
     else if(yongWS.score >= 0 && jiActive===0){ jiXiong='小吉'; jiXiongReason.push('用神尚有力，无动克，事可缓慢成就'); }
     else if(yongWS.score <= -3 && yuanActive===0){ jiXiong='大凶'; jiXiongReason.push('用神休囚破散，无原神救助，事不可为'); }
-    else if(jiActive>0 && yuanActive===0){ jiXiong='凶'; jiXiongReason.push('忌神发动克用，又无原神救助，事有阻难'); }
-    else if(yongWS.score <= -1 && jiActive>0){ jiXiong='凶'; jiXiongReason.push('用神衰弱又见忌神动克，凶'); }
+    else if(jiActive>0 && yuanActive===0){ jiXiong='凶'; jiXiongReason.push('忌神发动克用，原神不现，事有阻难'); }
+    else if(yongWS.score <= -1 && jiActive>0){ jiXiong='凶'; jiXiongReason.push('用神衰弱又见忌神动克'); }
     else if(yongWS.score >= 0 && jiActive>0 && yuanActive>0){ jiXiong='先难后易'; jiXiongReason.push('忌神虽动，但原神亦动通关，凶中有救，先阻后成'); }
     else if(chouActive>0){ jiXiong='凶中加重'; jiXiongReason.push('仇神发动生忌克原，凶势加重'); }
-    else { jiXiong='平'; jiXiongReason.push('用神旺衰与动克平衡，事在两可之间，需观时日'); }
+    else { jiXiong='平'; jiXiongReason.push('用神旺衰与动克平衡，事在两可，需观时日'); }
 
-    // 空亡/月破额外降级
-    if(yong.kong && yongWS.score<2) { jiXiong = '空待'; jiXiongReason.push('用神空亡，事未到时候，待出空、冲空之日方可论吉凶'); }
-    if(yongWS.reason.some(r=>r.includes('月破')) && yongWS.score<3) {
-      if(jiXiong==='平'||jiXiong==='小吉') jiXiong='破';
-      jiXiongReason.push('用神月破，事成亦破');
+    if(yong.kong && yongWS.score<2){ jiXiong='空待'; jiXiongReason.push('用神空亡，事未到时候，待出空、冲空之日方可论吉凶'); }
+    if(yongWS.reason.some(r=>r.includes('月破')) && yongWS.score<3){
+      jiXiongReason.push('用神月破，纵成易破');
     }
 
-    // 特殊占问加成
-    if(wenshi==='jibing' && yong){
-      // 疾病：看官鬼（病症）、子孙（药）
-      const guanghost = yaoList.find(y=>y.liuqin==='官鬼' && !y.isFu);
-      const medicine = yaoList.find(y=>y.liuqin==='子孙' && !y.isFu);
-      if(guanghost){
-        const ghWS = yaowangshuai(guanghost, yue, ri, dongYaos);
-        const medWS = medicine ? yaowangshuai(medicine, yue, ri, dongYaos) : null;
-        if(ghWS.score>=2 && (!medWS || medWS.score<=0)){ jiXiong='病重'; jiXiongReason.push('官鬼（病）旺而无制，子孙（药）无力，病重难愈'); }
-        else if(medWS && medWS.score>=1 && ke(medicine.wx, guanghost.wx)){ jiXiongReason.push('子孙旺相克官鬼，医药有效，病可愈'); }
+    // 疾病专项
+    if(wenshi==='jibing'){
+      const ghost = yaoList.find(y=>y.liuqin==='官鬼');
+      const med   = yaoList.find(y=>y.liuqin==='子孙');
+      if(ghost){
+        const gws = yaowangshuai(ghost,yue,ri,yaoList);
+        const mws = med ? yaowangshuai(med,yue,ri,yaoList) : null;
+        if(gws.score>=2 && (!mws || mws.score<=0)){
+          jiXiong='病重';
+          jiXiongReason.push('官鬼（病）旺而无制，子孙（药）无力或不现，病重难愈');
+        } else if(mws && mws.score>=1 && ke(mws.wx,gws.wx)){
+          jiXiongReason.push('子孙旺相克官鬼，医药有效，病可愈');
+        }
       }
     }
 
+    const shiWS = yaowangshuai(shi, yue, ri, yaoList);
+    const yingWS= yaowangshuai(ying, yue, ri, yaoList);
+
     return {
-      rules,
-      yongWanted,
-      yong, yongType, yongWS,
+      rules, yongWanted, yong, yongType, yongWS,
       yuanShenWx, jiShenWx, chouShenWx, xianShenWx,
-      yuanShen, yuanWS,
-      jiShen, jiWS,
-      chouShen, chouWS,
+      yuanShen, yuanWS, jiShen, jiWS, chouShen, chouWS,
       dongbian, duiYong, yongSpecial,
       jiXiong, jiXiongReason,
-      shi, ying, shiWS: yaowangshuai(shi,yue,ri,dongYaos), yingWS: yaowangshuai(ying,yue,ri,dongYaos),
+      shi, ying, shiWS, yingWS,
+      yue, ri, riGan,
     };
   }
 
@@ -352,6 +346,6 @@
     YONGSHEN_RULES,
     duangua,
     yaowangshuai,
-    liuqin,
+    WX_MAP,
   };
 })(window);
