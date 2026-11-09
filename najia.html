@@ -13,6 +13,7 @@
 <script src="data/yijing-ontology-enhance.js"></script>
 <script src="data/yijing-najia-data.js"></script>
 <script src="data/yijing-najia-engine.js"></script>
+<script src="data/yijing-najia-duangua.js"></script>
 <script src="data/yijing-zhujia-texts.js"></script>
 <script src="js/ontology-linker.js"></script>
 <script src="js/apply-shell.js" data-page="najia"></script>
@@ -202,6 +203,24 @@
     </div>
   </div>
 
+  <div class="section panel" id="duanguaSection" style="display:none">
+    <h2>五、断卦 <small>用神·原神·忌神·仇神·旺衰·动变生克</small></h2>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:14px">
+      <label style="font-size:.92rem">占问类型：
+        <select id="wenshiSel" style="padding:6px 10px;border:1px solid var(--ink-3);background:var(--paper);font-family:inherit;border-radius:4px">
+        </select>
+      </label>
+      <label id="genderWrap" style="font-size:.92rem;display:none">占者性别：
+        <select id="genderSel" style="padding:6px 10px;border:1px solid var(--ink-3);background:var(--paper);font-family:inherit;border-radius:4px">
+          <option value="nan">男</option>
+          <option value="nv">女</option>
+        </select>
+      </label>
+      <button class="btn btn-primary" id="duanBtn" style="background:var(--zhu);color:#fff">断卦</button>
+    </div>
+    <div id="duanguaResult"></div>
+  </div>
+
   <div class="section panel">
     <h2>纳甲筮法本体知识 <small>点击实体可跳对应条目</small></h2>
     <div style="font-size:.92rem;line-height:2" id="najiaIntro">
@@ -346,17 +365,22 @@
   document.getElementById('paiBtn').onclick = doPai;
 
   // 排盘渲染
+  let currentPan = null;
   function doPai(){
     const yue = yueSel.value;
     const ri = riSel.value;
     const res = E.zhuangua(yaoValues, {yue, ri});
     if(res.error){alert(res.error);return;}
+    currentPan = res;
     document.getElementById('paiEmpty').style.display='none';
     document.getElementById('paiResult').style.display='block';
+    document.getElementById('duanguaSection').style.display='block';
     renderHead(res);
     renderTable(res);
     renderFu(res);
     renderXiyi(res);
+    // 初始占问类型选择器
+    initWenshiSel(res);
   }
 
   function hexSymbolStr(sym){
@@ -478,6 +502,129 @@
     box.innerHTML = items.map(([k,n,desc])=>`
       <div class="xiyi-item"><span class="lq ${LIUQIN_CLASS[k]}">${n}</span> <span style="color:var(--ink-2);font-size:.8rem">${desc}</span><br>${xiyi[k]}</div>
     `).join('');
+  }
+
+  // 断卦：占问类型选择器 + 断卦按钮 + 渲染
+  function initWenshiSel(){
+    const sel = document.getElementById('wenshiSel');
+    const D = window.YJ_NAJIA_DUANGUA;
+    sel.innerHTML = D.YONGSHEN_RULES.map(r=>`<option value="${r.id}">${r.name}</option>`).join('');
+    sel.onchange = ()=>{
+      const id = sel.value;
+      const r = D.YONGSHEN_RULES.find(x=>x.id===id);
+      const needGender = typeof r.main==='object';
+      document.getElementById('genderWrap').style.display = needGender ? '' : 'none';
+    };
+    sel.onchange();
+  }
+  document.getElementById('duanBtn').onclick = ()=>{
+    if(!currentPan) return;
+    const D = window.YJ_NAJIA_DUANGUA;
+    const wenshi = document.getElementById('wenshiSel').value;
+    const gender = document.getElementById('genderSel').value;
+    const r = D.duangua(currentPan, wenshi, gender);
+    renderDuanResult(r);
+  };
+
+  const LEVEL_COLOR = { '极旺':'#b04028','旺':'#b04028','偏旺':'#a87f3a','平':'#6b5f4a','偏弱':'#5a7a8c','衰':'#5a7a8c','极衰':'#2c5f8c','空待':'#888','破':'#888' };
+
+  function wsBadge(ws){
+    return `<span style="background:${LEVEL_COLOR[ws.level]||'#888'};color:#fff;padding:2px 8px;border-radius:3px;font-size:.8rem;margin:0 4px">${ws.level}（${ws.score>=0?'+':''}${ws.score}）</span>`;
+  }
+
+  function renderDuanResult(r){
+    const box = document.getElementById('duanguaResult');
+    if(r.error){ box.innerHTML = `<div style="color:var(--zhu);padding:12px">${r.error}</div>`; return; }
+    const yongName = r.yong.label + (r.yong.isFu?'（伏）':'');
+    const yaoName = (y)=>`${y.label}${y.isShi?'（世）':(y.isYing?'（应）':'')}（${y.gz}·${y.liuqin}）`;
+    const reasonList = (arr)=>arr.length?`<ul style="margin:4px 0 0 18px;color:var(--ink-2);font-size:.85rem">${arr.map(x=>`<li>${x}</li>`).join('')}</ul>`:'';
+
+    // 原神/忌神/仇神行
+    const lqBadge = (n)=>{
+      const map={'父母':'fumu','兄弟':'xiongdi','子孙':'zisun','妻财':'qicai','官鬼':'guangui'};
+      return `<span class="lq ${map[n]||''}">${n}</span>`;
+    };
+    const wxColors = {'金':'#c8a54a','木':'#3a7850','水':'#3a6394','火':'#b04028','土':'#8a6f3a'};
+    const wxChip = (w)=>`<span style="background:${wxColors[w]};color:#fff;padding:1px 6px;border-radius:3px;font-size:.78rem">${w}</span>`;
+
+    const godRow = (title, list, wsList, wx, desc) => {
+      if(!list || list.length===0) return `<div style="display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px dashed var(--ink-4)"><b style="width:72px;color:var(--ink-1);flex-shrink:0">${title}${wxChip(wx)}</b><span style="color:var(--ink-2);font-size:.88rem">${desc}；本卦${title}${list.length?'':'不现'}</span></div>`;
+      return `<div style="display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px dashed var(--ink-4)">
+        <b style="width:72px;color:var(--ink-1);flex-shrink:0">${title}${wxChip(wx)}</b>
+        <div style="flex:1">
+          <div style="font-size:.9rem">${list.map((y,i)=>`${wsBadge(wsList[i])} ${yaoName(y)}`).join('；')}</div>
+          <div style="color:var(--ink-2);font-size:.83rem;margin-top:3px">${desc}</div>
+        </div>
+      </div>`;
+    };
+
+    let html = `
+      <div style="background:rgba(156,42,42,0.06);border:1px solid var(--zhu);border-radius:6px;padding:14px 18px;margin-bottom:14px">
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+          <span style="font-size:1.05rem">占法：<b>${r.rules.name}</b></span>
+          <span style="font-size:1.4rem;font-weight:700;color:${LEVEL_COLOR[r.jiXiong]||'var(--ink)'}">${r.jiXiong}</span>
+        </div>
+        <div style="color:var(--ink-2);font-size:.85rem;margin-top:4px">${r.rules.desc}</div>
+        <ul style="margin:6px 0 0 18px;font-size:.9rem;color:var(--ink-1)">
+          ${r.jiXiongReason.map(x=>`<li>${x}</li>`).join('')}
+        </ul>
+      </div>
+
+      <h3 style="font-size:1rem;color:var(--ink-1);margin:10px 0">用神分析</h3>
+      <div style="background:#fff;border:1px solid var(--ink-4);border-radius:6px;padding:12px 14px">
+        <div style="display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px dashed var(--ink-4)">
+          <b style="width:72px;color:var(--zhu);flex-shrink:0">用神${wxChip(r.yongWx)}</b>
+          <div style="flex:1">
+            <div style="font-size:.9rem">${wsBadge(r.yongWS)}${lqBadge(r.yong.liuqin)} ${yongName} —— ${r.yongType}</div>
+            ${reasonList(r.yongWS.reason)}
+          </div>
+        </div>
+        ${godRow('原神', r.yuanShen, r.yuanWS, r.yuanShenWx, '生用神者，原神旺动来生用则吉')}
+        ${godRow('忌神', r.jiShen, r.jiWS, r.jiShenWx, '克用神者，忌神旺动克用则凶')}
+        ${godRow('仇神', r.chouShen, r.chouWS, r.chouShenWx, '生忌神、克原神者，忌神之原神，增凶')}
+        <div style="display:flex;gap:10px;align-items:flex-start;padding:8px 0">
+          <b style="width:72px;color:var(--ink-3);flex-shrink:0">闲神${wxChip(r.xianShenWx)}</b>
+          <span style="color:var(--ink-2);font-size:.88rem">用神所生者，于所问之事无直接损益，多主旁杂之事</span>
+        </div>
+      </div>`;
+
+    if(r.yongSpecial.length){
+      html += `<h3 style="font-size:1rem;color:var(--ink-1);margin:14px 0 6px">用神特殊状态</h3>
+      <div style="background:#fff5e0;border:1px solid var(--gold);border-radius:6px;padding:12px 14px;font-size:.9rem;line-height:1.9">
+        ${r.yongSpecial.map(x=>`• ${x}`).join('<br>')}
+      </div>`;
+    }
+
+    if(r.dongbian.length){
+      html += `<h3 style="font-size:1rem;color:var(--ink-1);margin:14px 0 6px">动变生克（动爻化变）</h3>
+      <div style="background:#fff;border:1px solid var(--ink-4);border-radius:6px;padding:12px 14px;font-size:.9rem;line-height:1.85">
+        ${r.dongbian.map(d=>`
+          <div><b>${d.type}</b>：${d.desc}</div>
+        `).join('')}
+      </div>`;
+    }
+
+    if(r.duiYong.length){
+      html += `<h3 style="font-size:1rem;color:var(--ink-1);margin:14px 0 6px">动爻对用神</h3>
+      <div style="background:#fff;border:1px solid var(--ink-4);border-radius:6px;padding:12px 14px;font-size:.9rem;line-height:1.85">
+        ${r.duiYong.map(d=>`<div style="color:${d.good?'var(--song)':'var(--zhu)'}">${d.good?'〔吉〕':'〔凶〕'} ${yaoName(d.yao)} → ${d.type}</div>`).join('')}
+      </div>`;
+    }
+
+    // 世应
+    html += `<h3 style="font-size:1rem;color:var(--ink-1);margin:14px 0 6px">世应</h3>
+      <div style="background:#fff;border:1px solid var(--ink-4);border-radius:6px;padding:12px 14px;font-size:.9rem;line-height:1.85">
+        <div>世爻（占者自身）：${wsBadge(r.shiWS)} ${yaoName(r.shi)}</div>
+        ${reasonList(r.shiWS.reason)}
+        <div>应爻（所占之人/事/对方）：${wsBadge(r.yingWS)} ${yaoName(r.ying)}</div>
+        ${reasonList(r.yingWS.reason)}
+      </div>`;
+
+    html += `<div style="margin-top:12px;font-size:.8rem;color:var(--ink-3);line-height:1.7">
+      <b>按</b>：以上断卦规则依《黄金策》《卜筮正宗》《增删卜易》体系综合给出，程序自动演算，仅供学术研究参考。实际断卦尚需考虑进神退神、反吟伏吟、合处逢冲、冲中逢合、空亡填实、墓绝胎养等多重精微因素，属于易学研究的高层规则，可在后续版本中持续扩充。
+    </div>`;
+
+    box.innerHTML = html;
   }
 
   // 默认预排一个乾为天 静卦 甲子月甲子日 示例
