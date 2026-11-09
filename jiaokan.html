@@ -11,22 +11,23 @@
 <script src="data/yijing-variants.js"></script>
 <script src="js/ontology-linker.js"></script>
 <style>
-.jk-hero{
-  text-align:center;padding:40px 20px 26px;
-  background:linear-gradient(180deg,var(--paper-2) 0%,var(--paper) 100%);
-  border-bottom:1px solid var(--line);
-}
+.jk-hero{text-align:center;padding:40px 20px 26px;background:linear-gradient(180deg,var(--paper-2) 0%,var(--paper) 100%);border-bottom:1px solid var(--line);}
 .jk-hero h1{font-size:36px;color:var(--zhu);letter-spacing:10px;margin:0 0 8px;}
-.jk-hero p{color:var(--ink-3);max-width:680px;margin:10px auto 0;font-size:14px;font-family:var(--font-kai);line-height:1.9;}
-.ed-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin-top:18px;}
-.ed-card{background:var(--paper-2);border:1px solid var(--line);border-radius:var(--radius-lg);padding:16px 18px;position:relative;}
+.jk-hero p{color:var(--ink-3);max-width:720px;margin:10px auto 0;font-size:14px;font-family:var(--font-kai);line-height:1.9;}
+.ed-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;margin-top:18px;}
+.ed-card{background:var(--paper-2);border:1px solid var(--line);border-radius:var(--radius-lg);padding:16px 18px;position:relative;transition:all .2s;}
+.ed-card:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(156,42,42,.08);}
 .ed-card.primary{border-color:var(--zhu);box-shadow:0 0 0 1px var(--zhu) inset;}
 .ed-card .ed-name{font-weight:700;color:var(--ink);font-size:15px;letter-spacing:1px;}
 .ed-card .ed-era{font-size:12px;color:var(--ink-3);font-family:var(--font-sans);margin:4px 0 8px;}
-.ed-card .ed-note{font-size:13px;color:var(--ink-2);font-family:var(--font-kai);line-height:1.8;}
+.ed-card .ed-note{font-size:12.5px;color:var(--ink-2);font-family:var(--font-kai);line-height:1.8;}
 .ed-card .ed-tag{position:absolute;top:14px;right:14px;font-size:11px;padding:2px 8px;border-radius:10px;font-family:var(--font-sans);}
 .ed-tag.tb{background:rgba(156,42,42,.10);color:var(--zhu);}
 .ed-tag.tc{background:rgba(168,127,58,.14);color:#8a6a2c;}
+.filter-bar{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 20px;align-items:center;}
+.filter-btn{font-family:var(--font-sans);font-size:12px;padding:5px 12px;border:1px solid var(--line);border-radius:16px;background:var(--paper-2);color:var(--ink-2);cursor:pointer;transition:all .15s;}
+.filter-btn.active{background:var(--zhu);color:#fff;border-color:var(--zhu);}
+.filter-btn:hover{border-color:var(--zhu);}
 .name-table{width:100%;border-collapse:collapse;font-size:14px;margin-top:18px;}
 .name-table th,.name-table td{padding:7px 10px;border-bottom:1px solid var(--line-soft);text-align:left;}
 .name-table th{color:var(--zhu);font-size:13px;letter-spacing:2px;background:var(--paper-2);position:sticky;top:0;font-weight:500;}
@@ -35,22 +36,38 @@
 .name-table td.bo{font-family:var(--font-kai);font-size:15px;color:var(--zhu);}
 .name-table td.sym{font-size:20px;color:var(--ink-2);width:44px;}
 .name-table tr.head-row td{background:var(--paper-3);color:var(--gold);font-family:var(--font-sans);font-size:12px;letter-spacing:3px;}
-.yw-gua{margin:22px 0;}
-.yw-gua h3{color:var(--zhu);font-size:19px;letter-spacing:3px;margin:0 0 10px;padding-bottom:6px;border-bottom:1px solid var(--line);}
-.yw-item{display:grid;grid-template-columns:70px 1fr;gap:14px;padding:11px 0;border-bottom:1px dashed var(--line-soft);}
-.yw-item .pos{font-family:var(--font-kai);color:var(--ink-3);font-size:14px;}
-.yw-pair{display:grid;gap:6px;}
+.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius-lg);}
+.yw-gua{margin:22px 0;display:none;}
+.yw-gua.show{display:block;}
+.yw-gua h3{color:var(--zhu);font-size:19px;letter-spacing:3px;margin:0 0 6px;padding-bottom:8px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px;}
+.yw-gua h3 .sym{font-size:24px;color:var(--ink-2);}
+.yw-gua h3 .bsname{font-size:13px;color:var(--gold);font-family:var(--font-sans);letter-spacing:1px;font-weight:normal;margin-left:6px;}
+.guaci-block{background:var(--paper-2);border-left:3px solid var(--zhu);padding:10px 14px;border-radius:0 var(--radius) var(--radius) 0;margin-bottom:12px;}
+.guaci-block .gc-label{font-size:11px;font-family:var(--font-sans);color:var(--zhu);letter-spacing:2px;}
+.yw-item{display:grid;grid-template-columns:68px 1fr;gap:14px;padding:10px 0;border-bottom:1px dashed var(--line-soft);}
+.yw-item .pos{font-family:var(--font-kai);color:var(--ink-3);font-size:13.5px;padding-top:2px;}
+.yw-pair{display:grid;gap:5px;}
 .yw-row{font-size:14px;line-height:1.8;}
 .yw-row .lab{display:inline-block;min-width:64px;font-family:var(--font-sans);font-size:11px;color:var(--ink-3);letter-spacing:1px;}
-.yw-row.tx-t {color:var(--ink);font-family:var(--font-kai);}
-.yw-row.tx-b {color:var(--zhu);font-family:var(--font-kai);}
+.yw-row.tx-t{color:var(--ink);font-family:var(--font-kai);}
+.yw-row.tx-b{color:var(--zhu);font-family:var(--font-kai);}
+.yw-row.tx-other{color:#8a6a2c;font-family:var(--font-kai);font-size:13.5px;}
 .yw-kind{display:inline-block;font-size:11px;font-family:var(--font-sans);padding:1px 7px;border-radius:9px;background:rgba(168,127,58,.14);color:#8a6a2c;margin-left:8px;}
 .yw-note{font-size:12px;color:var(--ink-3);font-family:var(--font-kai);margin-top:2px;}
 .jk-note{background:var(--paper-2);border-left:3px solid var(--gold);padding:12px 16px;font-size:13px;color:var(--ink-2);font-family:var(--font-kai);line-height:1.9;border-radius:0 var(--radius) var(--radius) 0;margin-top:16px;}
+.sig-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;margin-top:18px;}
+.sig-card{background:var(--paper-2);border:1px solid var(--line);border-radius:var(--radius-lg);padding:16px 18px;}
+.sig-card h4{color:var(--zhu);font-size:15px;margin:0 0 8px;letter-spacing:1px;}
+.sig-card p{font-size:13px;color:var(--ink-2);font-family:var(--font-kai);line-height:1.9;margin:0;}
+.yizhuan-item{padding:12px 0;border-bottom:1px dashed var(--line-soft);}
+.yizhuan-item .pian{font-family:var(--font-sans);font-size:12px;color:var(--gold);letter-spacing:1px;margin-bottom:4px;}
+.src-list ol{font-size:13px;color:var(--ink-2);font-family:var(--font-kai);line-height:2.1;padding-left:20px;}
 @media (max-width:768px){
   .jk-hero h1{font-size:28px;letter-spacing:6px;}
   .name-table{font-size:13px;}
   .yw-item{grid-template-columns:52px 1fr;}
+  .ed-grid{grid-template-columns:1fr;}
+  .sig-grid{grid-template-columns:1fr;}
 }
 </style>
 </head>
@@ -62,15 +79,24 @@
 
     <section class="section jk-hero" style="border-radius:0;margin:0 -32px 24px;padding-left:32px;padding-right:32px;">
       <h1>校勘异文</h1>
-      <p>《周易》流传两千余年，传世本与出土本互有异同。此处汇集帛书、阜阳简、上博简、汉石经、敦煌写本等版本异文，按卦按爻对照，供校勘考订。<span style="color:var(--gold);">异文照录，不擅改底本。</span></p>
+      <p>《周易》自战国以降传抄两千余年，出土本（帛书、楚简、汉简）与传世本互有异同。此处以通行本为底，对校马王堆帛书、上博楚竹书、阜阳汉简、汉石经等诸本异文，按卦按爻胪列，<span style="color:var(--gold);">异文照录，不擅改底本</span>，为校勘训诂与版本研究提供可追溯的基础材料。</p>
     </section>
 
     <section class="section" id="editions">
       <div class="section-head">
-        <span class="title-zhu-sub">EDITIONS</span>
+        <span class="title-zhu-sub">VERSIONS</span>
         <h2 class="title-zhu" style="font-size:26px;">版本谱系</h2>
       </div>
+      <p style="color:var(--ink-3);font-size:13px;font-family:var(--font-kai);margin-bottom:6px;">共 12 种版本实体，其中出土本 7 种、传世本 5 种，覆盖战国至清的主要《周易》传本。</p>
       <div class="ed-grid" id="edGrid"></div>
+    </section>
+
+    <section class="section" id="significance">
+      <div class="section-head">
+        <span class="title-zhu-sub">SCHOLARLY VALUE</span>
+        <h2 class="title-zhu" style="font-size:26px;">出土本校勘价值</h2>
+      </div>
+      <div class="sig-grid" id="sigGrid"></div>
     </section>
 
     <section class="section" id="guaming">
@@ -78,10 +104,10 @@
         <span class="title-zhu-sub">HEXAGRAM NAMES</span>
         <h2 class="title-zhu" style="font-size:26px;">帛书卦名对照</h2>
       </div>
-      <p style="color:var(--ink-3);font-size:13px;font-family:var(--font-kai);">马王堆帛书《周易》卦序与今本迥异，按八宫排列（键、根、赣、辰、川、夺、罗、筭），卦名多借字。下表按帛书卦序列出今本名与帛书名对照。</p>
+      <p style="color:var(--ink-3);font-size:13px;font-family:var(--font-kai);">马王堆帛书《周易》卦序与今本迥异，按八宫排列（键、根、赣、辰、川、夺、罗、筭），卦名多为本字或通假字，保留了卦名原始词义。下表按帛书卦序列出今本与帛书名对照。</p>
       <div class="table-wrap" style="overflow-x:auto;">
         <table class="name-table">
-          <thead><tr><th>帛书序</th><th>符号</th><th>今本名</th><th>帛书名</th></tr></thead>
+          <thead><tr><th>帛序</th><th>卦符</th><th>今本名</th><th>帛书名</th></tr></thead>
           <tbody id="nameBody"></tbody>
         </table>
       </div>
@@ -89,11 +115,32 @@
 
     <section class="section" id="yiwen">
       <div class="section-head">
-        <span class="title-zhu-sub">TEXTUAL VARIANTS</span>
-        <h2 class="title-zhu" style="font-size:26px;">爻辞异文对照</h2>
+        <span class="title-zhu-sub">GUACI YAOICI VARIANTS</span>
+        <h2 class="title-zhu" style="font-size:26px;">卦爻辞异文对照</h2>
       </div>
-      <p style="color:var(--ink-3);font-size:13px;font-family:var(--font-kai);">下以今本为底，列帛书本异文，标注异文类型（通假 / 异文 / 异名 / 同文）。字形因帛书残损或释读分歧者以〔〕注出。</p>
+      <p style="color:var(--ink-3);font-size:13px;font-family:var(--font-kai);">下以今本为底，列帛书本卦辞、爻辞异文，标注异文类型（通假/异文/异名/衍/脱/倒/同文）；部分爻补列上博简、阜阳简异文。字形因残损或释读分歧以〔〕注出。</p>
+      <div class="filter-bar" id="filterBar">
+        <button class="filter-btn active" data-gua="all">全部</button>
+      </div>
       <div id="ywWrap"></div>
+    </section>
+
+    <section class="section" id="yizhuan">
+      <div class="section-head">
+        <span class="title-zhu-sub">YIZHUAN VARIANTS</span>
+        <h2 class="title-zhu" style="font-size:26px;">十翼异文（举要）</h2>
+      </div>
+      <p style="color:var(--ink-3);font-size:13px;font-family:var(--font-kai);">帛书《系辞》《易之义》《二三子问》与传世《十翼》多有异同，下举关键异文数则，如"易有太极"帛书作"易有大恒"，为学术史上一大公案。</p>
+      <div id="yzWrap"></div>
+    </section>
+
+    <section class="section" id="shangbo">
+      <div class="section-head">
+        <span class="title-zhu-sub">SHANGBO BAMBOO SLIPS</span>
+        <h2 class="title-zhu" style="font-size:26px;">上博楚简异文（举要）</h2>
+      </div>
+      <p style="color:var(--ink-3);font-size:13px;font-family:var(--font-kai);">上博楚竹书《周易》为现存最早传本（战国中晚期），楚系文字异写颇多，下列代表性异文。</p>
+      <div id="sbWrap"></div>
     </section>
 
     <section class="section" id="sources">
@@ -101,7 +148,7 @@
         <span class="title-zhu-sub">SOURCES</span>
         <h2 class="title-zhu" style="font-size:26px;">文献依据</h2>
       </div>
-      <div id="srcList"></div>
+      <div class="src-list" id="srcList"></div>
       <div class="jk-note" id="disclaimer"></div>
     </section>
 
@@ -113,8 +160,9 @@
 (function(){
   var V = window.YJ_VARIANTS || {};
   var GUA = window.YJ_GUA_FULL || {};
+  var allGua = ['乾','坤','屯','蒙','需','讼','师','比','小畜','履','泰','否','同人','大有','谦','豫','随','蛊','临','观','噬嗑','贲','剥','复','无妄','大畜','颐','大过','坎','离','咸','恒','遁','大壮','晋','明夷','家人','睽','蹇','解','损','益','夬','姤','萃','升','困','井','革','鼎','震','艮','渐','归妹','丰','旅','巽','兑','涣','节','中孚','小过','既济','未济'];
   function name2num(n){ var g = GUA[n]; return g ? g.num : 0; }
-  function symOf(n){ var g = GUA[n]; return (g && g.num) ? String.fromCodePoint(0x4DC0 + g.num - 1) : ''; }
+  function symOf(n){ var g = GUA[n]; return (g && g.num !== undefined) ? String.fromCodePoint(0x4DC0 + g.num) : ''; }
 
   document.getElementById('topbar-slot').innerHTML = YJ_Link.topbar('jiaokan');
   document.getElementById('sidebar-slot').innerHTML = YJ_Link.sidebar('jiaokan');
@@ -123,51 +171,102 @@
   /* ---- 版本谱系 ---- */
   var edHtml = (V.editions || []).map(function(e){
     var tag = e.type === '出土' ? '<span class="ed-tag tc">出土</span>' : '<span class="ed-tag tb">传世</span>';
+    var extra = e.findspot ? '<div style="font-size:11.5px;color:var(--ink-3);font-family:var(--font-sans);margin-top:6px;">出土地：' + e.findspot + (e.foundYear ? ' · ' + e.foundYear + '年发现' : '') + (e.curator ? '<br>整理：' + e.curator : '') + '</div>' : '';
     return '<div class="ed-card' + (e.primary ? ' primary' : '') + '">' + tag +
       '<div class="ed-name">' + e.name + '</div>' +
-      '<div class="ed-era">' + e.era + (e.findspot ? ' · ' + e.findspot : '') + '</div>' +
-      '<div class="ed-note">' + (e.note || '') + '</div>' +
+      '<div class="ed-era">' + e.era + '</div>' +
+      '<div class="ed-note">' + (e.note || '') + '</div>' + extra +
       '</div>';
   }).join('');
   document.getElementById('edGrid').innerHTML = edHtml;
 
+  /* ---- 学术价值 ---- */
+  var sigHtml = (V.significance || []).map(function(s){
+    return '<div class="sig-card"><h4>' + s.title + '</h4><p>' + s.text + '</p></div>';
+  }).join('');
+  document.getElementById('sigGrid').innerHTML = sigHtml;
+
   /* ---- 帛书卦名对照 ---- */
-  var order = V.boshuOrder || [];
-  var rows = [], lastGongStarts = {0:'键宫 · 上卦乾',8:'根宫 · 上卦艮',16:'赣宫 · 上卦坎',24:'辰宫 · 上卦震',32:'川宫 · 上卦坤',40:'夺宫 · 上卦兑',48:'罗宫 · 上卦离',56:'筭宫 · 上卦巽'};
-  order.forEach(function(jinName, i){
+  var rows = [], lastGongStarts = {0:'键宫 · 上卦乾（键）',8:'根宫 · 上卦艮（根）',16:'赣宫 · 上卦坎（赣）',24:'辰宫 · 上卦震（辰）',32:'川宫 · 上卦坤（川）',40:'夺宫 · 上卦兑（夺）',48:'罗宫 · 上卦离（罗）',56:'筭宫 · 上卦巽（筭）'};
+  (V.boshuOrder || []).forEach(function(jinName, i){
     if(lastGongStarts[i]) rows.push('<tr class="head-row"><td colspan="4">' + lastGongStarts[i] + '</td></tr>');
     var bo = (V.guaNameMap || {})[jinName] || jinName;
     rows.push('<tr><td class="ord">' + (i + 1) + '</td><td class="sym">' + symOf(jinName) + '</td><td class="jin">' + jinName + '</td><td class="bo">' + bo + '</td></tr>');
   });
   document.getElementById('nameBody').innerHTML = rows.join('');
 
-  /* ---- 爻辞异文 ---- */
+  /* ---- 卦爻辞异文 ---- */
   var groups = {};
+  (V.guaciVariants || []).forEach(function(v){
+    var k = '卦辞';
+    (groups[v.gua] = groups[v.gua] || []).push({pos:'卦辞',tongxing:v.tongxing,boshu:v.bs,sb:v.sb,fy:v.fy,kind:v.kind||'异文',note:v.note});
+  });
   (V.yaoVariants || []).forEach(function(v){
     (groups[v.gua] = groups[v.gua] || []).push(v);
   });
-  var orderGua = ['乾','坤','泰','谦','豫','随','蛊','临','观','睽'];
-  var ywHtml = orderGua.filter(function(g){ return groups[g]; }).map(function(g){
+  var filterHtml = '<button class="filter-btn active" data-gua="all">全部</button>' +
+    allGua.map(function(g){ return '<button class="filter-btn" data-gua="' + g + '">' + g + '</button>'; }).join('');
+  document.getElementById('filterBar').innerHTML = filterHtml;
+
+  var ywHtml = allGua.filter(function(g){ return groups[g]; }).map(function(g){
+    var boName = (V.guaNameMap || {})[g] || '';
     var items = groups[g].map(function(v){
-      var boTxt = v.boshu && v.boshu !== '（阙）' ? v.boshu : '（帛书残缺）';
+      var boTxt = (v.boshu && v.boshu !== '（阙）') ? v.boshu : '（帛书残缺）';
+      var extraRows = '';
+      if(v.sb) extraRows += '<div class="yw-row tx-other"><span class="lab">上博简</span>' + v.sb + '</div>';
+      if(v.fy) extraRows += '<div class="yw-row tx-other"><span class="lab">阜阳简</span>' + v.fy + '</div>';
       return '<div class="yw-item">' +
         '<div class="pos">' + v.pos + '</div>' +
         '<div class="yw-pair">' +
-          '<div class="yw-row tx-t"><span class="lab">今本</span>' + v.tongxing + '</div>' +
+          '<div class="yw-row tx-t"><span class="lab">通行本</span>' + v.tongxing + '</div>' +
           '<div class="yw-row tx-b"><span class="lab">帛书本</span>' + boTxt +
             '<span class="yw-kind">' + (v.kind || '异文') + '</span></div>' +
+          extraRows +
           (v.note ? '<div class="yw-note">校记：' + v.note + '</div>' : '') +
         '</div>' +
       '</div>';
     }).join('');
-    return '<div class="yw-gua"><h3>' + g + '卦 ' + symOf(g) + '</h3>' + items + '</div>';
+    return '<div class="yw-gua show" data-gua="' + g + '"><h3><span class="sym">' + symOf(g) + '</span>' + g + '卦<span class="bsname">帛书：' + boName + '</span></h3>' +
+      items + '</div>';
   }).join('');
   document.getElementById('ywWrap').innerHTML = ywHtml;
 
+  document.querySelectorAll('.filter-btn').forEach(function(b){
+    b.addEventListener('click', function(){
+      document.querySelectorAll('.filter-btn').forEach(function(x){ x.classList.remove('active'); });
+      b.classList.add('active');
+      var g = b.getAttribute('data-gua');
+      document.querySelectorAll('.yw-gua').forEach(function(el){
+        if(g === 'all' || el.getAttribute('data-gua') === g) el.classList.add('show');
+        else el.classList.remove('show');
+      });
+    });
+  });
+
+  /* ---- 十翼异文 ---- */
+  var yzHtml = (V.yizhuanVariants || []).map(function(v){
+    return '<div class="yizhuan-item">' +
+      '<div class="pian">' + v.pian + '</div>' +
+      '<div class="yw-row tx-t"><span class="lab">通行本</span>' + v.tongxing + '</div>' +
+      '<div class="yw-row tx-b"><span class="lab">帛书本</span>' + v.bs + '</div>' +
+      (v.note ? '<div class="yw-note">校记：' + v.note + '</div>' : '') +
+    '</div>';
+  }).join('');
+  document.getElementById('yzWrap').innerHTML = yzHtml;
+
+  /* ---- 上博简异文 ---- */
+  var sbHtml = (V.shangboKey || []).map(function(v){
+    return '<div class="yizhuan-item">' +
+      '<div class="pian">' + v.gua + ' · ' + v.yao + '</div>' +
+      '<div class="yw-row tx-other"><span class="lab">上博简</span>' + v.sb + '</div>' +
+      (v.note ? '<div class="yw-note">校记：' + v.note + '</div>' : '') +
+    '</div>';
+  }).join('');
+  document.getElementById('sbWrap').innerHTML = sbHtml;
+
   /* ---- 来源 ---- */
   document.getElementById('srcList').innerHTML =
-    '<ol style="font-size:13px;color:var(--ink-2);font-family:var(--font-kai);line-height:2.1;">' +
-    (V.sources || []).map(function(s){ return '<li>' + s + '</li>'; }).join('') + '</ol>';
+    '<ol>' + (V.sources || []).map(function(s){ return '<li>' + s + '</li>'; }).join('') + '</ol>';
   document.getElementById('disclaimer').textContent = V.disclaimer || '';
 
   if(YJ_Link && YJ_Link.decorate) setTimeout(function(){ YJ_Link.decorate(document.querySelector('.content')); }, 300);
