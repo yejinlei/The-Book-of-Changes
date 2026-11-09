@@ -7,6 +7,8 @@
 <link rel="stylesheet" href="css/yijing.css">
 <script src="data/yijing-ontology.js"></script>
 <script src="data/gua-full-data.js"></script>
+<script src="data/yijing-ontology-enhance.js"></script>
+<script src="data/yijing-shifa.js"></script>
 <script src="data/yijing-shifa-engine.js"></script>
 <script src="js/ontology-linker.js"></script>
 <style>
@@ -198,6 +200,14 @@
           <div id="resultDetail"></div>
         </div>
       </div>
+    </div>
+
+    <div class="section" id="originSection">
+      <div class="section-head"><h2 style="font-size:24px;">筮法源流</h2></div>
+      <p style="color:var(--ink-3);font-size:13px;margin-bottom:16px;">
+        三种经典筮法在本体中的出处、阐演注家与所属流派，全部取自本体关联，可逐项跳转。
+      </p>
+      <div id="originGrid" class="grid-3"></div>
     </div>
 
     <div class="section">
@@ -493,6 +503,47 @@ document.querySelectorAll('.method-tabs button').forEach(b=>{
 });
 
 render();
+
+/* ===== 筮法源流（本体关联渲染）===== */
+(function(){
+  var grid = document.getElementById('originGrid');
+  if(!grid) return;
+  var SF = (YJ_ONT.shifa && YJ_ONT.shifa.methods) || null;
+  if(!SF){ grid.innerHTML = '<div style="color:var(--ink-3);font-size:13px;">筮法本体模块未加载。</div>'; return; }
+  var zjName = function(id){
+    var z = (YJ_ONT.zhujia||[]).find(function(x){ return x.id===id || x.name===id; });
+    return z ? z.name : id;
+  };
+  var html = Object.keys(SF).map(function(k){
+    var m = SF[k];
+    var r = m.relations || {};
+    var yuan = r.yuanChuYuxi ? window.YJ_Link.ent('系辞传', 'shiyi', r.yuanChuYuxi) : '';
+    var zjs = (r.guanlianZhe||[]).map(function(id){
+      return window.YJ_Link.ent(zjName(id), 'zhujia', id);
+    }).join('、');
+    var prob = m.probability ? Object.keys(m.probability).map(function(p){
+      return '<span class="badge badge-outline" style="margin:1px;">' + p + ' ' + (m.probability[p]*100).toFixed(2) + '%</span>';
+    }).join('') : '';
+    return '<div class="card fade-up">' +
+      '<h4 style="color:var(--zhu);letter-spacing:2px;margin-top:0;">' + (m.name||k) + '</h4>' +
+      '<div style="font-size:12px;color:var(--gold);letter-spacing:1px;margin-bottom:6px;">' + (m.dynasty||'') + ' · ' + (m.status||'') + '</div>' +
+      '<p style="font-size:13px;color:var(--ink-2);line-height:1.9;margin:0 0 8px;">' + (m.desc||'') + '</p>' +
+      '<div style="font-size:12px;color:var(--ink-3);line-height:2;">' +
+        '<div><strong style="color:var(--gold);">出处：</strong>' + (m.source||'') + (yuan?('（' + yuan + '）'):'') + '</div>' +
+        (zjs?('<div><strong style="color:var(--gold);">阐演：</strong>' + zjs + '</div>'):'') +
+        '<div><strong style="color:var(--gold);">器具：</strong>' + (m.tools||'') + '　<strong style="color:var(--gold);">难度：</strong>' + (m.difficulty||'') + '</div>' +
+      '</div>' +
+      '<div style="margin-top:8px;">' + prob + '</div>' +
+    '</div>';
+  }).join('');
+  grid.innerHTML = html;
+})();
+
+/* 全站实体标注 */
+(function(){
+  var run = function(){ try{ window.YJ_Link.decorate(document.querySelector('.content')||document.body); }catch(e){} };
+  run(); setTimeout(run, 500); window.addEventListener('load', function(){ setTimeout(run, 700); });
+})();
 </script>
 </body>
 </html>

@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="css/yijing.css">
 <script src="data/yijing-ontology.js"></script>
 <script src="data/gua-full-data.js"></script>
+<script src="data/yijing-ontology-enhance.js"></script>
 <script src="js/ontology-linker.js"></script>
 <style>
 .gua-detail{display:none;}
@@ -34,10 +35,11 @@
 .gua-prop .v{color:var(--ink);font-size:14px;font-weight:600;margin-top:2px;}
 
 .yao-row{
-  display:grid;grid-template-columns:60px 1fr;gap:18px;
+  display:grid;grid-template-columns:64px 1fr;gap:18px;
   padding:16px 0;border-bottom:1px dashed var(--line-soft);
 }
 .yao-row:last-child{border-bottom:none;}
+.yao-row:target{background:rgba(156,42,42,.06);border-radius:var(--radius);}
 .yao-idx{
   text-align:center;border-right:1px solid var(--line-soft);padding-right:12px;
 }
@@ -48,6 +50,20 @@
 .yao-text{font-family:var(--font-kai);font-size:16px;color:var(--ink);line-height:2;}
 .yao-xiaoxiang{font-size:13px;color:var(--gold);font-style:italic;margin:6px 0;}
 .yao-explain{font-size:13px;color:var(--ink-3);font-family:var(--font-sans);line-height:1.9;}
+.yao-rel{font-size:12px;color:var(--ink-3);margin-top:8px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;}
+.yao-rel .tag{background:var(--paper-3);border-radius:3px;padding:2px 8px;letter-spacing:1px;}
+
+.yao-anno-btn{
+  font-size:12px;padding:3px 12px;border:1px solid var(--line);background:var(--paper);
+  border-radius:3px;cursor:pointer;color:var(--ink-2);font-family:var(--font-serif);letter-spacing:1px;
+}
+.yao-anno-btn:hover{border-color:var(--zhu);color:var(--zhu);}
+.yao-anno{margin-top:10px;border-top:1px dashed var(--line-soft);padding-top:10px;display:none;}
+.yao-anno.open{display:block;}
+.yao-anno-item{font-size:13px;line-height:1.9;color:var(--ink-2);margin-bottom:8px;}
+.yao-anno-item .src{color:var(--zhu);font-weight:700;margin-right:6px;font-family:var(--font-kai);}
+.yao-anno-item .txt{color:var(--ink-2);}
+.yao-anno-loading{font-size:12px;color:var(--ink-3);}
 
 .related-gua{
   display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:14px;
@@ -82,7 +98,7 @@
 .gua-grid-item:hover,.gua-grid-item.active{background:var(--zhu);color:#fff;border-color:var(--zhu);transform:scale(1.06);}
 .gua-grid-item .s{font-size:30px;line-height:1;margin-bottom:4px;}
 .gua-grid-item .n{font-size:11px;letter-spacing:1px;}
-.jump-btns{display:flex;gap:8px;margin-top:14px;}
+.jump-btns{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;}
 .jump-btns a{font-size:12px;padding:4px 10px;background:var(--paper);border:1px solid var(--line-soft);border-radius:3px;text-decoration:none;color:var(--ink-2);}
 .jump-btns a:hover{background:var(--zhu);color:#fff;border-color:var(--zhu);}
 
@@ -114,14 +130,14 @@
         <button class="on" data-f="all">全部</button>
         <button data-f="上经">上经</button>
         <button data-f="下经">下经</button>
-        <button data-f="乾宫">乾宫</button>
-        <button data-f="坎宫">坎宫</button>
-        <button data-f="艮宫">艮宫</button>
-        <button data-f="震宫">震宫</button>
-        <button data-f="巽宫">巽宫</button>
-        <button data-f="离宫">离宫</button>
-        <button data-f="坤宫">坤宫</button>
-        <button data-f="兑宫">兑宫</button>
+        <button data-f="乾">乾宫</button>
+        <button data-f="坎">坎宫</button>
+        <button data-f="艮">艮宫</button>
+        <button data-f="震">震宫</button>
+        <button data-f="巽">巽宫</button>
+        <button data-f="离">离宫</button>
+        <button data-f="坤">坤宫</button>
+        <button data-f="兑">兑宫</button>
       </div>
       <div class="gua-grid" id="guaGrid"></div>
     </div>
@@ -138,25 +154,52 @@
 </div>
 <div id="footer-slot"></div>
 
+<script src="data/yijing-shifa-engine.js" onerror="void 0"></script>
 <script>
 document.getElementById('topbar-slot').innerHTML = YJ_Link.topbar('gua');
 document.getElementById('sidebar-slot').innerHTML = YJ_Link.sidebar('gua');
 document.getElementById('footer-slot').innerHTML = YJ_Link.footer();
 
-const guas = YJ_ONT.LiuShiSiGua||[];
-const baguaMap = YJ_ONT.BaGuaMap||{};
+const guas = YJ_ONT.liushisigua || [];
+const baguaMap = YJ_ONT.baguaMap || {};
+const yaoMap = YJ_ONT.yaoMap || {};
 const grid = document.getElementById('guaGrid');
 
-// 八宫顺序
-const GONGS=['乾宫','坎宫','艮宫','震宫','巽宫','离宫','坤宫','兑宫'];
+/* ---------- 八卦三爻位组合 → 经卦名 ---------- */
+const TRIGRAM_BITS = { '111':'乾','110':'兑','101':'离','100':'震','011':'巽','010':'坎','001':'艮','000':'坤' };
+function trigramOf(yaoArr){
+  return TRIGRAM_BITS[yaoArr.map(y=>y.yinYang==='阳'?'1':'0').join('')] || null;
+}
+
+function findGua(shang, xia){
+  return guas.find(g=>g.shang===shang && g.xia===xia) || null;
+}
+function cuoGua(g){
+  if(!g.yao) return null;
+  const bits = g.yao.map(y=>y.yinYang==='阳'?'阴':'阳');
+  return guas.find(x=>x.num!==g.num && x.yao && x.yao.every((y,i)=>y.yinYang===bits[i])) || null;
+}
+function zongGua(g){
+  if(!g.yao || g.yao.length<6) return null;
+  const rev = [...g.yao].reverse();
+  return guas.find(x=>x.num!==g.num && x.yao && x.yao.length===6 &&
+    x.yao.every((y,i)=>y.yinYang===rev[i].yinYang)) || null;
+}
+function huGua(g){
+  if(!g.yao || g.yao.length<6) return null;
+  const lower = trigramOf([g.yao[1],g.yao[2],g.yao[3]]); // 二三四爻为下互
+  const upper = trigramOf([g.yao[2],g.yao[3],g.yao[4]]); // 三四五爻为上互
+  if(!lower || !upper) return null;
+  return findGua(upper, lower);
+}
 
 function renderList(filter='all'){
-  let arr=guas;
-  if(filter!=='all'){
-    if(['上经','下经'].includes(filter)) arr=guas.filter(g=>g.jing===filter);
-    else arr=guas.filter(g=>g.gong===filter);
+  let arr = guas;
+  if(filter !== 'all'){
+    if(['上经','下经'].includes(filter)) arr = guas.filter(g=>g.jing===filter);
+    else arr = guas.filter(g=>g.gong===filter);
   }
-  grid.innerHTML=arr.map(g=>`
+  grid.innerHTML = arr.map(g=>`
     <a class="gua-grid-item" href="#${g.id}" data-id="${g.id}">
       <span class="s">${g.symbol}</span>
       <span class="n">${g.num}.${g.name}</span>
@@ -164,7 +207,6 @@ function renderList(filter='all'){
 }
 renderList();
 
-// 过滤按钮
 document.querySelectorAll('.gua-filter button').forEach(b=>{
   b.addEventListener('click',()=>{
     document.querySelectorAll('.gua-filter button').forEach(x=>x.classList.remove('on'));
@@ -173,69 +215,81 @@ document.querySelectorAll('.gua-filter button').forEach(b=>{
   });
 });
 
-// 错卦综卦互卦计算
-function cuoGua(g){
-  // 阴阳全反：把每个爻反过来
-  const all=guas;
-  return all.find(x=>x.num!==g.num && x.yao && g.yao &&
-    x.yao.every((y,i)=>y.yinYang!==g.yao[i].yinYang));
-}
-function zongGua(g){
-  // 综卦：卦画上下颠倒 = 爻序倒排且阴阳不变
-  if(!g.yao||g.yao.length<6) return null;
-  const revYao=[...g.yao].reverse();
-  return guas.find(x=>x.num!==g.num && x.yao&&
-    x.yao.length===revYao.length&&
-    x.yao.every((y,i)=>y.yinYang===revYao[i].yinYang));
-}
-function huGua(g){
-  // 互卦：取2、3、4爻为下卦，3、4、5爻为上卦
-  if(!g.yao||g.yao.length<6) return null;
-  // 简化匹配：找上下卦组合
-  return null;
-}
-
 function showList(){
+  document.getElementById('listHead').style.display='block';
   document.getElementById('listView').style.display='block';
   document.getElementById('detailView').classList.remove('active');
-  document.getElementById('listHead').style.display='block';
-  history.pushState('','','gua.html');
+  if(location.hash) history.pushState('','','gua.html');
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
+/* ---------- 十翼诠释链接 ---------- */
+function shiyiLinks(g){
+  const out = [];
+  const tuan = g.jing==='上经' ? 'zy_tuan_shang' : 'zy_tuan_xia';
+  const xiang = g.jing==='上经' ? 'zy_xiang_shang' : 'zy_xiang_xia';
+  out.push(YJ_Link.ent('彖传', 'shiyi', tuan));
+  out.push(YJ_Link.ent('象传', 'shiyi', xiang));
+  if(g.name==='乾'||g.name==='坤') out.push(YJ_Link.ent('文言传','shiyi','zy_wenyan'));
+  return out.join('、');
+}
+
+function yaoRowHTML(g, y){
+  const yid = y.id || (g.id+'_y'+y.num);
+  const isYang = y.yinYang==='阳';
+  const xiangId = g.jing==='上经' ? 'zy_xiang_shang' : 'zy_xiang_xia';
+  return `<div class="yao-row" id="${yid}">
+    <div class="yao-idx">
+      <div class="pos">${y.pos}</div>
+      <div class="sym">${isYang?'━━━':'━ ━'}</div>
+      <div class="yy">${isYang?'阳爻':'阴爻'}${y.wei?' · '+y.wei:''}</div>
+    </div>
+    <div>
+      <div class="yao-text">${y.text||''}</div>
+      ${y.xiaoxiang?`<div class="yao-xiaoxiang">《象》曰：${(y.xiaoxiang||'').replace(/^《象》[曰：:]+/,'')}</div>`:''}
+      ${y.bai||y.explain?`<div class="yao-explain">${y.bai||y.explain}</div>`:''}
+      <div class="yao-rel">
+        <span class="tag">所属：${YJ_Link.ent(g.name,'gua',g.id)}卦</span>
+        <span class="tag">诠释：${YJ_Link.ent('象传','shiyi',xiangId)}</span>
+        <button class="yao-anno-btn" data-gua="${g.name}" data-yao="${yid}" data-pos="${y.pos}">历代注家注解 ▾</button>
+      </div>
+      <div class="yao-anno" id="anno-${yid}"></div>
+    </div>
+  </div>`;
+}
+
 function showGua(id){
-  const g=guas.find(x=>x.id===id)||guas.find(x=>x.name===id);
+  const g = guas.find(x=>x.id===id) || guas.find(x=>x.name===id);
   if(!g) return;
-  const gf=(YJ_GUA_FULL&&YJ_GUA_FULL[g.name])||{};
-  const sg=baguaMap[g.shang], xg=baguaMap[g.xia];
+  const sg = baguaMap[g.shang], xg = baguaMap[g.xia];
+  const yaoArr = YJ_ONT.getYaoOfGua ? YJ_ONT.getYaoOfGua(g.id) : (g.yao||[]);
+  const mainYao = yaoArr.filter(y=>!y.isYong);
+  const yangN = mainYao.filter(y=>y.yinYang==='阳').length;
+  const yinN = mainYao.length - yangN;
 
-  // 统计阳爻阴爻
-  const yangN=(g.yao||[]).filter(y=>y.yinYang==='阳').length;
-  const yinN=(g.yao||[]).length-yangN;
-
-  // 相关卦
-  const cg=cuoGua(g), zg=zongGua(g);
+  const cg = cuoGua(g), zg = zongGua(g), hg = huGua(g);
+  const st = YJ_ONT.stats || {};
 
   document.getElementById('listHead').style.display='none';
   document.getElementById('listView').style.display='none';
   document.getElementById('detailView').classList.add('active');
 
-  const html=`
+  const html = `
     <div class="gua-detail-card fade-up">
       <div class="gua-header">
         <div class="gua-symbol-lg">${g.symbol}</div>
         <div class="gua-meta">
-          <div class="num">第 ${g.num} 卦 · ${g.jing} · ${g.gong||''}</div>
+          <div class="num">第 ${g.num} 卦 · ${g.jing} · ${g.gong||''}宫</div>
           <h1>${g.name}</h1>
           <div style="color:var(--ink-3);font-family:var(--font-kai);font-size:15px;margin-top:4px;">
-            ${sg?`${YJ_Link.ent(sg.name,'bagua',sg.id)}（${sg.ziran}）上`:''}
+            ${sg?`${YJ_Link.ent(sg.name,'bagua',sg.id)}（${sg.ziran}）上 `:''}
             ${xg?`${YJ_Link.ent(xg.name,'bagua',xg.id)}（${xg.ziran}）下`:''}
             · ${yangN}阳${yinN}阴
           </div>
           <div class="tags">
             <span class="badge badge-zhu">${g.jing}</span>
-            ${g.gong?`<span class="badge badge-gold">${g.gong}</span>`:''}
-            ${g.wuxing?`<span class="badge badge-outline">${g.wuxing}</span>`:''}
+            ${g.gong?`<span class="badge badge-gold">${g.gong}宫</span>`:''}
+            ${g.wuxing?`<span class="badge badge-outline">五行·${g.wuxing}</span>`:''}
             ${sg?`<span class="badge badge-outline">上${sg.name}·${sg.ziran}</span>`:''}
             ${xg?`<span class="badge badge-outline">下${xg.name}·${xg.ziran}</span>`:''}
           </div>
@@ -243,52 +297,43 @@ function showGua(id){
       </div>
 
       <div class="gua-props">
-        <div class="gua-prop"><div class="k">卦辞</div><div class="v">${YJ_Link.ent(g.name,'gua',g.id)}卦</div></div>
         <div class="gua-prop"><div class="k">错卦</div><div class="v">${cg?YJ_Link.ent(cg.name,'gua',cg.id):'—'}</div></div>
         <div class="gua-prop"><div class="k">综卦</div><div class="v">${zg?YJ_Link.ent(zg.name,'gua',zg.id):'—'}</div></div>
-        <div class="gua-prop"><div class="k">互卦</div><div class="v">—</div></div>
+        <div class="gua-prop"><div class="k">互卦</div><div class="v">${hg?YJ_Link.ent(hg.name,'gua',hg.id):'—'}</div></div>
+        <div class="gua-prop"><div class="k">十翼</div><div class="v" style="font-weight:400;">${shiyiLinks(g)}</div></div>
       </div>
     </div>
 
     <div class="gua-detail-card fade-up">
       <h3 style="color:var(--zhu);letter-spacing:3px;margin-top:0;">卦辞</h3>
-      <div class="jingwen">${g.guaci||gf.guaci||''}</div>
-      ${gf.guaciBai?`<div class="baihua">${gf.guaciBai}</div>`:''}
+      <div class="jingwen">${g.guaciBai?g.guaci:g.guaci||''}</div>
+      ${g.guaciBai?`<div class="baihua">${g.guaciBai}</div>`:''}
     </div>
 
-    <div class="gua-detail-card fade-up">
-      <h3 style="color:var(--zhu);letter-spacing:3px;margin-top:0;">彖传</h3>
-      <div class="jingwen">${g.tuan||gf.tuan||''}</div>
-    </div>
+    ${g.tuan?`<div class="gua-detail-card fade-up">
+      <h3 style="color:var(--zhu);letter-spacing:3px;margin-top:0;">彖传 · ${YJ_Link.ent('彖传','shiyi',g.jing==='上经'?'zy_tuan_shang':'zy_tuan_xia')}</h3>
+      <div class="jingwen">${g.tuan}</div>
+    </div>`:''}
 
-    <div class="gua-detail-card fade-up">
-      <h3 style="color:var(--zhu);letter-spacing:3px;margin-top:0;">象传</h3>
-      <div class="jingwen">${g.xiang||gf.xiang||''}</div>
-    </div>
+    ${g.xiang?`<div class="gua-detail-card fade-up">
+      <h3 style="color:var(--zhu);letter-spacing:3px;margin-top:0;">象传 · ${YJ_Link.ent('象传','shiyi',g.jing==='上经'?'zy_xiang_shang':'zy_xiang_xia')}</h3>
+      <div class="jingwen">${g.xiang}</div>
+    </div>`:''}
 
     ${g.wenyan?`<div class="gua-detail-card fade-up">
-      <h3 style="color:var(--zhu);letter-spacing:3px;margin-top:0;">文言传</h3>
+      <h3 style="color:var(--zhu);letter-spacing:3px;margin-top:0;">文言传 · ${YJ_Link.ent('文言传','shiyi','zy_wenyan')}</h3>
       <div class="jingwen">${g.wenyan}</div>
     </div>`:''}
 
     <div class="gua-detail-card fade-up">
-      <h3 style="color:var(--zhu);letter-spacing:3px;margin-top:0;">六爻</h3>
-      ${(g.yao||[]).map((y,i)=>{
-        const isYang=y.yinYang==='阳';
-        return `<div class="yao-row">
-          <div class="yao-idx">
-            <div class="pos">${y.pos}</div>
-            <div class="sym">${isYang?'━━━':'━ ━'}</div>
-            <div class="yy">${isYang?'阳爻':'阴爻'}</div>
-          </div>
-          <div>
-            <div class="yao-text">${y.text||''}</div>
-            ${y.xiaoxiang?`<div class="yao-xiaoxiang">《象》曰：${y.xiaoxiang.replace(/《象》[曰：:]+/,'')}</div>`:''}
-            ${y.explain?`<div class="yao-explain">${y.explain}</div>`:''}
-          </div>
-        </div>`;
-      }).join('')}
-      ${g.yong?`<div class="jingwen" style="margin-top:12px;">${g.yong}</div>`:''}
+      <h3 style="color:var(--zhu);letter-spacing:3px;margin-top:0;">六爻 · 逐爻下钻（共 ${mainYao.length} 爻）</h3>
+      ${yaoArr.map(y=>yaoRowHTML(g,y)).join('')}
+    </div>
+
+    <div class="gua-detail-card fade-up">
+      <h3 style="color:var(--zhu);letter-spacing:3px;margin-top:0;">本体关联</h3>
+      <p style="font-size:13px;color:var(--ink-3);margin-bottom:10px;">本卦在本体关系网中的正反向关联（点击可跳转）：</p>
+      ${YJ_Link.relsHTML(g.id)}
     </div>
 
     <div class="gua-detail-card fade-up">
@@ -298,30 +343,72 @@ function showGua(id){
         ${xg?`<a href="#${xg.id}" class="rel-gua-item"><span class="s">${xg.symbol}</span>下卦：${xg.name}</a>`:''}
         ${cg?`<a href="#${cg.id}" class="rel-gua-item"><span class="s">${cg.symbol}</span>错卦：${cg.name}</a>`:''}
         ${zg?`<a href="#${zg.id}" class="rel-gua-item"><span class="s">${zg.symbol}</span>综卦：${zg.name}</a>`:''}
+        ${hg?`<a href="#${hg.id}" class="rel-gua-item"><span class="s">${hg.symbol}</span>互卦：${hg.name}</a>`:''}
       </div>
       <div class="jump-btns">
         <a href="animation/gua-${String(g.num-1).padStart(2,'0')}.html" target="_blank">📺 讲解动画</a>
-        <a href="reader.html#${g.id}">📖 经文阅读</a>
+        <a href="reader.html#${g.id}">📖 经文汇评</a>
+        <a href="shifa.html#demo-${g.num-1}">🔮 以此卦起筮</a>
       </div>
     </div>
   `;
-  document.getElementById('detailContent').innerHTML=html;
+  document.getElementById('detailContent').innerHTML = html;
   document.getElementById('detailView').classList.add('active');
-  window.scrollTo({top:0,behavior:'smooth'});
+  bindAnnoButtons();
+  window.YJ_Link.decorate(document.getElementById('detailContent'));
 }
 
-// hash 路由
+/* ---------- 逐爻注家注解（下钻）---------- */
+function bindAnnoButtons(){
+  document.querySelectorAll('.yao-anno-btn').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const box = document.getElementById('anno-'+btn.dataset.yao);
+      if(!box) return;
+      if(box.classList.contains('open')){ box.classList.remove('open'); btn.textContent='历代注家注解 ▾'; return; }
+      if(box.dataset.loaded){ box.classList.add('open'); btn.textContent='历代注家注解 ▴'; return; }
+      box.innerHTML = '<div class="yao-anno-loading">正在加载历代汇评…</div>';
+      box.classList.add('open');
+      btn.textContent = '历代注家注解 ▴';
+      YJ_Link.loadYaoAnnotations(btn.dataset.gua, (anno)=>{
+        const yao = { pos: btn.dataset.pos, text: '' };
+        const g = guas.find(x=>x.name===btn.dataset.gua);
+        const yid = btn.dataset.yao;
+        const yi = (YJ_ONT.yaoMap||{})[yid];
+        const bucket = YJ_Link.matchYaoBucket(anno, yi||yao);
+        let h = '';
+        if(bucket && bucket.notes.length){
+          h = bucket.notes.map(n=>`<div class="yao-anno-item"><span class="src">${n.src||'注'}</span><span class="txt">${n.text}</span></div>`).join('');
+        }else if(anno.heads && anno.heads.length && !bucket){
+          h = anno.heads.slice(0,6).map(n=>`<div class="yao-anno-item"><span class="src">${n.src||'注'}</span><span class="txt">${n.text}</span></div>`).join('');
+        }else{
+          h = '<div class="yao-anno-loading">该爻暂无独立汇评条目。</div>';
+        }
+        box.innerHTML = h;
+        box.dataset.loaded = '1';
+      });
+    });
+  });
+}
+
+/* ---------- hash 路由：#g01 或 #g01~g01_y1 ---------- */
 function route(){
-  const h=location.hash.replace('#','');
-  if(h){
-    const all=document.querySelectorAll('.gua-grid-item');
-    all.forEach(el=>el.classList.toggle('active',el.dataset.id===h));
-    showGua(h);
-  }else{
-    showList();
+  const raw = decodeURIComponent(location.hash.replace('#',''));
+  if(!raw){ showList(); return; }
+  const [guaId, yaoId] = raw.split('~');
+  showGua(guaId);
+  document.querySelectorAll('.gua-grid-item').forEach(el=>el.classList.toggle('active', el.dataset.id===guaId));
+  if(yaoId){
+    setTimeout(()=>{
+      const el = document.getElementById(yaoId);
+      if(el){
+        el.scrollIntoView({behavior:'smooth', block:'center'});
+        const b = el.querySelector('.yao-anno-btn');
+        if(b) b.click();
+      }
+    }, 300);
   }
 }
-window.addEventListener('hashchange',route);
+window.addEventListener('hashchange', route);
 route();
 </script>
 </body>

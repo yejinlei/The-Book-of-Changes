@@ -12,6 +12,7 @@
 <script src="js/echarts.min.js" onerror="this.onerror=null;this.src='https://lib.baomitu.com/echarts/5.4.3/echarts.min.js';"></script>
 <script src="data/yijing-ontology.js"></script>
 <script src="data/gua-full-data.js"></script>
+<script src="data/yijing-ontology-enhance.js"></script>
 <script src="js/ontology-linker.js"></script>
 <style>
 .hero-taiji{font-size:72px;color:var(--zhu);margin-bottom:12px;display:inline-block;animation:spin 60s linear infinite;}
@@ -315,20 +316,13 @@ document.getElementById('guaPreview').innerHTML = guas.map(g=>`
     <div class="nm">${g.num}.${g.name}</div>
   </a>`).join('');
 
-// 十翼
-const shiyiDefs = [
-  {id:'tuan',name:'彖传',desc:'断一卦之大义，释卦辞之理'},
-  {id:'xiang',name:'象传',desc:'取卦象以明人事，含大象小象'},
-  {id:'xici',name:'系辞传',desc:'通论易道之全体，易学哲学纲领'},
-  {id:'wenyan',name:'文言传',desc:'专释乾坤二卦之微言大义'},
-  {id:'shuogua',name:'说卦传',desc:'说八卦之象德、方位、性情'},
-  {id:'xugua',name:'序卦传',desc:'叙六十四卦之排列次序与相因之理'},
-  {id:'zagua',name:'杂卦传',desc:'错综杂举，以明卦义之反对'},
-];
-document.getElementById('shiyiGrid').innerHTML = shiyiDefs.map(s=>`
+// 十翼（从本体读取，10 篇）
+const shiyiArr = ONT.shiyi || [];
+document.getElementById('shiyiGrid').innerHTML = shiyiArr.map(s=>`
   <a href="shiyi.html#${s.id}" class="card" style="text-decoration:none;color:inherit;">
     <h4 style="color:var(--zhu);letter-spacing:3px;">${s.name}</h4>
-    <p style="color:var(--ink-3);font-size:13px;margin:0;">${s.desc}</p>
+    <p style="color:var(--ink-3);font-size:13px;margin:0;">${s.desc||''}</p>
+    <div style="margin-top:6px;font-size:11px;color:var(--gold);letter-spacing:1px;">${s.author||''}${s.pian?(' · 释 '+s.pian+' 卦'):''}</div>
   </a>`).join('');
 
 // 流派
@@ -359,9 +353,10 @@ const events = ONT.events||[
 ];
 document.getElementById('timeline').innerHTML = events.map(e=>`
   <div class="tl-item">
-    <div class="era">${e.era}</div>
-    <h4>${e.name}</h4>
-    <p>${e.desc}</p>
+    <div class="era">${e.era}${e.year?(' · '+e.year):''}</div>
+    <h4>${e.event||e.name||''}</h4>
+    <p>${e.content||e.desc||''}</p>
+    ${e.people?`<div style="font-size:11px;color:var(--gold);letter-spacing:1px;margin-top:4px;">${e.people}</div>`:''}
   </div>`).join('');
 
 // ===== ECharts 本体关系图 =====
@@ -454,22 +449,27 @@ function getCss(v){
   const c=getComputedStyle(div).color;div.remove();return c;
 }
 
-// 三元组计数（动态统计）
-let cnt=0;
-[ONT.bagua,guas,zhuJiaArr,ONT.zhuben,schools,ONT.yitu].forEach(arr=>{
-  if(!Array.isArray(arr))return;
-  arr.forEach(o=>{
-    Object.keys(o).forEach(k=>{
-      if(['id','name','label','symbol','desc','dynasty','school','works','num','text','explain','guaci','tuan','xiang','wenyan','yao','yong','jing','gong','wuxing','shang','xia','pos','yinYang','xiaoxiang','nature','ziran','qinqing','fangwei','xing','yao','de','shu','yinyang','yaoci','comment','era','title'].indexOf(k)===-1){
-        cnt++;
-      }
-    });
-  });
-});
-// 爻作为独立节点关系
-guas.forEach(g=>{(g.yao||[]).forEach(()=>cnt++);});
-document.getElementById('st-triple').textContent=cnt;
-document.getElementById('tripleCount').textContent=cnt;
+// 三元组计数（读取本体增强后的统计）
+const st = ONT.stats || {};
+const tripleN = st.triples || 0;
+document.getElementById('st-triple').textContent = tripleN;
+document.getElementById('st-master').textContent = (ONT.zhujia||[]).length;
+const _sg = document.getElementById('st-gua'); if(_sg) _sg.textContent = (st.gua||64);
+const _sy = document.getElementById('st-yao'); if(_sy) _sy.textContent = (st.yao||384);
+const tcEl = document.getElementById('tripleCount');
+if(tcEl) tcEl.textContent = tripleN;
+const ycEl = document.getElementById('yao-count-inline');
+if(ycEl) ycEl.textContent = `${st.yao||384} 爻实例 · 逐爻可下钻`;
+
+// ===== 本体实体标注：把页面涉及的八卦/六十四卦/注家/流派/易图/十翼渲染为可点击实体 =====
+function doDecorate(){
+  try{
+    window.YJ_Link.decorate(document.querySelector('.content') || document.body);
+  }catch(e){}
+}
+doDecorate();
+setTimeout(doDecorate, 400);
+window.addEventListener('load', function(){ setTimeout(doDecorate, 600); });
 </script>
 </body>
 </html>

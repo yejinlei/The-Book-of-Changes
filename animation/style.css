@@ -1,0 +1,107 @@
+/* ========================================================
+   《易经》讲解动画 · 共用样式表（animation/style.css）
+   统一为宣纸米黄 + 朱红 + 横黑雅调，并与全站本体论平台同一视觉体系。
+   供 gua-XX.html（单卦播放页）与 gua-index.html（64卦总览）共用。
+   ======================================================== */
+:root{
+  --paper:#f4ecd8;
+  --paper-2:#fffdf5;
+  --ink:#2a2418;
+  --ink-2:#5c4d3a;
+  --ink-3:#8a7a65;
+  --zhu:#8b2525;
+  --zhu-2:#a03c20;
+  --gold:#a87f3a;
+  --line:#d9c9a8;
+  --line-soft:#e9ddc4;
+}
+
+/* ===== 统一顶栏（与主站同构）===== */
+.yj-sitebar{
+  background:rgba(40,28,16,.94);position:sticky;top:0;z-index:50;
+  backdrop-filter:blur(6px);
+}
+.yj-sitebar .inner{
+  max-width:1280px;margin:0 auto;padding:12px 24px;
+  display:flex;flex-wrap:wrap;gap:8px;align-items:center;
+}
+.yj-sitebar .brand{
+  color:#f0dbb0;text-decoration:none;font-size:16px;letter-spacing:3px;
+  margin-right:12px;font-weight:600;
+}
+.yj-sitebar .brand small{opacity:.55;font-size:11px;letter-spacing:1px;margin-left:6px;}
+.yj-sitebar a.lnk{
+  color:#d9c6a0;text-decoration:none;padding:6px 12px;border-radius:4px;
+  font-size:14px;letter-spacing:1px;transition:all .2s;
+}
+.yj-sitebar a.lnk:hover{background:rgba(217,198,160,.15);color:#f0dbb0;}
+.yj-sitebar a.lnk.on{background:rgba(217,198,160,.22);color:#fff9e8;}
+.yj-sitebar .spacer{flex:1;}
+.yj-sitebar .cta{
+  background:var(--zhu-2);color:#fff !important;border-radius:4px;
+  padding:6px 14px;font-size:14px;text-decoration:none;letter-spacing:2px;
+}
+
+/* ===== 单卦播放页 body.gua-page ===== */
+body.gua-page{
+  background:var(--paper);color:var(--ink);margin:0;
+  font-family:"Noto Serif CJK SC","Noto Serif SC","Songti SC",serif;
+}
+body.gua-page .wrap{max-width:960px;margin:0 auto;padding:26px 24px 60px;}
+body.gua-page .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:10px;}
+body.gua-page .back{color:var(--zhu-2);text-decoration:none;font-size:15px;}
+body.gua-page .back:hover{text-decoration:underline;}
+body.gua-page h1{color:#8b2c1c;font-size:28px;margin:12px 0 6px;letter-spacing:2px;}
+body.gua-page .sub{color:var(--ink-3);font-size:14px;margin-bottom:18px;}
+body.gua-page .video-box{background:#1a1410;border-radius:6px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.25);margin-bottom:20px;}
+body.gua-page video{width:100%;display:block;aspect-ratio:16/9;background:#000;}
+body.gua-page .card{background:var(--paper-2);border:1px solid var(--line);border-radius:6px;padding:20px 24px;margin-bottom:16px;}
+body.gua-page .card h2{color:#8b2c1c;font-size:18px;margin:0 0 10px;border-left:3px solid var(--zhu-2);padding-left:10px;}
+body.gua-page .guaci{font-size:16px;line-height:1.9;color:var(--ink);}
+body.gua-page .bai{color:var(--ink-2);line-height:1.85;font-size:15px;margin-top:8px;padding-top:8px;border-top:1px dashed var(--line);}
+body.gua-page .yao-list{margin:0;padding:0;list-style:none;}
+body.gua-page .yao-list li{padding:10px 0;border-bottom:1px dashed var(--line-soft);font-size:14px;line-height:1.85;}
+body.gua-page .yao-list li:last-child{border-bottom:none;}
+body.gua-page .yao-list .yao-ti{color:#8b2c1c;font-weight:bold;margin-right:8px;}
+body.gua-page .hls-badge{display:inline-block;background:var(--zhu-2);color:#fff;font-size:11px;padding:2px 7px;border-radius:3px;margin-left:8px;vertical-align:middle;letter-spacing:1px;}
+body.gua-page .rel-nav{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;}
+body.gua-page .rel-nav a{font-size:13px;color:#8b2c1c;border:1px solid var(--line);border-radius:4px;padding:4px 12px;text-decoration:none;}
+body.gua-page .rel-nav a:hover{background:var(--zhu-2);color:#fff;border-color:var(--zhu-2);}
+body.gua-page .foot{text-align:center;color:var(--ink-3);font-size:13px;letter-spacing:1px;margin-top:30px;}
+
+/* ===== 64卦总览页 body.gua-index ===== */
+body.gua-index{
+  background:var(--paper);color:var(--ink);margin:0;
+  font-family:'Noto Serif CJK SC','Songti SC',serif;
+}
+body.gua-index .wrap{max-width:1280px;margin:0 auto;padding:30px 24px 80px;}
+body.gua-index h1{font-size:clamp(28px,4.5vw,48px);text-align:center;color:var(--zhu);letter-spacing:12px;margin:10px 0 6px;}
+body.gua-index .subtitle{text-align:center;color:var(--ink-3);font-size:17px;letter-spacing:4px;margin-bottom:14px;}
+body.gua-index .progress{text-align:center;color:var(--zhu);font-size:16px;letter-spacing:3px;margin-bottom:40px;}
+body.gua-index .progress bar{display:block;width:360px;max-width:90%;height:8px;background:rgba(139,37,37,.15);border-radius:4px;margin:12px auto 0;overflow:hidden;}
+body.gua-index .progress fill{display:block;height:100%;background:var(--zhu);border-radius:4px;width:100%;transition:width .5s;}
+body.gua-index .gong-section{margin:40px 0;}
+body.gua-index .gong-title{font-size:24px;color:var(--zhu);letter-spacing:6px;border-bottom:2px solid var(--zhu);padding-bottom:8px;margin:0 0 20px;}
+body.gua-index .gua-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:14px;}
+body.gua-index .gua-card{background:rgba(255,253,245,.75);border:1px solid rgba(139,37,37,.2);border-radius:8px;padding:20px 14px;text-align:center;text-decoration:none;color:inherit;transition:all .25s cubic-bezier(.4,0,.2,1);cursor:pointer;position:relative;overflow:hidden;}
+body.gua-index .gua-card:hover{transform:translateY(-4px);box-shadow:0 8px 24px rgba(139,37,37,.18);border-color:var(--zhu);background:#fffdf0;}
+body.gua-index .gua-card.done{border-color:rgba(139,37,37,.5);}
+body.gua-index .gua-card.pending{filter:grayscale(.5);}
+body.gua-index .gua-num{font-size:13px;color:var(--ink-3);letter-spacing:2px;margin-bottom:6px;}
+body.gua-index .gua-symbol{font-size:44px;color:var(--ink);line-height:1;margin:4px 0 6px;}
+body.gua-index .gua-name{font-size:26px;color:var(--zhu);letter-spacing:4px;font-weight:600;margin-bottom:6px;}
+body.gua-index .gua-desc{font-size:13px;color:var(--ink-3);letter-spacing:1px;margin-bottom:8px;}
+body.gua-index .gua-dur{font-size:12px;color:var(--zhu);letter-spacing:2px;padding:3px 8px;border:1px solid rgba(139,37,37,.3);border-radius:12px;display:inline-block;}
+body.gua-index .gua-card.pending .gua-dur{color:var(--ink-3);border-color:rgba(154,143,120,.3);}
+body.gua-index .footer,body.gua-page .footer{text-align:center;padding:30px;color:var(--ink-3);font-size:14px;letter-spacing:2px;border-top:1px solid rgba(139,37,37,.15);margin-top:40px;}
+
+@media(max-width:640px){
+  body.gua-index .gua-grid{grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:10px;}
+  body.gua-index .gua-card{padding:14px 8px;}
+  body.gua-index .gua-symbol{font-size:32px;}
+  body.gua-index .gua-name{font-size:20px;}
+  body.gua-page .wrap{padding:18px 14px 48px;}
+  body.gua-page h1{font-size:22px;}
+  .yj-sitebar .inner{padding:10px 14px;}
+  .yj-sitebar a.lnk{padding:5px 9px;font-size:13px;}
+}

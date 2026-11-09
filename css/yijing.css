@@ -336,3 +336,14 @@ h3{font-size:20px;letter-spacing:2px;margin:18px 0 10px;}
   .content{padding:20px 16px 40px;}
   h1{font-size:28px;}h2{font-size:22px;}
 }
+
+/* ===== 本体关系列表（增量补全）===== */
+.rel-list{display:flex;flex-direction:column;gap:6px;}
+.rel-list .rel-line{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-size:13px;color:var(--ink-2);}
+.rel-list .rel-pred{color:var(--gold);font-family:var(--font-sans);letter-spacing:1px;min-width:56px;}
+
+/* ===== 旧页被壳包裹后的兜底排版 ===== */
+.yj-shelled .content{max-width:1180px;margin:0 auto;padding:32px 40px 56px;}
+.yj-shelled .content>section,
+.yj-shelled .content>.container{max-width:none;}
+@media(max-width:640px){.yj-shelled .content{padding:20px 16px 44px;}}
