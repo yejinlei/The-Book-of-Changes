@@ -1,307 +1,401 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Expires" content="0">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ctext y='26' font-size='26'%3E%E2%98%AF%3C/text%3E%3C/svg%3E">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>易学研究工具 | 易经本体论</title>
-<style>
-:root {
-  --bg: #f4ecd8;
-  --text: #2b1810;
-  --accent: #8b0000;
-  --gold: #b8860b;
-  --blue: #1e3a8a;
-  --green: #14532d;
-  --border: #d4c5a3;
-  --card: #faf6ed;
-}
-* { margin:0; padding:0; box-sizing:border-box; }
-body {
-  font-family: 'Songti SC','STSong','SimSun','Noto Serif CJK SC','Source Han Serif SC','Noto Serif SC',serif;
-  background: var(--bg);
-  color: var(--text);
-  line-height: 2;
-  padding-top:70px;
-}
-.top-nav {
-  position:fixed;top:0;left:0;right:0;height:70px;
-  background:var(--card);border-bottom:2px solid var(--border);
-  z-index:1000;display:flex;align-items:center;justify-content:space-between;padding:0 30px;
-}
-.logo { font-size:20px;font-weight:700;color:var(--text);text-decoration:none; }
-.logo span { color:var(--accent);font-size:26px; }
-.nav-links a { margin-left:24px;color:var(--text);text-decoration:none;font-size:15px; }
-.nav-links a:hover { color:var(--accent); }
-.container { max-width:1000px;margin:40px auto;padding:0 40px; }
-.back-link { display:inline-block;margin-bottom:30px;color:var(--accent);text-decoration:none; }
-.back-link:hover { text-decoration:underline; }
-.tabs { display:flex;gap:0;border-bottom:2px solid var(--border);margin-bottom:30px;flex-wrap:wrap; }
-.tab {
-  padding:12px 24px;cursor:pointer;font-size:16px;font-weight:500;
-  border-bottom:3px solid transparent;margin-bottom:-2px;
-}
-.tab.active { color:var(--accent);border-bottom-color:var(--accent);font-weight:600; }
-.tab-content { display:none; }
-.tab-content.active { display:block; }
-.page-title h1 { font-size:42px;color:var(--accent);letter-spacing:8px;text-align:center;margin-bottom:8px; }
-.page-title p { color:var(--gold);text-align:center;font-size:16px;margin-bottom:20px; }
-.card { background:var(--card);border:1px solid var(--border);border-radius:6px;padding:30px;margin-bottom:20px; }
-.card h3 { color:var(--accent);font-size:22px;margin-bottom:16px; }
-.shi-yi-box {
-  border:1px solid var(--gold);padding:20px;margin:20px 0;border-radius:4px;background:#fffdf5;
-  text-align:center;font-size:20px;letter-spacing:4px;
-}
-.shi-yi-result { margin-top:20px;padding:15px;border-top:1px dashed var(--border);font-size:16px;line-height:2; }
-.btn { padding:10px 24px;background:var(--accent);color:#fff;border:none;border-radius:4px;cursor:pointer;font-size:16px;font-family:inherit;margin:10px 5px; }
-.btn:hover { opacity:0.9; }
-.btn-gold { background:var(--gold); }
-.bagua-grid { display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:20px 0; }
-.bagua-item { padding:15px;text-align:center;border:1px solid var(--border);border-radius:4px;background:#fff;cursor:pointer; }
-.bagua-item:hover { border-color:var(--accent); }
-.bagua-item .sym { font-size:32px;color:var(--accent); }
-.gong-table { width:100%;border-collapse:collapse;margin:20px 0; }
-.gong-table th, .gong-table td { border:1px solid var(--border);padding:10px;text-align:center; }
-.gong-table th { background:var(--accent);color:#fff; }
-.stats-bar { display:flex;gap:20px;margin:20px 0;flex-wrap:wrap; }
-.stat-item { flex:1;min-width:140px;padding:20px;background:#fff;border:1px solid var(--border);border-radius:4px;text-align:center; }
-.stat-num { font-size:32px;font-weight:700;color:var(--accent); }
-.stat-label { font-size:14px;opacity:0.8; }
-.person-grid { display:grid;grid-template-columns:repeat(2,1fr);gap:20px; }
-.person-card { padding:20px;background:var(--card);border-left:4px solid var(--accent);border-radius:4px; }
-.person-card h4 { color:var(--accent);font-size:18px;margin-bottom:8px; }
-.person-card .era { color:var(--gold);font-size:14px;margin-bottom:8px; }
-@media(max-width:768px) { .person-grid,.bagua-grid{grid-template-columns:repeat(2,1fr);} .bagua-grid{grid-template-columns:repeat(2,1fr);} }
-</style>
-<script src="js/apply-shell.js" data-page="yanjiu"></script>
+<title>历代注家注本 · 本体论《易经》</title>
+<link rel="stylesheet" href="css/yijing.css">
+<script src="data/yijing-ontology.js"></script>
+<script src="data/gua-full-data.js"></script>
+<script src="data/yijing-ontology-enhance.js"></script>
+<script src="data/yijing-zhujia-texts.js"></script>
+<script src="js/ontology-linker.js"></script>
 </head>
-<body>
-<nav class="top-nav"><a href="index.html" class="logo"><span class="taiji">☯</span>易经本体论<small>ONTOLOGY</small></a>
-    <div class="nav-divider">·</div>
-    <a href="index.html">首页</a>
-    <a href="gua.html">六十四卦</a>
-    <a href="reader.html">经文汇评</a>
-    <a href="shiyi.html">十翼</a>
-    <a href="yitu.html">易图互动</a>
-  <a href="shifa.html">筮法推演</a>
-    <a href="bianhua.html">变化</a>
-    <a href="animation/index.html">易之变 · 动画</a>
-    <a href="animation/qian.html">乾卦讲解</a>
-    <a href="yanjiu.html" class="active">研究</a>
-  </nav>
+<body data-page="yanjiu">
+<main>
+  <header class="section-hero">
+    <h1>历代注家注本</h1>
+    <p class="en">COMMENTARIES &amp; MASTERS · 3000 years of Yi scholarship</p>
+    <p class="sub">从先秦孔子到当代学者，易学注疏传统凡两千年而不绝。本页收录 <strong id="zhujiaCount">—</strong> 家注家、<strong id="zhubenCount">—</strong> 种注本，聚合《周易集解》1979 条、《周易折中》2575 条，合计 4554 条历代注文原文，并与 64 卦、384 爻双向关联。</p>
+    <div class="stat-grid" id="sourceStats"></div>
+  </header>
 
-<div class="container">
-  <a href="index.html" class="back-link">← 返回首页</a>
-  <div class="page-title">
-    <h1>易 学 研 究</h1>
-    <p>爻变推演 · 八宫卦序 · 卦爻统计 · 易学人物 · 历代注疏 · 序卦流转</p>
-  </div>
+  <section class="section">
+    <h2><span class="en">01</span>时代谱系</h2>
+    <p class="sub-title">一图纵览易学传承：从伏羲画卦到当代研究，流派承续、著作年代、引文规模一目了然。</p>
+    <div id="timelineWrap"></div>
+  </section>
 
-  <div class="tabs">
-    <div class="tab active" data-tab="shifa">🔮 爻变推演</div>
-    <div class="tab" data-tab="bagong">🏯 八宫卦序</div>
-    <div class="tab" data-tab="stats">📊 卦爻统计</div>
-    <div class="tab" data-tab="renwu">🌐 易学人物</div>
-    <div class="tab" data-tab="zhushu">📚 历代注疏</div>
-    <div class="tab" data-tab="xugua">🗺️ 序卦流转</div>
-  </div>
-
-  <!-- 爻变推演（大衍筮法） -->
-  <div class="tab-content active" id="shifa">
-    <div class="card">
-      <h3>大衍筮法 · 模拟占筮</h3>
-      <p style="margin-bottom:15px">大衍之数五十，其用四十有九。分而为二以象两，挂一以象三，揲之以四以象四时，归奇于扐以象闰。模拟古法蓍草起卦，得本卦、变卦。</p>
-      <button class="btn" onclick="doShiYi()">开始起卦</button>
-      <button class="btn btn-gold" onclick="clearResult()">重置</button>
-      <div id="shifaResult"></div>
+  <section class="section">
+    <h2><span class="en">02</span>注家总览</h2>
+    <p class="sub-title">按引文多寡排序，点击卡片查看该注家生平、流派、代表作，及所注经句原文。</p>
+    <div class="filter-bar" id="zhujiaFilter">
+      <button class="filter-btn active" data-dyn="all">全部</button>
+      <button class="filter-btn" data-dyn="先秦">先秦</button>
+      <button class="filter-btn" data-dyn="两汉">两汉</button>
+      <button class="filter-btn" data-dyn="魏晋">魏晋</button>
+      <button class="filter-btn" data-dyn="隋唐">隋唐</button>
+      <button class="filter-btn" data-dyn="两宋">两宋</button>
+      <button class="filter-btn" data-dyn="元明">元明</button>
+      <button class="filter-btn" data-dyn="清">清</button>
+      <button class="filter-btn" data-dyn="近现代">近现代</button>
+      <input type="search" id="zhujiaSearch" placeholder="搜索注家姓名、字号、代表作……" class="zhujia-search">
     </div>
-    <div class="card" style="margin-top:20px">
-      <h3>可玩易图 · 八图互动</h3>
-      <p style="margin-bottom:15px">河图可数、洛书可验、太极可转、八卦可旋、方圆可推、消息可演——八幅古图皆可点击拖动，动手即见易理。</p>
-      <a class="btn" href="yitu.html">进入可玩易图 →</a>
-  <a href="shifa.html">筮法推演</a>
-    </div>
-  </div>
+    <div class="zhujia-grid" id="zhujiaGrid"></div>
+  </section>
 
-  <!-- 八宫卦序 -->
-  <div class="tab-content" id="bagong">
-    <div class="card">
-      <h3>京房八宫卦序</h3>
-      <p>汉·京房所创八宫卦体系，以八纯卦为宫首，一世至五世、游魂、归魂，每宫八卦，共六十四卦。</p>
-      <table class="gong-table">
-        <tr><th>八宫</th><th>上世</th><th>一世</th><th>二世</th><th>三世</th><th>四世</th><th>五世</th><th>游魂</th><th>归魂</th></tr>
-        <tr><td>乾宫</td><td>䷀ 乾</td><td>䷫ 姤</td><td>䷠ 遁</td><td>䷋ 否</td><td>䷓ 观</td><td>䷖ 剥</td><td>䷢ 晋</td><td>䷣ 大有</td></tr>
-        <tr><td>震宫</td><td>䷲ 震</td><td>䷧ 豫</td><td>䷏ 解</td><td>䷟ 恒</td><td>䷯ 升</td><td>䷛ 井</td><td>䷐ 大过</td><td>䷮ 随</td></tr>
-        <tr><td>坎宫</td><td>䷜ 坎</td><td>䷻ 节</td><td>䷺ 屯</td><td>䷂ 既济</td><td>䷘ 革</td><td>䷞ 丰</td><td>䷶ 明夷</td><td>䷇ 师</td></tr>
-        <tr><td>艮宫</td><td>䷳ 艮</td><td>䷔ 贲</td><td>䷷ 大畜</td><td>䷙ 损</td><td>䷨ 睽</td><td>䷤ 履</td><td>䷥ 中孚</td><td>䷴ 渐</td></tr>
-        <tr><td>坤宫</td><td>䷁ 坤</td><td>䷗ 复</td><td>䷒ 临</td><td>䷊ 泰</td><td>䷡ 大壮</td><td>䷪ 夬</td><td>䷄ 需</td><td>䷇ 比</td></tr>
-        <tr><td>巽宫</td><td>䷸ 巽</td><td>䷈ 小畜</td><td>䷈ 家人</td><td>䷨ 益</td><td>䷩ 无妄</td><td>䷘ 噬嗑</td><td>䷭ 颐</td><td>䷬ 蛊</td></tr>
-        <tr><td>离宫</td><td>䷝ 离</td><td>䷱ 旅</td><td>䷮ 鼎</td><td>䷠ 未济</td><td>䷢ 蒙</td><td>䷿ 涣</td><td>䷻ 讼</td><td>䷌ 同人</td></tr>
-        <tr><td>兑宫</td><td>䷹ 兑</td><td>䷫ 困</td><td>䷠ 萃</td><td>䷋ 咸</td><td>䷓ 蹇</td><td>䷖ 谦</td><td>䷢ 小过</td><td>䷣ 归妹</td></tr>
-      </table>
-      <p style="margin-top:12px;font-size:14px;opacity:0.8">变爻规则：一世变初爻，二世变初二，三世变初二三，四世变初二三四，五世变初二三五，游魂变四爻（归位），归魂变回内卦。</p>
-    </div>
-  </div>
+  <section class="section">
+    <h2><span class="en">03</span>重要注本</h2>
+    <p class="sub-title">易学史最重要的注本清单：自《易传》十翼起，每一部都奠定了一个时代的易学范式。</p>
+    <div class="zhuben-list" id="zhubenList"></div>
+  </section>
 
-  <!-- 卦爻统计 -->
-  <div class="tab-content" id="stats">
-    <div class="card">
-      <h3>卦爻辞吉凶统计</h3>
-      <p>基于《周易》本经卦辞爻辞的吉凶类词频统计：</p>
-      <div class="stats-bar">
-        <div class="stat-item"><div class="stat-num">121</div><div class="stat-label">吉（含"贞吉""大吉"）</div></div>
-        <div class="stat-item"><div class="stat-num">28</div><div class="stat-label">凶（含"贞凶""终凶"）</div></div>
-        <div class="stat-item"><div class="stat-num">13</div><div class="stat-label">悔</div></div>
-        <div class="stat-item"><div class="stat-num">20</div><div class="stat-label">吝</div></div>
-        <div class="stat-item"><div class="stat-num">16</div><div class="stat-label">无咎</div></div>
-        <div class="stat-item"><div class="stat-num">22</div><div class="stat-label">利（利涉大川等）</div></div>
-      </div>
-      <div class="stats-bar">
-        <div class="stat-item"><div class="stat-num">192</div><div class="stat-label">阳爻（—）</div></div>
-        <div class="stat-item"><div class="stat-num">192</div><div class="stat-label">阴爻（- -）</div></div>
-        <div class="stat-item"><div class="stat-num">186</div><div class="stat-label">当位（正位）爻</div></div>
-        <div class="stat-item"><div class="stat-num">128</div><div class="stat-label">中位爻（二五爻）</div></div>
-      </div>
-      <p>统计规律：阳爻居初、三、五为当位，阴爻居二、四、上为当位；二爻居下卦中，五爻居上卦中，中优于正，故易多"中吉"。</p>
-    </div>
-  </div>
+  <section class="section">
+    <h2><span class="en">04</span>流派传承</h2>
+    <p class="sub-title">象数、义理、图书、史事、丹道、考据——六派易学的源流、代表人物与核心学说。</p>
+    <div class="school-grid" id="schoolGrid"></div>
+  </section>
+</main>
 
-  <!-- 易学人物 -->
-  <div class="tab-content" id="renwu">
-    <div class="card">
-      <h3>历代易学人物传承</h3>
-      <div class="person-grid">
-        <div class="person-card"><h4>伏羲</h4><div class="era">上古 · 传说时代</div>仰观俯察，始作八卦，以通神明之德，以类万物之情。</div>
-        <div class="person-card"><h4>周文王（姬昌）</h4><div class="era">西周 · 前11世纪</div>羑里演易，重八卦为六十四卦，作卦辞。</div>
-        <div class="person-card"><h4>周公（姬旦）</h4><div class="era">西周 · 前11世纪</div>作爻辞，完成《易经》本经。</div>
-        <div class="person-card"><h4>孔子</h4><div class="era">春秋 · 前551-前479</div>晚而好易，韦编三绝，作《易传》"十翼"。</div>
-        <div class="person-card"><h4>京房</h4><div class="era">西汉 · 前77-前37</div>创八宫卦序、纳甲筮法，象数易大家。</div>
-        <div class="person-card"><h4>郑玄</h4><div class="era">东汉 · 127-200</div>经学大师，以爻辰说注易，兼采今古文。</div>
-        <div class="person-card"><h4>王弼</h4><div class="era">曹魏 · 226-249</div>扫象阐理，以老庄解易，义理派开山。</div>
-        <div class="person-card"><h4>孔颖达</h4><div class="era">唐 · 574-648</div>撰《周易正义》，科举标准，王注孔疏一统。</div>
-        <div class="person-card"><h4>李鼎祚</h4><div class="era">唐</div>辑《周易集解》，存汉易35家，象数宝库。</div>
-        <div class="person-card"><h4>邵雍</h4><div class="era">北宋 · 1011-1077</div>创先天学，梅花易数，象数之集大成者。</div>
-        <div class="person-card"><h4>程颐</h4><div class="era">北宋 · 1033-1107</div>《伊川易传》，理学义理派巅峰。</div>
-        <div class="person-card"><h4>朱熹</h4><div class="era">南宋 · 1130-1200</div>《周易本义》，恢复易本为卜筮之书，科举定本。</div>
-        <div class="person-card"><h4>来知德</h4><div class="era">明 · 1525-1604</div>《周易集注》，错综说，明代易学第一人。</div>
-        <div class="person-card"><h4>王夫之</h4><div class="era">明末清初 · 1619-1692</div>《周易内传》《外传》，以易释哲学。</div>
-        <div class="person-card"><h4>尚秉和</h4><div class="era">清末民初 · 1870-1950</div>《周易尚氏学》，以象解易，近代象数大家。</div>
-        <div class="person-card"><h4>高亨</h4><div class="era">近现代 · 1900-1986</div>《周易古经今注》，以经观经、以传观传，考据派代表。</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 历代注疏 -->
-  <div class="tab-content" id="zhushu">
-    <div class="card">
-      <h3>历代重要注本</h3>
-      <table class="gong-table">
-        <tr><th>书名</th><th>作者</th><th>时代</th><th>流派</th><th>地位</th></tr>
-        <tr><td>《易传》（十翼）</td><td>孔子及后学</td><td>战国</td><td>—</td><td>最古注本，易之义理源头</td></tr>
-        <tr><td>《周易注》</td><td>王弼、韩康伯</td><td>魏晋</td><td>义理</td><td>扫象言理，唐代官方正统</td></tr>
-        <tr><td>《周易正义》</td><td>孔颖达</td><td>唐</td><td>义理</td><td>五经正义之一，王注孔疏</td></tr>
-        <tr><td>《周易集解》</td><td>李鼎祚</td><td>唐</td><td>象数</td><td>保存汉易35家，象数渊薮</td></tr>
-        <tr><td>《皇极经世书》</td><td>邵雍</td><td>北宋</td><td>象数</td><td>先天易学，元会运世</td></tr>
-        <tr><td>《伊川易传》</td><td>程颐</td><td>北宋</td><td>义理</td><td>理学解易巅峰</td></tr>
-        <tr><td>《周易本义》</td><td>朱熹</td><td>南宋</td><td>兼采</td><td>元明清科举标准</td></tr>
-        <tr><td>《周易集注》</td><td>来知德</td><td>明</td><td>错综</td><td>明代易学绝作</td></tr>
-        <tr><td>《周易内传》</td><td>王夫之</td><td>明末清初</td><td>义理</td><td>船山易学，哲学易代表作</td></tr>
-        <tr><td>《御纂周易折中》</td><td>李光地等</td><td>清</td><td>折中</td><td>集宋易之大成，程朱并尊</td></tr>
-        <tr><td>《易汉学》</td><td>惠栋</td><td>清</td><td>汉学</td><td>清代汉易复兴代表作</td></tr>
-        <tr><td>《周易尚氏学》</td><td>尚秉和</td><td>民国</td><td>象数</td><td>近代以象解易第一书</td></tr>
-        <tr><td>《周易古经今注》</td><td>高亨</td><td>现代</td><td>考据</td><td>现代经学派代表作</td></tr>
-        <tr><td>《易学哲学史》</td><td>朱伯崑</td><td>当代</td><td>哲学</td><td>易学哲学通史权威著作</td></tr>
-      </table>
-    </div>
-  </div>
-
-  <!-- 序卦流转 -->
-  <div class="tab-content" id="xugua">
-    <div class="card">
-      <h3>《序卦传》卦序流转逻辑</h3>
-      <p>六十四卦两两相偶，"二二相耦，非覆即变"：覆即卦体颠倒，变即阴阳全反。上经三十卦始于乾坤、终于坎离，明天地之道；下经三十四卦始于咸恒、终于既济未济，明人伦之事。</p>
-      <div style="padding:20px;background:#fff;border-radius:4px;line-height:2.6;font-size:15px;">
-        <strong style="color:var(--accent)">上经流转：</strong><br>
-        乾坤→屯→蒙→需→讼→师→比→小畜→履→<strong style="color:var(--gold)">泰⇄否</strong>→同人→大有→谦→豫→随→蛊→临→观→噬嗑→贲→剥→复→无妄→大畜→颐→大过→<strong style="color:var(--gold)">坎⇄离</strong><br><br>
-        <strong style="color:var(--accent)">下经流转：</strong><br>
-        咸→恒→遁→大壮→晋→明夷→家人→睽→蹇→解→损→益→夬→姤→萃→升→困→井→革→鼎→<strong style="color:var(--gold)">震⇄艮</strong>→渐→归妹→丰→旅→巽→兑→涣→节→中孚→小过→<strong style="color:var(--gold)">既济⇄未济</strong>
-      </div>
-      <p style="margin-top:16px">上经30卦、下经34卦，两两一对共36对。既济为事之已成，未济为事之未成，终而复始，即易"穷则变，变则通，通则久"之义。</p>
-    </div>
+<!-- 注家详情弹层（独立浮层，非 modal 遮罩，但作为抽屉） -->
+<div id="zhuDetail" class="zhu-drawer">
+  <div class="zhu-drawer-inner">
+    <button class="zhu-close" id="zhuClose" aria-label="关闭">✕</button>
+    <div id="zhuDetailBody"></div>
   </div>
 </div>
 
 <script>
-// 根据hash自动打开对应tab
-const hash = window.location.hash.replace('#','');
-if(hash) {
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-  const target = document.querySelector(`.tab[data-tab="${hash}"]`);
-  const content = document.getElementById(hash);
-  if(target && content) {
-    target.classList.add('active');
-    content.classList.add('active');
-  }
-}
+(function(){
+  const T = window.YJ_ZHUJIA_TEXTS;
+  const O = window.YJ_ONT;
 
-// Tab切换
-document.querySelectorAll('.tab').forEach(tab => {
-  tab.addEventListener('click', () => {
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-    tab.classList.add('active');
-    document.getElementById(tab.dataset.tab).classList.add('active');
+  // 朝代分组
+  function dynastyGroup(d) {
+    if (!d) return '其他';
+    if (/上古|周|春秋|战国|先秦/.test(d)) return '先秦';
+    if (/汉|新莽/.test(d)) return '两汉';
+    if (/魏|晋|三国|南北朝|六朝|隋/.test(d)) return '魏晋';
+    if (/唐|五代/.test(d)) return '隋唐';
+    if (/宋|辽|金/.test(d)) return '两宋';
+    if (/元|明/.test(d)) return '元明';
+    if (/清/.test(d)) return '清';
+    if (/民国|近代|现代|当代/.test(d)) return '近现代';
+    return '其他';
+  }
+  const DYNASTY_ORDER = ['先秦','两汉','魏晋','隋唐','两宋','元明','清','近现代'];
+
+  // 总统计
+  document.getElementById('zhujiaCount').textContent = T.zhujia.filter(z=>z.stats.total>0).length;
+  document.getElementById('zhubenCount').textContent = T.zhuben.length;
+
+  // 来源统计卡
+  const ssEl = document.getElementById('sourceStats');
+  T.sources.forEach(s => {
+    const card = document.createElement('div'); card.className='stat-card';
+    card.innerHTML = `<div class="n">${s.quotes.toLocaleString()}</div>
+      <div class="k">${s.name}</div><div class="sub">${s.dynasty||''} · ${s.author||''}</div>`;
+    ssEl.appendChild(card);
   });
-});
 
-// 大衍筮法模拟
-function daYan() {
-  let n = 49;
-  for(let i=0;i<3;i++) {
-    const left = Math.floor(Math.random()*(n-2))+1;
-    const right = n - left - 1;
-    const lrem = left%4 || 4;
-    const rrem = right%4 || 4;
-    n = n - 1 - lrem - rrem;
-  }
-  return n/4; // 6/7/8/9
-}
-const yaoMap = {6:'老阴（×）变阳',7:'少阳（—）',8:'少阴（- -）',9:'老阳（○）变阴'};
-const yaoSym = {6:'- -',7:'——',8:'- -',9:'——'};
-function doShiYi() {
-  let yaos = [];
-  for(let i=0;i<6;i++) yaos.push(daYan());
-  yaos = yaos.reverse(); // 初爻到上爻
-  let benGua = '';
-  let bianGua = '';
-  let bianYao = [];
-  yaos.forEach((y,i) => {
-    benGua += yaoSym[y];
-    if(y===6||y===9) {
-      bianYao.push(i+1);
-      bianGua += (y===6)?'——':'- -';
-    } else {
-      bianGua += yaoSym[y];
+  // ---------- 时间轴 ----------
+  const tlWrap = document.getElementById('timelineWrap');
+  const tlEl = document.createElement('div'); tlEl.className='dynasty-timeline';
+  DYNASTY_ORDER.forEach(dyn => {
+    const group = T.zhujia.filter(z=>z.stats.total>0 && dynastyGroup(z.dynasty)===dyn);
+    if (!group.length) return;
+    const col = document.createElement('div'); col.className='dynasty-col';
+    const head = document.createElement('div'); head.className='dynasty-head';
+    head.innerHTML = `<div class="dn">${dyn}</div><div class="dc">${group.length}家 · ${group.reduce((s,x)=>s+x.stats.total,0)}条注文</div>`;
+    col.appendChild(head);
+    group.sort((a,b)=>b.stats.total-a.stats.total).slice(0,12).forEach(z=>{
+      const it = document.createElement('a'); it.className='dynasty-item';
+      it.href = '#zj-'+z.id;
+      it.innerHTML = `<span class="nm">${z.name}</span><span class="wk">${z.works[0]||''}</span><span class="ct">${z.stats.total}</span>`;
+      it.addEventListener('click', e=>{e.preventDefault(); showZhu(z.id);});
+      col.appendChild(it);
+    });
+    if (group.length>12) {
+      const more = document.createElement('div'); more.className='dynasty-more';
+      more.textContent = '等 '+group.length+' 家'; col.appendChild(more);
     }
-    benGua += '<br>';
-    bianGua += '<br>';
+    tlEl.appendChild(col);
   });
-  document.getElementById('shifaResult').innerHTML = `
-    <div class="shi-yi-box">
-      本卦（初→上）<br>${benGua.replace(/<br>$/,'')}
-      ${bianYao.length?`<br><br>变卦（变爻第${bianYao.join('、')}爻）<br>${bianGua.replace(/<br>$/,'')}`:'<br>无动爻，以本卦卦辞断'}
-    </div>
-    <div class="shi-yi-result">
-      <strong>六爻：</strong>初${yaoMap[yaos[0]]}、二${yaoMap[yaos[1]]}、三${yaoMap[yaos[2]]}、四${yaoMap[yaos[3]]}、五${yaoMap[yaos[4]]}、上${yaoMap[yaos[5]]}<br>
-      <strong>断法参考：</strong>${bianYao.length===0?'本卦卦辞为断':bianYao.length===1?'以本卦变爻爻辞断':bianYao.length===2?'以本卦两变爻爻辞断，上者为主':bianYao.length===3?'以本卦卦辞+变卦卦辞合断，本卦为主':'多数变爻以变卦卦辞为主'}
-    </div>
-  `;
-}
-function clearResult() { document.getElementById('shifaResult').innerHTML = ''; }
+  tlWrap.appendChild(tlEl);
+
+  // ---------- 注家卡片 ----------
+  const grid = document.getElementById('zhujiaGrid');
+  function renderZhujia(filter='all', kw='') {
+    grid.innerHTML='';
+    const list = T.zhujia.filter(z=>{
+      if (z.stats.total===0 && !z.bio) return false;
+      if (filter!=='all' && dynastyGroup(z.dynasty)!==filter) return false;
+      if (kw) {
+        const s = (z.name+z.style+z.dynasty+z.school+z.bio+(z.works.join('|'))).toLowerCase();
+        if (!s.includes(kw.toLowerCase())) return false;
+      }
+      return true;
+    }).sort((a,b)=>b.stats.total-a.stats.total);
+    list.forEach(z => {
+      const card = document.createElement('div'); card.className='zj-card'; card.id='zj-'+z.id;
+      card.innerHTML = `
+        <div class="zj-badge">${z.dynasty||'?'}</div>
+        <div class="zj-name">${z.name}</div>
+        <div class="zj-style">${z.style&&z.style!==z.name?z.style:''}</div>
+        <div class="zj-school">${z.school||''}</div>
+        <div class="zj-stats">
+          <span><em>${z.stats.jijie}</em><i>集解</i></span>
+          <span><em>${z.stats.zhezhong}</em><i>折中</i></span>
+          <span><em>${z.stats.total}</em><i>总计</i></span>
+        </div>
+        <div class="zj-works">${z.works.slice(0,2).map(w=>'<span class="work-tag">'+w+'</span>').join('')}</div>
+      `;
+      card.addEventListener('click', ()=>showZhu(z.id));
+      grid.appendChild(card);
+    });
+    if (!list.length) {
+      grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:40px;color:#999;">无匹配注家</div>';
+    }
+  }
+  renderZhujia();
+
+  // 筛选
+  document.getElementById('zhujiaFilter').addEventListener('click', e=>{
+    if (e.target.classList.contains('filter-btn')) {
+      document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+      e.target.classList.add('active');
+      renderZhujia(e.target.dataset.dyn, document.getElementById('zhujiaSearch').value);
+    }
+  });
+  document.getElementById('zhujiaSearch').addEventListener('input', e=>{
+    const dyn = document.querySelector('.filter-btn.active').dataset.dyn;
+    renderZhujia(dyn, e.target.value.trim());
+  });
+
+  // ---------- 注本列表 ----------
+  const zbList = document.getElementById('zhubenList');
+  // 按重要性排序
+  const zbOrder = ['zb_shiyi','zb_zhouyi','zb_zixia','zb_jingshi','zb_jiaoshi','zb_feishi','zb_zhengshi','zb_yushi','zb_wangbi','zb_kongyingda','zb_lidingzuo','zb_can_tongqi','zb_taijitu','zb_shaoyong','zb_hengqu','zb_chengyi','zb_dongpo','zb_zhuxi','zb_chengzhai','zb_laizhide','zb_oyi','zb_wangchuan','zb_huangzongxi','zb_liguangdi','zb_huidong','zb_jiaoxun','zb_shangbinghe','zb_yanjiu_bitan','zb_gaoheng','zb_huangshouqi','zb_zhubokun'];
+  const zbShown = zbOrder.map(id => T.zhuben.find(z=>z.id===id)).filter(Boolean);
+  // 追加未在清单里的
+  T.zhuben.forEach(z=>{if(!zbShown.find(x=>x.id===z.id))zbShown.push(z);});
+  zbShown.forEach(b=>{
+    const it = document.createElement('div'); it.className='zb-item';
+    // 找到作者名
+    const authNames = (b.author||'').split('/').map(aid=>{
+      const az = T.zhujia.find(z=>z.id===aid);
+      return az ? az.name : (O.zhujia.find(z=>z.id===aid)?.name||aid);
+    }).join('、');
+    it.innerHTML = `
+      <div class="zb-dyn">${b.dynasty||''}</div>
+      <div class="zb-title">《${b.name.replace(/^[《《]/,'').replace(/[》》]$/,'')}》</div>
+      <div class="zb-author">${authNames}</div>
+      <div class="zb-desc">${b.desc||''}</div>
+    `;
+    zbList.appendChild(it);
+  });
+
+  // ---------- 流派卡片 ----------
+  const schoolGrid = document.getElementById('schoolGrid');
+  const SCHOOLS = [
+    {name:'象数派',color:'#9c2a2a',desc:'以卦象、爻位、卦变、互体、旁通、纳甲为核心方法，汉易代表。',members:['zj_mengxi','zj_jingfang','zj_zhengxuan','zj_xunshuang','zj_yufan','zj_laizhide','zj_shangbinghe','zj_liudajun']},
+    {name:'义理派',color:'#3a4f9c',desc:'以义理解《易》，扫象数之繁琐，阐发儒家哲理。',members:['zj_kongzi','zj_wangbi','zj_kongyingda','zj_chengyi','zj_zhuxi','zj_wangfuzhi','zj_jinjngfang']},
+    {name:'图书派',color:'#2d7d58',desc:'以河图洛书、先天图、太极图为核心，宋易大宗。',members:['zj_chentuan','zj_shaoyong','zj_zhouzhouyi','zj_zhangzai']},
+    {name:'史事派',color:'#a87f3a',desc:'以历代史事证经，将易学与历史经验结合。',members:['zj_ganbao','zj_yangwanli']},
+    {name:'丹道派',color:'#6b4a82',desc:'以易理言丹道修炼，将易与内养结合。',members:['zj_weiboyang']},
+    {name:'考据派',color:'#5b5b5b',desc:'以训诂、文字、出土文献考辨经文本义，清代朴学与现代学术代表。',members:['zj_huidong','zj_zhanghuiyan','zj_jiaoxun','zj_huangzongxi','zj_gaoheng','zj_lijingchi','zj_gujiegang','zj_yuxingwu','zj_liaomingchun']},
+    {name:'汇通派',color:'#8b4513',desc:'近代以来，会通中西、儒释道或多学科视角的新易学。',members:['zj_hangxinzhai','zj_nanhuaijin','zj_fupeirong','zj_zengshiqiang','zj_zhubokun']},
+    {name:'普及派',color:'#b85a3d',desc:'面向大众解《易》，重人事、管理、处世应用。',members:['zj_nanhuaijin','zj_fupeirong','zj_zengshiqiang','zj_huangshouqi','zj_zhangsanwen']},
+  ];
+  SCHOOLS.forEach(s=>{
+    const card = document.createElement('div'); card.className='school-card';
+    card.style.borderLeft = `4px solid ${s.color}`;
+    const mHTML = s.members.map(mid=>{
+      const mz = T.zhujia.find(z=>z.id===mid);
+      return mz?`<a href="#zj-${mid}" class="school-member" data-zj="${mid}">${mz.name}</a>`:'';
+    }).join('');
+    card.innerHTML = `<h3 style="color:${s.color}">${s.name}</h3><p>${s.desc}</p><div class="school-members">${mHTML}</div>`;
+    card.querySelectorAll('.school-member').forEach(a=>{
+      a.addEventListener('click',e=>{e.preventDefault();showZhu(a.dataset.zj);});
+    });
+    schoolGrid.appendChild(card);
+  });
+
+  // ---------- 注家详情抽屉 ----------
+  function showZhu(zid) {
+    const z = T.zhujia.find(x=>x.id===zid);
+    if (!z) return;
+    const body = document.getElementById('zhuDetailBody');
+    // 注文展开：集解按卦分组
+    const jijieByGua = {};
+    (z.jijieQuotes||[]).forEach(q=>{
+      if (!jijieByGua[q.gua]) jijieByGua[q.gua] = [];
+      jijieByGua[q.gua].push(q);
+    });
+    const guaListHTML = Object.keys(jijieByGua).map(gn=>{
+      const qs = jijieByGua[gn];
+      const gid = qs[0].guaId;
+      return `<div class="zq-gua">
+        <h4><a href="gua.html#${gid}" target="_blank">${gn}卦 →</a> <span class="zq-cnt">${qs.length} 条</span></h4>
+        ${qs.slice(0,8).map(q=>`<div class="zq-item">
+          <span class="zq-pos">${q.pos||''}</span>
+          <span class="zq-text">${q.text}</span>
+        </div>`).join('')}
+        ${qs.length>8?`<details><summary>展开剩余 ${qs.length-8} 条</summary>${qs.slice(8).map(q=>`<div class="zq-item"><span class="zq-pos">${q.pos||''}</span><span class="zq-text">${q.text}</span></div>`).join('')}</details>`:''}
+      </div>`;
+    }).join('');
+
+    const zzHTML = (z.zhezhongSamples||[]).length ? `<h3>《周易折中》引${z.name}说</h3>${(z.zhezhongSamples||[]).map(q=>`
+      <div class="zq-item zz"><span class="zq-pos"><a href="gua.html#${q.guaId}" target="_blank">${q.gua}卦·${q.pos}</a></span><span class="zq-text">${q.text}</span></div>
+    `).join('')}` : '';
+
+    const worksHTML = (z.works||[]).length ? `<div class="z-meta-row"><b>代表作：</b>${z.works.map(w=>`<span class="work-tag">${w}</span>`).join('')}</div>` : '';
+
+    body.innerHTML = `
+      <div class="zhu-head">
+        <div class="zhu-badge">${z.dynasty||'?'}</div>
+        <h2>${z.name}</h2>
+        <p class="zhu-style">${z.style&&z.style!==z.name?z.style:''}</p>
+        <p class="zhu-school">${z.school||''}</p>
+      </div>
+      <div class="zhu-bio">${z.bio||'（小传待考）'}</div>
+      ${worksHTML}
+      <div class="zhu-stats-bar">
+        <span>《周易集解》引 <b>${z.stats.jijie}</b> 处</span>
+        <span>《周易折中》引 <b>${z.stats.zhezhong}</b> 处</span>
+        <span>合计 <b>${z.stats.total}</b> 处原文</span>
+      </div>
+      ${z.samples.length?`<h3>《周易集解》注文选录（共涉及 ${Object.keys(jijieByGua).length} 卦）</h3>${guaListHTML}`:''}
+      ${zzHTML}
+    `;
+    document.getElementById('zhuDetail').classList.add('open');
+    document.body.style.overflow='hidden';
+  }
+  document.getElementById('zhuClose').addEventListener('click', ()=>{
+    document.getElementById('zhuDetail').classList.remove('open');
+    document.body.style.overflow='';
+  });
+  document.getElementById('zhuDetail').addEventListener('click', e=>{
+    if (e.target.id==='zhuDetail') {
+      document.getElementById('zhuDetail').classList.remove('open');
+      document.body.style.overflow='';
+    }
+  });
+
+  // hash 直达
+  if (location.hash.startsWith('#zj-')) {
+    setTimeout(()=>showZhu(location.hash.slice(4)), 300);
+  }
+})();
 </script>
+<style>
+.section-hero{padding:80px 24px 40px;text-align:center;max-width:1100px;margin:0 auto;}
+.section-hero h1{font-size:44px;margin:0 0 8px;color:var(--ink);letter-spacing:4px;}
+.section-hero .en{color:var(--gold);font-size:12px;letter-spacing:3px;margin:0 0 18px;font-family:Georgia,serif;}
+.section-hero .sub{color:#554c40;font-size:16px;line-height:1.9;max-width:820px;margin:0 auto;}
+.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:28px;max-width:760px;margin-left:auto;margin-right:auto;}
+.stat-card{background:#fff8e7;border:1px solid #e8dcc0;padding:16px;border-radius:8px;text-align:center;}
+.stat-card .n{font-size:28px;color:var(--zhu);font-weight:700;}
+.stat-card .k{font-size:15px;color:var(--ink);margin:4px 0;}
+.stat-card .sub{font-size:12px;color:#8a7a5f;}
+.section{max-width:1200px;margin:0 auto;padding:40px 24px;}
+.section h2{font-size:26px;color:var(--ink);border-bottom:2px solid var(--zhu);padding-bottom:8px;display:flex;align-items:center;gap:12px;}
+.section h2 .en{color:var(--gold);font-size:13px;font-family:Georgia,serif;letter-spacing:2px;}
+.sub-title{color:#6b5f4d;font-size:14px;margin:-4px 0 20px;}
+
+/* 时间轴 */
+.dynasty-timeline{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
+.dynasty-col{background:#fff8e7;border:1px solid #e8dcc0;border-radius:8px;padding:14px;}
+.dynasty-head{border-bottom:1px dashed #c9b98f;padding-bottom:8px;margin-bottom:8px;}
+.dynasty-head .dn{font-size:18px;color:var(--zhu);font-weight:700;letter-spacing:2px;}
+.dynasty-head .dc{font-size:12px;color:#8a7a5f;margin-top:2px;}
+.dynasty-item{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px dotted #eadfc2;font-size:13px;cursor:pointer;color:var(--ink);text-decoration:none;}
+.dynasty-item:hover{color:var(--zhu);}
+.dynasty-item .nm{font-weight:600;min-width:48px;}
+.dynasty-item .wk{flex:1;color:#8a7a5f;font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.dynasty-item .ct{font-size:11px;color:var(--zhu);background:#f5e9c9;padding:1px 6px;border-radius:10px;}
+.dynasty-more{text-align:center;font-size:12px;color:#a89878;padding-top:6px;}
+
+/* 筛选 */
+.filter-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;align-items:center;}
+.filter-btn{border:1px solid #c9b98f;background:#fff8e7;color:#5a4d38;padding:6px 14px;border-radius:16px;font-size:13px;cursor:pointer;font-family:inherit;}
+.filter-btn.active{background:var(--zhu);color:#fff;border-color:var(--zhu);}
+.zhujia-search{margin-left:auto;border:1px solid #c9b98f;padding:7px 14px;border-radius:16px;font-size:13px;width:260px;font-family:inherit;background:#fff8e7;}
+
+/* 注家卡片 */
+.zhujia-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:14px;}
+.zj-card{background:#fff8e7;border:1px solid #e8dcc0;border-radius:10px;padding:16px;cursor:pointer;transition:all .2s;position:relative;}
+.zj-card:hover{border-color:var(--zhu);box-shadow:0 4px 14px rgba(156,42,42,.12);transform:translateY(-2px);}
+.zj-badge{position:absolute;top:10px;right:10px;background:var(--zhu);color:#fff;font-size:10px;padding:2px 7px;border-radius:8px;letter-spacing:1px;}
+.zj-name{font-size:20px;font-weight:700;color:var(--ink);margin-bottom:2px;}
+.zj-style{font-size:12px;color:#8a7a5f;margin-bottom:8px;font-style:italic;}
+.zj-school{font-size:12px;color:var(--gold);margin-bottom:10px;}
+.zj-stats{display:flex;gap:10px;margin-bottom:8px;}
+.zj-stats span{display:flex;align-items:baseline;gap:3px;}
+.zj-stats em{font-style:normal;font-weight:700;color:var(--zhu);font-size:15px;}
+.zj-stats i{font-style:normal;font-size:10px;color:#8a7a5f;}
+.zj-works{display:flex;flex-wrap:wrap;gap:4px;}
+.work-tag{background:#f0e4c2;color:#6b5a3a;font-size:10px;padding:2px 7px;border-radius:4px;}
+
+/* 注本 */
+.zhuben-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;}
+.zb-item{background:#fffaf0;border:1px solid #e8dcc0;border-left:4px solid var(--zhu);padding:14px 16px;border-radius:6px;}
+.zb-dyn{font-size:11px;color:var(--gold);letter-spacing:1px;}
+.zb-title{font-size:18px;color:var(--ink);font-weight:700;margin:4px 0;}
+.zb-author{font-size:12px;color:#8a7a5f;margin-bottom:6px;}
+.zb-desc{font-size:13px;color:#4a4034;line-height:1.75;}
+
+/* 流派 */
+.school-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;}
+.school-card{background:#fffaf0;border:1px solid #e8dcc0;padding:16px;border-radius:8px;}
+.school-card h3{margin:0 0 8px;font-size:18px;}
+.school-card p{margin:0 0 10px;font-size:13px;color:#4a4034;line-height:1.75;}
+.school-members{display:flex;flex-wrap:wrap;gap:6px;}
+.school-member{background:#f0e4c2;color:#6b4a2a;font-size:12px;padding:3px 9px;border-radius:12px;text-decoration:none;cursor:pointer;}
+.school-member:hover{background:var(--zhu);color:#fff;}
+
+/* 抽屉 */
+.zhu-drawer{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:200;display:none;justify-content:flex-end;}
+.zhu-drawer.open{display:flex;}
+.zhu-drawer-inner{width:min(680px,92vw);height:100%;background:var(--paper);overflow-y:auto;padding:32px;position:relative;box-shadow:-6px 0 24px rgba(0,0,0,.2);}
+.zhu-close{position:absolute;top:16px;right:16px;background:transparent;border:none;font-size:22px;color:#8a7a5f;cursor:pointer;}
+.zhu-close:hover{color:var(--zhu);}
+.zhu-head{border-bottom:2px solid var(--zhu);padding-bottom:14px;margin-bottom:16px;}
+.zhu-badge{display:inline-block;background:var(--zhu);color:#fff;font-size:11px;padding:2px 10px;border-radius:10px;margin-bottom:8px;letter-spacing:1px;}
+.zhu-head h2{margin:0;font-size:28px;color:var(--ink);letter-spacing:2px;}
+.zhu-style{color:#8a7a5f;font-style:italic;margin:4px 0;}
+.zhu-school{color:var(--gold);font-size:14px;}
+.zhu-bio{font-size:15px;line-height:1.95;color:#3a3226;margin-bottom:16px;text-indent:2em;}
+.z-meta-row{margin:8px 0;display:flex;gap:6px;flex-wrap:wrap;align-items:center;font-size:13px;color:#5a4d38;}
+.zhu-stats-bar{display:flex;gap:20px;background:#f5ecd4;padding:10px 16px;border-radius:6px;margin:14px 0;font-size:13px;color:#5a4d38;}
+.zhu-stats-bar b{color:var(--zhu);font-size:17px;margin:0 4px;}
+.zhu-drawer-inner h3{border-left:3px solid var(--zhu);padding-left:10px;margin:24px 0 12px;font-size:17px;color:var(--ink);}
+.zq-gua{background:#fff8e7;border:1px solid #e8dcc0;border-radius:6px;padding:12px 14px;margin-bottom:10px;}
+.zq-gua h4{margin:0 0 8px;font-size:15px;display:flex;align-items:center;gap:10px;}
+.zq-gua h4 a{color:var(--zhu);text-decoration:none;}
+.zq-gua h4 a:hover{text-decoration:underline;}
+.zq-cnt{font-size:11px;background:#f0e4c2;color:#6b5a3a;padding:1px 7px;border-radius:10px;}
+.zq-item{display:flex;gap:8px;padding:6px 0;border-top:1px dotted #eadfc2;font-size:13px;line-height:1.8;}
+.zq-item:first-child{border-top:none;}
+.zq-pos{min-width:70px;color:var(--gold);font-size:12px;padding-top:2px;white-space:nowrap;}
+.zq-pos a{color:var(--gold);text-decoration:none;}
+.zq-text{flex:1;color:#2a2520;}
+.zq-item.zz .zq-pos{color:var(--zhu);}
+details{margin-top:6px;}
+details summary{cursor:pointer;color:var(--zhu);font-size:12px;}
+
+@media (max-width: 900px){
+  .dynasty-timeline{grid-template-columns:repeat(2,1fr);}
+  .stat-grid{grid-template-columns:repeat(3,1fr);}
+  .zhujia-search{width:100%;margin-left:0;}
+}
+@media (max-width: 600px){
+  .dynasty-timeline{grid-template-columns:1fr;}
+  .section-hero h1{font-size:32px;}
+  .stat-grid{grid-template-columns:1fr 1fr 1fr;gap:8px;}
+  .stat-card .n{font-size:22px;}
+}
+</style>
+<script src="js/apply-shell.js" data-page="yanjiu"></script>
 </body>
 </html>

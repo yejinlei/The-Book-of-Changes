@@ -8,6 +8,7 @@
 <script src="data/yijing-ontology.js"></script>
 <script src="data/gua-full-data.js"></script>
 <script src="data/yijing-ontology-enhance.js"></script>
+<script src="data/yijing-zhujia-texts.js"></script>
 <script src="data/yijing-yao-link.js"></script>
 <script src="js/ontology-linker.js"></script>
 <style>
@@ -63,6 +64,8 @@
 .yao-anno.open{display:block;}
 .yao-anno-item{font-size:13px;line-height:1.9;color:var(--ink-2);margin-bottom:8px;}
 .yao-anno-item .src{color:var(--zhu);font-weight:700;margin-right:6px;font-family:var(--font-kai);}
+.yao-anno-item .src a{color:var(--zhu);text-decoration:none;border-bottom:1px dotted var(--zhu);}
+.yao-anno-item .src a:hover{background:var(--zhu);color:#fff;}
 .yao-anno-item .txt{color:var(--ink-2);}
 .yao-anno-loading{font-size:12px;color:var(--ink-3);}
 
@@ -379,9 +382,9 @@ function bindAnnoButtons(){
         const bucket = YJ_Link.matchYaoBucket(anno, yi||yao);
         let h = '';
         if(bucket && bucket.notes.length){
-          h = bucket.notes.map(n=>`<div class="yao-anno-item"><span class="src">${n.src||'注'}</span><span class="txt">${n.text}</span></div>`).join('');
+          h = bucket.notes.map(n=>`<div class="yao-anno-item"><span class="src"><a href="yanjiu.html#zj-${n.srcId||''}" target="_blank" title="${n.dynasty||''} ${n.school||''}">${n.src||'注'}</a></span><span class="txt">${(n.text||'').replace(/^[：:]+/,'')}</span></div>`).join('');
         }else if(anno.heads && anno.heads.length && !bucket){
-          h = anno.heads.slice(0,6).map(n=>`<div class="yao-anno-item"><span class="src">${n.src||'注'}</span><span class="txt">${n.text}</span></div>`).join('');
+          h = anno.heads.slice(0,8).map(n=>`<div class="yao-anno-item"><span class="src"><a href="yanjiu.html#zj-${n.srcId||''}" target="_blank" title="${n.dynasty||''} ${n.school||''}">${n.src||'注'}</a></span><span class="txt">${(n.text||'').replace(/^[：:]+/,'')}</span></div>`).join('');
         }else{
           h = '<div class="yao-anno-loading">该爻暂无独立汇评条目。</div>';
         }

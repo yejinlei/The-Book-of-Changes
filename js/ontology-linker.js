@@ -262,41 +262,107 @@
     return total;
   }
 
-  /* ================= 逐爻注家注解（按需加载）================= */
+  /* ================= 逐爻注家注解（从 YJ_ZHUJIA_TEXTS 聚合）================= */
   var annoCache = {};
   function loadYaoAnnotations(guaName, cb){
     if(annoCache[guaName]){ cb(annoCache[guaName]); return; }
+    var T = window.YJ_ZHUJIA_TEXTS || {zhujia:[]};
+    var nameMap = {};
+    T.zhujia.forEach(function(z){ nameMap[z.id] = z.name; });
+    // 按该卦聚合所有注文，再按爻位分桶
+    var byPos_bucket = { heads:[], yao:{} };
+    // yaoId 的位置顺序：初九/初六 → 用九/用六
+    var YAO_POS = ['初九','初六','九二','六二','九三','六三','九四','六四','九五','六五','上九','上六','用九','用六'];
+    T.zhujia.forEach(function(z){
+      (z.jijieQuotes||[]).forEach(function(q){
+        if(q.gua !== guaName) return;
+        var posKey = q.position || '';
+        var rec = { srcId: z.id, src: z.name, text: q.text, dynasty: z.dynasty||'', school: z.school||'' };
+        // 判定属于哪一爻
+        if(posKey === '卦辞' || posKey.indexOf('元亨利贞')>=0 || posKey.length<4) {
+          byPos_bucket.heads.push(rec);
+        } else {
+          // 匹配位置关键词
+          var matched = null;
+          for (var i=0; i<YAO_POS.length; i++){
+            if(posKey.indexOf(YAO_POS[i])>=0){ matched = YAO_POS[i]; break; }
+          }
+          if(matched){
+            if(!byPos_bucket.yao[matched]) byPos_bucket.yao[matched] = [];
+            byPos_bucket.yao[matched].push(rec);
+          } else {
+            byPos_bucket.heads.push(rec);
+          }
+        }
+      });
+    });
+    // 同时从旧 data/gua/*.json 补卦辞头注，兜底
     fetch('data/gua/' + encodeURIComponent(guaName) + '.json', { cache: 'force-cache' })
       .then(function(r){ return r.json(); })
       .then(function(j){
-        var buckets = [], heads = [], cur = null;
+        var buckets = [], heads = byPos_bucket.heads.slice(), cur = null;
         var lines = (j && j.jijie && j.jijie.lines) || [];
+        var posStack = [];
         lines.forEach(function(l){
-          if(l.k === 'text'){ cur = { text: l.t || '', notes: [] }; buckets.push(cur); }
-          else if(l.k === 'note'){
-            var rec = { src: l.s || '', text: l.t || '' };
-            if(cur) cur.notes.push(rec); else heads.push(rec);
+          if(l.k === 'text'){
+            cur = { text: l.t||'', notes: [], posKey: '' };
+            for (var i=0;i<YAO_POS.length;i++){
+              if((l.t||'').indexOf(YAO_POS[i])>=0){ cur.posKey = YAO_POS[i]; break; }
+            }
+            buckets.push(cur);
+          } else if(l.k === 'note' && l.s !== '案'){
+            // 把原注追加到对应桶；若 id 已在 YJ_ZHUJIA_TEXTS 中则跳过，避免重复
+            var nid = null;
+            var nm = l.s;
+            // 简单映射原名→id
+            T.zhujia.forEach(function(z){
+              if(z.name === nm || z.style === nm) nid = z.id;
+            });
+            if(!nid){
+              // 兜底加 heads
+              if(!cur) heads.push({srcId:null, src:nm, text:(l.t||'').replace(/^[：:]*/,''),dynasty:'',school:''});
+              else cur.notes.push({srcId:null, src:nm, text:(l.t||'').replace(/^[：:]*/,''),dynasty:'',school:''});
+            }
+          }
+        });
+        // 把 zhujia-texts 的按爻注文合并进对应桶
+        buckets.forEach(function(b){
+          if(b.posKey && byPos_bucket.yao[b.posKey]){
+            byPos_bucket.yao[b.posKey].forEach(function(r){
+              if(!b.notes.find(function(x){return x.src===r.src && x.text===r.text;})) b.notes.push(r);
+            });
           }
         });
         var out = { buckets: buckets, heads: heads, raw: j };
         annoCache[guaName] = out;
         cb(out);
       })
-      .catch(function(){ cb({ buckets: [], heads: [], raw: null }); });
+      .catch(function(){
+        // data/gua 文件缺失时，仅用 zhujia-texts 输出 heads
+        var buckets = [];
+        Object.keys(byPos_bucket.yao).forEach(function(pk){
+          buckets.push({text:pk, notes:byPos_bucket.yao[pk], posKey:pk});
+        });
+        cb({ buckets: buckets, heads: byPos_bucket.heads, raw: null });
+      });
   }
 
-  // 把某爻与汇评分桶匹配
+  // 把某爻与汇评分桶匹配（增强：优先用 yao.pos 匹配）
   function matchYaoBucket(anno, yao){
     if(!anno || !anno.buckets) return null;
-    var core = (yao.text || '').replace(/[。．.，,：:；;\s]/g, '');
+    if(yao.pos){
+      var byPos = anno.buckets.filter(function(b){ return (b.posKey||b.text||'').indexOf(yao.pos) === 0 || (b.text||'').indexOf(yao.pos) === 0; });
+      if(byPos.length) return byPos[0];
+    }
+    var core = (yao.text || '').replace(/[。．.，,：:；;\s""]/g, '');
     if(core){
       var byCore = anno.buckets.filter(function(b){
-        return (b.text || '').replace(/[。．.，,：:；;\s]/g, '').indexOf(core) >= 0;
+        return (b.text || '').replace(/[。．.，,：:；;\s""]/g, '').indexOf(core) >= 0;
       });
       if(byCore.length) return byCore[0];
     }
-    var byPos = anno.buckets.filter(function(b){ return (b.text || '').indexOf(yao.pos) === 0 || (b.text||'').indexOf(yao.pos + '：') === 0; });
-    return byPos[0] || null;
+    var byPos2 = anno.buckets.filter(function(b){ return (b.text || '').indexOf(yao.pos) === 0; });
+    return byPos2[0] || null;
   }
 
   /* ================= 全站外壳 ================= */
