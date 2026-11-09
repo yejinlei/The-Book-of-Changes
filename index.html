@@ -13,6 +13,7 @@
 <script src="data/yijing-ontology.js"></script>
 <script src="data/gua-full-data.js"></script>
 <script src="data/yijing-ontology-enhance.js"></script>
+<script src="data/yijing-yao-link.js"></script>
 <script src="js/ontology-linker.js"></script>
 <style>
 .hero-taiji{font-size:72px;color:var(--zhu);margin-bottom:12px;display:inline-block;animation:spin 60s linear infinite;}
@@ -90,7 +91,22 @@
 @media(max-width:768px){
   .ont-level{grid-template-columns:repeat(4,1fr);}
   .bagua-grid{grid-template-columns:repeat(2,1fr);}
-  .gua-preview{grid-template-columns:repeat(6,1fr);}
+  .gua-preview{grid-template-columns:repeat(5,1fr);gap:5px;}
+  .gua-mini{min-width:0;padding:8px 2px;}
+  .gua-mini .nm{max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+}
+@media(max-width:480px){
+  .ont-level{grid-template-columns:repeat(2,1fr);gap:8px;}
+  .bagua-grid{grid-template-columns:repeat(2,1fr);gap:8px;}
+  .bagua-card{padding:12px 8px;}
+  .bagua-card .sym{font-size:34px;}
+  .bagua-card .name{font-size:16px;letter-spacing:1px;}
+  .gua-preview{grid-template-columns:repeat(4,1fr);gap:4px;}
+  .gua-mini{padding:6px 2px;}
+  .gua-mini .sym{font-size:20px;}
+  .gua-mini .nm{font-size:10px;letter-spacing:0;}
+  #graphBox{height:min(64vh,420px);}
+  .master-chip{font-size:12px;padding:5px 10px;}
 }
 </style>
 </head>

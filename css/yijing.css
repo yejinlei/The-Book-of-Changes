@@ -347,3 +347,54 @@ h3{font-size:20px;letter-spacing:2px;margin:18px 0 10px;}
 .yj-shelled .content>section,
 .yj-shelled .content>.container{max-width:none;}
 @media(max-width:640px){.yj-shelled .content{padding:20px 16px 44px;}}
+
+/* ===== 移动端硬化（适配手机）===== */
+html,body{max-width:100%;}
+body{overflow-x:hidden;}
+@supports (overflow:clip){body{overflow-x:clip;}}
+img,video,svg,table,pre,iframe{max-width:100%;}
+table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;}
+pre{overflow-x:auto;}
+
+/* 占位/绝对定位装饰不得撑破视口 */
+.ent-pop{max-width:min(320px,78vw);white-space:normal;word-break:break-word;}
+/* 大衍筮法「│」串等无换行机会的长串 */
+.sticks-visual,.yarrow-bar,.pile-display{word-break:break-all;overflow-wrap:anywhere;max-width:100%;}
+.yarrow-stage{max-width:100%;}
+
+@media(max-width:1024px){
+  .shifa-panel{grid-template-columns:1fr;gap:16px;}
+}
+@media(max-width:768px){
+  /* 触屏上悬停气泡无意义且会撑宽页面，直接隐藏 */
+  .ent-pop{display:none !important;}
+  .shifa-panel{grid-template-columns:1fr;}
+  .dual-gua{grid-template-columns:1fr;gap:10px;}
+  .dual-gua .arrow{transform:rotate(90deg);}
+  .gua-header{grid-template-columns:1fr !important;gap:14px !important;}
+  .gua-symbol-lg{font-size:84px !important;}
+  .gua-meta h1{font-size:30px !important;letter-spacing:4px !important;}
+  .gua-props{grid-template-columns:repeat(2,1fr) !important;}
+  .yao-row{grid-template-columns:48px 1fr !important;gap:12px !important;}
+  .hero h1,.section h2{letter-spacing:4px !important;}
+}
+@media(max-width:640px){
+  body{font-size:15px;}
+  .content{padding:16px 12px 40px !important;}
+  .yj-shelled .content{padding:16px 12px 40px !important;}
+  .hero{padding:32px 14px 26px !important;}
+  .hero h1{font-size:30px !important;}
+  .card,.panel-card,.gua-detail-card{padding:16px 14px !important;border-radius:8px !important;}
+  .gua-symbol-lg{font-size:68px !important;}
+  .result-gua .main-sym{font-size:80px !important;}
+  .result-gua h2{font-size:24px !important;letter-spacing:4px !important;}
+  .result-gua{padding:16px !important;}
+  .dual-mini .s{font-size:48px !important;}
+  .sticks-visual{font-size:22px !important;letter-spacing:-3px !important;}
+  .yao-bar-visual{width:120px !important;}
+  .stats-grid{grid-template-columns:repeat(2,1fr) !important;}
+  .topbar{height:auto !important;min-height:52px;padding:8px 12px !important;}
+  .topbar .logo{font-size:16px !important;letter-spacing:3px !important;}
+  .footer{padding:24px 14px !important;}
+  .btn,.cta,button{padding:10px 16px;}
+}

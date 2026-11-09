@@ -8,6 +8,7 @@
 <script src="data/yijing-ontology.js"></script>
 <script src="data/gua-full-data.js"></script>
 <script src="data/yijing-ontology-enhance.js"></script>
+<script src="data/yijing-yao-link.js"></script>
 <script src="js/ontology-linker.js"></script>
 <style>
 .gua-detail{display:none;}
@@ -251,6 +252,7 @@ function yaoRowHTML(g, y){
       <div class="yao-rel">
         <span class="tag">所属：${YJ_Link.ent(g.name,'gua',g.id)}卦</span>
         <span class="tag">诠释：${YJ_Link.ent('象传','shiyi',xiangId)}</span>
+        ${(y.annotatedBy&&y.annotatedBy.length)?`<span class="tag">注家：${y.annotatedBy.map(z=>{const e=(YJ_ONT.zhujia||[]).find(x=>x.id===z)||{};return YJ_Link.ent(e.name||z,'zhujia',z);}).join(' ')}</span>`:''}
         <button class="yao-anno-btn" data-gua="${g.name}" data-yao="${yid}" data-pos="${y.pos}">历代注家注解 ▾</button>
       </div>
       <div class="yao-anno" id="anno-${yid}"></div>

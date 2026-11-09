@@ -34,6 +34,7 @@
     ['data/yijing-ontology.js',
      'data/gua-full-data.js',
      'data/yijing-ontology-enhance.js',
+     'data/yijing-yao-link.js',
      'js/ontology-linker.js'].forEach(injectScript);
   }
 

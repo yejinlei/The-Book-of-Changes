@@ -1,61 +1,12 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1">
-<title>第1卦 乾 · 易·讲解动画</title>
-<link rel="stylesheet" href="../style.css">
-<script src="https://cdn.jsdelivr.net/npm/hls.js@1.5"></script>
-<style>
-body{background:#f3ead8;margin:0;font-family:"Noto Serif SC","Source Han Serif SC",serif;color:#3a2a16}
-nav{background:#8B1A1A;color:#f3ead8;padding:14px 24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap}
-nav a{color:#f3ead8;text-decoration:none;margin:0 10px;font-size:15px}
-.wrap{max-width:900px;margin:0 auto;padding:24px 16px}
-h1{font-size:28px;color:#8B1A1A;border-bottom:2px solid #8B1A1A;padding-bottom:10px;margin:10px 0 16px}
-.player{background:#000;border-radius:8px;overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,.25);position:relative;padding-bottom:56.25%;height:0}
-video{position:absolute;top:0;left:0;width:100%;height:100%;background:#000}
-.meta{background:#faf4e2;border:1px solid #d9c79a;border-radius:6px;padding:16px 20px;margin:20px 0;line-height:2}
-.meta .k{color:#8B1A1A;font-weight:bold}
-.guaci{background:#fff;border-left:4px solid #8B1A1A;padding:14px 20px;margin:16px 0;border-radius:4px;line-height:2;font-size:17px}
-.back{display:inline-block;margin-top:16px;color:#8B1A1A;text-decoration:none;border:1px solid #8B1A1A;padding:8px 20px;border-radius:4px}
-.back:hover{background:#8B1A1A;color:#f3ead8}
-.badge{display:inline-block;background:#8B1A1A;color:#f3ead8;padding:2px 8px;border-radius:3px;font-size:12px;margin-left:8px;vertical-align:middle}
-.yao-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px;margin-top:12px}
-.yao-item{background:#faf4e2;border:1px solid #d9c79a;border-radius:4px;padding:10px 14px}
-.yao-item .pos{color:#8B1A1A;font-weight:bold}
-</style>
-</head>
-<body>
-<nav>
-  <div><strong>易 · The Book of Changes</strong></div>
-  <div><a href="../">首页</a><a href="index.html">动画总览</a><a href="gua-index.html">64卦列表</a></div>
-</nav>
-<div class="wrap">
-  <h1>第1卦 乾<span class="badge">女声版 · HLS</span></h1>
-  <div class="player"><video id="v" controls playsinline></video></div>
-  <div class="meta">
-    <p><span class="k">卦象：</span>䷀ 上乾下乾　<span class="k">宫位：</span>宫　<span class="k">时长：</span>2分59秒</p>
-    <p><span class="k">配音：</span>晓晓（zh-CN-XiaoxiaoNeural）女声 · 神经语音合成　<span class="k">背景音乐：</span>古琴泛音垫音</p>
-  </div>
-  <div class="guaci">
-    <strong>卦辞：</strong>乾：元、享、利、贞。<br>
-    <strong>白话：</strong>乾卦象征纯粹的阳刚与创造力，是万物生发的本源。它具备开创、通达、适宜、坚守四种德性，只要行得正、守得住，事情就能顺利展开。总体大吉，但前提是刚健而不骄亢。
-  </div>
-  <h3 style="color:#8B1A1A;margin-top:24px">六爻</h3>
-  <div class="yao-list">
-    <div class="yao-item"><span class="pos">初九</span>：潜龙勿用。<br><small>如潜藏的龙，时机未到，力量尚在积蓄。此时不宜轻举妄动、急于出头，应沉住气修养自己，等待条件成熟再行动。</small></div>
-    <div class="yao-item"><span class="pos">九二</span>：见龙在田，利见大人。<br><small>如龙出现在田野，才华开始显露，也遇到可依靠的贵人。宜主动寻求贤明者的提携，在合适的位置上施展本领。</small></div>
-    <div class="yao-item"><span class="pos">九三</span>：君子终日乾乾，夕惕，若厉，无咎。<br><small>君子整天勤勉不懈，到夜晚仍警惕自省，处境看似危险却能有惊无险。关键在于自强不息、随时戒惧，方能免于过失。</small></div>
-    <div class="yao-item"><span class="pos">九四</span>：或跃在渊，无咎。<br><small>如龙在深渊边跃跃欲试，进退未定。此时可以尝试进取，只要审时度势、量力而行，就不会有过错。</small></div>
-    <div class="yao-item"><span class="pos">九五</span>：飞龙在天，利见大人。<br><small>如龙飞腾于天，事业达到鼎盛，正是大展宏图、与贤者共成大事的时候。宜把握时机，以德居高位。</small></div>
-    <div class="yao-item"><span class="pos">上九</span>：亢龙有悔。<br><small>如龙飞得过高，物极必反，必有悔恨。提醒人勿因成功而骄矜膨胀，懂得收势退让才能保全。</small></div>
-  </div>
-  <a class="back" href="gua-index.html">← 返回64卦列表</a>
-</div>
-<script>
-var video=document.getElementById("v");
-var src="assets/gua-hls/00-乾/index.m3u8";
-if(Hls.isSupported()){var hls=new Hls({maxBufferLength:20,maxMaxBufferLength:60});hls.loadSource(src);hls.attachMedia(video);}
-else if(video.canPlayType("application/vnd.apple.mpegurl")){video.src=src;}
-</script>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>乾卦讲解 · 跳转中…</title>
+<meta http-equiv="refresh" content="0;url=gua-00.html">
+<link rel="canonical" href="gua-00.html">
+<script>location.replace('gua-00.html' + location.search + location.hash);</script>
+<style>body{font-family:"Songti SC","SimSun",serif;background:#f4ecd8;color:#3a1f0b;text-align:center;padding:100px 20px}
+a{color:#8b0000}</style>
+</head><body>
+<p>正在跳转到《易经讲解动画》…如未自动跳转，请<a href="gua-00.html">点击这里</a>。</p>
 </body></html>

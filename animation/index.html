@@ -10,6 +10,7 @@
 <!-- HLS 播放器：本地优先，外部 CDN 兜底（避免 CDN 不稳导致边下边播失效） -->
 <script src="assets/hls.min.js"></script>
 <script>if(typeof Hls==='undefined'){document.write('<scr'+'ipt src="https://cdn.jsdelivr.net/npm/hls.js@1.5.13/dist/hls.min.js"><\/scr'+'ipt>');}</script>
+<link rel="stylesheet" href="style.css">
 <style>
   :root {
     --paper: #f4ecd8;
@@ -214,20 +215,43 @@
     .chapter-bar { grid-template-columns: repeat(7, 1fr); }
     .chapter-bar div:nth-child(n+8) { margin-top: 2px; }
   }
+  /* ===== 移动端适配 ===== */
+  img,video,svg,table{max-width:100%;}
+  .wrap{max-width:100%;}
+  .file-list li{flex-wrap:wrap;row-gap:6px;}
+  .file-list li .fname{min-width:0;word-break:break-all;overflow-wrap:anywhere;}
+  @media (max-width: 768px) {
+    .wrap { padding: 16px 14px 60px; }
+    h1 { font-size: 30px; letter-spacing: 6px; margin: 18px 0 4px; }
+    .sub { font-size: 13px; letter-spacing: 1px; margin-bottom: 20px; }
+    .player-box { padding: 6px; }
+    .controls-bar { font-size: 12px; gap: 6px; }
+    .controls-bar button { padding: 7px 12px; font-size: 12px; }
+    .chapter-bar { grid-template-columns: repeat(4, 1fr) !important; }
+    .section-title { font-size: 20px; letter-spacing: 2px; margin: 28px 0 12px; }
+    .script-box { padding: 16px; font-size: 14px; line-height: 1.9; max-height: 60vh; }
+    .scene-card { padding: 16px; }
+  }
+  @media (max-width: 420px) {
+    .chapter-bar { grid-template-columns: repeat(3, 1fr) !important; }
+    h1 { font-size: 24px; letter-spacing: 4px; }
+    .file-list li { font-size: 12px; padding: 8px 10px; }
+  }
 </style>
 </head>
 <body>
 
-<nav class="topbar"><a href="../index.html">首页</a>
-    <a href="../gua.html">六十四卦</a>
-    <a href="../reader.html">经文汇评</a>
-    <a href="../shiyi.html">十翼</a>
-    <a href="../yitu.html">易图互动</a>
-    <a href="../bianhua.html">变化</a>
-    <a href="index.html" class="active">易之变 · 动画</a>
-    <a href="qian.html">乾卦讲解</a><a href="gua-index.html">64卦讲解</a>
-    <a href="../yanjiu.html">研究</a>
-  </nav>
+<div class="yj-sitebar"><div class="inner">
+  <a class="brand" href="../index.html">易经本体论<small>· 易之变</small></a>
+  <a class="lnk" href="../index.html">本经大义</a>
+  <a class="lnk" href="../gua.html">六十四卦</a>
+  <a class="lnk" href="../reader.html">经文汇评</a>
+  <a class="lnk" href="../shifa.html">筮法占筮</a>
+  <a class="lnk on" href="gua-index.html">卦象动画</a>
+  <a class="lnk" href="qian.html">乾卦讲解</a>
+  <span class="spacer"></span>
+  <a class="cta" href="../shifa.html">起卦</a>
+</div></div>
 
 <div class="wrap">
   <h1>易 之 变</h1>
