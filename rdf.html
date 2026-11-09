@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>本体论 · RDF/OWL 知识图谱 | 易经本体论</title>
+<link rel="stylesheet" href="css/yijing.css">
+<script src="data/yijing-ontology.js"></script>
+<script src="data/gua-full-data.js"></script>
+<script src="data/yijing-ontology-enhance.js"></script>
+<script src="data/yijing-rdf.js"></script>
+<script src="js/ontology-linker.js"></script>
+<script src="js/apply-shell.js" data-page="rdf"></script>
+<style>
+.rdf-hero{background:linear-gradient(135deg,rgba(156,42,42,.9),rgba(168,127,58,.7)),url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22120%22 height=%22120%22><text x=%220%22 y=%2280%22 font-size=%2290%22 fill=%22rgba(255,255,255,.06)%22>☰☱☲☳☴☵☶☷</text></svg>');color:#f7f1e1;padding:52px 40px;border-radius:8px;margin:24px 0;position:relative;overflow:hidden;}
+.rdf-hero h1{font-size:40px;margin:0 0 12px;letter-spacing:4px;font-weight:600;}
+.rdf-hero .sub{font-size:16px;opacity:.95;line-height:1.9;max-width:760px;}
+.rdf-hero .en{font-family:Georgia,serif;font-style:italic;opacity:.7;margin-top:12px;font-size:14px;letter-spacing:1px;}
+.rdf-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin:24px 0;}
+.rdf-stat{background:#fdf8ea;border:1px solid #e8dcc0;border-radius:6px;padding:16px;text-align:center;}
+.rdf-stat .num{font-size:28px;color:var(--zhu);font-weight:600;font-family:'STKaiti',serif;}
+.rdf-stat .lb{font-size:12px;color:#6b5a3c;margin-top:6px;letter-spacing:2px;}
+.code-block{background:#1f1a14;color:#e9e1c6;padding:18px 20px;border-radius:6px;font-family:'SF Mono',Consolas,monospace;font-size:12px;line-height:1.8;overflow-x:auto;margin:12px 0;border-left:3px solid var(--zhu);}
+.code-block .p{color:#c9a35f;}
+.code-block .c{color:#7a8a6c;font-style:italic;}
+.code-block .s{color:#c79b7a;}
+.code-block .u{color:#9ab5c9;}
+
+.tabs{display:flex;gap:2px;border-bottom:2px solid var(--zhu);margin:24px 0 18px;flex-wrap:wrap;}
+.tab{padding:10px 20px;background:#f3e9ce;cursor:pointer;border-top-left-radius:6px;border-top-right-radius:6px;font-size:14px;color:#6b5a3c;transition:all .2s;border:1px solid transparent;border-bottom:none;}
+.tab:hover{background:#ecdfb8;}
+.tab.active{background:var(--zhu);color:#f7f1e1;font-weight:600;}
+.tab-pane{display:none;}
+.tab-pane.active{display:block;}
+
+.query-card{background:#fdf8ea;border:1px solid #e8dcc0;border-radius:6px;padding:18px 20px;margin:14px 0;transition:all .2s;}
+.query-card:hover{border-color:var(--zhu);box-shadow:0 2px 8px rgba(156,42,42,.08);}
+.query-card h3{margin:0 0 8px;font-size:17px;color:var(--zhu);display:flex;align-items:center;gap:8px;}
+.query-card h3::before{content:'▸';color:var(--gold);}
+.query-card .q-desc{font-size:13px;color:#6b5a3c;line-height:1.8;margin-bottom:10px;}
+.query-card .sparql{background:#1f1a14;color:#a8b9a5;padding:10px 12px;border-radius:4px;font-family:'SF Mono',monospace;font-size:11px;line-height:1.6;margin-bottom:10px;overflow-x:auto;}
+table.rdf-tbl{width:100%;border-collapse:collapse;margin-top:10px;font-size:13px;}
+table.rdf-tbl th{background:#ecdfb8;color:#3b2f1e;padding:8px 12px;text-align:left;font-weight:600;border-bottom:2px solid var(--zhu);font-size:12px;letter-spacing:1px;}
+table.rdf-tbl td{padding:8px 12px;border-bottom:1px solid #e8dcc0;color:#2a2520;}
+table.rdf-tbl tr:hover td{background:#faf3dd;}
+table.rdf-tbl td.num{color:var(--zhu);font-weight:600;text-align:center;}
+
+.dl-section{margin:28px 0;}
+.dl-section h2{font-size:22px;color:var(--ink);border-left:4px solid var(--zhu);padding-left:12px;margin:0 0 16px;letter-spacing:2px;}
+.dl-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;}
+.dl-card{background:#fdf8ea;border:1px solid #e8dcc0;border-radius:6px;padding:16px;}
+.dl-card h4{margin:0 0 8px;color:var(--zhu);font-size:15px;}
+.dl-card p{font-size:12px;color:#6b5a3c;line-height:1.8;margin:0 0 10px;}
+.dl-btn{display:inline-block;padding:6px 14px;background:var(--zhu);color:#f7f1e1;border-radius:4px;text-decoration:none;font-size:12px;transition:all .2s;border:1px solid var(--zhu);}
+.dl-btn:hover{background:transparent;color:var(--zhu);}
+
+.prefix-list{columns:2;column-gap:24px;font-family:'SF Mono',monospace;font-size:12px;line-height:2;}
+.prefix-list .p{color:var(--zhu);}
+.prefix-list .u{color:#395a77;word-break:break-all;}
+
+.entity-cloud{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0;}
+.entity-chip{display:inline-block;padding:5px 12px;background:#f3e9ce;border:1px solid #e0d1a8;border-radius:20px;font-size:12px;color:#3b2f1e;cursor:pointer;transition:all .2s;}
+.entity-chip:hover{background:var(--zhu);color:#f7f1e1;border-color:var(--zhu);}
+.entity-chip.zhujia{border-left:3px solid var(--zhu);}
+.entity-chip.gua{border-left:3px solid var(--indigo,#3a5a8c);}
+.entity-chip.tri{border-left:3px solid var(--gold);}
+.entity-chip.shu{border-left:3px solid #5a7a4c;}
+.entity-chip.zb{border-left:3px solid #7a4a6a;}
+
+.license-box{background:#eef4e9;border:1px solid #c8d8b6;border-radius:6px;padding:16px 20px;margin:20px 0;font-size:13px;color:#3a4a2a;line-height:1.9;}
+.license-box strong{color:#2a3a1a;}
+.note-box{background:#fdf6e3;border:1px dashed var(--gold);border-radius:6px;padding:14px 18px;margin:16px 0;font-size:13px;color:#5a4a2a;line-height:1.9;}
+
+@media(max-width:768px){
+  .rdf-hero{padding:32px 20px;}
+  .rdf-hero h1{font-size:28px;}
+  .prefix-list{columns:1;}
+  table.rdf-tbl{font-size:12px;}
+  table.rdf-tbl th,table.rdf-tbl td{padding:6px 8px;}
+}
+</style>
+</head>
+<body>
+<div class="topbar-slot"></div>
+<div class="sidebar-slot"></div>
+
+<main class="main">
+<div class="rdf-hero">
+  <h1>☯ 本体论 · RDF / OWL 知识图谱</h1>
+  <div class="sub">Yijing Ontology — 面向数字人文研究的开放语义数据。<br>
+  覆盖六十四卦、三百八十四爻、十翼、历代注家与注本、筮法、卦变、纳甲、校勘异文、学术传承关系网络，全部以标准 RDF/OWL Turtle 格式导出，可直接被任意语义网推理机加载查询。</div>
+  <div class="en">An open RDF/OWL ontology for digital humanities research on the Yijing (I-Ching, Book of Changes).</div>
+</div>
+
+<div class="rdf-stats" id="rdfStats"></div>
+
+<div class="tabs" id="rdfTabs">
+  <div class="tab active" data-tab="overview">📜 本体概览</div>
+  <div class="tab" data-tab="queries">🔍 知识查询</div>
+  <div class="tab" data-tab="classes">🏷 类与属性</div>
+  <div class="tab" data-tab="entities">☯ 实体云</div>
+  <div class="tab" data-tab="sparql">💻 SPARQL 端点</div>
+  <div class="tab" data-tab="download">📥 下载与授权</div>
+</div>
+
+<!-- 本体概览 -->
+<div class="tab-pane active" data-pane="overview">
+  <div class="dl-section">
+    <h2>命名空间</h2>
+    <div class="code-block"><span class="c"># 本本体的基础 IRI（永久地址）</span><br>
+@prefix <span class="p">yj:</span>  &lt;<span class="u">https://yejinlei.github.io/The-Book-of-Changes/ontology/yijing#</span>&gt;<br>
+<br><span class="c"># 标准词汇表</span><br>
+@prefix <span class="p">rdf:</span>  &lt;<span class="u">http://www.w3.org/1999/02/22-rdf-syntax-ns#</span>&gt;<br>
+@prefix <span class="p">rdfs:</span> &lt;<span class="u">http://www.w3.org/2000/01/rdf-schema#</span>&gt;<br>
+@prefix <span class="p">owl:</span>  &lt;<span class="u">http://www.w3.org/2002/07/owl#</span>&gt;<br>
+@prefix <span class="p">xsd:</span>  &lt;<span class="u">http://www.w3.org/2001/XMLSchema#</span>&gt;<br>
+@prefix <span class="p">skos:</span> &lt;<span class="u">http://www.w3.org/2004/02/skos/core#</span>&gt;<br>
+@prefix <span class="p">dct:</span>  &lt;<span class="u">http://purl.org/dc/terms/</span>&gt;<br>
+@prefix <span class="p">foaf:</span> &lt;<span class="u">http://xmlns.com/foaf/0.1/</span>&gt;<br>
+<br><span class="c"># 外部知识库对齐</span><br>
+@prefix <span class="p">wd:</span>   &lt;<span class="u">http://www.wikidata.org/entity/</span>&gt; <span class="c">// Wikidata 实体</span><br>
+@prefix <span class="p">ctext:</span>&lt;<span class="u">https://ctext.org/</span>&gt; <span class="c">// 中国哲学书电子化计划</span></div>
+  </div>
+
+  <div class="dl-section">
+    <h2>本体层次</h2>
+    <div class="code-block"><span class="c">## 核心类树（owl:Class）</span><br>
+<span class="p">yj:Hexagram</span>        <span class="c">— 卦（64 卦）</span><br>
+<span class="p">yj:Trigram</span>         <span class="c">— 八卦</span><br>
+<span class="p">yj:Line</span>            <span class="c">— 爻（384 爻）</span><br>
+<span class="p">yj:YiZhuan</span>         <span class="c">— 十翼</span><br>
+<span class="p">yj:Commentator</span>     <span class="c">— 注家</span><br>
+<span class="p">yj:Commentary</span>      <span class="c">— 注本</span><br>
+<span class="p">yj:CommentaryNote</span>  <span class="c">— 注文（每条具体注解）</span><br>
+<span class="p">yj:School</span>          <span class="c">— 流派</span><br>
+<span class="p">yj:DivinationMethod</span><span class="c">— 筮法</span><br>
+<span class="p">yj:NajiaSystem</span>     <span class="c">— 纳甲体系</span><br>
+<span class="p">yj:HexagramChange</span>  <span class="c">— 卦变</span><br>
+<span class="p">yj:TextualVersion</span>  <span class="c">— 版本</span><br>
+<span class="p">yj:TextualVariant</span>  <span class="c">— 异文</span><br>
+<span class="p">yj:AcademicRelation</span><span class="c">— 学术关系</span></div>
+  </div>
+
+  <div class="dl-section">
+    <h2>示例三元组</h2>
+    <div class="code-block"><span class="c">## 乾卦本体片段</span><br>
+<span class="p">yj:gua_00</span> a yj:Hexagram ;<br>
+&nbsp;&nbsp;rdfs:label <span class="s">"乾"</span>@zh-Hans ;<br>
+&nbsp;&nbsp;yj:name <span class="s">"乾"</span>@zh-Hans ;<br>
+&nbsp;&nbsp;yj:sequenceNumber <span class="s">"1"</span>^^xsd:integer ;<br>
+&nbsp;&nbsp;yj:wuxing <span class="s">"金"</span>@zh-Hans ;<br>
+&nbsp;&nbsp;yj:upperTrigram yj:tri_qian ;<br>
+&nbsp;&nbsp;yj:lowerTrigram yj:tri_qian ;<br>
+&nbsp;&nbsp;yj:cuoGua yj:gua_01 ;   <span class="c">## 坤为错卦</span><br>
+&nbsp;&nbsp;yj:hasLine yj:gua_00_y1, yj:gua_00_y2, ..., yj:gua_00_y6 .<br>
+<br><span class="c">## 初九爻 — 带历代注疏</span><br>
+<span class="p">yj:gua_00_y1</span> a yj:Line ;<br>
+&nbsp;&nbsp;rdfs:label <span class="s">"初九"</span>@zh-Hans ;<br>
+&nbsp;&nbsp;yj:yaociText <span class="s">"潜龙勿用。"</span>@zh-Hans ;<br>
+&nbsp;&nbsp;yj:yinYang <span class="s">"阳"</span>@zh-Hans ;<br>
+&nbsp;&nbsp;yj:lineOf yj:gua_00 .<br>
+<br><span class="c">## 学术传承</span><br>
+<span class="p">yj:zj_huiding</span> yj:followsDoctrineOf yj:zj_yufan .<br>
+<span class="p">yj:zj_wangbi</span>  yj:criticizes yj:zj_yufan .<br>
+<br><span class="c">## 外部对齐</span><br>
+<span class="p">yj:zj_zhuxi</span> owl:sameAs wd:Q9430 . <span class="c">// Wikidata 朱熹</span><br>
+<span class="p">yj:yj:Hexagram</span> owl:sameAs wd:Hexagram .</div>
+  </div>
+
+  <div class="note-box">
+    <strong>本体设计原则：</strong>①每条三元组都可追溯到原始文献（卦爻辞、十翼、注疏原文）；②所有筮法规则（大衍、纳甲）以可计算公理表达，不硬编码结论；③学术关系区分<strong>师承 / 宗述 / 引述 / 驳斥 / 评议</strong>五类，方向严格；④文本异文多版本并列保留，不做擅断。
+  </div>
+</div>
+
+<!-- 知识查询 -->
+<div class="tab-pane" data-pane="queries">
+  <div class="note-box">
+    以下查询基于本体数据即时运算，结果由三元组逻辑推出而非硬编码。您可以在支持 SPARQL 的工具中使用右侧给出的 SPARQL 查询直接在 TTL 上运行，得到完全一致的结果。
+  </div>
+  <div id="queries"></div>
+</div>
+
+<!-- 类与属性 -->
+<div class="tab-pane" data-pane="classes">
+  <div class="dl-section">
+    <h2>类（owl:Class）— <span id="clsCount"></span></h2>
+    <table class="rdf-tbl" id="clsTbl"><thead><tr><th>ID</th><th>中文名</th><th>英文说明</th><th>对齐 Wikidata</th></tr></thead><tbody></tbody></table>
+  </div>
+  <div class="dl-section">
+    <h2>对象属性（owl:ObjectProperty）— <span id="opCount"></span></h2>
+    <table class="rdf-tbl" id="opTbl"><thead><tr><th>谓词</th><th>中文</th><th>语义</th></tr></thead><tbody></tbody></table>
+  </div>
+  <div class="dl-section">
+    <h2>数据属性（owl:DatatypeProperty）— <span id="dpCount"></span></h2>
+    <table class="rdf-tbl" id="dpTbl"><thead><tr><th>谓词</th><th>中文</th><th>语义</th><th>值域</th></tr></thead><tbody></tbody></table>
+  </div>
+</div>
+
+<!-- 实体云 -->
+<div class="tab-pane" data-pane="entities">
+  <div class="dl-section">
+    <h2>☰ 八卦（Trigram）</h2>
+    <div class="entity-cloud" id="triCloud"></div>
+  </div>
+  <div class="dl-section">
+    <h2>䷀ 六十四卦（Hexagram）</h2>
+    <div class="entity-cloud" id="guaCloud"></div>
+  </div>
+  <div class="dl-section">
+    <h2>📜 十翼（Ten Wings）</h2>
+    <div class="entity-cloud" id="shiCloud"></div>
+  </div>
+  <div class="dl-section">
+    <h2>🧓 历代注家（Commentator）</h2>
+    <div class="entity-cloud" id="zjCloud"></div>
+  </div>
+  <div class="dl-section">
+    <h2>📚 重要注本（Commentary）</h2>
+    <div class="entity-cloud" id="zbCloud"></div>
+  </div>
+  <div class="dl-section">
+    <h2>🎓 流派（School）</h2>
+    <div class="entity-cloud" id="lpCloud"></div>
+  </div>
+  <div class="dl-section">
+    <h2>🔮 筮法（Divination Method）</h2>
+    <div class="entity-cloud" id="sfCloud"></div>
+  </div>
+  <div class="dl-section">
+    <h2>📖 版本（Textual Version）</h2>
+    <div class="entity-cloud" id="verCloud"></div>
+  </div>
+</div>
+
+<!-- SPARQL -->
+<div class="tab-pane" data-pane="sparql">
+  <div class="dl-section">
+    <h2>如何查询本本体</h2>
+    <p style="color:#3b2f1e;line-height:1.9;font-size:14px;">
+      本站目前以<strong>静态 Turtle 文件</strong>形式提供下载，您可以使用任意 RDF 工具加载后用 SPARQL 查询。
+      推荐工具：Apache Jena (arq / tdb2)、rdflib (Python)、Protegé、GraphDB、Blazegraph。
+    </p>
+    <div class="code-block"><span class="c"># Python + rdflib 示例：列出所有汉代注家</span><br>
+<span class="p">from</span> rdflib <span class="p">import</span> Graph, Namespace<br>
+g = Graph()<br>
+g.parse(<span class="s">"yijing-ontology.ttl"</span>, format=<span class="s">"turtle"</span>)<br>
+YJ = Namespace(<span class="s">"https://yejinlei.github.io/The-Book-of-Changes/ontology/yijing#"</span>)<br>
+q = <span class="s">"""<br>
+&nbsp;&nbsp;SELECT ?name ?work WHERE {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;?c a yj:Commentator ;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rdfs:label ?name ;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;yj:dynasty ?d ;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;yj:representativeWork ?work .<br>
+&nbsp;&nbsp;&nbsp;&nbsp;FILTER(REGEX(STR(?d), "汉"))<br>
+&nbsp;&nbsp;}<br>
+"""</span><br>
+<span class="p">for</span> row <span class="p">in</span> g.query(q, initNs={<span class="s">'yj'</span>: YJ}):<br>
+&nbsp;&nbsp;<span class="p">print</span>(row.name, row.work)</div>
+    <div class="note-box">
+      <strong>未来计划：</strong>本站将提供在线 SPARQL 端点（Endpoint），直接在浏览器中即可提交查询并返回 JSON/CSV。
+      届时可通过 <code style="background:#ecdfb8;padding:2px 6px;border-radius:3px;">https://yejinlei.github.io/The-Book-of-Changes/sparql</code> 访问。
+    </div>
+  </div>
+
+  <div class="dl-section">
+    <h2>常用查询示例</h2>
+    <p style="color:#3b2f1e;line-height:1.9;font-size:14px;">下列每条都可以直接复制到任意 SPARQL 查询工具中运行（把命名空间 <code>yj:</code> 绑定到本本体 IRI 即可）。</p>
+    <div class="code-block"><span class="c"># 1. 错卦、综卦、互卦查询：泰卦的全部卦象关系</span><br>
+SELECT ?rel ?targetName WHERE {<br>
+&nbsp;&nbsp;yj:gua_10 ?rel ?target . <span class="c"># 泰卦 = 第11卦 (idx 10)</span><br>
+&nbsp;&nbsp;?target rdfs:label ?targetName .<br>
+&nbsp;&nbsp;FILTER(?rel IN (yj:cuoGua, yj:zongGua, yj:huGua, yj:jiaoGua))<br>
+}<br>
+<br><span class="c"># 2. 王弼的学术论敌：哪些人驳斥王弼</span><br>
+SELECT ?critic ?name WHERE {<br>
+&nbsp;&nbsp;?critic yj:criticizes yj:zj_wangbi ; rdfs:label ?name .<br>
+}<br>
+<br><span class="c"># 3. 某卦某爻的全部注疏及其作者朝代</span><br>
+SELECT ?zjName ?zjEra ?noteText ?citation WHERE {<br>
+&nbsp;&nbsp;?note yj:annotates yj:gua_00_y1 ;   <span class="c"># 乾初九</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;yj:commentaryNoteText ?noteText ;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;yj:sourceCitation ?citation ;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;yj:annotatedBy ?zj .<br>
+&nbsp;&nbsp;?zj rdfs:label ?zjName ; yj:dynasty ?zjEra .<br>
+} ORDER BY ?zjEra<br>
+<br><span class="c"># 4. 帛书本与通行本卦名对照表</span><br>
+SELECT ?seq ?rec ?boshu WHERE {<br>
+&nbsp;&nbsp;?g a yj:Hexagram ;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;yj:sequenceNumber ?seq ;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rdfs:label ?rec ;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;yj:variantReading ?boshu .<br>
+&nbsp;&nbsp;FILTER(CONTAINS(STR(?boshu), "帛书"))<br>
+} ORDER BY ?seq</div>
+  </div>
+</div>
+
+<!-- 下载与授权 -->
+<div class="tab-pane" data-pane="download">
+  <div class="dl-section">
+    <h2>下载本体文件</h2>
+    <div class="dl-grid">
+      <div class="dl-card">
+        <h4>📄 yijing-ontology.ttl</h4>
+        <p>完整本体的 RDF/Turtle 序列化文件，包含全部类、属性、实例、三元组。可被 Jena/rdflib/Protegé/GraphDB 等工具直接加载。</p>
+        <a class="dl-btn" href="data/yijing-ontology.ttl" download>下载 Turtle (TTL)</a>
+      </div>
+      <div class="dl-card">
+        <h4>📊 yijing-rdf.js</h4>
+        <p>浏览器端本体索引文件，提供实体列表、预计算查询结果，用于本页渲染，同时也可作为第三方网站嵌入数据源。</p>
+        <a class="dl-btn" href="data/yijing-rdf.js" download>下载 JS 索引</a>
+      </div>
+      <div class="dl-card">
+        <h4>🔗 GitHub 仓库</h4>
+        <p>本体源数据、构建脚本、历史版本全部开源，可在 GitHub 上提交 issue/PR 参与校勘补全。</p>
+        <a class="dl-btn" href="https://github.com/yejinlei/The-Book-of-Changes" target="_blank" rel="noopener">访问仓库 ↗</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="license-box">
+    <strong>📜 开放授权协议 (License)</strong><br>
+    本本体采用 <strong>CC BY-SA 4.0（知识共享 署名-相同方式共享 4.0 国际）</strong> 协议开放：
+    <ul style="margin:8px 0 0 20px;padding:0;line-height:2;">
+      <li><strong>BY（署名）</strong>：使用时须保留原作者署名与链接；</li>
+      <li><strong>SA（相同方式共享）</strong>：基于本本体的衍生作品须以相同协议开放；</li>
+      <li>允许学术研究、教学、二次创作、商业使用；</li>
+      <li>原始经文属公有领域；注疏原文版权归原整理者所有，本项目以教育研究为目的整理呈现。</li>
+    </ul>
+  </div>
+
+  <div class="dl-section">
+    <h2>如何引用（Citation）</h2>
+    <div class="code-block">叶锦雷. (2026). <em>易经本体论 Yijing Ontology</em> (v1.5).
+GitHub. https://yejinlei.github.io/The-Book-of-Changes/
+<br><br>
+@online&#123;yijing-ontology-2026,
+&nbsp;&nbsp;author = &#123;叶锦雷&#125;,
+&nbsp;&nbsp;title  = &#123;易经本体论 Yijing Ontology&#125;,
+&nbsp;&nbsp;year   = &#123;2026&#125;,
+&nbsp;&nbsp;url    = &#123;https://yejinlei.github.io/The-Book-of-Changes/&#125;,
+&nbsp;&nbsp;note   = &#123;RDF/OWL 开放本体 v1.5&#125;
+&#125;</div>
+  </div>
+
+  <div class="dl-section">
+    <h2>与外部知识库的互联</h2>
+    <p style="color:#3b2f1e;line-height:1.9;font-size:14px;margin-bottom:12px;">
+      本本体通过 <code style="background:#ecdfb8;padding:2px 6px;border-radius:3px;">owl:sameAs</code> 对齐至以下开放知识库：
+    </p>
+    <table class="rdf-tbl">
+      <thead><tr><th>知识库</th><th>前缀</th><th>对齐内容</th><th>链接</th></tr></thead>
+      <tbody>
+        <tr><td>Wikidata</td><td><code>wd:</code></td><td>孔子、王弼、朱熹、程颐、邵雍、孔颖达等主要注家；卦、十翼、易占等核心概念</td><td><a href="https://www.wikidata.org/" target="_blank" rel="noopener">wikidata.org ↗</a></td></tr>
+        <tr><td>中国哲学书电子化计划</td><td><code>ctext:</code></td><td>《周易》经传原文、注疏原文原文定位</td><td><a href="https://ctext.org/" target="_blank" rel="noopener">ctext.org ↗</a></td></tr>
+        <tr><td>CBDB 中国历代人物传记资料库</td><td><code>cbdb:</code></td><td>注家人名 ID 对齐（规划中）</td><td><a href="https://projects.iq.harvard.edu/cbdb" target="_blank" rel="noopener">CBDB ↗</a></td></tr>
+        <tr><td>LOD Cloud</td><td>—</td><td>未来接入开放互联数据云</td><td>—</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note-box">
+    <strong>参与共建：</strong>本本体是一项持续的数字人文工程，欢迎提交 issue 补充：①出土文献异文；②未收录的注家注本；③医易/丹道/天文等跨学科对齐；④RDF 推理公理。所有贡献者将署名在本体贡献者列表中。
+  </div>
+</div>
+
+<footer class="footer-slot"></footer>
+</main>
+
+<script>
+(function(){
+  const D = window.YJ_RDF;
+  if(!D){console.error('YJ_RDF not loaded');return;}
+
+  // 统计
+  const s = D.stats;
+  const statsEl = document.getElementById('rdfStats');
+  const statMap = [
+    ['64','卦 (Hexagram)'],
+    ['384','爻 (Line)'],
+    ['85','注家 (Commentator)'],
+    ['21','注本 (Commentary)'],
+    ['10','翼 (Ten Wings)'],
+    ['18','类 (Class)'],
+    ['4','筮法 (Method)'],
+    ['12','版本 (Version)'],
+    [s.triples.toLocaleString(),'三元组 (Triples)'],
+  ];
+  statsEl.innerHTML = statMap.map(x=>`<div class="rdf-stat"><div class="num">${x[0]}</div><div class="lb">${x[1]}</div></div>`).join('');
+
+  // Tabs
+  document.querySelectorAll('#rdfTabs .tab').forEach(t=>{
+    t.addEventListener('click',()=>{
+      document.querySelectorAll('#rdfTabs .tab').forEach(x=>x.classList.remove('active'));
+      document.querySelectorAll('.tab-pane').forEach(x=>x.classList.remove('active'));
+      t.classList.add('active');
+      document.querySelector('.tab-pane[data-pane="'+t.dataset.tab+'"]').classList.add('active');
+    });
+  });
+
+  // Queries
+  const qBox = document.getElementById('queries');
+  D.queries.forEach(q=>{
+    const res = D.queryResults[q.id] || [];
+    const cols = res.length ? Object.keys(res[0]) : [];
+    const tbl = res.length ? `<table class="rdf-tbl"><thead><tr>${cols.map(c=>`<th>${c}</th>`).join('')}</tr></thead><tbody>${
+      res.map(r=>`<tr>${cols.map(c=>{
+        const v=r[c]; const isnum=typeof v==='number';
+        return `<td class="${isnum?'num':''}">${v==null?'—':v}</td>`;
+      }).join('')}</tr>`).join('')
+    }</tbody></table>` : '<p style="color:#6b5a3c;font-size:13px;">（无结果）</p>';
+    const sp = q.sparql ? `<div class="sparql">${q.sparql.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div>` : '';
+    const card = document.createElement('div');
+    card.className = 'query-card';
+    card.innerHTML = `<h3>${q.title}</h3><div class="q-desc">${q.desc||''}</div>${sp}${tbl}`;
+    qBox.appendChild(card);
+  });
+
+  // Classes/props tables
+  function fillTbl(tbodyId, list, mapper){
+    const tb=document.getElementById(tbodyId);
+    list.forEach(x=>{
+      const tr=document.createElement('tr');
+      tr.innerHTML = mapper(x);
+      tb.appendChild(tr);
+    });
+  }
+  document.getElementById('clsCount').textContent = D.classes.length;
+  document.getElementById('opCount').textContent = D.objectProperties.length;
+  document.getElementById('dpCount').textContent = D.dataProperties.length;
+  fillTbl('clsTbl', D.classes, c=>`<td><code>${c.id}</code></td><td>${c.labelZh}</td><td style="font-style:italic;color:#6b5a3c;">${c.commentEn}</td><td>${c.wdId?`<a href="https://www.wikidata.org/wiki/${c.wdId}" target="_blank" rel="noopener">wd:${c.wdId}</a>`:'—'}</td>`);
+  fillTbl('opTbl', D.objectProperties, p=>`<td><code>yj:${p.id}</code></td><td>${p.labelZh}</td><td style="color:#6b5a3c;">${p.commentEn}</td>`);
+  fillTbl('dpTbl', D.dataProperties, p=>`<td><code>yj:${p.id}</code></td><td>${p.labelZh}</td><td style="color:#6b5a3c;">${p.commentEn}</td><td><code>${p.commentEn.match(/xsd:(\w+)/)||'xsd:string'}</code></td>`);
+
+  // entity clouds
+  function cloud(elId, list, cls, href){
+    const el=document.getElementById(elId);
+    el.innerHTML = list.map(x=>{
+      const label = x.name || x;
+      return `<a class="entity-chip ${cls}" ${href?`href="${href(x)}"`:''}>${label}</a>`;
+    }).join('');
+  }
+  cloud('triCloud', D.entities.trigrams, 'tri');
+  cloud('guaCloud', D.entities.hexagrams, 'gua', x=>`gua.html#${x.id}`);
+  cloud('shiCloud', D.entities.shiyi, 'shu', x=>`shiyi.html#${x.id}`);
+  cloud('zjCloud', D.entities.commentators, 'zhujia', x=>`yanjiu.html#${x.id}`);
+  cloud('zbCloud', D.entities.commentaries, 'zb');
+  cloud('lpCloud', D.entities.schools, 'shu');
+  cloud('sfCloud', D.entities.methods, 'shu', x=>({
+    sf_dayan:'shifa.html', sf_tongqian:'shifa.html', sf_meihua:'shifa.html', sf_najia:'najia.html'
+  })[x.id] || '#');
+  cloud('verCloud', D.entities.versions, 'zb', x=>`jiaokan.html#${x.id}`);
+document.getElementById('topbar-slot').innerHTML = YJ_Link.topbar('rdf');
+document.getElementById('sidebar-slot').innerHTML = YJ_Link.sidebar('rdf');
+document.querySelector('.footer-slot').innerHTML = YJ_Link.footer();
+YJ_Link.initMobile();
+})();
+</script>
+</body>
+</html>
