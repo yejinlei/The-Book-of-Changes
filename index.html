@@ -1,895 +1,475 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Cache-Control" content="no-cache,no-store,must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ctext y='26' font-size='26'%3E%E2%98%AF%3C/text%3E%3C/svg%3E">
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>易经本体论 | The Book of Changes Ontology</title>
-<!-- ECharts 本地优先 + 多重CDN兜底 -->
+<link rel="stylesheet" href="css/yijing.css">
 <script src="js/echarts.min.js" onerror="this.onerror=null;this.src='https://lib.baomitu.com/echarts/5.4.3/echarts.min.js';"></script>
-<script>
-// 加载兜底检测，确保echarts一定可用
-window.addEventListener('load', function() {
-  if (typeof echarts === 'undefined') {
-    console.warn('本地ECharts加载失败，尝试备用CDN...');
-    var script = document.createElement('script');
-    script.src = 'https://unpkg.com/echarts@5.4.3/dist/echarts.min.js';
-    script.onload = function() {
-      console.log('备用CDN ECharts加载成功');
-      if (typeof renderChart === 'function') renderChart();
-    };
-    document.head.appendChild(script);
-  }
-});
-</script>
+<script src="data/yijing-ontology.js"></script>
+<script src="data/gua-full-data.js"></script>
+<script src="js/ontology-linker.js"></script>
 <style>
-:root {
-  --bg: #f4ecd8;
-  --paper: #faf6ed;
-  --text: #2b1810;
-  --accent: #8b0000;
-  --gold: #b8860b;
-  --ink: #1a1a2e;
-  --blue: #1e3a8a;
-  --green: #14532d;
-  --purple: #4c1d95;
-  --border: #d4c5a3;
-  --shadow: rgba(139,0,0,0.08);
+.hero-taiji{font-size:72px;color:var(--zhu);margin-bottom:12px;display:inline-block;animation:spin 60s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.ont-level{
+  display:grid;grid-template-columns:repeat(7,1fr);gap:8px;
+  margin:24px 0;
 }
-* { margin:0; padding:0; box-sizing:border-box; }
-body {
-  font-family: 'Songti SC','STSong','SimSun','Noto Serif CJK SC','Source Han Serif SC','Noto Serif SC',serif;
-  background: var(--bg);
-  color: var(--text);
-  line-height: 1.8;
+.ont-lvl{
+  text-align:center;padding:10px 6px;border:1px solid var(--line-soft);
+  border-radius:var(--radius);background:var(--paper-2);
+  font-size:12px;letter-spacing:1px;color:var(--ink-2);
 }
-/* 导航栏 */
-.top-nav {
-  position: fixed; top:0; left:0; right:0; height:64px;
-  background: var(--paper); border-bottom:2px solid var(--border);
-  z-index:1000; display:flex; align-items:center; justify-content:space-between;
-  padding:0 40px; box-shadow:0 2px 8px var(--shadow);
+.ont-lvl .lv-num{font-size:10px;color:var(--gold);font-family:var(--font-sans);margin-bottom:4px;}
+.ont-lvl .lv-name{font-size:14px;color:var(--zhu);font-weight:700;letter-spacing:2px;}
+.bagua-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:12px;
 }
-.logo { font-size:20px; font-weight:700; color:var(--ink); text-decoration:none; display:flex; align-items:center; gap:8px; }
-.logo .taiji { color:var(--accent); font-size:28px; }
-.logo small { font-size:12px; font-weight:400; color:var(--gold); margin-left:6px; letter-spacing:1px; }
-.nav-links { display:flex; gap:24px; }
-.nav-links a { color:var(--text); text-decoration:none; font-size:14px; font-weight:500; transition:.2s; }
-.nav-links a:hover { color:var(--accent); }
-.btn-reader {
-  background:var(--accent); color:#fff !important; padding:6px 18px; border-radius:4px; font-size:13px;
+.bagua-card{
+  background:var(--paper-2);border:1px solid var(--line-soft);
+  border-radius:var(--radius-lg);padding:18px;text-align:center;
+  transition:all .3s;cursor:pointer;text-decoration:none;color:inherit;
 }
-.btn-reader:hover { background:#6d0000; }
-main { padding-top:64px; }
-/* Hero 区 */
-.hero {
-  text-align:center; padding:80px 40px 60px;
-  background: linear-gradient(180deg, var(--paper) 0%, var(--bg) 100%);
-  border-bottom:1px solid var(--border);
-  position:relative;
+.bagua-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);border-color:var(--gold-soft);}
+.bagua-card .sym{font-size:48px;line-height:1;margin-bottom:8px;}
+.bagua-card .name{font-size:20px;color:var(--zhu);font-weight:700;letter-spacing:2px;}
+.bagua-card .attr{font-size:12px;color:var(--ink-3);margin-top:6px;letter-spacing:1px;}
+.bagua-card .nature{font-size:14px;color:var(--ink-2);margin-top:4px;font-family:var(--font-kai);}
+
+.gua-preview{
+  display:grid;grid-template-columns:repeat(8,1fr);gap:6px;
 }
-.hero::before, .hero::after {
-  content:""; position:absolute; left:50%; transform:translateX(-50%);
-  height:1px; width:60%; max-width:800px;
-  background:repeating-linear-gradient(90deg, var(--gold) 0, var(--gold) 4px, transparent 4px, transparent 10px);
+.gua-mini{
+  aspect-ratio:3/4;background:var(--paper-2);border:1px solid var(--line-soft);
+  border-radius:4px;padding:8px 4px;text-align:center;text-decoration:none;color:inherit;
+  transition:all .2s;display:flex;flex-direction:column;align-items:center;justify-content:center;
 }
-.hero::before { top:20px; } .hero::after { bottom:20px; }
-.hero h1 { font-size:52px; color:var(--accent); font-weight:900; letter-spacing:12px; margin-bottom:12px; }
-.hero .subtitle { font-size:18px; color:var(--gold); letter-spacing:4px; margin-bottom:32px; }
-.hero .quote { font-size:15px; color:var(--ink); font-style:italic; max-width:600px; margin:0 auto 40px; opacity:.8; }
-/* 统计数字 */
-.stats-grid {
-  display:grid; grid-template-columns:repeat(6,1fr); gap:24px; max-width:1000px; margin:0 auto;
+.gua-mini:hover{background:var(--zhu);color:#fff;border-color:var(--zhu);transform:scale(1.08);z-index:2;}
+.gua-mini .sym{font-size:28px;line-height:1;margin-bottom:2px;}
+.gua-mini .nm{font-size:11px;letter-spacing:1px;}
+
+.school-card{
+  background:var(--paper-2);border:1px solid var(--line-soft);border-radius:var(--radius-lg);
+  padding:18px 20px;transition:all .25s;border-left:3px solid var(--zhu);
 }
-.stat-card {
-  background:var(--paper); border:1px solid var(--border); border-radius:8px; padding:20px 12px;
-  text-align:center;
+.school-card:hover{box-shadow:var(--shadow);transform:translateX(4px);}
+.school-card h4{font-size:17px;color:var(--ink);margin-bottom:6px;letter-spacing:2px;}
+.school-card p{font-size:13px;color:var(--ink-3);margin:0;line-height:1.8;}
+
+.master-chip{
+  display:inline-flex;align-items:center;gap:6px;
+  background:var(--paper-2);border:1px solid var(--line-soft);
+  padding:6px 12px;border-radius:20px;font-size:13px;
+  margin:4px;color:var(--ink-2);text-decoration:none;
+  transition:all .2s;
 }
-.stat-num { font-size:36px; font-weight:900; color:var(--accent); line-height:1; margin-bottom:6px; }
-.stat-label { font-size:13px; color:var(--text); font-weight:500; }
-.stat-sub { font-size:11px; color:var(--gold); margin-top:4px; }
-/* 通用区块 */
-.section { padding:60px 40px; max-width:1200px; margin:0 auto; }
-.section-title {
-  text-align:center; margin-bottom:48px;
+.master-chip:hover{background:var(--zhu);color:#fff;border-color:var(--zhu);}
+.master-chip .d{font-size:10px;color:var(--gold);font-family:var(--font-sans);}
+.master-chip:hover .d{color:var(--gold-soft);}
+
+#graphBox{width:100%;height:520px;background:var(--paper-2);border:1px solid var(--line-soft);border-radius:var(--radius-lg);}
+
+.timeline{position:relative;padding-left:32px;}
+.timeline::before{content:"";position:absolute;left:11px;top:8px;bottom:8px;width:2px;background:var(--line);}
+.tl-item{position:relative;margin-bottom:20px;}
+.tl-item::before{
+  content:"";position:absolute;left:-27px;top:8px;width:12px;height:12px;
+  background:var(--zhu);border:2px solid var(--paper);border-radius:50%;
+  box-shadow:0 0 0 2px var(--zhu);
 }
-.section-title h2 {
-  font-size:32px; color:var(--accent); letter-spacing:6px; margin-bottom:8px;
-  position:relative; display:inline-block; padding:0 30px;
-}
-.section-title h2::before, .section-title h2::after {
-  content:""; position:absolute; top:50%; width:20px; height:1px; background:var(--gold);
-}
-.section-title h2::before { left:0; } .section-title h2::after { right:0; }
-.section-title p { color:var(--gold); font-size:14px; letter-spacing:2px; }
-/* 模块入口卡片 */
-.module-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; margin-bottom:40px; }
-.module-card {
-  background:var(--paper); border:1px solid var(--border); border-radius:8px; padding:30px;
-  transition:.3s; cursor:pointer; text-decoration:none; color:inherit; display:block;
-  border-top:3px solid var(--accent);
-}
-.module-card:hover { transform:translateY(-4px); box-shadow:0 8px 24px var(--shadow); border-top-color:var(--gold); }
-.module-icon { font-size:36px; margin-bottom:12px; }
-.module-card h3 { font-size:20px; color:var(--ink); margin-bottom:8px; }
-.module-card p { font-size:14px; color:#5a4a3a; line-height:1.7; margin-bottom:12px; }
-.module-card .enter { color:var(--accent); font-size:13px; font-weight:600; }
-/* 八卦卡片 */
-.bagua-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:20px; }
-.bagua-card {
-  background:var(--paper); border:1px solid var(--border); border-radius:8px; padding:24px; text-align:center;
-  position:relative; transition:.3s; cursor:default;
-}
-.bagua-card:hover { transform:translateY(-3px); box-shadow:0 6px 20px var(--shadow); }
-.bagua-symbol { display:flex; justify-content:center; align-items:center; margin-bottom:8px; height:72px; }
-.bagua-symbol .gua-svg { transition: transform .3s; }
-.bagua-card:hover .bagua-symbol .gua-svg { transform: rotate(3deg) scale(1.05); }
-.bagua-name { font-size:24px; font-weight:700; color:var(--accent); margin-bottom:8px; }
-.bagua-nature { font-size:14px; color:var(--gold); margin-bottom:12px; font-weight:500; }
-.bagua-attrs { display:grid; grid-template-columns:1fr 1fr; gap:6px; font-size:12px; text-align:left; }
-.bagua-attr { color:#5a4a3a; }
-.bagua-attr b { color:var(--ink); }
-/* 64卦网格 */
-.gua64-grid { display:grid; grid-template-columns:repeat(8,1fr); gap:8px; }
-.gua-cell {
-  aspect-ratio:1; background:var(--paper); border:1px solid var(--border); border-radius:4px;
-  display:flex; flex-direction:column; align-items:center; justify-content:center;
-  cursor:pointer; transition:.2s; font-family:serif; padding:4px;
-  text-decoration:none; color:inherit;
-}
-.gua-cell:hover { background:var(--accent); color:#fff; border-color:var(--accent); transform:scale(1.1); z-index:2; }
-.gua-cell .sym { display:flex; justify-content:center; align-items:center; height:36px; }
-.gua-cell:hover .sym .gua-svg { transform: scale(1.08); filter: drop-shadow(0 0 4px rgba(255,255,255,.5)); }
-.gua-cell .sym .gua-svg { transition: transform .3s, filter .3s; }
-.gua-cell .name { font-size:11px; margin-top:2px; }
-.gua-cell .num { font-size:9px; opacity:.6; position:absolute; top:2px; left:4px; }
-.gua-cell { position:relative; }
-.gua-cell.jing-shang { border-top:2px solid var(--accent); }
-.gua-cell.jing-xia { border-top:2px solid var(--gold); }
-.jing-toggle { text-align:center; margin-bottom:20px; display:flex; justify-content:center; gap:12px; }
-.jing-toggle button {
-  padding:8px 20px; border:1px solid var(--border); background:var(--paper); color:var(--text);
-  border-radius:4px; cursor:pointer; font-family:inherit; font-size:14px; transition:.2s;
-}
-.jing-toggle button.active { background:var(--accent); color:#fff; border-color:var(--accent); }
-/* 大师卡片 */
-.master-section { padding:60px 40px; background:var(--paper); border-top:1px solid var(--border); border-bottom:1px solid var(--border); }
-.era-group { margin-bottom:36px; }
-.era-title {
-  font-size:20px; color:var(--accent); font-weight:700; margin-bottom:16px; padding-bottom:8px;
-  border-bottom:2px solid var(--gold); display:flex; align-items:center; gap:10px;
-}
-.era-title .count { font-size:13px; color:var(--gold); font-weight:400; }
-.masters-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
-.master-card {
-  background:var(--bg); border:1px solid var(--border); border-radius:6px; padding:16px; transition:.2s;
-}
-.master-card:hover { background:#fff; box-shadow:0 4px 12px var(--shadow); }
-.master-card .name { font-size:17px; font-weight:700; color:var(--ink); margin-bottom:4px; }
-.master-card .years { font-size:12px; color:var(--gold); margin-bottom:8px; }
-.master-card .school-tag {
-  display:inline-block; font-size:11px; padding:2px 8px; border-radius:3px; background:var(--gold); color:#fff;
-  margin-bottom:8px;
-}
-.master-card .masterpiece { font-size:12px; color:var(--accent); margin-bottom:6px; font-weight:500; }
-.master-card .desc { font-size:12px; color:#5a4a3a; line-height:1.6; }
-/* 注本列表 */
-.books-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:16px; }
-.book-card {
-  background:var(--paper); border:1px solid var(--border); border-left:4px solid var(--accent);
-  border-radius:4px; padding:16px 20px;
-}
-.book-card .book-name { font-size:17px; font-weight:700; color:var(--ink); margin-bottom:4px; }
-.book-card .book-meta { font-size:12px; color:var(--gold); margin-bottom:8px; }
-.book-card .book-meta span { margin-right:12px; }
-.book-card .book-desc { font-size:13px; color:#5a4a3a; line-height:1.7; }
-/* 流派/三易 */
-.schools-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
-.school-card {
-  background:var(--paper); border:1px solid var(--border); border-radius:8px; padding:24px;
-  border-top:3px solid var(--green);
-}
-.school-card.sanyi { border-top-color:var(--accent); }
-.school-card h4 { font-size:18px; color:var(--accent); margin-bottom:10px; }
-.school-card p { font-size:13px; color:#5a4a3a; line-height:1.8; }
-/* 时间轴 */
-.timeline { position:relative; padding-left:30px; }
-.timeline::before {
-  content:""; position:absolute; left:10px; top:0; bottom:0; width:2px; background:var(--border);
-}
-.timeline-item { position:relative; margin-bottom:24px; padding-left:24px; }
-.timeline-item::before {
-  content:""; position:absolute; left:-24px; top:8px; width:14px; height:14px;
-  border-radius:50%; background:var(--accent); border:3px solid var(--bg);
-}
-.timeline-item .t-era { font-size:13px; color:var(--gold); font-weight:600; margin-bottom:4px; }
-.timeline-item .t-title { font-size:16px; font-weight:700; color:var(--ink); margin-bottom:4px; }
-.timeline-item .t-person { font-size:12px; color:var(--accent); margin-bottom:6px; }
-.timeline-item .t-content { font-size:13px; color:#5a4a3a; line-height:1.7; }
-/* 知识图谱 */
-.chart-container { width:100%; height:600px; background:var(--paper); border:1px solid var(--border); border-radius:8px; }
-.graph-bar { display:flex; align-items:center; gap:10px; margin:0 0 12px; flex-wrap:wrap; }
-.graph-crumb { font-family:'Songti SC',SimSun,serif; font-size:14px; color:var(--ink,#3a2a1a); background:#f1e7d2; border:1px solid var(--border); border-radius:6px; padding:5px 12px; }
-.graph-spacer { flex:1; }
-.graph-btn { font-family:inherit; font-size:13px; cursor:pointer; padding:6px 14px; border-radius:6px; border:1px solid #8b0000; background:#fff; color:#8b0000; transition:.25s; }
-.graph-btn:hover { background:#8b0000; color:#fff; }
-.graph-btn:disabled { opacity:.4; cursor:not-allowed; }
-.graph-sel { font-family:inherit; font-size:13px; padding:6px 10px; border-radius:6px; border:1px solid var(--border); background:#fff; color:#3a2a1a; max-width:220px; }
-.graph-tip { font-size:12px; color:#9a8f7a; text-align:center; margin-top:10px; }
-/* 经文库入口 */
-.text-module-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; margin-top:30px; }
-.text-card {
-  background:var(--paper); border:1px solid var(--border); border-radius:8px; padding:30px; text-align:center; cursor:pointer; transition:.3s;
-}
-.text-card:hover { transform:translateY(-4px); box-shadow:0 8px 20px var(--shadow); }
-.text-card .icon { font-size:42px; margin-bottom:12px; }
-.text-card h3 { font-size:19px; color:var(--ink); margin-bottom:8px; }
-.text-card p { font-size:13px; color:#5a4a3a; line-height:1.7; }
-/* Footer */
-footer {
-  text-align:center; padding:40px; background:var(--ink); color:#aaa; font-size:13px; line-height:2;
-}
-footer .ont-note { color:var(--gold); font-size:12px; margin-top:8px; }
-/* 响应式 */
-@media (max-width:900px) {
-  .stats-grid { grid-template-columns:repeat(3,1fr); }
-  .module-grid, .schools-grid, .text-module-grid { grid-template-columns:1fr; }
-  .bagua-grid { grid-template-columns:repeat(2,1fr); }
-  .gua64-grid { grid-template-columns:repeat(4,1fr); }
-  .masters-grid, .books-grid { grid-template-columns:1fr; }
-  .hero h1 { font-size:32px; letter-spacing:6px; }
-  .nav-links { gap:12px; }
-  .nav-links a { font-size:12px; margin-left:0 !important; }
-  .top-nav { padding:0 16px; }
-  .section { padding:40px 20px; }
+.tl-item .era{font-size:11px;color:var(--gold);letter-spacing:2px;font-family:var(--font-sans);}
+.tl-item h4{font-size:16px;color:var(--ink);margin:2px 0 4px;letter-spacing:2px;}
+.tl-item p{font-size:13px;color:var(--ink-3);margin:0;line-height:1.8;}
+
+@media(max-width:768px){
+  .ont-level{grid-template-columns:repeat(4,1fr);}
+  .bagua-grid{grid-template-columns:repeat(2,1fr);}
+  .gua-preview{grid-template-columns:repeat(6,1fr);}
 }
 </style>
 </head>
 <body>
-<!-- 导航 -->
-<nav class="top-nav"><a href="index.html" class="logo"><span class="taiji">☯</span>易经本体论<small>ONTOLOGY</small></a>
-    <div class="nav-divider">·</div>
-    <a href="index.html" class="active">首页</a>
-    <a href="gua.html">六十四卦</a>
-    <a href="reader.html">经文汇评</a>
-    <a href="shiyi.html">十翼</a>
-    <a href="yitu.html">易图互动</a>
-    <a href="bianhua.html">变化</a>
-    <a href="animation/index.html">易之变</a>
-            <a href="animation/gua-index.html">64卦讲解 · 动画</a>
-    <a href="animation/qian.html">乾卦讲解</a>
-    <a href="yanjiu.html">研究</a>
-  </nav>
+<div id="topbar-slot"></div>
+<div class="layout">
+  <div id="sidebar-slot"></div>
+  <main class="content" style="padding:0;">
 
-<main>
-<!-- Hero -->
-<section class="hero" id="overview">
-  <h1>易 经</h1>
-  <div class="subtitle">THE BOOK OF CHANGES ONTOLOGY</div>
-  <div class="quote">"易有太极，是生两仪，两仪生四象，四象生八卦，八卦定吉凶，吉凶生大业。"<br>——《周易·系辞上》</div>
-  <div class="stats-grid" id="statsGrid"></div>
-</section>
+    <!-- Hero -->
+    <section class="hero">
+      <div class="hero-taiji">☯</div>
+      <h1>易经本体论</h1>
+      <div class="subtitle">The Book of Changes Ontology · 易有太极 是生两仪</div>
+      <div class="quote">
+        "易之为书也，广大悉备，有天道焉，有人道焉，有地道焉。"<br>
+        —— 《周易·系辞下》
+      </div>
+      <div style="margin-bottom:32px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+        <a href="gua.html" class="btn">进入卦象</a>
+        <a href="shifa.html" class="btn btn-gold">起卦占筮</a>
+        <a href="reader.html" class="btn btn-ghost">经文阅读</a>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-num" id="st-gua">64</div><div class="stat-label">别卦</div><div class="stat-sub">六十四卦</div></div>
+        <div class="stat-card"><div class="stat-num" id="st-yao">384</div><div class="stat-label">爻</div><div class="stat-sub">六爻成卦</div></div>
+        <div class="stat-card"><div class="stat-num">8</div><div class="stat-label">经卦</div><div class="stat-sub">八卦</div></div>
+        <div class="stat-card"><div class="stat-num">10</div><div class="stat-label">翼</div><div class="stat-sub">十翼易传</div></div>
+        <div class="stat-card"><div class="stat-num" id="st-master">56</div><div class="stat-label">注家</div><div class="stat-sub">历代大师</div></div>
+        <div class="stat-card"><div class="stat-num" id="st-triple">2721</div><div class="stat-label">三元组</div><div class="stat-sub">本体关系</div></div>
+      </div>
+    </section>
 
-<!-- 易之变 · 动态影像（Remotion + three.js + SVG · 人声旁白版 · HLS 边下边播） -->
-<section class="section" id="yi-film-section" style="max-width:1100px;">
-  <div class="section-title">
-    <h2>易 之 变</h2>
-    <p>REMOTION 动态影像 · 从一道到万象 · 十四幕卦变全程</p>
-  </div>
-  <div id="yi-film" style="position:relative;max-width:1100px;margin:0 auto;background:#0b0b10;border:1px solid var(--border);border-radius:6px;box-shadow:0 4px 24px rgba(0,0,0,.35);overflow:hidden;">
-    <video id="yi-film-video" controls preload="metadata" playsinline
-           poster="animation/assets/易之变-封面.jpg"
-           style="display:block;width:100%;background:#000;"
-           src="animation/assets/yizhibian-full.mp4">
-      您的浏览器不支持视频播放。
-    </video>
-    <div style="position:absolute;left:14px;top:12px;font-size:12px;color:#d4a017;opacity:.85;font-family:'Kaiti SC','STKaiti',serif;pointer-events:none;letter-spacing:1px;">易之变 · 十四幕 · 人声旁白版 · 近七分钟 · 道生一 → 一生二 → 二生三 → 三生万物 → 错·综·互·变 → 万变归一</div>
-    <a href="animation/index.html" style="position:absolute;right:14px;top:12px;padding:4px 12px;background:var(--accent);color:#fff;border-radius:3px;text-decoration:none;font-size:12px;font-family:'Noto Serif SC','Source Han Serif SC',serif;letter-spacing:1px;">⚡ HLS 边下边播</a>
-  </div>
+    <!-- 本体架构层级 -->
+    <section class="section">
+      <div class="section-head">
+        <div class="en">Ontology Hierarchy</div>
+        <h2>本体七层</h2>
+      </div>
+      <p style="text-align:center;color:var(--ink-3);max-width:760px;margin:0 auto 28px;font-size:14px;">
+        从"道"的形上本体出发，层层下贯至符号系统、经文、注疏、流派与文化外延，构成完整的易学知识体系。点击卡片可下钻至对应页面。
+      </p>
+      <div class="ont-level">
+        <a href="#L1" class="ont-lvl"><div class="lv-num">L0</div><div class="lv-name">元类</div><div style="margin-top:4px;">本体之基</div></a>
+        <a href="#L1" class="ont-lvl"><div class="lv-num">L1</div><div class="lv-name">道·阴阳·五行</div><div style="margin-top:4px;">核心范畴</div></a>
+        <a href="#bagua" class="ont-lvl"><div class="lv-num">L2</div><div class="lv-name">八卦·六十四卦</div><div style="margin-top:4px;">符号系统</div></a>
+        <a href="#jing" class="ont-lvl"><div class="lv-num">L3</div><div class="lv-name">经·传</div><div style="margin-top:4px;">经文体系</div></a>
+        <a href="#zhushu" class="ont-lvl"><div class="lv-num">L4</div><div class="lv-name">注家·注本</div><div style="margin-top:4px;">注疏传统</div></a>
+        <a href="#pai" class="ont-lvl"><div class="lv-num">L5</div><div class="lv-name">义理·象数</div><div style="margin-top:4px;">义理体系</div></a>
+        <a href="#chuan" class="ont-lvl"><div class="lv-num">L6</div><div class="lv-name">传承·应用</div><div style="margin-top:4px;">文化外延</div></a>
+      </div>
+    </section>
 
-  <!-- 十四幕章节导航 -->
-  <div id="yi-film-chapters" style="max-width:1100px;margin:16px auto 0;display:grid;grid-template-columns:repeat(auto-fill,minmax(158px,1fr));gap:8px;"></div>
-  <p style="max-width:1100px;margin:12px auto 0;font-size:12.5px;color:var(--text);opacity:.62;text-align:center;line-height:1.8;">
-    本片由 Remotion 逐帧渲染，画面以 SVG 绘制经传卦象、three.js 生成三维星尘、Remotion 编排时间轴，edge-tts 云希男声旁白 + 古琴垫音 ——
-    完整呈现《易经》的宇宙生成链与错、综、互、变、消息、卦序六种卦变。默认加载为 HLS 流媒体，可边下边播、任意拖拽。<br>
-    <a href="animation/assets/yizhibian-full.mp4" download style="color:var(--accent);text-decoration:none;">↓ 下载全片 MP4 (48MB)</a>
-    &nbsp;·&nbsp;
-    <a href="animation/index.html" style="color:var(--accent);text-decoration:none;">进入独立放映页（HLS） →</a>
-  </p>
-</section>
+    <!-- 八经卦 -->
+    <section class="section" id="bagua">
+      <div class="section-head">
+        <div class="en">Ba Gua · Eight Trigrams</div>
+        <h2>八卦定象</h2>
+      </div>
+      <p style="text-align:center;color:var(--ink-3);max-width:760px;margin:0 auto 28px;font-size:14px;">
+        古者包牺氏之王天下也，仰则观象于天，俯则观法于地，观鸟兽之文，与地之宜，近取诸身，远取诸物，于是始作八卦。
+      </p>
+      <div class="bagua-grid" id="baguaGrid"></div>
+    </section>
 
-<!-- 核心模块入口 -->
-<section class="section">
-  <div class="section-title">
-    <h2>本体架构</h2>
-    <p>SEVEN-LAYER ONTOLOGY · 七层本体建模</p>
-  </div>
-  <div class="module-grid">
-    <a class="module-card" href="#shengcheng">
-      <div class="module-icon">☯</div>
-      <h3>本体生成链</h3>
-      <p>道 → 太极 → 两仪 → 四象 → 八卦 → 六十四卦 → 三百八十四爻，完整的本体生成层级可视化。</p>
-      <span class="enter">查看生成链 →</span>
-    </a>
-    <a class="module-card" href="#bagua">
-      <div class="module-icon">☰☷</div>
-      <h3>符号系统</h3>
-      <p>八卦、六十四卦、河图洛书、太极图、先后天八卦、十二消息卦等易图体系完整建模。</p>
-      <span class="enter">查看符号体系 →</span>
-    </a>
-    <a class="module-card" href="#texts">
-      <div class="module-icon">📜</div>
-      <h3>经文文本</h3>
-      <p>易经本经（卦爻辞）+ 十翼（易传）+ 历代注疏，卦辞、彖传、象传、爻辞、文言、系辞完整构建。</p>
-      <span class="enter">进入经文库 →</span>
-    </a>
-    <a class="module-card" href="#masters">
-      <div class="module-icon">👤</div>
-      <h3>注家注本</h3>
-      <p>56位历代易学大师 + 21种经典注本，从先秦孔子到当代名家，完整的注疏传统知识库。</p>
-      <span class="enter">查阅历代易学 →</span>
-    </a>
-    <a class="module-card" href="#sanyi">
-      <div class="module-icon">☯</div>
-      <h3>义理体系</h3>
-      <p>三易原则（变易/简易/不易）、象数派/义理派/图书派/考据派等易学流派分类梳理。</p>
-      <span class="enter">研究义理体系 →</span>
-    </a>
-    <a class="module-card" href="#chart">
-      <div class="module-icon">🕸</div>
-      <h3>知识图谱</h3>
-      <p>本体关系图谱可视化，1143条关系三元组，清晰展示本体之间的生成、注释、师承等关系。</p>
-      <span class="enter">查看知识图谱 →</span>
-    </a>
-  </div>
-</section>
+    <!-- 六十四卦预览 -->
+    <section class="section" id="jing">
+      <div class="section-head">
+        <div class="en">Liu Shi Si Gua · 64 Hexagrams</div>
+        <h2>六十四卦</h2>
+      </div>
+      <p style="text-align:center;color:var(--ink-3);max-width:760px;margin:0 auto 20px;font-size:14px;">
+        八卦两两相重，成六十四别卦。<span id="gua-count-inline"></span>
+      </p>
+      <div class="gua-preview" id="guaPreview"></div>
+      <div style="text-align:center;margin-top:20px;">
+        <a href="gua.html" class="btn btn-ghost">浏览全部六十四卦 →</a>
+      </div>
+    </section>
 
-<!-- 八卦 -->
-<section class="section" id="bagua">
-  <div class="section-title">
-    <h2>八 经 卦</h2>
-    <p>EIGHT TRIGRAMS · 八卦本体</p>
-  </div>
-  <div class="bagua-grid" id="baguaGrid"></div>
-</section>
+    <!-- 三易原则 -->
+    <section class="section" id="L1">
+      <div class="section-head">
+        <div class="en">San Yi · Three Principles</div>
+        <h2>三易大义</h2>
+      </div>
+      <div class="grid-3">
+        <div class="card" style="text-align:center;border-top:3px solid var(--zhu);">
+          <div style="font-size:40px;color:var(--zhu);margin-bottom:8px;">⟳</div>
+          <h3 style="color:var(--zhu);">变易</h3>
+          <p style="color:var(--ink-3);font-size:14px;">
+            天地万物，时刻变化，无有静止。易之为言变也，卦爻之动，皆所以明变化之道。
+          </p>
+        </div>
+        <div class="card" style="text-align:center;border-top:3px solid var(--gold);">
+          <div style="font-size:40px;color:var(--gold);margin-bottom:8px;">☷</div>
+          <h3 style="color:var(--gold);">简易</h3>
+          <p style="color:var(--ink-3);font-size:14px;">
+            大道至简。阴阳二爻，尽天地之理；六十四卦，括万物之情。
+          </p>
+        </div>
+        <div class="card" style="text-align:center;border-top:3px solid var(--blue-ink);">
+          <div style="font-size:40px;color:var(--blue-ink);margin-bottom:8px;">☰</div>
+          <h3 style="color:var(--blue-ink);">不易</h3>
+          <p style="color:var(--ink-3);font-size:14px;">
+            变中有不变者存。天尊地卑，乾坤定矣；动静有常，刚柔断矣。
+          </p>
+        </div>
+      </div>
+    </section>
 
-<!-- 六十四卦 -->
-<section class="section" id="liushisigua">
-  <div class="section-title">
-    <h2>六 十 四 卦</h2>
-    <p>SIXTY-FOUR HEXAGRAMS · 别卦本体（点击查看详情）</p>
-  </div>
-  <div class="jing-toggle">
-    <button class="active" data-jing="all">全部64卦</button>
-    <button data-jing="上经">上经30卦</button>
-    <button data-jing="下经">下经34卦</button>
-  </div>
-  <div class="gua64-grid" id="gua64Grid"></div>
-</section>
+    <!-- 十翼易传入口 -->
+    <section class="section">
+      <div class="section-head">
+        <div class="en">Shi Yi · Ten Wings</div>
+        <h2>十翼</h2>
+      </div>
+      <div class="grid-2" id="shiyiGrid"></div>
+      <div style="text-align:center;margin-top:20px;">
+        <a href="shiyi.html" class="btn btn-ghost">阅读十翼全文 →</a>
+      </div>
+    </section>
 
-<!-- 三易 / 流派 -->
-<section class="section" id="sanyi">
-  <div class="section-title">
-    <h2>三易·流派</h2>
-    <p>THREE YI & SCHOOLS · 义理体系本体</p>
-  </div>
-  <div class="schools-grid" id="schoolsGrid"></div>
-</section>
+    <!-- 易学流派 -->
+    <section class="section" id="pai">
+      <div class="section-head">
+        <div class="en">Schools of Yi-ology</div>
+        <h2>义理流派</h2>
+      </div>
+      <div class="grid-2" id="schoolGrid"></div>
+    </section>
 
-<!-- 经文入口 -->
-<section class="section" id="texts">
-  <div class="section-title">
-    <h2>经 文 库</h2>
-    <p>CLASSIC TEXTS · 经传易图</p>
-  </div>
-  <div class="text-module-grid">
-    <a class="text-card" href="reader.html">
-      <div class="icon">📖</div>
-      <h3>易经全文 · 历代批注</h3>
-      <p>64卦卦爻辞 +《周易集解》汉唐注 +《周易折中》程传/本义/历代集说，仿脂批段间嵌入阅读</p>
-    </a>
-    <a class="text-card" href="shiyi.html">
-      <div class="icon">📜</div>
-      <h3>易传（十翼）</h3>
-      <p>彖传、象传、系辞、文言、说卦、序卦、杂卦——孔子所作十翼全文，义理之渊薮</p>
-    </a>
-    <a class="text-card" href="yitu.html">
-      <div class="icon">🌀</div>
-      <h3>易图体系</h3>
-      <p>河图洛书·太极图·先后天八卦·六十四卦方圆图·十二消息卦 —— <b>八图皆可互动</b>，点数可算、卦位可拖、卦变可演</p>
-    </a>
-    <a class="text-card" href="animation/index.html">
-      <div class="icon">🎬</div>
-      <h3>易之变 · 动画</h3>
-      <p><b>Remotion + Three.js + SVG</b> 渲染 · 从「道生一」到「六十四卦」再到错/综/互/之/消息卦 · 共 14 幕 / 2 分 54 秒 · 附完整剧本与源码</p>
-    </a>
-  </div>
-</section>
+    <!-- 历代注家 -->
+    <section class="section" id="zhushu">
+      <div class="section-head">
+        <div class="en">Masters & Commentaries</div>
+        <h2>历代注家</h2>
+      </div>
+      <p style="text-align:center;color:var(--ink-3);max-width:760px;margin:0 auto 20px;font-size:14px;">
+        自孔子以降，历代贤哲递相传注，象数义理，各擅胜场，汇成两千年易学洪流。
+      </p>
+      <div id="masterChips" style="text-align:center;max-width:960px;margin:0 auto;"></div>
+      <div style="text-align:center;margin-top:20px;">
+        <a href="yanjiu.html" class="btn btn-ghost">详观注本与汇评 →</a>
+      </div>
+    </section>
 
-<!-- 历代大师 -->
-<section class="master-section" id="masters">
-  <div class="section" style="padding-top:0;">
-    <div class="section-title">
-      <h2>历 代 易 学 大 师</h2>
-      <p>MASTERS THROUGH AGES · 注家本体（<span id="masterCount"></span>位）</p>
-    </div>
-    <div id="mastersByEra"></div>
+    <!-- 本体知识图谱 -->
+    <section class="section">
+      <div class="section-head">
+        <div class="en">Ontology Graph</div>
+        <h2>本体关系网</h2>
+      </div>
+      <p style="text-align:center;color:var(--ink-3);max-width:760px;margin:0 auto 20px;font-size:14px;">
+        本图呈现核心本体实例（道、阴阳、八卦、卦、爻、注家、注本、流派）间的 <span id="tripleCount">2721</span> 条关系。节点可拖拽，滚轮缩放，点击节点可跳转至对应条目。
+      </p>
+      <div id="graphBox"></div>
+    </section>
 
-    <div class="section-title" style="margin-top:60px;">
-      <h2>经 典 注 本</h2>
-      <p>CLASSIC COMMENTARIES · 注本本体（<span id="bookCount"></span>种）</p>
-    </div>
-    <div class="books-grid" id="booksGrid"></div>
-  </div>
-</section>
+    <!-- 易学传承时间线 -->
+    <section class="section" id="chuan">
+      <div class="section-head">
+        <div class="en">Lineage & Transmission</div>
+        <h2>易学传承</h2>
+      </div>
+      <div class="timeline" id="timeline"></div>
+    </section>
 
-<!-- 知识图谱 -->
-<section class="section" id="chart">
-  <div class="section-title">
-    <h2>本 体 知 识 图 谱</h2>
-    <p>ONTOLOGY GRAPH · 关系三元组（<span id="tripleCount"></span>条）· 点击任意节点下钻其关系子图</p>
-  </div>
-  <div class="graph-bar">
-    <span class="graph-crumb" id="graphCrumb">全景 · 本体主干</span>
-    <span class="graph-spacer"></span>
-    <button class="graph-btn" id="graphBack" type="button">← 返回上层</button>
-    <button class="graph-btn" id="graphReset" type="button">回到全景</button>
-    <select class="graph-sel" id="graphFocus" title="快速聚焦">
-      <option value="">快速聚焦节点…</option>
-    </select>
-  </div>
-  <div class="chart-container" id="ontoChart"></div>
-  <div class="graph-tip" id="graphTip">提示：拖动可移动节点，滚轮缩放；单击节点可下钻查看其全部关系。</div>
-</section>
+    <!-- 功能入口 -->
+    <section class="section" style="padding-bottom:24px;">
+      <div class="grid-3">
+        <a href="shifa.html" class="card" style="text-align:center;text-decoration:none;color:inherit;">
+          <div style="font-size:44px;color:var(--zhu);margin-bottom:10px;">筮</div>
+          <h3 style="color:var(--zhu);">筮法推演</h3>
+          <p style="color:var(--ink-3);font-size:13px;margin:0;">大衍之数五十，其用四十有九。三变成爻，十八变成卦，模拟传统蓍草起卦全流程。</p>
+        </a>
+        <a href="bianhua.html" class="card" style="text-align:center;text-decoration:none;color:inherit;">
+          <div style="font-size:44px;color:var(--gold);margin-bottom:10px;">變</div>
+          <h3 style="color:var(--gold);">卦变推演</h3>
+          <p style="color:var(--ink-3);font-size:13px;margin:0;">错卦、综卦、互卦、爻变——直观演示卦与卦之间的转化关系。</p>
+        </a>
+        <a href="animation/gua-index.html" class="card" style="text-align:center;text-decoration:none;color:inherit;">
+          <div style="font-size:44px;color:var(--blue-ink);margin-bottom:10px;">影</div>
+          <h3 style="color:var(--blue-ink);">卦象讲解</h3>
+          <p style="color:var(--ink-3);font-size:13px;margin:0;">六十四卦逐卦动画讲解，女声配音+古琴背景音，约2.5-3分钟/卦。</p>
+        </a>
+      </div>
+    </section>
 
-<!-- 传承时间轴 -->
-<section class="section" id="lineage">
-  <div class="section-title">
-    <h2>易 学 传 承</h2>
-    <p>LINEAGE OF YI-LEARNING · 关键事件</p>
-  </div>
-  <div class="timeline" id="timeline"></div>
-</section>
-</main>
+  </main>
+</div>
+<div id="footer-slot"></div>
 
-<footer>
-  <div>易经本体论 · The Book of Changes Ontology</div>
-  <div>以本体论方法构建易经知识库 · 所有数据以本体实例建模，网页仅为渲染视图</div>
-  <div class="ont-note">数据来源：李鼎祚《周易集解》、李光地《御纂周易折中》、朱熹《周易本义》、程颐《伊川易传》等</div>
-</footer>
-
-<script src="data/gua-full-data.js"></script>
-<script src="data/yijing-ontology.js"></script>
-<script src="data/gua-anim.js"></script>
 <script>
-const ONT = window.YJ_ONT;
-console.log('✅ 易经本体已加载', ONT.stats());
+// 注入外壳
+document.getElementById('topbar-slot').innerHTML = YJ_Link.topbar('home');
+document.getElementById('sidebar-slot').innerHTML = YJ_Link.sidebar('home');
+document.getElementById('footer-slot').innerHTML = YJ_Link.footer();
 
-// ===== 渲染统计数字 =====
-function renderStats() {
-  const s = ONT.stats();
-  const html = [
-    {num:s.bagua, label:'八卦', sub:'经卦'},
-    {num:s.liushisigua, label:'六十四卦', sub:'别卦'},
-    {num:s.yao, label:'爻', sub:'三百八十四爻'},
-    {num:s.zhujia, label:'历代注家', sub:'先秦至当代'},
-    {num:s.zhuben, label:'经典注本', sub:'从汉至清'},
-    {num:s.triples, label:'本体关系', sub:'知识三元组'},
-  ].map(c => `
-    <div class="stat-card">
-      <div class="stat-num">${c.num}</div>
-      <div class="stat-label">${c.label}</div>
-      <div class="stat-sub">${c.sub}</div>
-    </div>
-  `).join('');
-  document.getElementById('statsGrid').innerHTML = html;
-}
+const ONT = YJ_ONT;
+const GF = YJ_GUA_FULL;
 
-// ===== 渲染八卦 =====
-function renderBagua() {
-  const html = ONT.bagua.map(g => `
-    <div class="bagua-card" data-bagua="${g.name}">
-      <div class="bagua-symbol" data-bagua-sym="${g.name}"></div>
-      <div class="bagua-name">${g.num}. ${g.name}</div>
-      <div class="bagua-nature">${g.nature}（${g.yinyang}）</div>
-      <div class="bagua-attrs">
-        <div class="bagua-attr"><b>五行：</b>${g.wuxing}</div>
-        <div class="bagua-attr"><b>方位：</b>${g.fangwei}</div>
-        <div class="bagua-attr"><b>自然：</b>${g.ziran}</div>
-        <div class="bagua-attr"><b>亲情：</b>${g.qinqing}</div>
-      </div>
-    </div>
-  `).join('');
-  document.getElementById('baguaGrid').innerHTML = html;
-  document.querySelectorAll('[data-bagua-sym]').forEach(el=>{
-    GuaAnim.baguaSVG(el, el.dataset.baguaSym, 60);
-  });
-}
+// 统计
+const zhuJiaArr = ONT.zhujia||[];
+document.getElementById('st-master').textContent = zhuJiaArr.length;
 
-// ===== 渲染64卦 =====
-let currentJing = 'all';
-function render64Gua() {
-  let list = ONT.liushisigua;
-  if (currentJing !== 'all') list = list.filter(g => g.jing === currentJing);
-  const html = list.map(g => `
-    <a class="gua-cell ${g.jing==='上经'?'jing-shang':'jing-xia'}" href="gua.html#${g.name}" title="${g.num}.${g.name}：${(g.guaci||'').replace(/"/g,'')}" data-gua-idx="${g.num-1}">
-      <span class="sym" data-gua-sym="${g.num-1}"></span>
-      <span class="name">${g.name}</span>
-      <span class="num">${g.num}</span>
-    </a>
-  `).join('');
-  document.getElementById('gua64Grid').innerHTML = html;
-  // 挂六爻小图
-  document.querySelectorAll('[data-gua-sym]').forEach(el=>{
-    const idx = +el.dataset.guaSym;
-    const g = ONT.liushisigua[idx];
-    GuaAnim.mountMini(el, g, {size: 40});
-  });
-}
-document.querySelectorAll('.jing-toggle button').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.jing-toggle button').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    currentJing = btn.dataset.jing;
-    render64Gua();
-  });
+// 八卦
+const baguaGrid = document.getElementById('baguaGrid');
+baguaGrid.innerHTML = (ONT.bagua||[]).map(g=>`
+  <a href="gua.html#${g.id}" class="bagua-card fade-up">
+    <div class="sym">${g.symbol}</div>
+    <div class="name">${g.name}</div>
+    <div class="nature">${g.xiang}，君子以${g.de}</div>
+    <div class="attr">${g.ziran} · ${g.qinqing} · ${g.fangwei} · ${g.wuxing}</div>
+  </a>`).join('');
+
+// 64卦预览
+const guas = ONT.liushisigua||[];
+document.getElementById('gua-count-inline').textContent = `共 ${guas.length} 卦，上经 30、下经 34，含 384 爻 + 乾坤用九用六。`;
+document.getElementById('guaPreview').innerHTML = guas.map(g=>`
+  <a href="gua.html#${g.id}" class="gua-mini" title="${g.name}·${g.guaci||''}">
+    <div class="sym">${g.symbol}</div>
+    <div class="nm">${g.num}.${g.name}</div>
+  </a>`).join('');
+
+// 十翼
+const shiyiDefs = [
+  {id:'tuan',name:'彖传',desc:'断一卦之大义，释卦辞之理'},
+  {id:'xiang',name:'象传',desc:'取卦象以明人事，含大象小象'},
+  {id:'xici',name:'系辞传',desc:'通论易道之全体，易学哲学纲领'},
+  {id:'wenyan',name:'文言传',desc:'专释乾坤二卦之微言大义'},
+  {id:'shuogua',name:'说卦传',desc:'说八卦之象德、方位、性情'},
+  {id:'xugua',name:'序卦传',desc:'叙六十四卦之排列次序与相因之理'},
+  {id:'zagua',name:'杂卦传',desc:'错综杂举，以明卦义之反对'},
+];
+document.getElementById('shiyiGrid').innerHTML = shiyiDefs.map(s=>`
+  <a href="shiyi.html#${s.id}" class="card" style="text-decoration:none;color:inherit;">
+    <h4 style="color:var(--zhu);letter-spacing:3px;">${s.name}</h4>
+    <p style="color:var(--ink-3);font-size:13px;margin:0;">${s.desc}</p>
+  </a>`).join('');
+
+// 流派
+const schools = ONT.liupai||[];
+document.getElementById('schoolGrid').innerHTML = schools.slice(0,8).map(s=>`
+  <div class="school-card">
+    <h4>${s.name||s.name}</h4>
+    <p>${s.desc||''}</p>
+  </div>`).join('');
+
+// 注家chips
+document.getElementById('masterChips').innerHTML = zhuJiaArr.slice(0,32).map(z=>`
+  <a href="yanjiu.html#${z.id}" class="master-chip">
+    <span>${z.name||z.name}</span>
+    <span class="d">${z.era||''}</span>
+  </a>`).join('');
+
+// 传承时间线
+const events = ONT.events||[
+  {era:'上古',name:'伏羲画卦',desc:'仰观俯察，始作八卦，以通神明之德，以类万物之情。'},
+  {era:'西周',name:'文王演易',desc:'文王拘羑里，重八卦为六十四卦，作卦辞。周公作爻辞。'},
+  {era:'春秋',name:'孔子作十翼',desc:'晚而好易，韦编三绝，作彖象系辞文言等十篇以传易道。'},
+  {era:'汉代',name:'汉易象数',desc:'孟喜、京房创卦气说、纳甲筮法；郑玄、荀爽以象数解易。'},
+  {era:'魏晋',name:'王弼扫象',desc:'王弼著《周易注》，黜象数而申义理，开玄学易之宗。'},
+  {era:'两宋',name:'程朱理学易',desc:'程颐作《易传》，朱熹著《周易本义》，集义理派之大成；邵雍倡先天易学。'},
+  {era:'清代',name:'汉学复兴',desc:'惠栋、张惠言、焦循等复兴汉易，以考据训诂方法治易。'},
+  {era:'近现代',name:'考古新证',desc:'马王堆帛书周易、郭店楚简出土，易学研究进入新阶段。'},
+];
+document.getElementById('timeline').innerHTML = events.map(e=>`
+  <div class="tl-item">
+    <div class="era">${e.era}</div>
+    <h4>${e.name}</h4>
+    <p>${e.desc}</p>
+  </div>`).join('');
+
+// ===== ECharts 本体关系图 =====
+window.addEventListener('load', function(){
+  setTimeout(renderGraph,200);
 });
+function renderGraph(){
+  if(typeof echarts==='undefined'){return;}
+  const dom=document.getElementById('graphBox');
+  if(!dom) return;
+  const chart=echarts.init(dom);
 
-// 显示卦详情：跳转到独立页面 gua.html
-// （原来为首页浮层弹窗，现改为独立页面渲染，符合"网页仅为本体渲染视图"原则）
+  const nodes=[];const links=[];
+  const add=(id,name,cat,symSize)=>{if(!nodes.find(n=>n.id===id))nodes.push({id,name,category:cat,symbolSize:symSize||18});};
+  const link=(s,t,pred)=>links.push({source:s,target:t,label:{show:false,formatter:pred},value:1});
 
-// ===== 渲染流派 =====
-function renderSchools() {
-  const sanyi = ONT.liupai.filter(s => s.sanyi);
-  const others = ONT.liupai.filter(s => !s.sanyi);
-  const html = [
-    ...sanyi.map(s => `<div class="school-card sanyi"><h4>· ${s.name} ·</h4><p>${s.desc}</p></div>`),
-    ...others.map(s => `<div class="school-card"><h4>${s.name}</h4><p>${s.desc}</p></div>`),
-  ].join('');
-  document.getElementById('schoolsGrid').innerHTML = html;
-}
+  // 根节点：道/太极/两仪
+  add('Dao','道',0,40);
+  add('Taiji','太极',0,34);
+  add('YinYang','阴阳',0,28);
+  link('Dao','Taiji','生');
+  link('Taiji','YinYang','分');
 
-// ===== 渲染大师（按时代分组）=====
-function renderMasters() {
-  const eraOrder = ['上古','西周','春秋','春秋末','西汉初','西汉','东汉','三国吴','曹魏','东晋','唐','五代宋初','北宋','南宋','元','明','明末','明末清初','清','近现代','现代','当代'];
-  const eraGroupMap = {};
-  ONT.zhujia.forEach(z => {
-    if (!eraGroupMap[z.era]) eraGroupMap[z.era] = [];
-    eraGroupMap[z.era].push(z);
+  // 八卦
+  (ONT.bagua||[]).forEach(g=>{
+    add(g.id,g.name,1,26);
+    link('YinYang',g.id,'生');
   });
-  const sortedEras = Object.keys(eraGroupMap).sort((a,b) => eraOrder.indexOf(a) - eraOrder.indexOf(b));
-  const html = sortedEras.map(era => `
-    <div class="era-group">
-      <div class="era-title">${era} <span class="count">(${eraGroupMap[era].length}位)</span></div>
-      <div class="masters-grid">
-        ${eraGroupMap[era].map(z => `
-          <div class="master-card">
-            <div class="name">${z.name}</div>
-            <div class="years">${z.years}</div>
-            ${z.school?`<span class="school-tag">${z.school}</span>`:''}
-            <div class="masterpiece">代表作：${z.masterpiece}</div>
-            <div class="desc">${z.desc}</div>
-          </div>
-        `).join('')}
-      </div>
-    </div>
-  `).join('');
-  document.getElementById('mastersByEra').innerHTML = html;
-  document.getElementById('masterCount').textContent = ONT.zhujia.length;
-}
-
-// ===== 渲染注本 =====
-function renderBooks() {
-  const html = ONT.zhuben.map(b => `
-    <div class="book-card">
-      <div class="book-name">《${b.name}》</div>
-      <div class="book-meta">
-        <span>📝 ${b.author}</span>
-        <span>🏛 ${b.dynasty}</span>
-        ${b.school?`<span>🏷 ${b.school}</span>`:''}
-        <span>📚 ${b.juan}卷</span>
-      </div>
-      <div class="book-desc">${b.desc}</div>
-    </div>
-  `).join('');
-  document.getElementById('booksGrid').innerHTML = html;
-  document.getElementById('bookCount').textContent = ONT.zhuben.length;
-}
-
-// ===== 渲染时间轴 =====
-function renderTimeline() {
-  const html = ONT.events.map(e => `
-    <div class="timeline-item">
-      <div class="t-era">${e.era} · ${e.year}</div>
-      <div class="t-title">${e.event}</div>
-      <div class="t-person">核心人物：${e.people}</div>
-      <div class="t-content">${e.content||e.desc||''}</div>
-    </div>
-  `).join('');
-  document.getElementById('timeline').innerHTML = html;
-}
-
-// ===== 渲染知识图谱（分级下钻）=====
-let chartInstance = null;
-let curFocus = null;         // 当前聚焦节点id，null=全景
-let focusStack = [];         // 下钻历史
-// 关系谓词中文标签
-const PRED_CN = {
-  shengCheng:'生成', youShengChengYu:'由…生成', zuHeCheng:'组合成', youZuHeYu:'由…组合',
-  chongGua:'重卦为', xiaGua:'下卦为', shangGua:'上卦为', yaoWei:'爻位为', shuYuGua:'属于卦',
-  zhushi:'注释', zhuShiYou:'注释者', zhushiZai:'注释在', youZhuShi:'有注释',
-  zuoZhe:'作者', zhuZuo:'著作', shuYuLiupai:'属于流派', chengYuan:'成员',
-  shiCheng:'师承', diZi:'弟子', duiYingWuXing:'对应五行', duiYingFangwei:'对应方位',
-  shengYu:'生于', hanYou:'含有', baoHan:'包含', shuYu:'属于', xiangZheng:'象征',
-  fenJuan:'分卷', baoHanGua:'所含卦', yaoWeiMing:'爻位', yinYang:'阴阳', xuGua:'序卦',
-  cuoGua:'错卦', zongGua:'综卦', huGua:'互卦', xiangChuan:'相传', zuoZheShi:'作者为',
-  huiBian:'汇编', youZhujia:'含注家', shengHuoYu:'生活于', xiChengYu:'师承于',
-  canYu:'参与', sanYi:'三义', keShiHuaYu:'可视化于', biaoZheng:'表征', xiangZhengZhi:'象征',
-  shuYuJing:'属经', youZhuZuo:'著作', zuHeYu:'由…组合'
-};
-const CAT_COLOR = {bagua:'#8b0000', gua:'#b8860b', zhujia:'#1e3a8a', jing:'#14532d', yuan:'#4c1d95', yao:'#0f766e'};
-const CAT_NAME = {yuan:'本体核心', bagua:'八经卦', gua:'六十四卦', zhujia:'历代注家', jing:'经传图', yao:'爻'};
-const CAT_LEGEND = [{name:'本体核心',itemStyle:{color:'#4c1d95'}},{name:'八经卦',itemStyle:{color:'#8b0000'}},{name:'六十四卦',itemStyle:{color:'#b8860b'}},{name:'历代注家',itemStyle:{color:'#1e3a8a'}},{name:'经传图',itemStyle:{color:'#14532d'}}];
-
-// 节点元信息（id -> {name, cat, size}）
-function buildNodeMeta(){
-  const meta = {};
-  const put=(id,name,cat,size)=>{ if(id) meta[id]={id,name,cat,size}; };
-  put('Dao','道','yuan',52); put('Taiji','太极','yuan',46);
-  put('YinYang','两仪','yuan',32); put('Sixiang','四象','yuan',30);
-  put('Bagua','八卦','yuan',38); put('Jing','易经本经','jing',38);
-  put('ShiYi','十翼','jing',30); put('Yitu','易图','jing',30);
-  (ONT.bagua||[]).forEach(g=>put(g.id, g.name, 'bagua', 28));
-  (ONT.liushisigua||[]).forEach(g=>put(g.id, g.name, 'gua', 20));
-  (ONT.zhujia||[]).forEach(z=>put(z.id, z.name, 'zhujia', 22));
-  (ONT.shiyi||[]).forEach(z=>put(z.id, z.name, 'jing', 18));
-  (ONT.yitu||[]).forEach(z=>put(z.id, z.name, 'jing', 16));
-  (ONT.liupai||[]).forEach(z=>put(z.id, z.name, 'yuan', 18));
-  (ONT.zhuben||[]).forEach(z=>put(z.id, z.name, 'jing', 15));
-  // 时代节点（注家生活时代，供时代维度下钻）
-  (ONT.triples||[]).forEach(t=>{ if(t.predicate==='shengHuoYu'){ const nm=String(t.object).replace(/^era_/,''); put(t.object, nm, 'yuan', 16); } });
-  return meta;
-}
-const NODE_META = buildNodeMeta();
-
-// 主干链路（全景时显示）
-const MAIN_CHAIN = ['Dao','Taiji','YinYang','Sixiang','Bagua','Jing','ShiYi','Yitu'];
-
-// 邻接表
-let ADJ = null;
-function buildAdj(){
-  if(ADJ) return ADJ;
-  ADJ = {};
-  const seen = {};  // 去重：同一对 (a|b|pred) 只保留一条，消除正反双向重复
-  (ONT.triples||[]).forEach(t=>{
-    const key = t.subject + '\u0001' + t.object + '\u0001' + t.predicate;
-    if(seen[key]) return;
-    seen[key] = 1;
-    (ADJ[t.subject]=ADJ[t.subject]||[]).push({to:t.object, pred:t.predicate, dir:'out'});
-    (ADJ[t.object]=ADJ[t.object]||[]).push({to:t.subject, pred:t.predicate, dir:'in'});
-  });
-  // 邻接表内按目标节点去重：同一邻居只保留一条边（正反/多谓词合并）
-  Object.keys(ADJ).forEach(k=>{
-    const uniq = {}, arr = [];
-    ADJ[k].forEach(e=>{ if(!uniq[e.to]){ uniq[e.to]=1; arr.push(e);} });
-    ADJ[k] = arr;
-  });
-  return ADJ;
-}
-
-// 全景视图：本体主干（道→四象→八卦→经→传/图）+ 八经卦 + 代表注家
-function buildOverview(){
-  const adj=buildAdj();
-  const nodes=[], links=[], seen=new Set();
-  const addNode=id=>{
-    const m=NODE_META[id]; if(!m||seen.has(id))return;
-    seen.add(id);
-    nodes.push({id, name:m.name, category:CAT_NAME[m.cat]||'其他', symbolSize:m.size,
-      itemStyle:{color:CAT_COLOR[m.cat]||'#888'},
-      label:{show:m.size>=20, fontSize:12, fontFamily:'Songti SC,SimSun,serif'}});
-  };
-  const addLink=(s,t,pred,color,w)=>{
-    if(!seen.has(s)||!seen.has(t)) return;
-    links.push({source:s,target:t,value:PRED_CN[pred]||pred,lineStyle:{color:color,width:w||1.4}});
-  };
-  MAIN_CHAIN.forEach(addNode);
-  (ONT.bagua||[]).forEach(g=>addNode(g.id));
-  // 代表注家（四圣 + 历代大家）
-  const repZJ=['zj_fuxi','zj_wenwang','zj_zhougong','zj_kongzi','zj_jingfang','zj_zhengxuan','zj_yufan','zj_wangbi','zj_kongyingda','zj_shaoyong','zj_chengyi','zj_zhuxi','zj_liguangdi','zj_wangfuzhi','zj_shangbinghe','zj_gaoheng'];
-  repZJ.forEach(addNode);
-  // 主干链路边（真实三元组）：生成链
-  const chainPairs=[['Dao','Taiji'],['Taiji','YinYang'],['YinYang','Sixiang'],['Sixiang','Bagua']];
-  chainPairs.forEach(p=>addLink(p[0],p[1],'shengCheng','#8b0000',2));
-  // 八卦 → 主干
-  (ONT.bagua||[]).forEach(g=>addLink('Bagua',g.id,'baoHan','#b8860b',1));
-  // 主干 → 经/传/图
-  addLink('Bagua','Jing','shengCheng','#14532d',2);
-  addLink('Jing','ShiYi','baoHan','#14532d',1.6);
-  addLink('Jing','Yitu','baoHan','#14532d',1.4);
-  // 四圣 → 经传
-  addLink('zj_fuxi','Bagua','zuoZhe','#1e3a8a',1.4);
-  addLink('zj_wenwang','Jing','zuoZhe','#1e3a8a',1.4);
-  addLink('zj_zhougong','Jing','zuoZhe','#1e3a8a',1.4);
-  addLink('zj_kongzi','ShiYi','zuoZhe','#1e3a8a',1.4);
-  // 其余代表注家 → 经
-  repZJ.slice(4).forEach(id=>addLink(id,'Jing','zhushi','#1e3a8a',1));
-  return {nodes,links};
-}
-
-// 聚焦视图：以 focusId 为中心的一跳邻域
-function buildFocus(focusId){
-  const adj=buildAdj();
-  const center=NODE_META[focusId];
-  if(!center) return buildOverview();
-  const nodes=[],links=[],seen=new Set();
-  const addNode=(id,isCenter)=>{
-    const m=NODE_META[id]; if(!m||seen.has(id))return;
-    seen.add(id);
-    nodes.push({id, name:m.name, category:CAT_NAME[m.cat]||'其他', symbolSize:isCenter?Math.max(m.size,40):m.size,
-      itemStyle:{color:CAT_COLOR[m.cat]||'#888', borderColor:isCenter?'#8b0000':'transparent', borderWidth:isCenter?3:0},
-      label:{show:true, fontSize:12, fontFamily:'Songti SC,SimSun,serif', fontWeight:isCenter?'bold':'normal'}});
-  };
-  addNode(focusId,true);
-  const neigh = (adj[focusId]||[]).slice(0,80);
-  neigh.forEach(e=>{
-    addNode(e.to,false);
-    links.push({source:focusId, target:e.to, value:PRED_CN[e.pred]||e.pred,
-      lineStyle:{color:'#b8860b', width:1.4}});
-  });
-  return {nodes,links};
-}
-
-function graphTitle(focusId){
-  if(!focusId) return '全景 · 本体主干';
-  const m=NODE_META[focusId];
-  return '已聚焦：' + (m?m.name:focusId) + '（' + ((ADJ&&ADJ[focusId])?ADJ[focusId].length:0) + ' 条关系）';
-}
-
-function drawGraph(){
-  ensureChart();
-  const data = curFocus ? buildFocus(curFocus) : buildOverview();
-  document.getElementById('graphCrumb').textContent = graphTitle(curFocus);
-  document.getElementById('graphBack').disabled = focusStack.length===0;
-  chartInstance.setOption({
-    tooltip:{ formatter: p => p.dataType==='edge'
-        ? (p.data.value||'')
-        : p.data.name },
-    legend: [{ data:CAT_LEGEND.map(c=>c.name), bottom:0, textStyle:{fontFamily:'Songti SC,SimSun,serif'} }],
-    series: [{
-      type:'graph', layout:'force', roam:true, draggable:true,
-      data:data.nodes, links:data.links,
-      categories:CAT_LEGEND.map(c=>({name:c.name,itemStyle:c.itemStyle})),
-      force:{repulsion:360, edgeLength:[70,150], gravity:0.08},
-      label:{position:'right', fontFamily:'Songti SC,SimSun,serif', fontSize:11},
-      lineStyle:{opacity:0.55, width:1, color:'#b8860b', curveness:0.08},
-      emphasis:{focus:'adjacency', lineStyle:{width:2.5, opacity:1}, label:{fontSize:14, fontWeight:'bold'}},
-      edgeLabel:{show:true, fontSize:10, color:'#8a6d3b', formatter:p=>p.data.value||''},
-      animationDuration:900, animationEasingUpdate:'quinticInOut'
-    }]
-  }, true);
-  // 点击节点下钻
-  chartInstance.off('click');
-  chartInstance.on('click', p=>{
-    if(p.dataType!=='node') return;
-    const id=p.data.id;
-    if(!id || id===curFocus){
-      // 已是中心：返回上层
-      if(curFocus){ curFocus=focusStack.pop()||null; drawGraph(); }
-      return;
+  // 64卦（为控制图形密度只取前32卦示例，全部点太多会糊）
+  guas.slice(0,32).forEach(g=>{
+    add(g.id,g.name+'卦',2,14);
+    if(g.shang&&ONT.baguaMap&&ONT.baguaMap[g.shang]){
+      link(ONT.baguaMap[g.shang].id,g.id,'上卦');
     }
-    if(curFocus) focusStack.push(curFocus);
-    curFocus=id; drawGraph();
+    if(g.xia&&ONT.baguaMap&&ONT.baguaMap[g.xia]){
+      link(ONT.baguaMap[g.xia].id,g.id,'下卦');
+    }
   });
-}
-
-function ensureChart(){
-  const dom=document.getElementById('ontoChart');
-  if(!dom) { throw new Error('图谱容器不存在'); }
-  dom.style.height='650px'; dom.style.width='100%';
-  if(!chartInstance){
-    chartInstance=echarts.init(dom);
-    window.addEventListener('resize',()=>chartInstance&&chartInstance.resize());
-    const ob=new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting&&chartInstance) setTimeout(()=>chartInstance.resize(),100); }),{threshold:.1});
-    ob.observe(dom);
-  } else { chartInstance.resize(); }
-}
-
-function renderChart(){
-  try{
-    document.getElementById('tripleCount').textContent = ONT.triples.length;
-    buildAdj();
-    // 聚焦下拉
-    const sel=document.getElementById('graphFocus');
-    if(sel && sel.options.length<=1){
-      const groups={'本体核心':[],'八卦':[],'六十四卦':[],'注家':[]};
-      MAIN_CHAIN.forEach(id=>groups['本体核心'].push(id));
-      (ONT.bagua||[]).forEach(g=>groups['八卦'].push(g.id));
-      (ONT.liushisigua||[]).forEach(g=>groups['六十四卦'].push(g.id));
-      (ONT.zhujia||[]).forEach(z=>groups['注家'].push(z.id));
-      Object.keys(groups).forEach(gk=>{
-        const og=document.createElement('optgroup'); og.label=gk;
-        groups[gk].forEach(id=>{
-          const m=NODE_META[id]; if(!m)return;
-          const o=document.createElement('option'); o.value=id; o.textContent=m.name;
-          og.appendChild(o);
-        });
-        sel.appendChild(og);
-      });
-      sel.addEventListener('change',()=>{
-        if(!sel.value) return;
-        if(curFocus) focusStack.push(curFocus);
-        curFocus=sel.value; drawGraph(); sel.value='';
+  // 注家+注本
+  (zhuJiaArr||[]).slice(0,18).forEach(z=>{
+    add(z.id,z.name||z.name,3,20);
+    if(z.works&&Array.isArray(z.works)){
+      z.works.forEach(w=>{
+        const wid='w_'+(w.id||w.name||w);
+        add(wid,w.name||w,4,14);
+        link(z.id,wid,'著');
+        // 注本关联到它注释的卦/经
+        link(wid,'Taiji','注');
       });
     }
-    document.getElementById('graphBack').onclick=()=>{ if(focusStack.length){ curFocus=focusStack.pop()||null; drawGraph(); } };
-    document.getElementById('graphReset').onclick=()=>{ curFocus=null; focusStack=[]; drawGraph(); };
-    drawGraph();
-  }catch(e){
-    console.error('知识图谱渲染失败:', e);
-    const dom=document.getElementById('ontoChart');
-    if(dom) dom.innerHTML='<div style="padding:100px;text-align:center;color:#8b0000;">知识图谱加载失败: '+e.message+'</div>';
-  }
-}
-// 页面加载后延迟初始化，最多重试5次
-let chartRetryCount = 0;
-function initChartWithRetry() {
-  if (typeof echarts === 'undefined' && chartRetryCount < 5) {
-    chartRetryCount++;
-    console.log(`等待ECharts加载，第${chartRetryCount}次重试...`);
-    setTimeout(initChartWithRetry, 500);
-    return;
-  }
-  renderChart();
-}
-window.addEventListener('load', () => { setTimeout(initChartWithRetry, 300); });
+  });
+  // 流派
+  (schools||[]).slice(0,6).forEach(s=>{
+    add(s.id,s.name||s.name,5,22);
+  });
 
-// ===== 十翼 / 易图：均为独立页面，见 shiyi.html、yitu.html =====
-
-// ===== 初始化 =====
-document.addEventListener('DOMContentLoaded', () => {
-  renderStats();
-  renderBagua();
-  render64Gua();
-  renderSchools();
-  renderMasters();
-  renderBooks();
-  renderTimeline();
-  // renderChart 改为 window.load 后延迟初始化，保证echarts与容器都就绪
-});
-</script>
-<!-- 易之变 · 影片章节导航 -->
-<script>
-(function(){
-  var meta = [
-    [1,"太虚","道生一之前"], [2,"太极之境","道生一"], [3,"两仪之境","一生二"],
-    [4,"四象之境","二生三"], [5,"八卦之境","四象生八卦"], [6,"重卦之境","八卦重六十四卦"],
-    [7,"错卦之境","阴阳全反"], [8,"综卦之境","上下倒置"], [9,"互卦之境","卦中有卦"],
-    [10,"变卦之境","爻变之卦"], [11,"消息之境","十二消息卦"], [12,"卦序筮法","序卦传·大衍之数"],
-    [13,"三易之境","变易·简易·不易"], [14,"归藏之境","万物归一"]
+  const categories=[
+    {name:'本体'},{name:'八卦'},{name:'六十四卦'},{name:'注家'},{name:'注本'},{name:'流派'}
   ];
-  // 各幕起始秒数（人声旁白版 6分49秒）
-  var starts = [0,10.5,28.5,49.2,70.8,100.4,138.7,160.3,182.9,207.5,236.0,270.7,317.0,353.9];
-  var box = document.getElementById('yi-film-chapters');
-  var vid = document.getElementById('yi-film-video');
-  if(!box || !vid) return;
-  meta.forEach(function(m, i){
-    var d = document.createElement('button');
-    d.type = 'button';
-    d.style.cssText = 'cursor:pointer;border:1px solid var(--border);background:var(--paper);color:var(--text);border-radius:4px;padding:8px 10px;text-align:left;font-family:inherit;font-size:12.5px;line-height:1.5;transition:.18s;';
-    d.innerHTML = '<b style="color:var(--accent);font-size:13px;">第'+m[0]+'幕 · '+m[1]+'</b><br><span style="opacity:.7">'+m[2]+'</span>';
-    d.onmouseenter = function(){ d.style.borderColor='var(--accent)'; d.style.transform='translateY(-1px)'; };
-    d.onmouseleave = function(){ d.style.borderColor='var(--border)'; d.style.transform='none'; };
-    d.onclick = function(){
-      vid.currentTime = starts[i] || 0;
-      vid.play();
-      vid.scrollIntoView({behavior:'smooth', block:'center'});
-    };
-    box.appendChild(d);
+  const palette=['var(--zhu)','var(--gold)','var(--blue-ink)','var(--green-ink)','var(--purple-ink)','#8c6b2f'];
+
+  chart.setOption({
+    backgroundColor:'transparent',
+    tooltip:{formatter:p=>p.dataType==='edge'?(p.data.name&&p.data.name.formatter||''):p.name},
+    legend:[{data:categories.map(c=>c.name),textStyle:{color:'var(--ink-3)'},top:8}],
+    series:[{
+      type:'graph',layout:'force',roam:true,draggable:true,
+      data:nodes.map(n=>({...n,itemStyle:{color:getCss(palette[n.category])}})),
+      links,
+      categories:categories.map((c,i)=>({...c,itemStyle:{color:getCss(palette[i])}})),
+      label:{show:true,position:'right',fontSize:11,color:'var(--ink-2)',fontFamily:'var(--font-serif)'},
+      lineStyle:{color:'var(--line)',curveness:0.15,opacity:.6,width:1},
+      emphasis:{lineStyle:{width:2,color:'var(--zhu)'},focus:'adjacency',label:{fontSize:14,fontWeight:'bold'}},
+      force:{repulsion:180,edgeLength:[60,120],gravity:0.08},
+      edgeSymbol:['none','arrow'],edgeSymbolSize:[0,6],
+    }]
   });
-})();
+  window.addEventListener('resize',()=>chart.resize());
+  // 点击跳转
+  chart.on('click',p=>{
+    if(p.dataType==='node' && p.data.id && p.data.category===2){
+      location.href='gua.html#'+p.data.id;
+    }else if(p.dataType==='node' && p.data.category===3){
+      location.href='yanjiu.html#'+p.data.id;
+    }
+  });
+}
+function getCss(v){
+  const div=document.createElement('div');div.style.color=v;document.body.appendChild(div);
+  const c=getComputedStyle(div).color;div.remove();return c;
+}
+
+// 三元组计数（动态统计）
+let cnt=0;
+[ONT.bagua,guas,zhuJiaArr,ONT.zhuben,schools,ONT.yitu].forEach(arr=>{
+  if(!Array.isArray(arr))return;
+  arr.forEach(o=>{
+    Object.keys(o).forEach(k=>{
+      if(['id','name','label','symbol','desc','dynasty','school','works','num','text','explain','guaci','tuan','xiang','wenyan','yao','yong','jing','gong','wuxing','shang','xia','pos','yinYang','xiaoxiang','nature','ziran','qinqing','fangwei','xing','yao','de','shu','yinyang','yaoci','comment','era','title'].indexOf(k)===-1){
+        cnt++;
+      }
+    });
+  });
+});
+// 爻作为独立节点关系
+guas.forEach(g=>{(g.yao||[]).forEach(()=>cnt++);});
+document.getElementById('st-triple').textContent=cnt;
+document.getElementById('tripleCount').textContent=cnt;
 </script>
 </body>
 </html>

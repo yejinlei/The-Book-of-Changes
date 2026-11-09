@@ -140,6 +140,7 @@ body.no-zj .anno.cmt-jijie,body.no-zj .anno.cmt-zhezhong{display:none}
   .page-nav{padding:0 16px}
 }
 </style>
+<script src="js/apply-shell.js" data-page="reader"></script>
 </head>
 <body>
 
@@ -151,6 +152,7 @@ body.no-zj .anno.cmt-jijie,body.no-zj .anno.cmt-zhezhong{display:none}
     <a href="reader.html" class="active">经文汇评</a>
     <a href="shiyi.html">十翼</a>
     <a href="yitu.html">易图互动</a>
+  <a href="shifa.html">筮法推演</a>
     <a href="bianhua.html">变化</a>
     <a href="animation/index.html">易之变 · 动画</a>
     <a href="animation/qian.html">乾卦讲解</a>
@@ -372,6 +374,18 @@ body.no-zj .anno.cmt-jijie,body.no-zj .anno.cmt-zhezhong{display:none}
             <span class="reader-sep">／</span>
             <span class="reader-bgua" id="readerDownGua"></span>
             <span class="reader-ud-label">下${s.down}</span>
+          </div>
+          <div style="margin-top:8px">
+            <a href="shifa.html#demo-${String(num-1).padStart(2,'0')}"
+               style="display:inline-block;padding:3px 14px;border:1px solid var(--zhu);
+                      color:var(--zhu);font-size:13px;letter-spacing:2px;text-decoration:none"
+               onmouseover="this.style.background='var(--zhu)';this.style.color='#fff'"
+               onmouseout="this.style.background='transparent';this.style.color='var(--zhu)'">蓍 占 示 例 →</a>
+            <a href="animation/gua-${String(num-1).padStart(2,'0')}.html"
+               style="display:inline-block;margin-left:8px;padding:3px 14px;border:1px solid var(--gold);
+                      color:var(--gold);font-size:13px;letter-spacing:2px;text-decoration:none"
+               onmouseover="this.style.background='var(--gold)';this.style.color='#fff'"
+               onmouseout="this.style.background='transparent';this.style.color='var(--gold)'">讲 解 动 画 →</a>
           </div>
         </div>
       </div>
