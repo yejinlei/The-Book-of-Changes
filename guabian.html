@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>卦变演算 · 易经本体论</title>
+<link rel="stylesheet" href="css/yijing.css">
+<script src="data/yijing-ontology.js"></script>
+<script src="data/gua-full-data.js"></script>
+<script src="data/yijing-ontology-enhance.js"></script>
+<script src="data/yijing-gua-bian-engine.js"></script>
+<script src="js/ontology-linker.js"></script>
+<style>
+.gb-hero{
+  text-align:center;padding:40px 20px 26px;
+  background:linear-gradient(180deg,var(--paper-2) 0%,var(--paper) 100%);
+  border-bottom:1px solid var(--line);
+}
+.gb-hero h1{font-size:36px;color:var(--zhu);letter-spacing:10px;margin:0 0 8px;}
+.gb-hero p{color:var(--ink-3);max-width:680px;margin:10px auto 0;font-size:14px;font-family:var(--font-kai);line-height:1.9;}
+.gb-picker{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0;}
+.gb-pick-btn{
+  font-family:var(--font-kai);font-size:14px;padding:6px 13px;border:1px solid var(--line);
+  background:var(--paper-2);color:var(--ink);border-radius:var(--radius);cursor:pointer;transition:.15s;
+}
+.gb-pick-btn:hover{border-color:var(--zhu);color:var(--zhu);}
+.gb-pick-btn.on{background:var(--zhu);color:#f8f1dd;border-color:var(--zhu);}
+.gb-main{display:grid;grid-template-columns:280px 1fr;gap:26px;margin-top:10px;}
+.gb-ben{
+  background:var(--paper-2);border:1px solid var(--line);border-radius:var(--radius-lg);
+  padding:22px;text-align:center;
+}
+.gb-ben .big-sym{font-size:76px;line-height:1;color:var(--zhu);}
+.gb-ben .ben-name{font-size:26px;letter-spacing:6px;margin:10px 0 4px;color:var(--ink);font-family:var(--font-kai);}
+.gb-ben .ben-sub{font-size:13px;color:var(--ink-3);font-family:var(--font-sans);letter-spacing:2px;}
+.gb-ben .ben-yang{font-size:12px;color:var(--ink-3);margin-top:8px;font-family:var(--font-kai);}
+.gb-yao-list{margin-top:14px;text-align:left;}
+.gb-yao-li{display:flex;align-items:center;gap:8px;padding:4px 0;font-size:13px;font-family:var(--font-kai);color:var(--ink-2);}
+.gb-yao-li .yb{width:30px;height:6px;border-radius:2px;background:var(--ink);}
+.gb-yao-li .yb.yin{background:linear-gradient(90deg,var(--ink) 0 40%,transparent 40% 60%,var(--ink) 60% 100%);}
+.gb-yao-li .ttl{color:var(--ink-3);min-width:34px;}
+.gb-rel-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;}
+.gb-rel{
+  background:var(--paper-2);border:1px solid var(--line);border-radius:var(--radius-lg);
+  padding:16px 18px;cursor:pointer;transition:.15s;
+}
+.gb-rel:hover{border-color:var(--zhu);transform:translateY(-2px);}
+.gb-rel .rlab{font-size:11px;letter-spacing:3px;color:var(--gold);font-family:var(--font-sans);}
+.gb-rel .rbody{display:flex;align-items:center;gap:12px;margin-top:8px;}
+.gb-rel .rsym{font-size:38px;color:var(--zhu);line-height:1;}
+.gb-rel .rname{font-size:19px;font-family:var(--font-kai);letter-spacing:3px;color:var(--ink);}
+.gb-rel .rdesc{font-size:12px;color:var(--ink-3);font-family:var(--font-kai);margin-top:6px;line-height:1.7;}
+.gb-sec{margin-top:30px;}
+.gb-sec h3{color:var(--zhu);font-size:20px;letter-spacing:4px;border-bottom:1px solid var(--line);padding-bottom:8px;}
+.bian-table{width:100%;border-collapse:collapse;font-size:14px;margin-top:12px;}
+.bian-table th,.bian-table td{padding:9px 10px;border-bottom:1px solid var(--line-soft);text-align:left;}
+.bian-table th{color:var(--gold);font-size:12px;letter-spacing:2px;font-family:var(--font-sans);font-weight:400;}
+.bian-table td.sym{font-size:22px;color:var(--zhu);width:50px;}
+.bian-table td.gn{font-family:var(--font-kai);font-size:16px;}
+.bian-table tr:hover{background:var(--paper-2);}
+.msg-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-top:14px;}
+.msg-card{
+  background:var(--paper-2);border:1px solid var(--line);border-radius:var(--radius);
+  padding:10px 6px;text-align:center;font-family:var(--font-kai);
+}
+.msg-card.on{border-color:var(--zhu);box-shadow:0 0 0 1px var(--zhu) inset;background:#fbf1ea;}
+.msg-card .ms{font-size:26px;color:var(--zhu);line-height:1;}
+.msg-card .mn{font-size:14px;color:var(--ink);margin-top:4px;letter-spacing:2px;}
+.msg-card .mj{font-size:11px;color:var(--ink-3);margin-top:2px;font-family:var(--font-sans);}
+.source-path{background:var(--paper-2);border-left:3px solid var(--gold);border-radius:0 var(--radius) var(--radius) 0;padding:14px 18px;margin-top:12px;}
+.source-path .sp-line{font-family:var(--font-kai);font-size:15px;color:var(--ink);line-height:2;}
+.source-path .sp-line b{color:var(--zhu);}
+.gb-note{font-size:12px;color:var(--ink-3);font-family:var(--font-kai);line-height:1.9;margin-top:12px;}
+@media (max-width:860px){
+  .gb-main{grid-template-columns:1fr;}
+  .gb-rel-grid{grid-template-columns:1fr;}
+  .msg-grid{grid-template-columns:repeat(3,1fr);}
+  .gb-hero h1{font-size:28px;letter-spacing:6px;}
+}
+</style>
+</head>
+<body>
+<div id="topbar-slot"></div>
+<div class="layout">
+  <div id="sidebar-slot"></div>
+  <main class="content">
+
+    <section class="section gb-hero" style="border-radius:0;margin:0 -32px 24px;padding-left:32px;padding-right:32px;">
+      <h1>卦变演算</h1>
+      <p>错卦者，六爻尽变；综卦者，全体颠倒；互卦者，中四爻重组；交卦者，上下卦易位；变卦者，一爻动而之。十二消息卦配月建节气，卦变来源循虞翻升降之说。<span style="color:var(--gold);">皆由六爻之位自动推演。</span></p>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <span class="title-zhu-sub">SELECT</span>
+        <h2 class="title-zhu" style="font-size:26px;">择卦推演</h2>
+      </div>
+      <div class="gb-picker" id="picker"></div>
+    </section>
+
+    <section class="section">
+      <div class="gb-main">
+        <div class="gb-ben" id="benPanel"></div>
+        <div id="relArea"></div>
+      </div>
+    </section>
+
+    <section class="section gb-sec" id="bianSec">
+      <h3>变卦六爻表</h3>
+      <p style="font-size:13px;color:var(--ink-3);font-family:var(--font-kai);">本卦六爻，各以一爻动而成之卦。</p>
+      <table class="bian-table">
+        <thead><tr><th>动爻</th><th>符号</th><th>之卦</th><th>上下卦</th></tr></thead>
+        <tbody id="bianBody"></tbody>
+      </table>
+    </section>
+
+    <section class="section gb-sec" id="msgSec">
+      <h3>十二消息卦（辟卦）</h3>
+      <p style="font-size:13px;color:var(--ink-3);font-family:var(--font-kai);">以阴阳消长配十二月建，为汉易卦气说之纲。</p>
+      <div class="msg-grid" id="msgGrid"></div>
+    </section>
+
+    <section class="section gb-sec" id="srcSec">
+      <h3>卦变来源（虞翻卦变说）</h3>
+      <div id="srcArea"></div>
+      <div class="gb-note">
+        说明：卦变来源依虞翻「一阴一阳之卦自复、姤，二阴二阳自临、遁，三阴三阳自泰、否」之说形式化推演，
+        所列「某爻之某爻」为升降路径。历代诸家卦变说互有异同，此处取通行之说供参照，非定论。
+      </div>
+    </section>
+
+  </main>
+</div>
+<div id="footer-slot"></div>
+
+<script>
+(function(){
+  var B = window.YJ_BIAN;
+  var GUA = window.YJ_GUA_FULL || {};
+  var cur = '乾';
+
+  document.getElementById('topbar-slot').innerHTML = YJ_Link.topbar('guabian');
+  document.getElementById('sidebar-slot').innerHTML = YJ_Link.sidebar('guabian');
+  document.getElementById('footer-slot').innerHTML = YJ_Link.footer();
+
+  function sym(n){ return B.hexSymbol(n); }
+  function yaoBar(lines){
+    return lines.map(function(x, i){
+      return '<div class="gb-yao-li"><span class="yb' + (x ? '' : ' yin') + '"></span><span class="ttl">' + B.yaoTitles(lines)[i] + '</span><span>' + (x ? '阳' : '阴') + '</span></div>';
+    }).reverse().join('');
+  }
+  function relCard(lab, name, desc){
+    if(!name) return '';
+    return '<div class="gb-rel" onclick="__pick(\'' + name + '\')">' +
+      '<div class="rlab">' + lab + '</div>' +
+      '<div class="rbody"><span class="rsym">' + sym(name) + '</span><span class="rname">' + name + '</span></div>' +
+      '<div class="rdesc">' + desc + '</div></div>';
+  }
+
+  window.__pick = function(n){ cur = n; render(); window.scrollTo({top:0,behavior:'smooth'}); };
+
+  /* ---- 择卦按钮 ---- */
+  var names = Object.keys(GUA);
+  document.getElementById('picker').innerHTML = names.map(function(n){
+    return '<button class="gb-pick-btn" data-n="' + n + '">' + sym(n) + ' ' + n + '</button>';
+  }).join('');
+  document.getElementById('picker').addEventListener('click', function(e){
+    var b = e.target.closest('.gb-pick-btn'); if(!b) return;
+    __pick(b.dataset.n);
+  });
+
+  function render(){
+    var r = B.relations(cur);
+    if(!r) return;
+
+    /* 高亮按钮 */
+    Array.prototype.forEach.call(document.querySelectorAll('.gb-pick-btn'), function(b){
+      b.classList.toggle('on', b.dataset.n === cur);
+    });
+
+    /* 本卦 */
+    var m = B.metaOf(cur) || {};
+    document.getElementById('benPanel').innerHTML =
+      '<div class="big-sym">' + r.symbol + '</div>' +
+      '<div class="ben-name">' + cur + '卦</div>' +
+      '<div class="ben-sub">' + (m.shang || '') + '上 ' + (m.xia || '') + '下 · 第 ' + (m.num || '') + ' 卦</div>' +
+      '<div class="ben-yang">' + r.yaoTitles.join(' · ') + '　（阳爻 ' + r.yang + '）</div>' +
+      '<div class="gb-yao-list">' + yaoBar(r.lines) + '</div>';
+
+    /* 关系四卡 */
+    document.getElementById('relArea').innerHTML =
+      '<div class="gb-rel-grid">' +
+        relCard('错卦 · CUO', r.cuo, '六爻尽变，阴阳全易。') +
+        relCard('综卦 · ZONG', r.zong, '全体颠倒，上下易位。') +
+        relCard('互卦 · HU', r.hu, '取二三四爻为下、三四五爻为上。') +
+        relCard('交卦 · JIAO', r.jiao, '上下两卦互换。') +
+      '</div>' +
+      '<div class="gb-note">递归互卦：' + (B.trace(cur).join(' → ')) + (r.cuoOfZong ? '　｜　错之综：' + r.cuoOfZong : '') + '</div>';
+
+    /* 变爻表 */
+    document.getElementById('bianBody').innerHTML = r.bian.map(function(b){
+      var bm = B.metaOf(b.name) || {};
+      return '<tr onclick="__pick(\'' + b.name + '\')" style="cursor:pointer;">' +
+        '<td>' + b.title + ' 动</td>' +
+        '<td class="sym">' + b.symbol + '</td>' +
+        '<td class="gn">' + b.name + '</td>' +
+        '<td style="color:var(--ink-3);font-size:13px;">' + (bm.shang || '') + '上 ' + (bm.xia || '') + '下</td>' +
+        '</tr>';
+    }).join('');
+
+    /* 消息卦 */
+    document.getElementById('msgGrid').innerHTML = B.MSG_TABLE.map(function(msg){
+      var on = r.message && r.message.name === msg.name ? ' on' : '';
+      return '<div class="msg-card' + on + '">' +
+        '<div class="ms">' + sym(msg.name) + '</div>' +
+        '<div class="mn">' + msg.name + '</div>' +
+        '<div class="mj">' + msg.month + '<br>' + msg.jieqi + '</div></div>';
+    }).join('');
+
+    /* 卦变来源 */
+    var s = r.source;
+    var srcHtml = '';
+    if(s && s.paths && s.paths.length){
+      srcHtml = s.paths.map(function(p){
+        return '<div class="source-path"><div class="sp-line">' +
+          '<b>' + p.from + '</b>卦（' + (B.msgInfo(B.linesOf(p.from)) || {}).month + ' ' + (B.msgInfo(B.linesOf(p.from)) || {}).jieqi + '）' +
+          '　→　' + p.text +
+          '　→　<b>' + cur + '</b>卦</div></div>';
+      }).join('');
+    } else if(s && s.candidates.length === 0){
+      srcHtml = '<div class="source-path"><div class="sp-line">' + cur + '卦为乾坤本体（' + (r.yang === 6 ? '六阳' : '六阴') + '），不经升降而来。</div></div>';
+    } else {
+      srcHtml = '<div class="source-path"><div class="sp-line">该卦卦变路径暂无对应升降关系。</div></div>';
+    }
+    document.getElementById('srcArea').innerHTML = srcHtml;
+
+    /* 实体标注 */
+    if(YJ_Link && YJ_Link.decorate) setTimeout(function(){ YJ_Link.decorate(document.querySelector('.content')); }, 120);
+  }
+
+  render();
+})();
+</script>
+</body>
+</html>

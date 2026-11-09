@@ -238,15 +238,15 @@
       return `<div class="zq-gua">
         <h4><a href="gua.html#${gid}" target="_blank">${gn}卦 →</a> <span class="zq-cnt">${qs.length} 条</span></h4>
         ${qs.slice(0,8).map(q=>`<div class="zq-item">
-          <span class="zq-pos">${q.pos||''}</span>
+          <span class="zq-pos">${q.citation||q.pos||''}</span>
           <span class="zq-text">${q.text}</span>
         </div>`).join('')}
-        ${qs.length>8?`<details><summary>展开剩余 ${qs.length-8} 条</summary>${qs.slice(8).map(q=>`<div class="zq-item"><span class="zq-pos">${q.pos||''}</span><span class="zq-text">${q.text}</span></div>`).join('')}</details>`:''}
+        ${qs.length>8?`<details><summary>展开剩余 ${qs.length-8} 条</summary>${qs.slice(8).map(q=>`<div class="zq-item"><span class="zq-pos">${q.citation||q.pos||''}</span><span class="zq-text">${q.text}</span></div>`).join('')}</details>`:''}
       </div>`;
     }).join('');
 
     const zzHTML = (z.zhezhongSamples||[]).length ? `<h3>《周易折中》引${z.name}说</h3>${(z.zhezhongSamples||[]).map(q=>`
-      <div class="zq-item zz"><span class="zq-pos"><a href="gua.html#${q.guaId}" target="_blank">${q.gua}卦·${q.pos}</a></span><span class="zq-text">${q.text}</span></div>
+      <div class="zq-item zz"><span class="zq-pos"><a href="gua.html#${q.guaId}" target="_blank">${q.citation||(q.gua+"卦·"+q.pos)}</a></span><span class="zq-text">${q.text}</span></div>
     `).join('')}` : '';
 
     const worksHTML = (z.works||[]).length ? `<div class="z-meta-row"><b>代表作：</b>${z.works.map(w=>`<span class="work-tag">${w}</span>`).join('')}</div>` : '';
@@ -377,7 +377,7 @@
 .zq-cnt{font-size:11px;background:#f0e4c2;color:#6b5a3a;padding:1px 7px;border-radius:10px;}
 .zq-item{display:flex;gap:8px;padding:6px 0;border-top:1px dotted #eadfc2;font-size:13px;line-height:1.8;}
 .zq-item:first-child{border-top:none;}
-.zq-pos{min-width:70px;color:var(--gold);font-size:12px;padding-top:2px;white-space:nowrap;}
+.zq-pos{min-width:152px;max-width:152px;color:var(--gold);font-size:12px;padding-top:2px;line-height:1.7;}
 .zq-pos a{color:var(--gold);text-decoration:none;}
 .zq-text{flex:1;color:#2a2520;}
 .zq-item.zz .zq-pos{color:var(--zhu);}

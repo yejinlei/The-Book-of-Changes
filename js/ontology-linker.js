@@ -372,18 +372,22 @@
     { id:'reader',  label:'经文汇评', href:'reader.html',  icon:'書' },
     { id:'shiyi',   label:'十翼易传', href:'shiyi.html',   icon:'傳' },
     { id:'yitu',    label:'易图图说', href:'yitu.html',    icon:'圖' },
-    { id:'bianhua', label:'卦变推演', href:'bianhua.html', icon:'變' },
+    { id:'guabian', label:'卦变演算', href:'guabian.html', icon:'變' },
+    { id:'jiaokan', label:'校勘异文', href:'jiaokan.html', icon:'校' },
     { id:'shifa',   label:'筮法占筮', href:'shifa.html',   icon:'筮' },
     { id:'yanjiu',  label:'历代注疏', href:'yanjiu.html',  icon:'注' },
+    { id:'bianhua', label:'易之变·动画', href:'bianhua.html', icon:'影' },
     { id:'anim',    label:'卦象动画', href:'animation/gua-index.html', icon:'影' }
   ];
   var TOP_PAGES = [
-    { id:'home',   label:'首页',    href:'index.html' },
-    { id:'gua',    label:'六十四卦', href:'gua.html' },
-    { id:'reader', label:'经文',    href:'reader.html' },
-    { id:'shifa',  label:'筮法',    href:'shifa.html' },
-    { id:'yanjiu', label:'注疏',    href:'yanjiu.html' },
-    { id:'anim',   label:'动画',    href:'animation/gua-index.html' }
+    { id:'home',    label:'首页',    href:'index.html' },
+    { id:'gua',     label:'六十四卦', href:'gua.html' },
+    { id:'reader',  label:'经文',    href:'reader.html' },
+    { id:'guabian', label:'卦变',    href:'guabian.html' },
+    { id:'jiaokan', label:'校勘',    href:'jiaokan.html' },
+    { id:'shifa',   label:'筮法',    href:'shifa.html' },
+    { id:'yanjiu',  label:'注疏',    href:'yanjiu.html' },
+    { id:'anim',    label:'动画',    href:'animation/gua-index.html' }
   ];
 
   function buildSidebar(activePage){
