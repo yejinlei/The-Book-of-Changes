@@ -377,6 +377,8 @@
     { id:'shifa',   label:'筮法占筮', href:'shifa.html',   icon:'筮' },
         { id:'najia',   label:'纳甲排盘', href:'najia.html',   icon:'甲' },
     { id:'guaqi',   label:'卦气天文', href:'guaqi.html',   icon:'曆' },
+    { id:'yiyi',    label:'医易会通', href:'yiyi.html',    icon:'醫' },
+    { id:'dandao',  label:'丹道参同', href:'dandao.html',  icon:'丹' },
     { id:'yanjiu',  label:'历代注疏', href:'yanjiu.html',  icon:'注' },
     { id:'rdf',     label:'本体/RDF',  href:'rdf.html',     icon:'⬡' },
     { id:'bianhua', label:'易之变·动画', href:'bianhua.html', icon:'影' },
@@ -391,6 +393,8 @@
     { id:'shifa',   label:'筮法',    href:'shifa.html' },
         { id:'najia',   label:'纳甲',    href:'najia.html' },
     { id:'guaqi',   label:'卦气',    href:'guaqi.html' },
+    { id:'yiyi',    label:'医易',    href:'yiyi.html' },
+    { id:'dandao',  label:'丹道',    href:'dandao.html' },
     { id:'yanjiu',  label:'注疏',    href:'yanjiu.html' },
     { id:'rdf',     label:'本体',    href:'rdf.html' },
     { id:'anim',    label:'动画',    href:'animation/gua-index.html' }

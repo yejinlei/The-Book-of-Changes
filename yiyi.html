@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>医易会通</title>
+<script src="data/yijing-ontology.js"></script>
+<script src="data/yijing-ontology-enhance.js"></script>
+<script src="data/yijing-zhujia-texts.js"></script>
+<script src="data/yijing-yiyi.js"></script>
+<script src="data/yijing-ontology-linker.js"></script>
+<script src="js/apply-shell.js" data-page="yiyi"></script>
+<style>
+.yiyi-intro{max-width:900px;margin:0 auto 30px;padding:20px;background:rgba(255,248,230,0.5);border-left:4px solid var(--zhu);}
+.yiyi-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:0 auto 24px;max-width:1200px;}
+.yiyi-tab{padding:10px 20px;background:rgba(156,42,42,0.08);border:1px solid rgba(156,42,42,0.2);border-radius:6px;cursor:pointer;font-family:var(--song);font-size:15px;transition:all .25s;color:var(--ink);}
+.yiyi-tab:hover{background:rgba(156,42,42,0.15);}
+.yiyi-tab.active{background:var(--zhu);color:#f7f1e1;border-color:var(--zhu);}
+.yiyi-panel{max-width:1200px;margin:0 auto;display:none;}
+.yiyi-panel.active{display:block;}
+/* 核心论点 */
+.thesis-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:18px;margin-bottom:30px;}
+.thesis-card{background:rgba(255,255,245,0.7);border:1px solid rgba(156,42,42,0.15);border-radius:10px;padding:20px;}
+.thesis-card h3{font-family:var(--kai);color:var(--zhu);font-size:18px;margin:0 0 10px;display:flex;align-items:center;gap:8px;}
+.thesis-card p{font-size:14px;line-height:1.8;color:var(--ink);margin:0 0 8px;}
+.thesis-card .quote{font-family:var(--kai);color:var(--gold);font-size:13px;padding-left:10px;border-left:2px solid var(--gold);margin-top:8px;}
+/* 六经 */
+.liu-jing-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(380px,1fr));gap:16px;margin-bottom:24px;}
+.jing-card{background:rgba(255,255,245,0.7);border-radius:10px;padding:18px;border:1px solid rgba(156,42,42,0.15);}
+.jing-card-header{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
+.jing-sym{font-size:34px;color:var(--zhu);font-weight:bold;}
+.jing-name{font-size:20px;font-family:var(--kai);color:var(--ink);}
+.jing-name .gua-jing{font-size:13px;color:var(--gold);display:block;margin-top:2px;}
+.jing-badge{padding:3px 10px;border-radius:20px;font-size:12px;color:#fff;margin-left:auto;}
+.jing-badge.taiyang{background:#8b3a3a;}
+.jing-badge.yangming{background:#c8662a;}
+.jing-badge.shaoyang{background:#6b8e23;}
+.jing-badge.taiyin{background:#4a6fa5;}
+.jing-badge.shaoyin{background:#5c4a85;}
+.jing-badge.jueyin{background:#6b3a7a;}
+.jing-row{display:flex;gap:8px;margin:6px 0;font-size:14px;}
+.jing-row .label{color:var(--gold);min-width:70px;font-family:var(--kai);}
+.jing-row .val{color:var(--ink);flex:1;}
+.jing-symptoms{margin-top:10px;padding-top:10px;border-top:1px dashed rgba(156,42,42,0.15);font-size:13px;color:#4a4036;line-height:1.8;}
+.jing-symptoms b{color:var(--zhu);font-family:var(--kai);}
+/* 经络 */
+.jingluo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:14px;}
+.jl-card{background:rgba(255,255,245,0.7);border-radius:10px;padding:16px;border:1px solid rgba(156,42,42,0.15);}
+.jl-header{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.jl-elem{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-family:var(--kai);font-size:16px;font-weight:bold;}
+.jl-elem.wood{background:#4a7a4a;}
+.jl-elem.fire{background:#b3432a;}
+.jl-elem.earth{background:#a07c3c;}
+.jl-elem.metal{background:#b8975c;}
+.jl-elem.water{background:#3a5a7a;}
+.jl-zangfu{font-size:17px;font-family:var(--kai);color:var(--ink);}
+.jl-zangfu .gua-tag{font-size:13px;color:var(--gold);margin-left:8px;}
+.jl-row{font-size:13px;line-height:1.7;margin:4px 0;color:#4a4036;}
+.jl-row b{color:var(--zhu);font-family:var(--kai);min-width:50px;display:inline-block;}
+/* 五运六气 */
+.wuyun{background:rgba(255,255,245,0.7);border-radius:10px;padding:20px;border:1px solid rgba(156,42,42,0.15);margin-bottom:20px;}
+.wuyun h3{font-family:var(--kai);color:var(--zhu);margin:0 0 12px;font-size:18px;}
+.wuyun-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;}
+.wuyun-item{padding:12px;background:rgba(255,248,230,0.6);border-radius:8px;border-left:3px solid var(--gold);}
+.wuyun-item .name{font-family:var(--kai);color:var(--zhu);font-size:16px;font-weight:bold;margin-bottom:6px;}
+.wuyun-item .gan{color:var(--gold);font-size:13px;margin-bottom:4px;}
+.wuyun-item p{font-size:13px;line-height:1.6;color:var(--ink);margin:2px 0;}
+.liuqi-table{width:100%;border-collapse:collapse;margin-top:10px;}
+.liuqi-table th{background:rgba(156,42,42,0.1);padding:10px;font-family:var(--kai);color:var(--zhu);font-size:14px;border:1px solid rgba(156,42,42,0.2);}
+.liuqi-table td{padding:10px;font-size:13px;border:1px solid rgba(156,42,42,0.15);text-align:center;color:var(--ink);}
+/* 医家易著 */
+.yijia-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;}
+.yijia-card{background:rgba(255,255,245,0.7);border-radius:10px;padding:16px;border:1px solid rgba(156,42,42,0.15);}
+.yijia-name{font-family:var(--kai);color:var(--zhu);font-size:18px;margin:0 0 4px;}
+.yijia-era{color:var(--gold);font-size:13px;margin-bottom:8px;}
+.yijia-works{font-size:13px;color:var(--ink);line-height:1.8;}
+.yijia-works .work{padding:2px 0;}
+.yijia-works .work b{color:var(--zhu);font-family:var(--kai);}
+.yijia-desc{font-size:13px;color:#4a4036;line-height:1.7;margin-top:8px;padding-top:8px;border-top:1px dashed rgba(156,42,42,0.15);}
+.quote-box{max-width:900px;margin:20px auto;padding:20px;background:rgba(247,241,225,0.8);border:1px solid rgba(168,127,58,0.3);border-radius:8px;font-family:var(--kai);font-size:15px;line-height:2;text-align:center;color:var(--ink);}
+.quote-box .src{font-size:13px;color:var(--gold);margin-top:8px;}
+@media(max-width:768px){
+.thesis-grid,.liu-jing-grid,.jingluo-grid,.yijia-grid{grid-template-columns:1fr;}
+.wuyun-grid{grid-template-columns:1fr 1fr;}
+}
+</style>
+</head>
+<body>
+<div class="shell-content yj-shelled">
+<h1 class="page-title">医易会通</h1>
+<p class="page-subtitle">阴阳脏腑经络 · 五运六气 · 医易同源</p>
+
+<div class="yiyi-intro">
+<h3 style="font-family:var(--kai);color:var(--zhu);margin-top:0;">医易同源论</h3>
+<p>医易同源之说，源自《周易》阴阳之理与《黄帝内经》医学体系的深层贯通。易学以阴阳为纲，以卦象立象；中医以阴阳为辨证之总纲，以五行、经络、运气诊治疾病。</p>
+<p>孙思邈言"不知易，不足以言太医"，张景岳《类经附翼》作《医易义》专论医易相通之理，赵献可以易理释命门，何梦瑶以河洛解医学——数千年来，易理与医理交织，形成了独特的"医易会通"学术传统。</p>
+</div>
+
+<div class="quote-box">
+"《易》具医之理，医得《易》之用。"<br>
+"医不可以无《易》，《易》不可以无医。"
+<div class="src">——张介宾《类经附翼·医易义》</div>
+</div>
+
+<div class="yiyi-tabs">
+<div class="yiyi-tab active" data-tab="thesis">核心论旨</div>
+<div class="yiyi-tab" data-tab="liujing">六经辨证</div>
+<div class="yiyi-tab" data-tab="jingluo">十二经络</div>
+<div class="yiyi-tab" data-tab="yunqi">五运六气</div>
+<div class="yiyi-tab" data-tab="yijia">医家易著</div>
+</div>
+
+<!-- 核心论旨 -->
+<div class="yiyi-panel active" id="panel-thesis">
+<h2 style="font-family:var(--kai);color:var(--zhu);max-width:1200px;margin:0 auto 16px;">医易会通核心论点</h2>
+<div class="thesis-grid" id="thesisGrid"></div>
+</div>
+
+<!-- 六经辨证 -->
+<div class="yiyi-panel" id="panel-liujing">
+<h2 style="font-family:var(--kai);color:var(--zhu);max-width:1200px;margin:0 auto 16px;">六经辨证与六卦对应</h2>
+<p style="max-width:1200px;margin:0 auto 20px;font-size:14px;color:#4a4036;line-height:1.8;">
+张仲景《伤寒论》六经辨证体系（太阳/阳明/少阳/太阴/少阴/厥阴），以三阴三阳为纲，对应疾病由表入里、由阳入阴的传变过程。历代医家多以卦象释六经——如唐宗海以乾坤喻水火、坎离合心肾，为医易会通经典论述。
+</p>
+<div class="liu-jing-grid" id="liuJingGrid"></div>
+</div>
+
+<!-- 十二经络 -->
+<div class="yiyi-panel" id="panel-jingluo">
+<h2 style="font-family:var(--kai);color:var(--zhu);max-width:1200px;margin:0 auto 16px;">十二经络 · 阴阳五行 · 卦象对应</h2>
+<p style="max-width:1200px;margin:0 auto 20px;font-size:14px;color:#4a4036;line-height:1.8;">
+十二经络分属五脏六腑，按手足、阴阳、五行分类，与六子卦（震坎艮巽离兑）存在象数对应关系。脏腑表里相配（如肺与大肠、心与小肠），五行生克制约，构成人体气血运行的网络。
+</p>
+<div class="jingluo-grid" id="jingLuoGrid"></div>
+</div>
+
+<!-- 五运六气 -->
+<div class="yiyi-panel" id="panel-yunqi">
+<h2 style="font-family:var(--kai);color:var(--zhu);max-width:1200px;margin:0 auto 16px;">五运六气</h2>
+<p style="max-width:1200px;margin:0 auto 20px;font-size:14px;color:#4a4036;line-height:1.8;">
+五运六气出自《素问·天元纪大论》，以天干纪运（木火土金水），地支纪气（风火热湿燥寒），推演每年气候变化与疾病流行规律，是易理（河洛数理、阴阳五行）与古代天文历法结合应用于医学的典范。
+</p>
+<div class="wuyun">
+<h3>五运（天干所纪）</h3>
+<div class="wuyun-grid" id="wuYunGrid"></div>
+</div>
+<div class="wuyun">
+<h3>六气（地支所纪）</h3>
+<table class="liuqi-table">
+<thead><tr><th>六气</th><th>三阴三阳</th><th>地支</th><th>气候特征</th><th>所病</th></tr></thead>
+<tbody id="liuQiBody"></tbody>
+</table>
+</div>
+</div>
+
+<!-- 医家易著 -->
+<div class="yiyi-panel" id="panel-yijia">
+<h2 style="font-family:var(--kai);color:var(--zhu);max-width:1200px;margin:0 auto 16px;">医家易著</h2>
+<p style="max-width:1200px;margin:0 auto 20px;font-size:14px;color:#4a4036;line-height:1.8;">
+历代以易理通医理的代表医家与著作。
+</p>
+<div class="yijia-grid" id="yijiaGrid"></div>
+</div>
+
+</div>
+<script>
+var D=window.YJ_YiYi;
+var ENT=window.YJ_Link.ent;
+
+// Tabs
+document.querySelectorAll('.yiyi-tab').forEach(function(t){
+  t.onclick=function(){
+    document.querySelectorAll('.yiyi-tab').forEach(function(x){x.classList.remove('active');});
+    document.querySelectorAll('.yiyi-panel').forEach(function(x){x.classList.remove('active');});
+    t.classList.add('active');
+    document.getElementById('panel-'+t.dataset.tab).classList.add('active');
+  };
+});
+
+// 核心论点
+var thesisHtml='';
+D.thesis.forEach(function(t){
+  thesisHtml+='<div class="thesis-card"><h3>'+t.title+'</h3>'+
+    '<p>'+t.desc+'</p>'+
+    '<div class="quote">'+t.quote+'</div></div>';
+});
+document.getElementById('thesisGrid').innerHTML=thesisHtml;
+
+// 六经
+var jc='';
+var classMap={taiyang:'taiyang',yangming:'yangming',shaoyang:'shaoyang',taiyin:'taiyin',shaoyin:'shaoyin',jueyin:'jueyin'};
+var nameMap={taiyang:'太阳',yangming:'阳明',shaoyang:'少阳',taiyin:'太阴',shaoyin:'少阴',jueyin:'厥阴'};
+D.liujing.forEach(function(j){
+  var gg=window.YJ_Link.findGuaBySymbol?window.YJ_Link.findGua(j.gua):null;
+  var guaName=gg?ENT(gg.name,'gua','g'+String(gg.num).padStart(2,'0')):j.gua;
+  jc+='<div class="jing-card"><div class="jing-card-header">'+
+    '<div class="jing-sym">'+j.symbol+'</div>'+
+    '<div class="jing-name">'+nameMap[j.id]+'病<span class="gua-jing">对应 '+guaName+'</span></div>'+
+    '<div class="jing-badge '+j.id+'">'+(j.id==='taiyang'?'三阳':j.id==='yangming'?'二阳':j.id==='shaoyang'?'一阳':j.id==='taiyin'?'三阴':j.id==='shaoyin'?'二阴':'一阴')+'</div>'+
+    '</div>'+
+    '<div class="jing-row"><span class="label">性质</span><span class="val">'+j.nature+'</span></div>'+
+    '<div class="jing-row"><span class="label">提纲</span><span class="val">'+j.outline+'</span></div>'+
+    '<div class="jing-row"><span class="label">主方</span><span class="val">'+j.formula+'</span></div>'+
+    '<div class="jing-symptoms"><b>症状：</b>'+j.symptoms+'</div>'+
+    '</div>';
+});
+document.getElementById('liuJingGrid').innerHTML=jc;
+
+// 经络
+var elemClass={wood:'wood',fire:'fire',earth:'earth',metal:'metal',water:'water'};
+var jl='';
+D.jingluo.forEach(function(m){
+  var gg=window.YJ_Link.findGuaBySymbol?window.YJ_Link.findGua(m.gua):null;
+  var guaName=gg?ENT(gg.name,'gua','g'+String(gg.num).padStart(2,'0')):m.gua;
+  var isYang=m.type.indexOf('阳')>-1;
+  var zf=isYang?m.fu+'（腑）':m.zang+'（脏）';
+  jl+='<div class="jl-card"><div class="jl-header">'+
+    '<div class="jl-elem '+m.element+'">'+m.element.charAt(0)+'</div>'+
+    '<div class="jl-zangfu">'+m.name+' · '+zf+'<span class="gua-tag">配 '+guaName+'</span></div>'+
+    '</div>'+
+    '<div class="jl-row"><b>五行</b>'+m.element+'　<b>阴阳</b>'+m.type+'　<b>表里</b>'+m.pair+'</div>'+
+    '<div class="jl-row"><b>循行</b>'+m.path+'</div>'+
+    '<div class="jl-row"><b>主病</b>'+m.disease+'</div>'+
+    '</div>';
+});
+document.getElementById('jingLuoGrid').innerHTML=jl;
+
+// 五运六气
+var wy='';
+D.wuyun.forEach(function(w){
+  wy+='<div class="wuyun-item"><div class="name">'+w.name+'运</div>'+
+    '<div class="gan">'+w.gan+'（天干）</div>'+
+    '<p>'+w.nature+'</p>'+
+    '<p>主病：'+w.disease+'</p></div>';
+});
+document.getElementById('wuYunGrid').innerHTML=wy;
+
+var lq='';
+D.liuqi.forEach(function(q){
+  lq+='<tr><td style="color:var(--zhu);font-weight:bold;">'+q.name+'</td>'+
+    '<td>'+q.sanyang_sanyin+'</td><td>'+q.zhi+'</td>'+
+    '<td>'+q.nature+'</td><td>'+q.disease+'</td></tr>';
+});
+document.getElementById('liuQiBody').innerHTML=lq;
+
+// 医家易著
+var yj='';
+D.yijia.forEach(function(y){
+  var zjId='zj_'+y.id;
+  var ent=window.YJ_Link.findZhujia(y.id);
+  var name=ent?ENT(ent.name,'zhujia',zjId):y.name;
+  var works='';
+  y.works.forEach(function(w){
+    works+='<div class="work">《<b>'+w.book+'</b>》';
+    if(w.notes)works+=' — '+w.notes;
+    works+='</div>';
+  });
+  yj+='<div class="yijia-card"><div class="yijia-name">'+name+'</div>'+
+    '<div class="yijia-era">'+y.era+'</div>'+
+    '<div class="yijia-works">'+works+'</div>'+
+    '<div class="yijia-desc">'+y.desc+'</div></div>';
+});
+document.getElementById('yijiaGrid').innerHTML=yj;
+</script>
+</body>
+</html>
