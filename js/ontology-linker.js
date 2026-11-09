@@ -375,6 +375,7 @@
     { id:'guabian', label:'卦变演算', href:'guabian.html', icon:'變' },
     { id:'jiaokan', label:'校勘异文', href:'jiaokan.html', icon:'校' },
     { id:'shifa',   label:'筮法占筮', href:'shifa.html',   icon:'筮' },
+        { id:'najia',   label:'纳甲排盘', href:'najia.html',   icon:'甲' },
     { id:'yanjiu',  label:'历代注疏', href:'yanjiu.html',  icon:'注' },
     { id:'bianhua', label:'易之变·动画', href:'bianhua.html', icon:'影' },
     { id:'anim',    label:'卦象动画', href:'animation/gua-index.html', icon:'影' }
@@ -386,6 +387,7 @@
     { id:'guabian', label:'卦变',    href:'guabian.html' },
     { id:'jiaokan', label:'校勘',    href:'jiaokan.html' },
     { id:'shifa',   label:'筮法',    href:'shifa.html' },
+        { id:'najia',   label:'纳甲',    href:'najia.html' },
     { id:'yanjiu',  label:'注疏',    href:'yanjiu.html' },
     { id:'anim',    label:'动画',    href:'animation/gua-index.html' }
   ];

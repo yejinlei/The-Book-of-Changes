@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>纳甲筮法（六爻）排盘 · 本体论《易经》数字人文平台</title>
+<meta name="description" content="西汉京房纳甲筮法（火珠林）可计算排盘：八宫世应、天干地支、六亲六神、飞伏神、月建日辰、旬空月破、旺衰长生，支持铜钱摇卦与手动起卦。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700;900&family=STKaiti:wght@400;700&display=swap" rel="stylesheet">
+<script src="data/yijing-ontology.js"></script>
+<script src="data/gua-full-data.js"></script>
+<script src="data/yijing-ontology-enhance.js"></script>
+<script src="data/yijing-najia-data.js"></script>
+<script src="data/yijing-najia-engine.js"></script>
+<script src="data/yijing-zhujia-texts.js"></script>
+<script src="js/ontology-linker.js"></script>
+<script src="js/apply-shell.js" data-page="najia"></script>
+<style>
+  :root{
+    --paper:#f7f1e1; --paper-2:#efe6d0; --ink:#1f1a14; --ink-2:#4a3f32;
+    --zhu:#9c2a2a; --zhu-2:#b84a3e; --gold:#a87f3a; --jade:#4a7a5e; --indigo:#3e5a80;
+  }
+  body{background:var(--paper);color:var(--ink);font-family:"Noto Serif SC","Songti SC",serif;margin:0;line-height:1.8;}
+  .wrap{max-width:1200px;margin:0 auto;padding:24px 20px 80px;}
+  h1.page-title{font-size:2.2rem;margin:0 0 6px;text-align:center;letter-spacing:6px;color:var(--zhu);}
+  .page-sub{text-align:center;color:var(--ink-2);font-size:.95rem;margin-bottom:30px;}
+  .page-sub .seal{display:inline-block;background:var(--zhu);color:#f7f1e1;padding:2px 10px;border-radius:4px;font-size:.8rem;margin-left:8px;letter-spacing:2px;}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+  @media(max-width:860px){.grid{grid-template-columns:1fr;}}
+
+  .panel{background:rgba(255,252,245,.72);border:1px solid #e3d6bb;border-radius:6px;padding:20px 22px;box-shadow:0 2px 0 rgba(0,0,0,.03);}
+  .panel h2{margin:0 0 14px;font-size:1.15rem;color:var(--zhu);border-bottom:1px dashed #d4c29a;padding-bottom:8px;letter-spacing:2px;}
+  .panel h2 small{color:var(--ink-2);font-weight:400;font-size:.78rem;margin-left:10px;letter-spacing:0;}
+
+  /* 铜钱起卦 */
+  .coins{display:flex;gap:18px;justify-content:center;margin:14px 0 18px;}
+  .coin{width:72px;height:72px;border-radius:50%;background:radial-gradient(circle at 35% 30%, #d6a84a, #8c6318);box-shadow:inset 0 -4px 8px rgba(0,0,0,.25),0 4px 10px rgba(0,0,0,.2);
+    display:flex;align-items:center;justify-content:center;color:#3a2a10;font-family:"STKaiti",KaiTi,serif;font-size:1.9rem;font-weight:700;
+    transition:transform .4s;}
+  .coin.back{background:radial-gradient(circle at 35% 30%, #e8c470, #6b4911);}
+  .coin.flipping{animation:flip .6s ease;}
+  @keyframes flip{0%{transform:rotateY(0);}50%{transform:rotateY(180deg) scale(1.08);}100%{transform:rotateY(360deg);}}
+
+  .btn-row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:12px 0;}
+  .btn{background:var(--zhu);color:#f7f1e1;border:none;padding:10px 20px;border-radius:4px;font-family:inherit;font-size:.95rem;cursor:pointer;letter-spacing:2px;transition:all .2s;}
+  .btn:hover{background:var(--zhu-2);transform:translateY(-1px);}
+  .btn.ghost{background:transparent;color:var(--zhu);border:1px solid var(--zhu);}
+  .btn.gold{background:var(--gold);}
+  .btn:disabled{opacity:.5;cursor:not-allowed;}
+
+  /* 起卦参数表 */
+  .qi-gua{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
+  .field{display:flex;flex-direction:column;gap:4px;}
+  .field label{font-size:.82rem;color:var(--ink-2);letter-spacing:1px;}
+  .field select,.field input{padding:8px 10px;border:1px solid #d4c29a;border-radius:4px;background:#fdfaef;font-family:inherit;font-size:.95rem;color:var(--ink);}
+
+  /* 手动摇爻表 */
+  .yao-row{display:grid;grid-template-columns:60px 1fr repeat(3,auto);gap:8px;align-items:center;margin:4px 0;padding:6px 8px;background:#faf4e4;border-radius:4px;}
+  .yao-row .lbl{font-size:.9rem;color:var(--ink-2);}
+  .yao-visual{display:flex;gap:4px;align-items:center;}
+  .yao-bar{height:10px;background:var(--ink);border-radius:2px;}
+  .yao-bar.old{border:2px solid var(--zhu);background:var(--paper);height:6px;}
+  .yao-bar.yang{width:42px;}
+  .yao-bar.yin{width:18px;}
+  .yao-btn{padding:4px 10px;border:1px solid #d4c29a;background:#fdfaef;border-radius:3px;cursor:pointer;font-family:inherit;font-size:.85rem;}
+  .yao-btn.active{background:var(--zhu);color:#f7f1e1;border-color:var(--zhu);}
+
+  /* 排盘展示 */
+  .pai-head{display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap;margin-bottom:18px;}
+  .hex-card{flex:0 0 auto;text-align:center;padding:16px 20px;background:#fdfaef;border:1px solid #d4c29a;border-radius:6px;min-width:170px;}
+  .hex-card .name{font-size:1.5rem;color:var(--zhu);font-weight:700;letter-spacing:4px;}
+  .hex-card .meta{font-size:.82rem;color:var(--ink-2);margin-top:4px;}
+  .hex-card .symbol{font-size:3rem;line-height:1;margin:6px 0;color:var(--ink);}
+  .hex-card.ben{border-color:var(--zhu);}
+  .hex-card.bian{border-color:var(--gold);}
+  .hex-card .arrow{font-size:1.3rem;color:var(--gold);margin:0 6px;}
+
+  .pai-info{flex:1;min-width:240px;font-size:.92rem;}
+  .pai-info .kv{display:inline-block;margin-right:16px;margin-bottom:4px;}
+  .pai-info .k{color:var(--ink-2);margin-right:4px;}
+  .pai-info .v{color:var(--zhu);font-weight:600;}
+  .pai-info .bianfa{margin-top:8px;padding:8px 12px;background:#fbf3dc;border-left:3px solid var(--gold);font-size:.9rem;border-radius:0 4px 4px 0;}
+  .pai-info .bianfa b{color:var(--zhu);}
+
+  /* 爻盘表格 */
+  .gua-table{width:100%;border-collapse:collapse;margin-top:10px;font-size:.92rem;}
+  .gua-table th{background:var(--paper-2);padding:8px 6px;font-weight:600;color:var(--ink-2);font-size:.82rem;letter-spacing:1px;border-bottom:2px solid var(--gold);}
+  .gua-table td{padding:8px 6px;text-align:center;border-bottom:1px dashed #e7dcc1;vertical-align:middle;}
+  .gua-table tr.shi-ying td{background:#fbf3dc;}
+  .gua-table tr.dong-yao td{background:#fbefef;}
+  .gua-table .pos{font-weight:600;color:var(--ink-2);font-size:.85rem;}
+  .gua-table .pos.shi::after{content:"世";color:var(--zhu);margin-left:2px;font-size:.72rem;vertical-align:super;}
+  .gua-table .pos.ying::after{content:"应";color:var(--gold);margin-left:2px;font-size:.72rem;vertical-align:super;}
+  .gua-table .ganzhi{font-weight:700;color:var(--ink);font-size:1.05rem;letter-spacing:2px;}
+  .gua-table .ganzhi.dong{color:var(--zhu);}
+  .gua-table .wuxing{color:var(--ink-2);font-size:.85rem;}
+  .lq{display:inline-block;padding:2px 8px;border-radius:3px;font-weight:600;font-size:.85rem;}
+  .lq-fumu{background:#e8edf5;color:#3e5a80;}
+  .lq-xiongdi{background:#e8e4dc;color:#5a4e3d;}
+  .lq-zisun{background:#e3efe6;color:#4a7a5e;}
+  .lq-qicai{background:#f6ecd2;color:#a87f3a;}
+  .lq-guangui{background:#f5e0dd;color:#9c2a2a;}
+  .ls{font-size:.8rem;color:var(--ink-2);}
+  .ws{font-size:.8rem;}
+  .ws.wang{color:#a04040;font-weight:700;}
+  .ws.xiang{color:#b57316;}
+  .ws.youqi{color:#5b7948;}
+  .ws.po{color:#9c2a2a;font-weight:700;}
+  .ws.ping{color:var(--ink-2);}
+  .ws.shuai{color:#7a6550;}
+  .kong-tag{font-size:.72rem;background:#eee;color:#999;padding:1px 4px;border-radius:2px;margin-left:2px;}
+  .po-tag{font-size:.72rem;background:var(--zhu);color:#fff;padding:1px 4px;border-radius:2px;margin-left:2px;}
+  .cs{font-size:.78rem;color:#7d6a49;}
+  .bian-yao{font-size:.8rem;color:var(--gold);font-weight:600;}
+  .bian-yao .lq{font-size:.72rem;padding:1px 4px;}
+
+  /* 飞伏神 */
+  .fu-list{margin-top:10px;font-size:.88rem;}
+  .fu-item{padding:8px 10px;background:#f8f1dd;border-left:3px solid var(--indigo);border-radius:0 4px 4px 0;margin-bottom:6px;}
+  .fu-item .fushen-b{color:var(--indigo);font-weight:600;}
+  .fu-item .feishen-b{color:var(--ink);}
+  .fu-item .rel{color:var(--zhu);font-size:.82rem;margin-left:6px;}
+  .fu-empty{color:var(--ink-2);font-size:.88rem;padding:8px;font-style:italic;}
+
+  /* 六亲象意 */
+  .xiyi{margin-top:10px;display:grid;grid-template-columns:repeat(auto-fit, minmax(200px,1fr));gap:8px;}
+  .xiyi-item{padding:8px 10px;background:#fdfaef;border-radius:4px;border-left:3px solid var(--gold);font-size:.85rem;}
+  .xiyi-item b{color:var(--zhu);margin-right:4px;}
+
+  /* 学术说明 */
+  .notice{padding:10px 14px;background:#f4ecd8;border-left:3px solid var(--zhu);border-radius:0 4px 4px 0;font-size:.88rem;color:var(--ink-2);margin-bottom:16px;line-height:1.7;}
+  .notice b{color:var(--zhu);}
+
+  .section{margin-top:28px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1 class="page-title">纳甲筮法·排盘</h1>
+  <p class="page-sub">西汉京房《京氏易传》· 五代《火珠林》· 清《卜筮正宗》《增删卜易》体系 <span class="seal">可计算</span></p>
+
+  <div class="notice">
+    <b>本体论说明</b>：本排盘由纯演算引擎自动完成，所有干支、六亲、六神、旺衰、飞伏、空亡均按传统规则程序算出，不预置结果。本卦、变卦、世应、八宫归属与本体库 64 卦三元组双向联通，可跳卦象详情、注家注本。
+  </div>
+
+  <div class="grid">
+    <!-- 左：起卦 -->
+    <div class="panel">
+      <h2>一、起卦 <small>模拟三铜钱法（字为正面=阳=3，背为背面=阴=2）</small></h2>
+      <div class="coins" id="coins">
+        <div class="coin" id="coin1" data-back="2">字</div>
+        <div class="coin" id="coin2" data-back="2">字</div>
+        <div class="coin" id="coin3" data-back="2">字</div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn" id="shakeBtn">摇卦（6次成卦）</button>
+        <button class="btn ghost" id="randomBtn">随机一键起卦</button>
+        <button class="btn gold" id="paiBtn" disabled>排 盘</button>
+        <button class="btn ghost" id="resetBtn">重 置</button>
+      </div>
+
+      <h2 style="margin-top:24px">二、起卦日时 <small>断卦需用月建日辰定旺衰</small></h2>
+      <div class="qi-gua">
+        <div class="field">
+          <label>月建（按节气）</label>
+          <select id="yueSel"></select>
+        </div>
+        <div class="field">
+          <label>日辰（天干地支）</label>
+          <select id="riSel"></select>
+        </div>
+      </div>
+
+      <h2 style="margin-top:24px">三、六爻手工录入 <small>初爻→上爻，6=老阴动 7=少阳 8=少阴 9=老阳动</small></h2>
+      <div id="yaoEditor"></div>
+    </div>
+
+    <!-- 右：排盘结果 -->
+    <div class="panel">
+      <h2>四、排盘结果 <small>本体可计算输出</small></h2>
+      <div id="paiEmpty" style="text-align:center;color:var(--ink-2);padding:60px 0;font-size:1rem;">
+        请先摇卦或随机起卦，再点击"排盘"
+      </div>
+      <div id="paiResult" style="display:none;">
+        <div class="pai-head" id="paiHead"></div>
+
+        <table class="gua-table" id="guaTable">
+          <thead>
+            <tr><th>爻位</th><th>本卦爻</th><th>干支</th><th>六亲</th><th>六神</th><th>旺衰</th><th>动变</th></tr>
+          </thead>
+          <tbody id="guaTbody"></tbody>
+        </table>
+
+        <h2 style="margin-top:20px">飞伏神 <small>本卦缺六亲时，到本宫纯卦同位取伏</small></h2>
+        <div class="fu-list" id="fuList"></div>
+
+        <h2 style="margin-top:20px">六亲取象 <small>《卜筮正宗》·《增删卜易》万物类象要略</small></h2>
+        <div class="xiyi" id="xiyiBox"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section panel">
+    <h2>纳甲筮法本体知识 <small>点击实体可跳对应条目</small></h2>
+    <div style="font-size:.92rem;line-height:2" id="najiaIntro">
+      <p><b id="intro-place">纳甲</b>之名始见于西汉 :ml-search[京房]{text="京房"}《京氏易传》，将天干地支按阴阳卦顺逆纳入六爻，结合五行生克、八宫世应、六亲生克构建预测体系，后世传为<b>火珠林/六爻</b>，为易学象数筮法最主要一脉。</p>
+      <p><b>纳干规则</b>：乾纳甲壬、坤纳乙癸（乾坤包天地首尾天干），震庚、巽辛、坎戊、离己、艮丙、兑丁（六子各纳一干）。<b>纳支规则</b>：阳卦（乾震坎艮）地支隔位顺行，阴卦（坤巽离兑）地支隔位逆行。</p>
+      <p><b>世应规则</b>：本宫卦世居上爻，一世至五世世居一至五爻，游魂世居四爻、归魂世居三爻；应爻与世爻相隔三位。</p>
+      <p><b>六亲规则</b>：以本宫五行为「我」：生我者父母、我生者子孙、同我者兄弟、我克者妻财、克我者官鬼。<b>六神</b>依日干起：甲乙起青龙、丙丁起朱雀、戊日勾陈、己日螣蛇、庚辛起白虎、壬癸起玄武，自初爻循环至上爻。</p>
+      <p><b>飞伏神</b>：本卦不现之六亲，需至本宫八纯卦同位寻取；飞神为显性爻，伏神为隐性爻，飞生伏则易出、飞克伏则难出，伏克飞则出暴。</p>
+      <p><b>旺衰</b>以月建为提纲：当令者旺、我生者相、生我者休、克我者囚、我克者死；日辰同功，月破（爻支与月冲）极衰，临日（爻支同日）有力；旬空（六甲旬中所缺二支）主事虚不实。</p>
+      <p>关键典籍：:ml-search[《火珠林》]{text="火珠林"}、:ml-search[《卜筮正宗》]{text="卜筮正宗"}（王洪绪）、:ml-search[《增删卜易》]{text="增删卜易"}（野鹤老人）、《易隐》、《易林补遗》。代表人物：京房、:ml-search[麻衣道者]{text="麻衣道者"}、:ml-search[刘伯温]{text="刘伯温"}（《黄金策》托名）、:ml-search[王洪绪]{text="王洪绪"}、野鹤老人。</p>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const N = window.YJ_NAJIA;
+  const E = window.YJ_NAJIA_ENGINE;
+  const POS_NAME = ['初','二','三','四','五','上'];
+  const LIUQIN_CLASS = {fumu:'lq-fumu',xiongdi:'lq-xiongdi',zisun:'lq-zisun',qicai:'lq-qicai',guangui:'lq-guangui'};
+  const WUXING_NAME = {jin:'金',mu:'木',shui:'水',huo:'火',tu:'土'};
+  const WANG_CLASS = {
+    '旺之极':'wang','旺相':'wang','旺':'wang','相':'xiang','有气':'youqi',
+    '平相':'ping','平':'ping','休':'shuai','衰败':'shuai','囚/死':'shuai','月破（极衰）':'po'
+  };
+
+  // 选项：月建、日干支
+  const yueOpts = [['寅','正月·立春'],['卯','二月·惊蛰'],['辰','三月·清明'],['巳','四月·立夏'],['午','五月·芒种'],['未','六月·小暑'],
+                   ['申','七月·立秋'],['酉','八月·白露'],['戌','九月·寒露'],['亥','十月·立冬'],['子','十一月·大雪'],['丑','十二月·小寒']];
+  const yueSel = document.getElementById('yueSel');
+  yueOpts.forEach(([v,l])=>{ const o=document.createElement('option');o.value=v;o.textContent=v+'月（'+l+'）';yueSel.appendChild(o);});
+
+  // 六十甲子日
+  const tianGan = ['甲','乙','丙','丁','戊','己','庚','辛','壬','癸'];
+  const diZhi = N.DIZHI_ORDER;
+  const riSel = document.getElementById('riSel');
+  for(let i=0;i<60;i++){
+    const g = tianGan[i%10], z = diZhi[i%12];
+    const gz = g+z;
+    const o = document.createElement('option');o.value=gz;o.textContent=gz+'日';riSel.appendChild(o);
+  }
+  // 默认：子月甲子日
+  yueSel.value = '子'; riSel.value = '甲子';
+
+  // 六爻编辑
+  let yaoValues = [null,null,null,null,null,null]; // 初→上
+  const yaoEditor = document.getElementById('yaoEditor');
+  function renderYaoEditor(){
+    yaoEditor.innerHTML = '';
+    // 注意：UI 显示从上到下是上→初，与数组相反
+    for(let i=5;i>=0;i--){
+      const row = document.createElement('div');
+      row.className = 'yao-row';
+      const isYang = yaoValues[i]===7||yaoValues[i]===9;
+      const isDong = yaoValues[i]===6||yaoValues[i]===9;
+      let visHtml = '';
+      if(yaoValues[i]===null){
+        visHtml = '<span style="color:#ccc;">未摇</span>';
+      } else if(isYang){
+        visHtml = '<div class="yao-bar yang'+(isDong?' old':'')+'"></div><span style="margin-left:6px;font-size:.78rem;color:'+(isDong?'var(--zhu)':'var(--ink-2)')+'">'+(isDong?'老阳○（动）':'少阳—')+'</span>';
+      } else {
+        visHtml = '<div class="yao-bar yin'+(isDong?' old':'')+'"></div><div style="width:6px"></div><div class="yao-bar yin'+(isDong?' old':'')+'"></div><span style="margin-left:6px;font-size:.78rem;color:'+(isDong?'var(--zhu)':'var(--ink-2)')+'">'+(isDong?'老阴×（动）':'少阴- -')+'</span>';
+      }
+      row.innerHTML = `
+        <span class="lbl">${POS_NAME[i]}爻</span>
+        <span class="yao-visual">${visHtml}</span>
+        <button class="yao-btn ${yaoValues[i]===9?'active':''}" data-idx="${i}" data-v="9">九·老阳</button>
+        <button class="yao-btn ${yaoValues[i]===8?'active':''}" data-idx="${i}" data-v="8">八·少阴</button>
+        <button class="yao-btn ${yaoValues[i]===7?'active':''}" data-idx="${i}" data-v="7">七·少阳</button>
+        <button class="yao-btn ${yaoValues[i]===6?'active':''}" data-idx="${i}" data-v="6">六·老阴</button>
+      `;
+      yaoEditor.appendChild(row);
+    }
+    yaoEditor.querySelectorAll('.yao-btn').forEach(b=>{
+      b.onclick = ()=>{
+        yaoValues[+b.dataset.idx] = +b.dataset.v;
+        renderYaoEditor();
+        updatePaiBtn();
+      };
+    });
+  }
+  function updatePaiBtn(){
+    document.getElementById('paiBtn').disabled = yaoValues.some(v=>v===null);
+  }
+  renderYaoEditor();
+
+  // 铜钱动画与摇卦
+  const coins = [document.getElementById('coin1'),document.getElementById('coin2'),document.getElementById('coin3')];
+  let shakeStep = 0, shakeResults = [];
+  function setCoinFace(el, isBack){
+    // 正面（字）=阳面=3，背面=阴面=2；isBack=true 显示"背"
+    el.classList.toggle('back', isBack);
+    el.textContent = isBack?'背':'字';
+    el.dataset.back = isBack?'2':'3';
+  }
+  function flipCoinsOnce(){
+    return new Promise(resolve=>{
+      coins.forEach(c=>c.classList.add('flipping'));
+      setTimeout(()=>{
+        const backs = [Math.random()<0.5,Math.random()<0.5,Math.random()<0.5];
+        coins.forEach((c,i)=>setCoinFace(c, backs[i]));
+        coins.forEach(c=>c.classList.remove('flipping'));
+        const backCount = backs.filter(x=>x).length;
+        // 三背(3) → 6老阴；二背(2) → 7少阳；一背(1) → 8少阴；0背(三字) → 9老阳
+        const v = backCount===3?6 : backCount===2?7 : backCount===1?8 : 9;
+        resolve({backs, v});
+      }, 650);
+    });
+  }
+
+  document.getElementById('shakeBtn').onclick = async ()=>{
+    const btn = document.getElementById('shakeBtn');
+    btn.disabled = true;
+    shakeStep = 0; shakeResults = [];
+    yaoValues = [null,null,null,null,null,null];
+    renderYaoEditor();
+    for(let i=0;i<6;i++){
+      const r = await flipCoinsOnce();
+      yaoValues[i] = r.v;
+      renderYaoEditor();
+      await new Promise(r=>setTimeout(r,200));
+    }
+    btn.disabled = false;
+    updatePaiBtn();
+    doPai();
+  };
+  document.getElementById('randomBtn').onclick = ()=>{
+    yaoValues = E.randomQigua();
+    renderYaoEditor();
+    updatePaiBtn();
+    doPai();
+  };
+  document.getElementById('resetBtn').onclick = ()=>{
+    yaoValues = [null,null,null,null,null,null];
+    shakeStep = 0; shakeResults = [];
+    coins.forEach(c=>setCoinFace(c,false));
+    renderYaoEditor();
+    document.getElementById('paiEmpty').style.display='block';
+    document.getElementById('paiResult').style.display='none';
+    updatePaiBtn();
+  };
+  document.getElementById('paiBtn').onclick = doPai;
+
+  // 排盘渲染
+  function doPai(){
+    const yue = yueSel.value;
+    const ri = riSel.value;
+    const res = E.zhuangua(yaoValues, {yue, ri});
+    if(res.error){alert(res.error);return;}
+    document.getElementById('paiEmpty').style.display='none';
+    document.getElementById('paiResult').style.display='block';
+    renderHead(res);
+    renderTable(res);
+    renderFu(res);
+    renderXiyi(res);
+  }
+
+  function hexSymbolStr(sym){
+    // 用 ☰☷☳☴☵☲☶☱ 组合成六爻Unicode
+    const KEY = {111:'☰',110:'☱',101:'☲',100:'☳',011:'☴',010:'☵',001:'☶',000:'☷'};
+    const nei = sym.slice(0,3).join('');
+    const wai = sym.slice(3,6).join('');
+    // 六爻整卦：查本体卦名 symbol 字段
+    return KEY[wai] + ' / ' + KEY[nei];
+  }
+
+  function renderHead(res){
+    const ben = res.ben, bian = res.bian;
+    const head = document.getElementById('paiHead');
+    let html = `
+      <div class="hex-card ben">
+        <div class="symbol">${findGuaSym(ben.num)}</div>
+        <div class="name">${ben.name}</div>
+        <div class="meta">${ben.gongName}·${ben.wuxingName}·${ben.level}</div>
+        <div class="meta">世${ben.shi}　应${ben.ying}</div>
+      </div>
+    `;
+    if(bian && res.dongCount>0){
+      html += `<div class="hex-card" style="padding-top:32px"><div style="font-size:1.5rem;color:var(--gold)">→</div></div>
+        <div class="hex-card bian">
+          <div class="symbol">${findGuaSym(bian.num)}</div>
+          <div class="name">${bian.name}</div>
+          <div class="meta">${bian.gongName}·${WUXING_NAME[bian.wuxing]}·${bian.level}</div>
+          <div class="meta">世${bian.shi}　应${bian.ying}</div>
+        </div>`;
+    }
+    html += `<div class="pai-info">
+      <div><span class="kv"><span class="k">月建</span><span class="v">${res.tiaojian.yue}月</span></span>
+        <span class="kv"><span class="k">日辰</span><span class="v">${res.tiaojian.ri}日</span></span>
+        <span class="kv"><span class="k">旬空</span><span class="v">${res.tiaojian.xunkong.join('、')}</span></span>
+        <span class="kv"><span class="k">动爻</span><span class="v">${res.dongCount}爻</span></span>
+      </div>
+      <div class="bianfa"><b>朱熹《易学启蒙》变占法（${res.bianfa.rule}）：</b>${res.bianfa.text}</div>
+      <div style="margin-top:6px;font-size:.82rem;color:var(--ink-2)">${res.dongList.map(d=>POS_NAME[d.pos-1]+'爻'+d.from+'→'+d.to+'（'+d.liuqin+' '+d.ganzhi+'）').join('；')||'六爻安静'}</div>
+    </div>`;
+    head.innerHTML = html;
+  }
+
+  function findGuaSym(num){
+    // 从 gua-full-data 查
+    const g = Object.values(window.YJ_GUA_FULL).find(x=>x.num===num);
+    return g?g.symbol:'䷀';
+  }
+
+  function renderTable(res){
+    const tb = document.getElementById('guaTbody');
+    tb.innerHTML = '';
+    // 表格从上到下：上爻→初爻（古人读卦习惯）
+    for(let i=5;i>=0;i--){
+      const y = res.yaos[i];
+      const tr = document.createElement('tr');
+      if(y.shi||y.ying) tr.classList.add('shi-ying');
+      if(y.dong) tr.classList.add('dong-yao');
+      let bianStr = '';
+      if(y.dong && y.bian){
+        bianStr = `<span class="bian-yao">→ ${y.bian.gan+y.bian.zhi} <span class="lq ${LIUQIN_CLASS[y.bian.liuqin.key]}">${y.bian.liuqin.name}</span></span>`;
+      }
+      // 爻条
+      let yaoBar = y.yinyang ? '<div class="yao-bar yang" style="width:30px"></div>' : '<div class="yao-bar yin" style="width:12px"></div><div style="width:4px"></div><div class="yao-bar yin" style="width:12px"></div>';
+      if(y.dong){ yaoBar += `<span style="font-size:.7rem;color:var(--zhu);margin-left:4px">${y.yinyang?'○':'×'}</span>`; }
+      // 旺衰样式
+      const wsKey = y.wangshuai||'';
+      const wsCls = Object.keys(WANG_CLASS).find(k=>wsKey.includes(k))||'ping';
+      const wsText = [];
+      if(y.yueEffect?.chong) wsText.push('<span class="po-tag">月破</span>');
+      else if(y.yueEffect?.he) wsText.push(y.yueEffect.he);
+      if(y.riEffect?.chong) wsText.push(y.riEffect.chong);
+      if(y.riEffect?.he) wsText.push(y.riEffect.he);
+      wsText.push(wsKey);
+      if(y.kong) wsText.push('<span class="kong-tag">空</span>');
+      tr.innerHTML = `
+        <td class="pos ${y.shi?'shi':''}${y.ying?'ying':''}">${POS_NAME[i]}</td>
+        <td style="display:flex;justify-content:center;align-items:center;gap:2px">${yaoBar}</td>
+        <td class="ganzhi ${y.dong?'dong':''}">${y.gan+y.zhi}</td>
+        <td><span class="lq ${LIUQIN_CLASS[y.liuqin.key]}">${y.liuqin.name}</span><br><span class="wuxing">${WUXING_NAME[y.wuxing]}</span></td>
+        <td><span class="ls">${y.liushen}</span></td>
+        <td class="ws ${WANG_CLASS[wsCls]||'ping'}">${wsText.join(' ')}</td>
+        <td>${bianStr}</td>
+      `;
+      tb.appendChild(tr);
+    }
+  }
+
+  function renderFu(res){
+    const box = document.getElementById('fuList');
+    if(!res.fushen.length){
+      box.innerHTML = '<div class="fu-empty">本宫六亲齐备，无伏神。</div>';
+      return;
+    }
+    box.innerHTML = res.fushen.map(f=>{
+      const p = POS_NAME[f.pos-1];
+      return `<div class="fu-item">
+        <b>${p}</b>：
+        <span class="fushen-b">${f.fushen.gan+f.fushen.zhi} ${f.fushen.liuqin.name}</span>（伏）
+        伏于 <span class="feishen-b">${f.feishen.gan+f.feishen.zhi} ${f.feishen.liuqin.name}</span>（飞）之下
+        <span class="rel">${f.relation}</span>
+      </div>`;
+    }).join('');
+  }
+
+  function renderXiyi(res){
+    const box = document.getElementById('xiyiBox');
+    const items = [
+      ['fumu','父母','生我者'],['xiongdi','兄弟','同我者'],['zisun','子孙','我生者'],
+      ['qicai','妻财','我克者'],['guangui','官鬼','克我者']
+    ];
+    const xiyi = {
+      fumu:'长辈、文书、契约、房屋、学业、庇护；占考试、长辈事为用神',
+      xiongdi:'兄弟朋友、同事同伴、竞争分利、劫财破耗',
+      zisun:'子女晚辈、医药解灾、福德财源、僧道宠物；克官鬼，占官职忌见',
+      qicai:'妻室、财物、货利、资本、欲望；占财、婚、货殖为用神，克父母',
+      guangui:'官府功名、职位权势、女占夫、疾病鬼神、压力凶灾；占功名官事为用神'
+    };
+    box.innerHTML = items.map(([k,n,desc])=>`
+      <div class="xiyi-item"><span class="lq ${LIUQIN_CLASS[k]}">${n}</span> <span style="color:var(--ink-2);font-size:.8rem">${desc}</span><br>${xiyi[k]}</div>
+    `).join('');
+  }
+
+  // 默认预排一个乾为天 静卦 甲子月甲子日 示例
+  window.addEventListener('load',()=>{
+    setTimeout(()=>{
+      yaoValues = [7,7,7,7,7,7]; // 全少阳静=乾为天
+      yueSel.value = '子'; riSel.value = '甲子';
+      renderYaoEditor(); updatePaiBtn();
+      doPai();
+    }, 200);
+  });
+})();
+</script>
+</body>
+</html>
