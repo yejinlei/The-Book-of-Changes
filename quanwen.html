@@ -86,12 +86,31 @@ body { font-family:var(--font-serif,'Songti SC','STSong','SimSun',serif); backgr
   </div>
 </div>
 
-<script src="data/texts-index.js?v=20261111d"></script>
+<script src="js/pako.min.js?v=20261111e"></script>
+<script src="data/texts-index.js?v=20261111e"></script>
 <script>
 (function(){
   var T = window.YJ_TEXTS;
   var cur = 'all', kw = '', books = (T && T.books) || [];
   var $ = function(id){ return document.getElementById(id); };
+
+  // 全文以 gzip 存储（体积约降 55%），此处透明解压后渲染
+  function decodeGz(u8){
+    if(u8.length>=2 && u8[0]===0x1f && u8[1]===0x8b){
+      if(window.pako && pako.ungzip) return pako.ungzip(u8, {to:'string'});
+      if(typeof DecompressionStream !== 'undefined')
+        return new Response(new Blob([u8]).stream().pipeThrough(new DecompressionStream('gzip'))).text();
+      throw new Error('浏览器不支持解压，请使用新版 Chrome/Edge/Firefox/Safari');
+    }
+    return new TextDecoder('utf-8').decode(u8);
+  }
+  function loadText(url){
+    return fetch(url).then(function(r){
+      if(!r.ok) throw new Error(r.status);
+      if(!/\.gz$/i.test(url)) return r.text();
+      return r.arrayBuffer().then(function(buf){ return Promise.resolve(decodeGz(new Uint8Array(buf))); });
+    });
+  }
 
   function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
@@ -141,12 +160,12 @@ body { font-family:var(--font-serif,'Songti SC','STSong','SimSun',serif); backgr
     $('qwTitle').textContent = '《'+b.title+'》';
     $('qwMeta').textContent = b.author + ' · ' + b.chars.toLocaleString() + ' 字 · ' + b.catName;
     $('qwDl').href = b.file;
-    $('qwDl').setAttribute('download', b.title+'.txt');
+    $('qwDl').setAttribute('download', b.title+'.txt.gz');
     $('qwText').innerHTML = '<div class="qw-loading">正在载入全文…</div>';
     if(push){ history.replaceState(null,'', '?book='+slug+'#'+slug); }
     $('qwReader').scrollIntoView({behavior:'smooth', block:'start'});
 
-    fetch(b.file).then(function(r){ if(!r.ok) throw new Error(r.status); return r.text(); })
+    loadText(b.file)
       .then(function(txt){
         var render = function(n){
           var lines = txt.split(/\r?\n/);
