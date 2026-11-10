@@ -902,3 +902,377 @@ footer .ent-pop,
 @media (max-width:640px){
   .hash-target{ scroll-margin-top:64px; }
 }
+
+/* ==========================================================
+   【跨页面主题适配补丁】修复所有交互页硬编码颜色
+   思路：所有页面里写死的 color:#fff / rgba(217,74,74,.06) 等，
+         用 !important 全局强制覆盖到主题变量，切主题时立即生效。
+   ========================================================== */
+
+/* ---- 默认（星象·深色）补专用变量 ---- */
+:root{
+  --on-accent:#ffffff;          /* 强调色（红/金/玉/紫）按钮/标签上的文字色（深色主题=白）*/
+  --yao-ci-bg:rgba(217,74,74,.10);   /* 爻辞条底色（朱红半透明）*/
+  --baihua-bg:rgba(123,191,166,.12); /* 白话解底色（玉青半透明）*/
+  --gua-yao-fill:#e8c878;       /* 卦象 SVG 中"阳爻"填充色（深色主题=亮金）*/
+  --gua-yao-yin:#5a7aaf;        /* 阴爻断裂处的底色（深色主题=深蓝灰，融入背景）*/
+  --gua-yao-line:rgba(200,180,120,.55); /* 爻画描边/气线 */
+  --gua-title-fill:var(--ink);  /* 卦象 SVG 下方卦名字色 */
+  --btn-border:var(--zhu);      /* 普通边框按钮边色 */
+  --btn-on-bg:var(--zhu);       /* 激活态按钮底色 */
+  --card-surface:var(--paper-2);/* 卡片通用底色 */
+  --pop-bg:var(--paper-2);      /* 弹出层/气泡底色 */
+  --input-bg:var(--paper);      /* 输入框/下拉底色 */
+  --table-head-bg:rgba(217,74,74,.18);  /* 纳甲/筮法表头底 */
+  --table-row-odd:rgba(255,255,255,.03);/* 表格奇数行底 */
+  --table-row-hover:rgba(212,176,121,.10);
+  --coin-front:#d4b079;         /* 铜钱正面（金）*/
+  --coin-back:#8b5a2b;          /* 铜钱背面（铜背）*/
+  --yarrow-stick:#d4b079;       /* 蓍草色 */
+}
+/* 青铜（深色）*/
+[data-theme="bronze"]{
+  --on-accent:#f4ead0;
+  --yao-ci-bg:rgba(184,115,51,.12);
+  --baihua-bg:rgba(106,144,112,.12);
+  --gua-yao-fill:#e0b870;
+  --gua-yao-yin:#3a3220;
+  --gua-yao-line:rgba(200,170,90,.55);
+  --table-head-bg:rgba(184,115,51,.20);
+  --table-row-odd:rgba(255,240,200,.03);
+  --table-row-hover:rgba(200,160,80,.12);
+  --coin-front:#c9a15a;
+  --coin-back:#6b4520;
+  --yarrow-stick:#c9a15a;
+}
+/* 竹简（深色）*/
+[data-theme="bamboo"]{
+  --on-accent:#f5f0d8;
+  --yao-ci-bg:rgba(168,48,48,.12);
+  --baihua-bg:rgba(125,172,106,.12);
+  --gua-yao-fill:#e6d890;
+  --gua-yao-yin:#2e3a28;
+  --gua-yao-line:rgba(210,200,120,.5);
+  --table-head-bg:rgba(168,48,48,.18);
+  --table-row-odd:rgba(220,230,180,.03);
+  --table-row-hover:rgba(200,200,120,.12);
+  --coin-front:#d9c878;
+  --coin-back:#7a5a20;
+  --yarrow-stick:#c8c078;
+}
+/* 水墨山水（浅色）*/
+[data-theme="ink"]{
+  --on-accent:#ffffff;
+  --yao-ci-bg:rgba(181,48,48,.08);
+  --baihua-bg:rgba(74,112,80,.08);
+  --gua-yao-fill:#2a2018;       /* 浅底=墨色爻画 */
+  --gua-yao-yin:#faf8f2;        /* 阴爻断裂=纸色融入 */
+  --gua-yao-line:rgba(80,60,30,.35);
+  --gua-title-fill:#2a2018;
+  --table-head-bg:rgba(181,48,48,.12);
+  --table-row-odd:rgba(0,0,0,.02);
+  --table-row-hover:rgba(80,60,30,.06);
+  --coin-front:#c9a048;
+  --coin-back:#7a5020;
+  --yarrow-stick:#a07848;
+}
+/* 宣纸古籍（浅色）*/
+[data-theme="paper"]{
+  --on-accent:#fff8e8;
+  --yao-ci-bg:rgba(194,58,42,.10);
+  --baihua-bg:rgba(74,122,74,.10);
+  --gua-yao-fill:#3a2418;       /* 浅底=深棕墨色爻画 */
+  --gua-yao-yin:#fbf5e4;
+  --gua-yao-line:rgba(140,90,40,.4);
+  --gua-title-fill:#3a2418;
+  --table-head-bg:rgba(194,58,42,.12);
+  --table-row-odd:rgba(120,80,30,.03);
+  --table-row-hover:rgba(160,120,50,.08);
+  --coin-front:#c89848;
+  --coin-back:#7a4818;
+  --yarrow-stick:#b08048;
+}
+
+/* ============ 全局强制覆盖：按钮/标签/点色的白字 ============ */
+.nav-links a:hover,
+.nav-links a.active,
+.version-btns button:hover,
+.version-btns button.on,
+.page-nav button:hover,
+.dot-zhu,.dot-mo,.dot-lan,.dot-jin,.dot-zi,
+.line-hd .yao-tag,
+.anno .src,
+.anno.cmt-wangbi .src,
+.anno.cmt-kongyingda .src,
+.anno.cmt-zhuxi .src,
+.anno.cmt-chengyi .src,
+.anno.cmt-jijie .src,
+.anno.cmt-zhezhong .src,
+.anno.cmt-an .src,
+.anno.cmt-zonglun .src,
+.anno.cmt-baihua .src,
+.toolbar-card button.on,
+.tab-btns button.on{
+  color:var(--on-accent) !important;
+}
+
+/* ============ 爻辞条底色（覆盖 rgba(217,74,74,.06) 硬编码） ============ */
+.gua-text.yao-ci,
+.line-ci,
+.yao-ci-p{
+  background:var(--yao-ci-bg) !important;
+  border-left-color:var(--zhu) !important;
+  color:var(--ink) !important;
+}
+
+/* ============ 白话注解底色（覆盖 rgba(74,112,80,.1) 硬编码） ============ */
+.anno.cmt-baihua,
+.baihua-block,
+.reader-baihua{
+  background:var(--baihua-bg) !important;
+  border-left-color:var(--jade) !important;
+  color:var(--ink-2) !important;
+}
+
+/* ============ 通用注解块 ============ */
+.anno{
+  background:var(--chip-bg) !important;
+  color:var(--ink-2) !important;
+  border-left-color:var(--gold-deep) !important;
+}
+
+/* ============ 卦象 SVG 爻画颜色覆盖（让 GuaAnim 深色/浅色主题自动适配）============
+   GuaAnim 里写死了 fill:#2a1f14（深棕），在深色主题上不可见；
+   通过 CSS 选择器强制覆盖所有 .gua-svg .yao / .b-yao 的 fill/stroke。*/
+.gua-svg .yao,
+.gua-svg .b-yao,
+.gua-svg .yao-glow,
+svg.gua-symbol .yao,
+svg.bagua-symbol .yao{
+  fill:var(--gua-yao-fill) !important;
+}
+.gua-svg .yao-qi{
+  stroke:var(--gua-yao-line) !important;
+}
+.gua-svg .gua-title,
+.gua-svg text.gua-label{
+  fill:var(--gua-title-fill) !important;
+}
+.gua-svg .yao:hover,
+.gua-svg .b-yao:hover{
+  fill:var(--zhu) !important;
+}
+.gua-svg .yao.moving,
+.gua-svg .flip,
+.gua-svg .yao.flip{
+  fill:var(--zhu) !important;
+}
+
+/* ============ 纳甲排盘页（najia.html）硬编码覆盖 ============ */
+.najia-toolbar,
+.najia-panel,
+.paipan-result,
+.liuyao-table,
+.liuyao-table th,
+.liuyao-table td,
+.yao-row,
+.shi-ying,
+.liuqin-tag,
+.liushhen-tag,
+.liushen-col,
+.waqian-panel,
+.waqian-coin{
+  color:var(--ink-2);
+}
+.liuyao-table th,
+.najia-hd{
+  background:var(--table-head-bg) !important;
+  color:var(--ink) !important;
+}
+.liuyao-table tr:nth-child(odd) td,
+.yao-row:nth-child(odd){
+  background:var(--table-row-odd) !important;
+}
+.liuyao-table tr:hover td,
+.yao-row:hover{
+  background:var(--table-row-hover) !important;
+}
+.waqian-coin{
+  color:var(--coin-front);
+  text-shadow:0 0 12px var(--gold-bright);
+}
+.waqian-coin.back{
+  color:var(--coin-back);
+}
+.najia-input,
+.najia-input select,
+.najia-input input{
+  background:var(--input-bg) !important;
+  color:var(--ink) !important;
+  border-color:var(--line) !important;
+}
+
+/* ============ 卦变演算页（guabian.html）============ */
+.guabian-card,
+.gua-rel-card,
+.xiaoxi-grid,
+.gua-compare{
+  background:var(--card-surface) !important;
+  border-color:var(--line) !important;
+  color:var(--ink-2) !important;
+}
+.xiaoxi-cell,
+.gua-mini-card{
+  background:var(--paper) !important;
+  border-color:var(--line-soft) !important;
+  color:var(--ink-2) !important;
+}
+.xiaoxi-cell.active,
+.gua-mini-card.active{
+  background:var(--zhu) !important;
+  color:var(--on-accent) !important;
+}
+
+/* ============ 校勘异文页（jiaokan.html）============ */
+.jiaokan-card,
+.yiwen-card,
+.version-block{
+  background:var(--card-surface) !important;
+  border-color:var(--line) !important;
+  color:var(--ink-2) !important;
+}
+.version-tag{
+  background:var(--gold) !important;
+  color:var(--on-accent) !important;
+}
+
+/* ============ 筮法推演页（shifa.html）============ */
+.shifa-section,
+.dayan-demo,
+.tongqian-demo,
+.meihua-demo,
+.shifa-result{
+  background:var(--card-surface) !important;
+  color:var(--ink-2) !important;
+  border-color:var(--line) !important;
+}
+.yarrow-stick{
+  color:var(--yarrow-stick) !important;
+}
+.shifa-coin{
+  color:var(--coin-front);
+}
+
+/* ============ 易之变·三动画（bianhua.html）============ */
+#bhua-root,
+.bhua-panel,
+.bhua-card,
+.bhua-controls{
+  background:var(--card-surface) !important;
+  color:var(--ink-2) !important;
+}
+.bhua-controls button,
+.bhua-controls select{
+  background:var(--paper) !important;
+  color:var(--ink) !important;
+  border-color:var(--line) !important;
+}
+.bhua-controls button.active{
+  background:var(--zhu) !important;
+  color:var(--on-accent) !important;
+}
+canvas#bhua-three{
+  background:transparent !important;
+}
+
+/* ============ 易图互动（yitu.html）============ */
+.yitu-card,
+.taiji-card,
+.xiantian-card,
+.houtian-card,
+.hetu-card,
+.luoshu-card{
+  background:var(--card-surface) !important;
+  color:var(--ink-2) !important;
+  border-color:var(--line) !important;
+}
+.yitu-card svg text,
+.yitu-card tspan{
+  fill:var(--ink) !important;
+}
+
+/* ============ 十翼易传（shiyi.html）============ */
+.yizhuan-card,
+.yizhuan-section{
+  background:var(--card-surface) !important;
+  color:var(--ink-2) !important;
+  border-color:var(--line) !important;
+}
+.yizhuan-jingwen{
+  color:var(--ink) !important;
+  border-left-color:var(--zhu) !important;
+  background:var(--yao-ci-bg) !important;
+}
+
+/* ============ 经文汇评页容器自身兜底（防止 apply-shell 注入失败时也不变色）============ */
+.reader{
+  background:var(--card-surface) !important;
+  color:var(--ink-2) !important;
+  border-color:var(--line-strong) !important;
+}
+.reader .gua-title{ color:var(--zhu) !important; }
+.reader .gua-sub,
+.reader .gua-meta{ color:var(--ink-3) !important; }
+.reader .section-hd{ color:var(--zhu) !important; }
+.reader .sub-hd{ color:var(--ice) !important; }
+.reader .line-hd{ color:var(--zhu) !important; }
+.reader .gua-text{ color:var(--ink) !important; }
+.reader .toolbar-card{
+  background:var(--paper-3) !important;
+  border-color:var(--line) !important;
+}
+.reader .toolbar-card select,
+.reader select{
+  background:var(--input-bg) !important;
+  color:var(--ink) !important;
+  border-color:var(--line) !important;
+}
+.reader .toolbar-hint{ color:var(--ink-3) !important; }
+
+/* 顶部顶栏/侧栏兜底（防止亮主题下仍是深空背景）*/
+.topbar{ background:var(--paper-2) !important; border-bottom-color:var(--line) !important; }
+.topbar .logo,
+.topbar .logo .cn,
+.topbar nav a{ color:var(--ink) !important; }
+.sidebar{
+  background:var(--paper-2) !important;
+  border-right-color:var(--line) !important;
+}
+.sidebar .side-hd{ color:var(--gold) !important; }
+.sidebar nav a{ color:var(--ink-2) !important; }
+.sidebar nav a.active{
+  background:var(--yao-ci-bg) !important;
+  color:var(--zhu) !important;
+  border-left-color:var(--zhu) !important;
+}
+.site-footer{
+  background:var(--paper-3) !important;
+  color:var(--ink-3) !important;
+  border-top-color:var(--line) !important;
+}
+
+/* 主题切换按钮自身也要适配 */
+.theme-toggle{
+  background:var(--paper-2) !important;
+  border-color:var(--line) !important;
+  color:var(--ink) !important;
+}
+.theme-menu{
+  background:var(--card-surface) !important;
+  border-color:var(--line) !important;
+  box-shadow:var(--shadow-lg) !important;
+}
+.theme-item{ color:var(--ink) !important; }
+.theme-item .ti-desc{ color:var(--ink-3) !important; }
+.theme-item.active{ color:var(--zhu) !important; }
+
