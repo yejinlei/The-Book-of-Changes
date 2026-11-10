@@ -11,73 +11,73 @@
 <script src="js/ontology-linker.js"></script>
 <script src="js/apply-shell.js" data-page="yiyi"></script>
 <style>
-.yiyi-intro{max-width:900px;margin:0 auto 30px;padding:20px;background:rgba(255,248,230,0.5);border-left:4px solid var(--zhu);}
+.yiyi-intro{max-width:900px;margin:0 auto 30px;padding:20px;background:var(--paper-2);border-left:4px solid var(--zhu);}
 .yiyi-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:0 auto 24px;max-width:1200px;}
-.yiyi-tab{padding:10px 20px;background:rgba(156,42,42,0.08);border:1px solid rgba(156,42,42,0.2);border-radius:6px;cursor:pointer;font-family:var(--song);font-size:15px;transition:all .25s;color:var(--ink);}
-.yiyi-tab:hover{background:rgba(156,42,42,0.15);}
-.yiyi-tab.active{background:var(--zhu);color:rgba(15,28,52,.92);border-color:var(--zhu);}
+.yiyi-tab{padding:10px 20px;background:var(--chip-bg);border:1px solid var(--line-strong);border-radius:6px;cursor:pointer;font-family:var(--song);font-size:15px;transition:all .25s;color:var(--ink);}
+.yiyi-tab:hover{background:var(--chip-bg);}
+.yiyi-tab.active{background:var(--zhu);color:#fff;border-color:var(--zhu);}
 .yiyi-panel{max-width:1200px;margin:0 auto;display:none;}
 .yiyi-panel.active{display:block;}
 /* 核心论点 */
 .thesis-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:18px;margin-bottom:30px;}
-.thesis-card{background:rgba(255,255,245,0.7);border:1px solid rgba(156,42,42,0.15);border-radius:10px;padding:20px;}
+.thesis-card{background:var(--paper-2);border:1px solid var(--chip-bg);border-radius:10px;padding:20px;}
 .thesis-card h3{font-family:var(--kai);color:var(--zhu);font-size:18px;margin:0 0 10px;display:flex;align-items:center;gap:8px;}
 .thesis-card p{font-size:14px;line-height:1.8;color:var(--ink);margin:0 0 8px;}
 .thesis-card .quote{font-family:var(--kai);color:var(--gold);font-size:13px;padding-left:10px;border-left:2px solid var(--gold);margin-top:8px;}
 /* 六经 */
 .liu-jing-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(380px,1fr));gap:16px;margin-bottom:24px;}
-.jing-card{background:rgba(255,255,245,0.7);border-radius:10px;padding:18px;border:1px solid rgba(156,42,42,0.15);}
+.jing-card{background:var(--paper-2);border-radius:10px;padding:18px;border:1px solid var(--chip-bg);}
 .jing-card-header{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
 .jing-sym{font-size:34px;color:var(--zhu);font-weight:bold;}
 .jing-name{font-size:20px;font-family:var(--kai);color:var(--ink);}
 .jing-name .gua-jing{font-size:13px;color:var(--gold);display:block;margin-top:2px;}
 .jing-badge{padding:3px 10px;border-radius:20px;font-size:12px;color:#fff;margin-left:auto;}
-.jing-badge.taiyang{background:#8b3a3a;}
-.jing-badge.yangming{background:#c8662a;}
-.jing-badge.shaoyang{background:#6b8e23;}
-.jing-badge.taiyin{background:#4a6fa5;}
-.jing-badge.shaoyin{background:#5c4a85;}
-.jing-badge.jueyin{background:#6b3a7a;}
+.jing-badge.taiyang{background:var(--zhu-deep);}
+.jing-badge.yangming{background:var(--amber);}
+.jing-badge.shaoyang{background:var(--jade);}
+.jing-badge.taiyin{background:var(--ice);}
+.jing-badge.shaoyin{background:var(--violet);}
+.jing-badge.jueyin{background:var(--violet);}
 .jing-row{display:flex;gap:8px;margin:6px 0;font-size:14px;}
 .jing-row .label{color:var(--gold);min-width:70px;font-family:var(--kai);}
 .jing-row .val{color:var(--ink);flex:1;}
-.jing-symptoms{margin-top:10px;padding-top:10px;border-top:1px dashed rgba(156,42,42,0.15);font-size:13px;color:#4a4036;line-height:1.8;}
+.jing-symptoms{margin-top:10px;padding-top:10px;border-top:1px dashed var(--chip-bg);font-size:13px;color:var(--ink-2);line-height:1.8;}
 .jing-symptoms b{color:var(--zhu);font-family:var(--kai);}
 /* 经络 */
 .jingluo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:14px;}
-.jl-card{background:rgba(255,255,245,0.7);border-radius:10px;padding:16px;border:1px solid rgba(156,42,42,0.15);}
+.jl-card{background:var(--paper-2);border-radius:10px;padding:16px;border:1px solid var(--chip-bg);}
 .jl-header{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
 .jl-elem{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-family:var(--kai);font-size:16px;font-weight:bold;}
-.jl-elem.wood{background:#4a7a4a;}
-.jl-elem.fire{background:#b3432a;}
-.jl-elem.earth{background:#a07c3c;}
-.jl-elem.metal{background:#b8975c;}
-.jl-elem.water{background:#3a5a7a;}
+.jl-elem.wood{background:var(--jade);}
+.jl-elem.fire{background:var(--zhu);}
+.jl-elem.earth{background:var(--gold-deep);}
+.jl-elem.metal{background:var(--gold);}
+.jl-elem.water{background:var(--ice);}
 .jl-zangfu{font-size:17px;font-family:var(--kai);color:var(--ink);}
 .jl-zangfu .gua-tag{font-size:13px;color:var(--gold);margin-left:8px;}
-.jl-row{font-size:13px;line-height:1.7;margin:4px 0;color:#4a4036;}
+.jl-row{font-size:13px;line-height:1.7;margin:4px 0;color:var(--ink-2);}
 .jl-row b{color:var(--zhu);font-family:var(--kai);min-width:50px;display:inline-block;}
 /* 五运六气 */
-.wuyun{background:rgba(255,255,245,0.7);border-radius:10px;padding:20px;border:1px solid rgba(156,42,42,0.15);margin-bottom:20px;}
+.wuyun{background:var(--paper-2);border-radius:10px;padding:20px;border:1px solid var(--chip-bg);margin-bottom:20px;}
 .wuyun h3{font-family:var(--kai);color:var(--zhu);margin:0 0 12px;font-size:18px;}
 .wuyun-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;}
-.wuyun-item{padding:12px;background:rgba(255,248,230,0.6);border-radius:8px;border-left:3px solid var(--gold);}
+.wuyun-item{padding:12px;background:var(--paper-3);border-radius:8px;border-left:3px solid var(--gold);}
 .wuyun-item .name{font-family:var(--kai);color:var(--zhu);font-size:16px;font-weight:bold;margin-bottom:6px;}
 .wuyun-item .gan{color:var(--gold);font-size:13px;margin-bottom:4px;}
 .wuyun-item p{font-size:13px;line-height:1.6;color:var(--ink);margin:2px 0;}
 .liuqi-table{width:100%;border-collapse:collapse;margin-top:10px;}
-.liuqi-table th{background:rgba(156,42,42,0.1);padding:10px;font-family:var(--kai);color:var(--zhu);font-size:14px;border:1px solid rgba(156,42,42,0.2);}
-.liuqi-table td{padding:10px;font-size:13px;border:1px solid rgba(156,42,42,0.15);text-align:center;color:var(--ink);}
+.liuqi-table th{background:var(--chip-bg);padding:10px;font-family:var(--kai);color:var(--zhu);font-size:14px;border:1px solid var(--line-strong);}
+.liuqi-table td{padding:10px;font-size:13px;border:1px solid var(--chip-bg);text-align:center;color:var(--ink);}
 /* 医家易著 */
 .yijia-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;}
-.yijia-card{background:rgba(255,255,245,0.7);border-radius:10px;padding:16px;border:1px solid rgba(156,42,42,0.15);}
+.yijia-card{background:var(--paper-2);border-radius:10px;padding:16px;border:1px solid var(--chip-bg);}
 .yijia-name{font-family:var(--kai);color:var(--zhu);font-size:18px;margin:0 0 4px;}
 .yijia-era{color:var(--gold);font-size:13px;margin-bottom:8px;}
 .yijia-works{font-size:13px;color:var(--ink);line-height:1.8;}
 .yijia-works .work{padding:2px 0;}
 .yijia-works .work b{color:var(--zhu);font-family:var(--kai);}
-.yijia-desc{font-size:13px;color:#4a4036;line-height:1.7;margin-top:8px;padding-top:8px;border-top:1px dashed rgba(156,42,42,0.15);}
-.quote-box{max-width:900px;margin:20px auto;padding:20px;background:rgba(247,241,225,0.8);border:1px solid rgba(168,127,58,0.3);border-radius:8px;font-family:var(--kai);font-size:15px;line-height:2;text-align:center;color:var(--ink);}
+.yijia-desc{font-size:13px;color:var(--ink-2);line-height:1.7;margin-top:8px;padding-top:8px;border-top:1px dashed var(--chip-bg);}
+.quote-box{max-width:900px;margin:20px auto;padding:20px;background:var(--paper-2);border:1px solid var(--line);border-radius:8px;font-family:var(--kai);font-size:15px;line-height:2;text-align:center;color:var(--ink);}
 .quote-box .src{font-size:13px;color:var(--gold);margin-top:8px;}
 @media(max-width:768px){
 .thesis-grid,.liu-jing-grid,.jingluo-grid,.yijia-grid{grid-template-columns:1fr;}
@@ -119,7 +119,7 @@
 <!-- 六经辨证 -->
 <div class="yiyi-panel" id="panel-liujing">
 <h2 style="font-family:var(--kai);color:var(--zhu);max-width:1200px;margin:0 auto 16px;">六经辨证与六卦对应</h2>
-<p style="max-width:1200px;margin:0 auto 20px;font-size:14px;color:#4a4036;line-height:1.8;">
+<p style="max-width:1200px;margin:0 auto 20px;font-size:14px;color:var(--ink-2);line-height:1.8;">
 张仲景《伤寒论》六经辨证体系（太阳/阳明/少阳/太阴/少阴/厥阴），以三阴三阳为纲，对应疾病由表入里、由阳入阴的传变过程。历代医家多以卦象释六经——如唐宗海以乾坤喻水火、坎离合心肾，为医易会通经典论述。
 </p>
 <div class="liu-jing-grid" id="liuJingGrid"></div>
@@ -128,7 +128,7 @@
 <!-- 十二经络 -->
 <div class="yiyi-panel" id="panel-jingluo">
 <h2 style="font-family:var(--kai);color:var(--zhu);max-width:1200px;margin:0 auto 16px;">十二经络 · 阴阳五行 · 卦象对应</h2>
-<p style="max-width:1200px;margin:0 auto 20px;font-size:14px;color:#4a4036;line-height:1.8;">
+<p style="max-width:1200px;margin:0 auto 20px;font-size:14px;color:var(--ink-2);line-height:1.8;">
 十二经络分属五脏六腑，按手足、阴阳、五行分类，与六子卦（震坎艮巽离兑）存在象数对应关系。脏腑表里相配（如肺与大肠、心与小肠），五行生克制约，构成人体气血运行的网络。
 </p>
 <div class="jingluo-grid" id="jingLuoGrid"></div>
@@ -137,7 +137,7 @@
 <!-- 五运六气 -->
 <div class="yiyi-panel" id="panel-yunqi">
 <h2 style="font-family:var(--kai);color:var(--zhu);max-width:1200px;margin:0 auto 16px;">五运六气</h2>
-<p style="max-width:1200px;margin:0 auto 20px;font-size:14px;color:#4a4036;line-height:1.8;">
+<p style="max-width:1200px;margin:0 auto 20px;font-size:14px;color:var(--ink-2);line-height:1.8;">
 五运六气出自《素问·天元纪大论》，以天干纪运（木火土金水），地支纪气（风火热湿燥寒），推演每年气候变化与疾病流行规律，是易理（河洛数理、阴阳五行）与古代天文历法结合应用于医学的典范。
 </p>
 <div class="wuyun">
@@ -156,7 +156,7 @@
 <!-- 医家易著 -->
 <div class="yiyi-panel" id="panel-yijia">
 <h2 style="font-family:var(--kai);color:var(--zhu);max-width:1200px;margin:0 auto 16px;">医家易著</h2>
-<p style="max-width:1200px;margin:0 auto 20px;font-size:14px;color:#4a4036;line-height:1.8;">
+<p style="max-width:1200px;margin:0 auto 20px;font-size:14px;color:var(--ink-2);line-height:1.8;">
 历代以易理通医理的代表医家与著作。
 </p>
 <div class="yijia-grid" id="yijiaGrid"></div>

@@ -9,66 +9,64 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>易图体系 · 可玩互动 | 易经本体论</title>
 <style>
-:root { --bg:var(--space-deep); --paper:#faf6ed; --text:#2b1810; --accent:#8b0000; --gold:#b8860b;
-  --ink:#1a1a2e; --blue:#1e3a8a; --border:#d4c5a3; --shadow:rgba(139,0,0,0.08); }
 * { margin:0; padding:0; box-sizing:border-box; }
-body { font-family:'Songti SC','STSong','SimSun','Noto Serif CJK SC','Source Han Serif SC','Noto Serif SC',serif; background:var(--bg); color:var(--text); line-height:2; }
-.top-nav { position:fixed; top:0; left:0; right:0; height:64px; background:var(--paper);
-  border-bottom:2px solid var(--border); z-index:1000; display:flex; align-items:center; justify-content:space-between;
-  padding:0 30px; box-shadow:0 2px 8px var(--shadow); }
+body { font-family:'Songti SC','STSong','SimSun','Noto Serif CJK SC','Source Han Serif SC','Noto Serif SC',serif; background:transparent; color:var(--ink); line-height:2; }
+.top-nav { position:fixed; top:0; left:0; right:0; height:64px; background:var(--paper-2);
+  border-bottom:1px solid var(--line); z-index:1000; display:flex; align-items:center; justify-content:space-between;
+  padding:0 30px; box-shadow:var(--shadow); }
 .logo { font-size:20px; font-weight:700; color:var(--ink); text-decoration:none; }
-.logo .taiji { color:var(--accent); font-size:26px; }
+.logo .taiji { color:var(--zhu); font-size:26px; }
 .nav-links { display:flex; gap:18px; flex-wrap:wrap; }
-.nav-links a { color:var(--text); text-decoration:none; font-size:14px; font-weight:500; }
-.nav-links a:hover, .nav-links a.active { color:var(--accent); }
+.nav-links a { color:var(--ink-2); text-decoration:none; font-size:14px; font-weight:500; }
+.nav-links a:hover, .nav-links a.active { color:var(--zhu); }
 .nav-links a.active { font-weight:700; }
 
 .wrap { max-width:1180px; margin:64px auto 0; padding:36px 40px 80px; }
-.back-link { display:inline-block; color:var(--accent); text-decoration:none; font-size:14px; margin-bottom:18px; }
+.back-link { display:inline-block; color:var(--zhu); text-decoration:none; font-size:14px; margin-bottom:18px; }
 .back-link:hover { text-decoration:underline; }
 .page-head { text-align:center; margin-bottom:20px; }
-.page-head h1 { font-size:42px; color:var(--accent); letter-spacing:10px; margin-bottom:8px; }
+.page-head h1 { font-size:42px; color:var(--zhu); letter-spacing:10px; margin-bottom:8px; }
 .page-head p { color:var(--gold); font-size:15px; }
-.playtip { text-align:center; font-size:13px; color:#8b7e6a; margin-bottom:30px; }
-.playtip b { color:var(--accent); }
+.playtip { text-align:center; font-size:13px; color:var(--ink-3); margin-bottom:30px; }
+.playtip b { color:var(--zhu); }
 
 .grid { display:grid; grid-template-columns:repeat(2,1fr); gap:26px; }
-.card { background:var(--paper); border:1px solid var(--border); border-radius:8px; padding:26px;
-  border-top:3px solid var(--accent); }
+.card { background:var(--paper-2); border:1px solid var(--line); border-radius:var(--radius-lg); padding:26px;
+  border-top:3px solid var(--zhu); box-shadow:var(--shadow);}
 .card.wide { grid-column:1 / -1; }
-.card h3 { font-size:21px; color:var(--accent); margin-bottom:6px; letter-spacing:2px; }
+.card h3 { font-size:21px; color:var(--zhu); margin-bottom:6px; letter-spacing:2px; }
 .card .meta { font-size:12px; color:var(--gold); margin-bottom:14px; }
 .card .meta span { margin-right:12px; }
 .card .svgbox { text-align:center; margin:14px 0; }
 .svgbox svg { max-width:100%; height:auto; }
-.card p.desc { font-size:14px; line-height:2; color:#4a3a2a; text-align:justify; }
+.card p.desc { font-size:14px; line-height:2; color:var(--ink-2); text-align:justify; }
 
 /* ===== 交互条 ===== */
 .toolbar { display:flex; flex-wrap:wrap; gap:8px; align-items:center; justify-content:center; margin:10px 0 4px; }
-.tbtn { font-family:inherit; font-size:12.5px; color:var(--accent); background:#fff8ef; border:1px solid var(--border);
+.tbtn { font-family:inherit; font-size:12.5px; color:var(--zhu); background:var(--paper); border:1px solid var(--line);
   border-radius:16px; padding:4px 13px; cursor:pointer; transition:.18s; }
-.tbtn:hover { background:var(--accent); color:#fff8ef; border-color:var(--accent); }
-.tbtn.on { background:var(--accent); color:#fff8ef; border-color:var(--accent); }
+.tbtn:hover { background:var(--zhu); color:#fff; border-color:var(--zhu); }
+.tbtn.on { background:var(--zhu); color:#fff; border-color:var(--zhu); }
 .hint { text-align:center; font-size:12px; color:var(--gold); min-height:20px; margin-top:6px; font-style:italic; }
 
 /* 可交互元素通用 */
 .ix { cursor:pointer; transition:.18s; }
-.ix:hover { filter:drop-shadow(0 0 6px rgba(139,0,0,.55)); }
-.hot { filter:drop-shadow(0 0 8px rgba(139,0,0,.9)); }
+.ix:hover { filter:drop-shadow(0 0 6px var(--zhu-soft)); }
+.hot { filter:drop-shadow(0 0 8px var(--zhu)); }
 @keyframes pop { 0%{transform:scale(1)} 50%{transform:scale(1.35)} 100%{transform:scale(1)} }
 .pop { animation:pop .45s ease; transform-box:fill-box; transform-origin:center; }
 
 /* 太极自转 & 阴阳光 */
 .svgbox .taiji-spin { transform-origin:115px 115px; animation: taiji-rotate 38s linear infinite; }
-.logo .taiji { color:var(--accent); font-size:26px; display:inline-block; animation: taiji-rotate 48s linear infinite; transform-origin:center; }
+.logo .taiji { color:var(--zhu); font-size:26px; display:inline-block; animation: taiji-rotate 48s linear infinite; transform-origin:center; }
 .card .taiji-spin.paused { animation-play-state:paused; }
 
 /* 消息卦爻条 */
 .xiaoxi-gua { display:inline-flex; flex-direction:column-reverse; align-items:center; gap:2px; margin:0 8px; vertical-align:middle; }
-.xiaoxi-gua .xxbar { background:#2a1f14; border-radius:1px; animation: xiaoxi-pulse 3s ease-in-out infinite; transform-origin:center; }
+.xiaoxi-gua .xxbar { background:var(--ink); border-radius:1px; animation: xiaoxi-pulse 3s ease-in-out infinite; transform-origin:center; }
 .xiaoxi-gua .xxbar.yang { width:22px; height:4px; }
 .xiaoxi-gua .xxbar.yin  { width:9px; height:4px; }
-.xiaoxi-label { display:block; font-size:12px; color:#8b0000; margin-top:2px; }
+.xiaoxi-label { display:block; font-size:12px; color:var(--zhu); margin-top:2px; }
 @keyframes taiji-rotate { to { transform: rotate(360deg); } }
 @keyframes xiaoxi-pulse { 0%,100% { opacity:.55; } 50% { opacity:1; } }
 @keyframes flow { to { stroke-dashoffset:-40; } }
@@ -96,6 +94,7 @@ body { font-family:'Songti SC','STSong','SimSun','Noto Serif CJK SC','Source Han
     <a href="animation/gua-index.html">易之变 · 动画</a>
     <a href="animation/qian.html">乾卦讲解</a>
     <a href="yanjiu.html">研究</a>
+    <span class="yj-theme-host"></span>
   </nav>
 
 <div class="wrap">

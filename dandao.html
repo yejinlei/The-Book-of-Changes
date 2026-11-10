@@ -11,64 +11,64 @@
 <script src="js/ontology-linker.js"></script>
 <script src="js/apply-shell.js" data-page="dandao"></script>
 <style>
-.dandao-intro{max-width:960px;margin:0 auto 30px;padding:24px;background:rgba(255,248,230,0.6);border-left:4px solid var(--zhu);border-radius:0 10px 10px 0;}
+.dandao-intro{max-width:960px;margin:0 auto 30px;padding:24px;background:var(--paper-2);border-left:4px solid var(--zhu);border-radius:0 10px 10px 0;}
 .dandao-intro h2{font-family:var(--kai);color:var(--zhu);margin:0 0 10px;font-size:22px;}
 .dandao-intro p{font-size:15px;line-height:1.9;color:var(--ink);margin:8px 0;}
 .meta-row{display:flex;gap:20px;flex-wrap:wrap;margin:16px 0;}
-.meta-item{background:rgba(168,127,58,0.1);padding:8px 16px;border-radius:20px;font-family:var(--kai);font-size:14px;color:var(--zhu);}
+.meta-item{background:var(--chip-bg);padding:8px 16px;border-radius:20px;font-family:var(--kai);font-size:14px;color:var(--zhu);}
 /* Tabs */
 .dd-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:0 auto 24px;max-width:1200px;}
-.dd-tab{padding:10px 20px;background:rgba(156,42,42,0.08);border:1px solid rgba(156,42,42,0.2);border-radius:6px;cursor:pointer;font-family:var(--song);font-size:15px;transition:all .25s;color:var(--ink);}
-.dd-tab:hover{background:rgba(156,42,42,0.15);}
-.dd-tab.active{background:var(--zhu);color:rgba(15,28,52,.92);border-color:var(--zhu);}
+.dd-tab{padding:10px 20px;background:var(--chip-bg);border:1px solid var(--line-strong);border-radius:6px;cursor:pointer;font-family:var(--song);font-size:15px;transition:all .25s;color:var(--ink);}
+.dd-tab:hover{background:var(--chip-bg);}
+.dd-tab.active{background:var(--zhu);color:#fff;border-color:var(--zhu);}
 .dd-panel{max-width:1200px;margin:0 auto;display:none;}
 .dd-panel.active{display:block;}
 /* 三家相见 */
 .sanjia-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:30px;}
-.sj-card{background:rgba(255,255,245,0.7);border-radius:10px;padding:20px;border:1px solid rgba(156,42,42,0.15);text-align:center;}
+.sj-card{background:var(--paper-2);border-radius:10px;padding:20px;border:1px solid var(--chip-bg);text-align:center;}
 .sj-sym{font-size:48px;color:var(--zhu);margin-bottom:10px;}
 .sj-name{font-family:var(--kai);font-size:22px;color:var(--zhu);margin-bottom:6px;}
 .sj-role{color:var(--gold);font-size:14px;font-family:var(--kai);margin-bottom:10px;}
 .sj-desc{font-size:14px;line-height:1.8;color:var(--ink);text-align:left;}
 /* 核心结构卡片 */
 .core-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;margin-bottom:24px;}
-.core-card{background:rgba(255,255,245,0.7);border-radius:10px;padding:18px;border:1px solid rgba(156,42,42,0.15);}
+.core-card{background:var(--paper-2);border-radius:10px;padding:18px;border:1px solid var(--chip-bg);}
 .core-card h4{font-family:var(--kai);color:var(--zhu);margin:0 0 8px;font-size:17px;display:flex;align-items:center;gap:8px;}
 .core-card .sym{font-size:28px;}
 .core-card p{font-size:14px;line-height:1.8;color:var(--ink);margin:0;}
 /* 月体纳甲 */
 .yueti-flow{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin:20px 0;}
-.yt-item{background:rgba(255,255,245,0.7);border-radius:10px;padding:14px;border:1px solid rgba(156,42,42,0.15);width:150px;text-align:center;flex-shrink:0;}
+.yt-item{background:var(--paper-2);border-radius:10px;padding:14px;border:1px solid var(--chip-bg);width:150px;text-align:center;flex-shrink:0;}
 .yt-moon{font-size:42px;margin:6px 0;}
 .yt-gua{font-size:30px;color:var(--zhu);}
 .yt-phase{font-family:var(--kai);color:var(--zhu);font-size:14px;margin:6px 0 4px;}
 .yt-jia{color:var(--gold);font-size:13px;font-family:var(--kai);margin-bottom:6px;}
-.yt-desc{font-size:12px;line-height:1.6;color:#4a4036;}
+.yt-desc{font-size:12px;line-height:1.6;color:var(--ink-2);}
 /* 消息卦火候 */
 .xiaoxi-flow{display:flex;flex-direction:column;gap:8px;max-width:800px;margin:0 auto;}
-.xx-row{display:flex;align-items:center;gap:12px;background:rgba(255,255,245,0.7);border-radius:8px;padding:10px 14px;border-left:4px solid var(--zhu);}
+.xx-row{display:flex;align-items:center;gap:12px;background:var(--paper-2);border-radius:8px;padding:10px 14px;border-left:4px solid var(--zhu);}
 .xx-gua{font-size:28px;min-width:50px;text-align:center;color:var(--zhu);}
 .xx-month{font-family:var(--kai);font-size:14px;color:var(--gold);min-width:60px;}
-.xx-pos{font-size:13px;color:#4a4036;min-width:80px;}
+.xx-pos{font-size:13px;color:var(--ink-2);min-width:80px;}
 .xx-hh{font-family:var(--kai);font-size:14px;color:var(--zhu);min-width:100px;font-weight:bold;}
 .xx-desc{font-size:13px;line-height:1.6;color:var(--ink);flex:1;}
 /* 注家 */
 .dandao-jia-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px;}
-.dj-card{background:rgba(255,255,245,0.7);border-radius:10px;padding:16px;border:1px solid rgba(156,42,42,0.15);}
+.dj-card{background:var(--paper-2);border-radius:10px;padding:16px;border:1px solid var(--chip-bg);}
 .dj-name{font-family:var(--kai);color:var(--zhu);font-size:18px;}
 .dj-era{color:var(--gold);font-size:13px;margin-bottom:6px;}
 .dj-works{font-size:14px;color:var(--ink);margin-bottom:6px;}
 .dj-works b{color:var(--zhu);font-family:var(--kai);}
-.dj-desc{font-size:13px;line-height:1.7;color:#4a4036;padding-top:8px;border-top:1px dashed rgba(156,42,42,0.15);}
+.dj-desc{font-size:13px;line-height:1.7;color:var(--ink-2);padding-top:8px;border-top:1px dashed var(--chip-bg);}
 /* 原文 */
-.yuanwen-box{background:rgba(247,241,225,0.85);border:1px solid rgba(168,127,58,0.3);border-radius:10px;padding:18px;margin:12px 0;max-width:900px;margin-left:auto;margin-right:auto;}
+.yuanwen-box{background:var(--paper-2);border:1px solid var(--line);border-radius:10px;padding:18px;margin:12px 0;max-width:900px;margin-left:auto;margin-right:auto;}
 .yw-quote{font-family:var(--kai);font-size:17px;line-height:2;color:var(--ink);}
 .yw-src{text-align:right;color:var(--gold);font-size:13px;margin-top:8px;}
-.yw-note{font-size:14px;color:#4a4036;line-height:1.8;margin-top:8px;padding-top:8px;border-top:1px dashed rgba(156,42,42,0.15);}
+.yw-note{font-size:14px;color:var(--ink-2);line-height:1.8;margin-top:8px;padding-top:8px;border-top:1px dashed var(--chip-bg);}
 /* 阶段 */
 .stages-flow{max-width:800px;margin:0 auto;display:flex;flex-direction:column;gap:12px;}
-.stage-item{background:rgba(255,255,245,0.7);border-radius:10px;padding:16px;border-left:5px solid var(--zhu);display:flex;gap:16px;align-items:flex-start;}
-.stage-num{width:40px;height:40px;background:var(--zhu);color:rgba(15,28,52,.92);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--kai);font-size:20px;flex-shrink:0;}
+.stage-item{background:var(--paper-2);border-radius:10px;padding:16px;border-left:5px solid var(--zhu);display:flex;gap:16px;align-items:flex-start;}
+.stage-num{width:40px;height:40px;background:var(--zhu);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--kai);font-size:20px;flex-shrink:0;}
 .stage-body{flex:1;}
 .stage-name{font-family:var(--kai);color:var(--zhu);font-size:18px;margin-bottom:4px;}
 .stage-gua{color:var(--gold);font-size:13px;margin-bottom:6px;}
@@ -122,7 +122,7 @@
 <h2 style="font-family:var(--kai);color:var(--zhu);max-width:1200px;margin:0 auto 16px;">火候总论</h2>
 <div class="core-grid" id="huohouGrid"></div>
 <h2 style="font-family:var(--kai);color:var(--zhu);max-width:800px;margin:30px auto 16px;">十二消息卦配周天火候</h2>
-<p style="max-width:800px;margin:0 auto 20px;font-size:14px;color:#4a4036;line-height:1.8;">
+<p style="max-width:800px;margin:0 auto 20px;font-size:14px;color:var(--ink-2);line-height:1.8;">
 十二消息卦自子至亥循环一周，对应一年十二月、一日十二时、一息一周天，是参同契火候制度的核心。
 </p>
 <div class="xiaoxi-flow" id="xiaoxiFlow"></div>
@@ -131,7 +131,7 @@
 <!-- 月体纳甲 -->
 <div class="dd-panel" id="panel-yueti">
 <h2 style="font-family:var(--kai);color:var(--zhu);max-width:1200px;margin:0 auto 16px;">月体纳甲火候</h2>
-<p style="max-width:1200px;margin:0 auto 20px;font-size:14px;color:#4a4036;line-height:1.8;">
+<p style="max-width:1200px;margin:0 auto 20px;font-size:14px;color:var(--ink-2);line-height:1.8;">
 以月相盈亏喻火符进退，震为初三新月、兑为初八上弦、乾为十五望月、巽为十六既亏、艮为二十三下弦、坤为三十月晦，是参同契最具特色的丹法符号。
 </p>
 <div class="yueti-flow" id="yuetiFlow"></div>
@@ -146,7 +146,7 @@
 <!-- 阶段 -->
 <div class="dd-panel" id="panel-stages">
 <h2 style="font-family:var(--kai);color:var(--zhu);max-width:1200px;margin:0 auto 16px;">内丹修炼四阶段</h2>
-<p style="max-width:800px;margin:0 auto 20px;font-size:14px;color:#4a4036;line-height:1.8;">
+<p style="max-width:800px;margin:0 auto 20px;font-size:14px;color:var(--ink-2);line-height:1.8;">
 参同契以易卦象描述丹道修炼的四层功程，由浅入深，由后天返先天。
 </p>
 <div class="stages-flow" id="stagesFlow"></div>

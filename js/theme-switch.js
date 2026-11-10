@@ -30,7 +30,8 @@
   function injectSwitcher(){
     // 已经有了就不重复
     if(document.getElementById('themeSwitcher')) return;
-    const topbar = document.querySelector('.topbar') || document.querySelector('.nav') || document.querySelector('header');
+    let topbar = document.querySelector('.yj-theme-host');
+    if(!topbar) topbar = document.querySelector('.topbar') || document.querySelector('.top-nav') || document.querySelector('.main-nav') || document.querySelector('nav') || document.querySelector('header');
     if(!topbar) return;
     const wrap = document.createElement('div');
     wrap.id='themeSwitcher';

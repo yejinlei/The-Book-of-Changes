@@ -48,6 +48,11 @@
   --font-sans:'PingFang SC','Microsoft YaHei','Hiragino Sans GB','Noto Sans CJK SC',sans-serif;
   --font-kai:'STKaiti','KaiTi','Kaiti SC',serif;
   --chip-bg:rgba(212,176,121,.14);
+  --chip-gold:rgba(212,176,121,.18);
+  --chip-zhu-sub:rgba(217,74,74,.12);
+  --chip-zhu:rgba(217,74,74,.10);
+  --song:var(--jade);          /* 吉色 */
+  --ink-4:var(--line-soft);   /* 兼容别名 */
 }
 
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -577,6 +582,9 @@ footer .ent-pop,
 /* ---------- 主题二：bronze（青铜吉金·玄黑铜绿）---------- */
 [data-theme="bronze"]{
   --chip-bg:rgba(180,150,80,.18);
+  --chip-gold:rgba(201,161,90,.18);
+  --chip-zhu:rgba(184,115,51,.14);
+  --chip-zhu-sub:rgba(184,115,51,.12);
   --space:#0a0a08;
   --space-2:#13120e;
   --space-3:#1f1e18;
@@ -610,6 +618,9 @@ footer .ent-pop,
 /* ---------- 主题三：bamboo（竹简汉简·青竹墨）---------- */
 [data-theme="bamboo"]{
   --chip-bg:rgba(120,150,90,.16);
+  --chip-gold:rgba(217,200,120,.18);
+  --chip-zhu:rgba(168,48,48,.12);
+  --chip-zhu-sub:rgba(168,48,48,.10);
   --space:#1f2a1e;
   --space-2:#2a3829;
   --space-3:#3a4a35;
@@ -643,6 +654,9 @@ footer .ent-pop,
 /* ---------- 主题四：ink（水墨山水·素白淡墨）---------- */
 [data-theme="ink"]{
   --chip-bg:rgba(80,60,40,.12);
+  --chip-gold:rgba(138,109,59,.12);
+  --chip-zhu:rgba(181,48,48,.10);
+  --chip-zhu-sub:rgba(181,48,48,.08);
   --space:#f5f2ea;
   --space-2:#faf8f2;
   --space-3:#ece8dc;
@@ -676,6 +690,9 @@ footer .ent-pop,
 /* ---------- 主题五：paper（宣纸古籍·米黄朱红）---------- */
 [data-theme="paper"]{
   --chip-bg:rgba(160,125,70,.16);
+  --chip-gold:rgba(168,127,58,.15);
+  --chip-zhu:rgba(194,58,42,.10);
+  --chip-zhu-sub:rgba(194,58,42,.08);
   --space:#ece2c8;
   --space-2:#f4ecd8;
   --space-3:#e3d6b0;

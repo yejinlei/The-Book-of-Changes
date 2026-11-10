@@ -22,25 +22,40 @@
   .wrap{max-width:1200px;margin:0 auto;padding:24px 20px 80px;}
   h1.page-title{font-size:2.2rem;margin:0 0 6px;text-align:center;letter-spacing:6px;color:var(--zhu);}
   .page-sub{text-align:center;color:var(--ink-3);font-size:.95rem;margin-bottom:30px;}
-  .page-sub .seal{display:inline-block;background:var(--zhu);color:#fff;padding:2px 10px;border-radius:4px;font-size:.8rem;margin-left:8px;letter-spacing:2px;}
+  .page-sub .seal{display:inline-block;background:var(--zhu);color:var(--paper-2);padding:2px 10px;border-radius:4px;font-size:.8rem;margin-left:8px;letter-spacing:2px;}
   .grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
-  @media(max-width:860px){.grid{grid-template-columns:1fr;}}
 
   .panel{background:var(--paper-2);border:1px solid var(--line);border-radius:var(--radius-lg);padding:20px 22px;box-shadow:var(--shadow);}
   .panel h2{margin:0 0 14px;font-size:1.15rem;color:var(--zhu);border-bottom:1px dashed var(--line);padding-bottom:8px;letter-spacing:2px;}
   .panel h2 small{color:var(--ink-3);font-weight:400;font-size:.78rem;margin-left:10px;letter-spacing:0;}
 
-  /* 铜钱起卦 */
+  /* ========== 通用主题色块（替换JS硬编码 #fff / #fff5e0） ========== */
+  .card-plain{background:var(--paper);border:1px solid var(--line-soft);border-radius:var(--radius);padding:12px 14px;}
+  .card-gold{background:var(--chip-gold,var(--chip-bg));border:1px solid var(--gold);border-radius:var(--radius);padding:12px 14px;}
+  .card-verdict{background:var(--chip-zhu,var(--chip-bg));border:1px solid var(--zhu);border-radius:var(--radius);padding:14px 18px;margin-bottom:14px;}
+  .row-dashed{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px dashed var(--line-soft);}
+  .row-dashed:last-child{border-bottom:none;}
+  .row-dashed .rb-label{width:72px;color:var(--ink-1);flex-shrink:0;font-weight:600;}
+  .row-dashed .rb-body{flex:1;}
+  .row-dashed .rb-sub{color:var(--ink-2);font-size:.83rem;margin-top:3px;}
+  .sub-h3{font-size:1rem;color:var(--ink-1);margin:14px 0 6px;letter-spacing:1px;}
+  .plain-ul{margin:6px 0 0 18px;font-size:.9rem;color:var(--ink-1);padding:0;}
+  .plain-ul.err{color:var(--ink-2);}
+  .pill{display:inline-block;padding:2px 8px;border-radius:3px;font-size:.8rem;margin:0 4px;color:var(--paper-2);font-weight:600;}
+  .pill.wx{font-size:.78rem;padding:1px 6px;}
+  .pill.ji{font-size:1.4rem;font-weight:700;padding:2px 12px;}
+
+  /* ========== 铜钱起卦 ========== */
   .coins{display:flex;gap:18px;justify-content:center;margin:14px 0 18px;}
   .coin{width:72px;height:72px;border-radius:50%;background:radial-gradient(circle at 35% 30%, var(--gold-bright), var(--gold-deep));box-shadow:inset 0 -4px 8px rgba(0,0,0,.25),0 4px 10px var(--shadow);
-    display:flex;align-items:center;justify-content:center;color:var(--paper);font-family:"STKaiti",KaiTi,serif;font-size:1.9rem;font-weight:700;
+    display:flex;align-items:center;justify-content:center;color:var(--paper-2);font-family:"STKaiti",KaiTi,serif;font-size:1.9rem;font-weight:700;
     transition:transform .4s;}
   .coin.back{background:radial-gradient(circle at 35% 30%, var(--gold), var(--gold-deep));}
   .coin.flipping{animation:flip .6s ease;}
   @keyframes flip{0%{transform:rotateY(0);}50%{transform:rotateY(180deg) scale(1.08);}100%{transform:rotateY(360deg);}}
 
   .btn-row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:12px 0;}
-  .btn{background:var(--zhu);color:#fff;border:none;padding:10px 20px;border-radius:4px;font-family:inherit;font-size:.95rem;cursor:pointer;letter-spacing:2px;transition:all .2s;}
+  .btn{background:var(--zhu);color:var(--paper-2);border:none;padding:10px 20px;border-radius:4px;font-family:inherit;font-size:.95rem;cursor:pointer;letter-spacing:2px;transition:all .2s;}
   .btn:hover{background:var(--zhu-deep);transform:translateY(-1px);}
   .btn.ghost{background:transparent;color:var(--zhu);border:1px solid var(--zhu);}
   .btn.gold{background:var(--gold);color:var(--paper);}
@@ -53,15 +68,23 @@
   .field select,.field input{padding:8px 10px;border:1px solid var(--line);border-radius:4px;background:var(--paper);font-family:inherit;font-size:.95rem;color:var(--ink);}
 
   /* 手动摇爻表 */
-  .yao-row{display:grid;grid-template-columns:60px 1fr repeat(3,auto);gap:8px;align-items:center;margin:4px 0;padding:6px 8px;background:var(--paper);border-radius:4px;}
-  .yao-row .lbl{font-size:.9rem;color:var(--ink-2);}
-  .yao-visual{display:flex;gap:4px;align-items:center;}
+  .yao-row{display:grid;grid-template-columns:60px 1fr repeat(4,auto);gap:8px;align-items:center;margin:4px 0;padding:6px 8px;background:var(--paper);border-radius:4px;}
+  .yao-row .lbl{font-size:.9rem;color:var(--ink-2);white-space:nowrap;}
+  .yao-visual{display:flex;gap:4px;align-items:center;min-width:110px;}
+  .yao-visual .untossed{color:var(--ink-4);font-size:.82rem;}
+  .yao-visual .tag{margin-left:6px;font-size:.78rem;}
+  .yao-visual .tag.dong{color:var(--zhu);}
+  .yao-visual .tag.jing{color:var(--ink-2);}
   .yao-bar{height:10px;background:var(--ink);border-radius:2px;}
   .yao-bar.old{border:2px solid var(--zhu);background:var(--paper);height:6px;}
   .yao-bar.yang{width:42px;}
   .yao-bar.yin{width:18px;}
-  .yao-btn{padding:4px 10px;border:1px solid var(--line);background:var(--paper);border-radius:3px;cursor:pointer;font-family:inherit;font-size:.85rem;color:var(--ink);}
-  .yao-btn.active{background:var(--zhu);color:#fff;border-color:var(--zhu);}
+  .yao-bar.yb-tab{width:30px;}
+  .yao-bar.yb-small{width:12px;}
+  .yb-gap{width:4px;display:inline-block;}
+  .ydong-mark{font-size:.7rem;color:var(--zhu);margin-left:4px;}
+  .yao-btn{padding:4px 10px;border:1px solid var(--line);background:var(--paper);border-radius:3px;cursor:pointer;font-family:inherit;font-size:.85rem;color:var(--ink);white-space:nowrap;}
+  .yao-btn.active{background:var(--zhu);color:var(--paper-2);border-color:var(--zhu);}
 
   /* 排盘展示 */
   .pai-head{display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap;margin-bottom:18px;}
@@ -72,6 +95,8 @@
   .hex-card.ben{border-color:var(--zhu);}
   .hex-card.bian{border-color:var(--gold);}
   .hex-card .arrow{font-size:1.3rem;color:var(--gold);margin:0 6px;}
+  .hex-arrow{display:flex;align-items:center;justify-content:center;padding:32px 4px 0;}
+  .hex-arrow .a{font-size:1.5rem;color:var(--gold);}
 
   .pai-info{flex:1;min-width:240px;font-size:.92rem;}
   .pai-info .kv{display:inline-block;margin-right:16px;margin-bottom:4px;}
@@ -80,19 +105,24 @@
   .pai-info .bianfa{margin-top:8px;padding:8px 12px;background:var(--chip-bg);border-left:3px solid var(--gold);font-size:.9rem;border-radius:0 4px 4px 0;}
   .pai-info .bianfa b{color:var(--zhu);}
 
+  .pai-empty{text-align:center;color:var(--ink-2);padding:60px 0;font-size:1rem;}
+  .dong-summary{margin-top:6px;font-size:.82rem;color:var(--ink-2);}
+
   /* 爻盘表格 */
-  .gua-table{width:100%;border-collapse:collapse;margin-top:10px;font-size:.92rem;}
-  .gua-table th{background:var(--paper);padding:8px 6px;font-weight:600;color:var(--ink-2);font-size:.82rem;letter-spacing:1px;border-bottom:2px solid var(--gold);}
+  .gua-table-wrap{overflow-x:auto;margin-top:10px;-webkit-overflow-scrolling:touch;}
+  .gua-table{width:100%;border-collapse:collapse;font-size:.92rem;min-width:480px;}
+  .gua-table th{background:var(--paper);padding:8px 6px;font-weight:600;color:var(--ink-2);font-size:.82rem;letter-spacing:1px;border-bottom:2px solid var(--gold);white-space:nowrap;}
   .gua-table td{padding:8px 6px;text-align:center;border-bottom:1px dashed var(--line-soft);vertical-align:middle;}
   .gua-table tr.shi-ying td{background:var(--chip-bg);}
-  .gua-table tr.dong-yao td{background:rgba(217,74,74,.08);}
+  .gua-table tr.dong-yao td{background:var(--chip-zhu-sub,rgba(217,74,74,.08));}
   .gua-table .pos{font-weight:600;color:var(--ink-2);font-size:.85rem;}
   .gua-table .pos.shi::after{content:"世";color:var(--zhu);margin-left:2px;font-size:.72rem;vertical-align:super;}
   .gua-table .pos.ying::after{content:"应";color:var(--gold);margin-left:2px;font-size:.72rem;vertical-align:super;}
   .gua-table .ganzhi{font-weight:700;color:var(--ink);font-size:1.05rem;letter-spacing:2px;}
   .gua-table .ganzhi.dong{color:var(--zhu);}
   .gua-table .wuxing{color:var(--ink-2);font-size:.85rem;}
-  .lq{display:inline-block;padding:2px 8px;border-radius:3px;font-weight:600;font-size:.85rem;color:#fff;}
+  .gua-table .vis-cell{display:flex;justify-content:center;align-items:center;gap:2px;}
+  .lq{display:inline-block;padding:2px 8px;border-radius:3px;font-weight:600;font-size:.85rem;color:var(--paper-2);}
   .lq-fumu{background:var(--ice);}
   .lq-xiongdi{background:var(--silver);}
   .lq-zisun{background:var(--jade);}
@@ -107,7 +137,7 @@
   .ws.ping{color:var(--ink-2);}
   .ws.shuai{color:var(--ink-3);}
   .kong-tag{font-size:.72rem;background:var(--line);color:var(--ink-3);padding:1px 4px;border-radius:2px;margin-left:2px;}
-  .po-tag{font-size:.72rem;background:var(--zhu);color:#fff;padding:1px 4px;border-radius:2px;margin-left:2px;}
+  .po-tag{font-size:.72rem;background:var(--zhu);color:var(--paper-2);padding:1px 4px;border-radius:2px;margin-left:2px;}
   .cs{font-size:.78rem;color:var(--ink-3);}
   .bian-yao{font-size:.8rem;color:var(--gold);font-weight:600;}
   .bian-yao .lq{font-size:.72rem;padding:1px 4px;}
@@ -122,14 +152,59 @@
 
   /* 六亲象意 */
   .xiyi{margin-top:10px;display:grid;grid-template-columns:repeat(auto-fit, minmax(200px,1fr));gap:8px;}
-  .xiyi-item{padding:8px 10px;background:var(--paper);border-radius:4px;border-left:3px solid var(--gold);font-size:.85rem;}
+  .xiyi-item{padding:8px 10px;background:var(--paper);border-radius:4px;border-left:3px solid var(--gold);font-size:.85rem;line-height:1.7;}
   .xiyi-item b{color:var(--zhu);margin-right:4px;}
 
+  /* 断卦区 */
+  .duangua-bar{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:14px;}
+  .duangua-bar label{font-size:.92rem;display:inline-flex;align-items:center;gap:4px;}
+  .duangua-bar select{padding:6px 10px;border:1px solid var(--line);background:var(--paper);font-family:inherit;border-radius:4px;color:var(--ink);font-size:.9rem;}
+  .duangua-bar .verdict-jixiong{font-size:1.4rem;font-weight:700;}
+  .good-text{color:var(--jade);}
+  .bad-text{color:var(--zhu);}
+  .feifu-empty{color:var(--ink-2);font-size:.88rem;padding:12px 0;font-style:italic;}
+  .src-note{margin-top:12px;font-size:.8rem;color:var(--ink-3);line-height:1.7;}
+
   /* 学术说明 */
-  .notice{padding:10px 14px;background:var(--space-deep);border-left:3px solid var(--zhu);border-radius:0 4px 4px 0;font-size:.88rem;color:var(--ink-2);margin-bottom:16px;line-height:1.7;}
+  .notice{padding:10px 14px;background:var(--chip-bg);border-left:3px solid var(--zhu);border-radius:0 4px 4px 0;font-size:.88rem;color:var(--ink-2);margin-bottom:16px;line-height:1.7;}
   .notice b{color:var(--zhu);}
 
   .section{margin-top:28px;}
+
+  /* ========== 响应式 ========== */
+  @media(max-width:860px){
+    .grid{grid-template-columns:1fr;}
+    .wrap{padding:16px 14px 60px;}
+    h1.page-title{font-size:1.7rem;letter-spacing:4px;}
+  }
+  @media(max-width:640px){
+    .panel{padding:14px 12px;}
+    .panel h2{font-size:1.02rem;letter-spacing:1px;}
+    .panel h2 small{display:block;margin:4px 0 0;font-size:.72rem;}
+    .coin{width:60px;height:60px;font-size:1.6rem;}
+    .coins{gap:12px;}
+    .btn{padding:8px 14px;font-size:.88rem;letter-spacing:1px;}
+    .qi-gua{grid-template-columns:1fr;}
+    .yao-row{grid-template-columns:48px 1fr;grid-auto-flow:dense;gap:6px 8px;padding:8px 6px;}
+    .yao-row .lbl{grid-column:1;}
+    .yao-row .yao-visual{grid-column:2;min-width:0;}
+    .yao-row .yao-btn{grid-column:span 1;padding:4px 8px;font-size:.78rem;}
+    .hex-card{min-width:130px;padding:12px 14px;}
+    .hex-card .name{font-size:1.2rem;letter-spacing:2px;}
+    .hex-card .symbol{font-size:2.4rem;}
+    .pai-info{min-width:0;flex-basis:100%;}
+    .xiyi{grid-template-columns:1fr 1fr;}
+    .duangua-bar{gap:8px;}
+    .duangua-bar label{font-size:.85rem;}
+  }
+  @media(max-width:420px){
+    h1.page-title{font-size:1.4rem;letter-spacing:2px;}
+    .page-sub{font-size:.82rem;margin-bottom:18px;}
+    .xiyi{grid-template-columns:1fr;}
+    .hex-card{min-width:110px;padding:10px 10px;}
+    .hex-card .name{font-size:1.05rem;}
+    .hex-card .symbol{font-size:2rem;}
+  }
 </style>
 </head>
 <body>
@@ -177,18 +252,20 @@
     <!-- 右：排盘结果 -->
     <div class="panel">
       <h2>四、排盘结果 <small>本体可计算输出</small></h2>
-      <div id="paiEmpty" style="text-align:center;color:var(--ink-2);padding:60px 0;font-size:1rem;">
+      <div id="paiEmpty" class="pai-empty">
         请先摇卦或随机起卦，再点击"排盘"
       </div>
       <div id="paiResult" style="display:none;">
         <div class="pai-head" id="paiHead"></div>
 
+        <div class="gua-table-wrap">
         <table class="gua-table" id="guaTable">
           <thead>
             <tr><th>爻位</th><th>本卦爻</th><th>干支</th><th>六亲</th><th>六神</th><th>旺衰</th><th>动变</th></tr>
           </thead>
           <tbody id="guaTbody"></tbody>
         </table>
+        </div>
 
         <h2 style="margin-top:20px">飞伏神 <small>本卦缺六亲时，到本宫纯卦同位取伏</small></h2>
         <div class="fu-list" id="fuList"></div>
@@ -201,18 +278,17 @@
 
   <div class="section panel" id="duanguaSection" style="display:none">
     <h2>五、断卦 <small>用神·原神·忌神·仇神·旺衰·动变生克</small></h2>
-    <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:14px">
-      <label style="font-size:.92rem">占问类型：
-        <select id="wenshiSel" style="padding:6px 10px;border:1px solid var(--ink-3);background:var(--paper);font-family:inherit;border-radius:4px">
-        </select>
+    <div class="duangua-bar">
+      <label>占问类型：
+        <select id="wenshiSel"></select>
       </label>
-      <label id="genderWrap" style="font-size:.92rem;display:none">占者性别：
-        <select id="genderSel" style="padding:6px 10px;border:1px solid var(--ink-3);background:var(--paper);font-family:inherit;border-radius:4px">
+      <label id="genderWrap" style="display:none">占者性别：
+        <select id="genderSel">
           <option value="nan">男</option>
           <option value="nv">女</option>
         </select>
       </label>
-      <button class="btn btn-primary" id="duanBtn" style="background:var(--zhu);color:#fff">断卦</button>
+      <button class="btn" id="duanBtn">断卦</button>
     </div>
     <div id="duanguaResult"></div>
   </div>
@@ -274,11 +350,11 @@
       const isDong = yaoValues[i]===6||yaoValues[i]===9;
       let visHtml = '';
       if(yaoValues[i]===null){
-        visHtml = '<span style="color:#ccc;">未摇</span>';
+        visHtml = '<span class="untossed">未摇</span>';
       } else if(isYang){
-        visHtml = '<div class="yao-bar yang'+(isDong?' old':'')+'"></div><span style="margin-left:6px;font-size:.78rem;color:'+(isDong?'var(--zhu)':'var(--ink-2)')+'">'+(isDong?'老阳○（动）':'少阳—')+'</span>';
+        visHtml = '<div class="yao-bar yang'+(isDong?' old':'')+'"></div><span class="tag '+(isDong?'dong':'jing')+'">'+(isDong?'老阳○（动）':'少阳—')+'</span>';
       } else {
-        visHtml = '<div class="yao-bar yin'+(isDong?' old':'')+'"></div><div style="width:6px"></div><div class="yao-bar yin'+(isDong?' old':'')+'"></div><span style="margin-left:6px;font-size:.78rem;color:'+(isDong?'var(--zhu)':'var(--ink-2)')+'">'+(isDong?'老阴×（动）':'少阴- -')+'</span>';
+        visHtml = '<div class="yao-bar yin'+(isDong?' old':'')+'"></div><div style="width:6px"></div><div class="yao-bar yin'+(isDong?' old':'')+'"></div><span class="tag '+(isDong?'dong':'jing')+'">'+(isDong?'老阴×（动）':'少阴- -')+'</span>';
       }
       row.innerHTML = `
         <span class="lbl">${POS_NAME[i]}爻</span>
@@ -400,7 +476,7 @@
       </div>
     `;
     if(bian && res.dongCount>0){
-      html += `<div class="hex-card" style="padding-top:32px"><div style="font-size:1.5rem;color:var(--gold)">→</div></div>
+      html += `<div class="hex-arrow"><div class="a">→</div></div>
         <div class="hex-card bian">
           <div class="symbol">${findGuaSym(bian.num)}</div>
           <div class="name">${bian.name}</div>
@@ -415,7 +491,7 @@
         <span class="kv"><span class="k">动爻</span><span class="v">${res.dongCount}爻</span></span>
       </div>
       <div class="bianfa"><b>朱熹《易学启蒙》变占法（${res.bianfa.rule}）：</b>${res.bianfa.text}</div>
-      <div style="margin-top:6px;font-size:.82rem;color:var(--ink-2)">${res.dongList.map(d=>POS_NAME[d.pos-1]+'爻'+d.from+'→'+d.to+'（'+d.liuqin+' '+d.ganzhi+'）').join('；')||'六爻安静'}</div>
+      <div class="dong-summary">${res.dongList.map(d=>POS_NAME[d.pos-1]+'爻'+d.from+'→'+d.to+'（'+d.liuqin+' '+d.ganzhi+'）').join('；')||'六爻安静'}</div>
     </div>`;
     head.innerHTML = html;
   }
@@ -440,8 +516,8 @@
         bianStr = `<span class="bian-yao">→ ${y.bian.gan+y.bian.zhi} <span class="lq ${LIUQIN_CLASS[y.bian.liuqin.key]}">${y.bian.liuqin.name}</span></span>`;
       }
       // 爻条
-      let yaoBar = y.yinyang ? '<div class="yao-bar yang" style="width:30px"></div>' : '<div class="yao-bar yin" style="width:12px"></div><div style="width:4px"></div><div class="yao-bar yin" style="width:12px"></div>';
-      if(y.dong){ yaoBar += `<span style="font-size:.7rem;color:var(--zhu);margin-left:4px">${y.yinyang?'○':'×'}</span>`; }
+      let yaoBar = y.yinyang ? '<div class="yao-bar yang yb-tab"></div>' : '<div class="yao-bar yin yb-small"></div><div class="yb-gap"></div><div class="yao-bar yin yb-small"></div>';
+      if(y.dong){ yaoBar += `<span class="ydong-mark">${y.yinyang?'○':'×'}</span>`; }
       // 旺衰样式
       const wsKey = y.wangshuai||'';
       const wsCls = Object.keys(WANG_CLASS).find(k=>wsKey.includes(k))||'ping';
@@ -454,7 +530,7 @@
       if(y.kong) wsText.push('<span class="kong-tag">空</span>');
       tr.innerHTML = `
         <td class="pos ${y.shi?'shi':''}${y.ying?'ying':''}">${POS_NAME[i]}</td>
-        <td style="display:flex;justify-content:center;align-items:center;gap:2px">${yaoBar}</td>
+        <td class="vis-cell">${yaoBar}</td>
         <td class="ganzhi ${y.dong?'dong':''}">${y.gan+y.zhi}</td>
         <td><span class="lq ${LIUQIN_CLASS[y.liuqin.key]}">${y.liuqin.name}</span><br><span class="wuxing">${WUXING_NAME[y.wuxing]}</span></td>
         <td><span class="ls">${y.liushen}</span></td>
@@ -525,7 +601,8 @@
   const LEVEL_COLOR = { '极旺':'var(--zhu)','旺':'var(--zhu)','偏旺':'var(--amber)','平':'var(--ink-3)','偏弱':'var(--ice)','衰':'var(--ice)','极衰':'var(--silver)','空待':'var(--ink-3)','破':'var(--zhu-deep)' };
 
   function wsBadge(ws){
-    return `<span style="background:${LEVEL_COLOR[ws.level]||'#888'};color:#fff;padding:2px 8px;border-radius:3px;font-size:.8rem;margin:0 4px">${ws.level}（${ws.score>=0?'+':''}${ws.score}）</span>`;
+    const bg = LEVEL_COLOR[ws.level]||'var(--ink-3)';
+    return `<span class="pill" style="background:${bg}">${ws.level}（${ws.score>=0?'+':''}${ws.score}）</span>`;
   }
 
   function renderDuanResult(r){
@@ -533,90 +610,91 @@
     if(r.error){ box.innerHTML = `<div style="color:var(--zhu);padding:12px">${r.error}</div>`; return; }
     const yongName = r.yong.label + (r.yong.isFu?'（伏）':'');
     const yaoName = (y)=>`${y.label}${y.isShi?'（世）':(y.isYing?'（应）':'')}（${y.gz}·${y.liuqin}）`;
-    const reasonList = (arr)=>arr.length?`<ul style="margin:4px 0 0 18px;color:var(--ink-2);font-size:.85rem">${arr.map(x=>`<li>${x}</li>`).join('')}</ul>`:'';
+    const reasonList = (arr)=>arr.length?`<ul class="plain-ul err">${arr.map(x=>`<li>${x}</li>`).join('')}</ul>`:'';
 
     // 原神/忌神/仇神行
     const lqBadge = (n)=>{
       const map={'父母':'fumu','兄弟':'xiongdi','子孙':'zisun','妻财':'qicai','官鬼':'guangui'};
       return `<span class="lq ${map[n]||''}">${n}</span>`;
     };
-    const wxColors = {'金':'var(--gold-deep)','木':'var(--jade)','水':'var(--ice)','火':'var(--zhu)','土':'var(--amber)'};
-    const wxChip = (w)=>`<span style="background:${wxColors[w]};color:#fff;padding:1px 6px;border-radius:3px;font-size:.78rem">${w}</span>`;
+    const wxColorMap = {'金':'var(--gold-deep)','木':'var(--jade)','水':'var(--ice)','火':'var(--zhu)','土':'var(--amber)'};
+    const wxChip = (w)=>`<span class="pill wx" style="background:${wxColorMap[w]}">${w}</span>`;
 
-    const godRow = (title, list, wsList, wx, desc) => {
-      if(!list || list.length===0) return `<div style="display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px dashed var(--ink-4)"><b style="width:72px;color:var(--ink-1);flex-shrink:0">${title}${wxChip(wx)}</b><span style="color:var(--ink-2);font-size:.88rem">${desc}；本卦${title}${list.length?'':'不现'}</span></div>`;
-      return `<div style="display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px dashed var(--ink-4)">
-        <b style="width:72px;color:var(--ink-1);flex-shrink:0">${title}${wxChip(wx)}</b>
-        <div style="flex:1">
-          <div style="font-size:.9rem">${list.map((y,i)=>`${wsBadge(wsList[i])} ${yaoName(y)}`).join('；')}</div>
-          <div style="color:var(--ink-2);font-size:.83rem;margin-top:3px">${desc}</div>
+    const godRow = (title, list, wsList, wx, desc, isXian) => {
+      const labelColor = isXian ? 'var(--ink-3)' : 'var(--ink-1)';
+      if(!list || list.length===0){
+        return `<div class="row-dashed">
+          <b class="rb-label" style="color:${labelColor}">${title}${wxChip(wx)}</b>
+          <span style="color:var(--ink-2);font-size:.88rem">${desc}；本卦${title}${list.length?'':'不现'}</span>
+        </div>`;
+      }
+      return `<div class="row-dashed">
+        <b class="rb-label" style="color:${labelColor}">${title}${wxChip(wx)}</b>
+        <div class="rb-body">
+          <div style="font-size:.9rem;line-height:1.9">${list.map((y,i)=>`${wsBadge(wsList[i])} ${yaoName(y)}`).join('；')}</div>
+          <div class="rb-sub">${desc}</div>
         </div>
       </div>`;
     };
 
     let html = `
-      <div style="background:rgba(156,42,42,0.06);border:1px solid var(--zhu);border-radius:6px;padding:14px 18px;margin-bottom:14px">
+      <div class="card-verdict">
         <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
           <span style="font-size:1.05rem">占法：<b>${r.rules.name}</b></span>
-          <span style="font-size:1.4rem;font-weight:700;color:${LEVEL_COLOR[r.jiXiong]||'var(--ink)'}">${r.jiXiong}</span>
+          <span class="pill ji" style="background:${LEVEL_COLOR[r.jiXiong]||'var(--ink)'};color:var(--paper-2)">${r.jiXiong}</span>
         </div>
         <div style="color:var(--ink-2);font-size:.85rem;margin-top:4px">${r.rules.desc}</div>
-        <ul style="margin:6px 0 0 18px;font-size:.9rem;color:var(--ink-1)">
+        <ul class="plain-ul">
           ${r.jiXiongReason.map(x=>`<li>${x}</li>`).join('')}
         </ul>
       </div>
 
-      <h3 style="font-size:1rem;color:var(--ink-1);margin:10px 0">用神分析</h3>
-      <div style="background:#fff;border:1px solid var(--ink-4);border-radius:6px;padding:12px 14px">
-        <div style="display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px dashed var(--ink-4)">
-          <b style="width:72px;color:var(--zhu);flex-shrink:0">用神${wxChip(r.yongWx)}</b>
-          <div style="flex:1">
-            <div style="font-size:.9rem">${wsBadge(r.yongWS)}${lqBadge(r.yong.liuqin)} ${yongName} —— ${r.yongType}</div>
+      <h3 class="sub-h3">用神分析</h3>
+      <div class="card-plain">
+        <div class="row-dashed">
+          <b class="rb-label" style="color:var(--zhu)">用神${wxChip(r.yongWx)}</b>
+          <div class="rb-body">
+            <div style="font-size:.9rem;line-height:1.9">${wsBadge(r.yongWS)}${lqBadge(r.yong.liuqin)} ${yongName} —— ${r.yongType}</div>
             ${reasonList(r.yongWS.reason)}
           </div>
         </div>
         ${godRow('原神', r.yuanShen, r.yuanWS, r.yuanShenWx, '生用神者，原神旺动来生用则吉')}
         ${godRow('忌神', r.jiShen, r.jiWS, r.jiShenWx, '克用神者，忌神旺动克用则凶')}
         ${godRow('仇神', r.chouShen, r.chouWS, r.chouShenWx, '生忌神、克原神者，忌神之原神，增凶')}
-        <div style="display:flex;gap:10px;align-items:flex-start;padding:8px 0">
-          <b style="width:72px;color:var(--ink-3);flex-shrink:0">闲神${wxChip(r.xianShenWx)}</b>
-          <span style="color:var(--ink-2);font-size:.88rem">用神所生者，于所问之事无直接损益，多主旁杂之事</span>
-        </div>
+        ${godRow('闲神', null, null, r.xianShenWx, '用神所生者，于所问之事无直接损益，多主旁杂之事', true)}
       </div>`;
 
     if(r.yongSpecial.length){
-      html += `<h3 style="font-size:1rem;color:var(--ink-1);margin:14px 0 6px">用神特殊状态</h3>
-      <div style="background:#fff5e0;border:1px solid var(--gold);border-radius:6px;padding:12px 14px;font-size:.9rem;line-height:1.9">
+      html += `<h3 class="sub-h3">用神特殊状态</h3>
+      <div class="card-gold" style="font-size:.9rem;line-height:1.9">
         ${r.yongSpecial.map(x=>`• ${x}`).join('<br>')}
       </div>`;
     }
 
     if(r.dongbian.length){
-      html += `<h3 style="font-size:1rem;color:var(--ink-1);margin:14px 0 6px">动变生克（动爻化变）</h3>
-      <div style="background:#fff;border:1px solid var(--ink-4);border-radius:6px;padding:12px 14px;font-size:.9rem;line-height:1.85">
-        ${r.dongbian.map(d=>`
-          <div><b>${d.type}</b>：${d.desc}</div>
-        `).join('')}
+      html += `<h3 class="sub-h3">动变生克（动爻化变）</h3>
+      <div class="card-plain" style="font-size:.9rem;line-height:1.85">
+        ${r.dongbian.map(d=>`<div><b>${d.type}</b>：${d.desc}</div>`).join('')}
       </div>`;
     }
 
     if(r.duiYong.length){
-      html += `<h3 style="font-size:1rem;color:var(--ink-1);margin:14px 0 6px">动爻对用神</h3>
-      <div style="background:#fff;border:1px solid var(--ink-4);border-radius:6px;padding:12px 14px;font-size:.9rem;line-height:1.85">
-        ${r.duiYong.map(d=>`<div style="color:${d.good?'var(--song)':'var(--zhu)'}">${d.good?'〔吉〕':'〔凶〕'} ${yaoName(d.yao)} → ${d.type}</div>`).join('')}
+      html += `<h3 class="sub-h3">动爻对用神</h3>
+      <div class="card-plain" style="font-size:.9rem;line-height:1.85">
+        ${r.duiYong.map(d=>`<div class="${d.good?'good-text':'bad-text'}">${d.good?'〔吉〕':'〔凶〕'} ${yaoName(d.yao)} → ${d.type}</div>`).join('')}
       </div>`;
     }
 
     // 世应
-    html += `<h3 style="font-size:1rem;color:var(--ink-1);margin:14px 0 6px">世应</h3>
-      <div style="background:#fff;border:1px solid var(--ink-4);border-radius:6px;padding:12px 14px;font-size:.9rem;line-height:1.85">
+    html += `<h3 class="sub-h3">世应</h3>
+      <div class="card-plain" style="font-size:.9rem;line-height:1.85">
         <div>世爻（占者自身）：${wsBadge(r.shiWS)} ${yaoName(r.shi)}</div>
         ${reasonList(r.shiWS.reason)}
         <div>应爻（所占之人/事/对方）：${wsBadge(r.yingWS)} ${yaoName(r.ying)}</div>
         ${reasonList(r.yingWS.reason)}
       </div>`;
 
-    html += `<div style="margin-top:12px;font-size:.8rem;color:var(--ink-3);line-height:1.7">
+    html += `<div class="src-note">
       <b>按</b>：以上断卦规则依《黄金策》《卜筮正宗》《增删卜易》体系综合给出，程序自动演算，仅供学术研究参考。实际断卦尚需考虑进神退神、反吟伏吟、合处逢冲、冲中逢合、空亡填实、墓绝胎养等多重精微因素，属于易学研究的高层规则，可在后续版本中持续扩充。
     </div>`;
 

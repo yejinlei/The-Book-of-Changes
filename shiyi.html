@@ -9,52 +9,50 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>易传 · 十翼 | 易经本体论</title>
 <style>
-:root { --bg:var(--space-deep); --paper:#faf6ed; --text:#2b1810; --accent:#8b0000; --gold:#b8860b;
-  --ink:#1a1a2e; --blue:#1e3a8a; --border:#d4c5a3; --shadow:rgba(139,0,0,0.08); }
 * { margin:0; padding:0; box-sizing:border-box; }
-body { font-family:'Songti SC','STSong','SimSun','Noto Serif CJK SC','Source Han Serif SC','Noto Serif SC',serif; background:var(--bg); color:var(--text); line-height:2; }
-.top-nav { position:fixed; top:0; left:0; right:0; height:64px; background:var(--paper);
-  border-bottom:2px solid var(--border); z-index:1000; display:flex; align-items:center; justify-content:space-between;
-  padding:0 30px; box-shadow:0 2px 8px var(--shadow); }
+body { font-family:'Songti SC','STSong','SimSun','Noto Serif CJK SC','Source Han Serif SC','Noto Serif SC',serif; background:transparent; color:var(--ink); line-height:2; }
+.top-nav { position:fixed; top:0; left:0; right:0; height:64px; background:var(--paper-2);
+  border-bottom:1px solid var(--line); z-index:1000; display:flex; align-items:center; justify-content:space-between;
+  padding:0 30px; box-shadow:var(--shadow); }
 .logo { font-size:20px; font-weight:700; color:var(--ink); text-decoration:none; }
-.logo .taiji { color:var(--accent); font-size:26px; }
+.logo .taiji { color:var(--zhu); font-size:26px; }
 .nav-links { display:flex; gap:18px; flex-wrap:wrap; }
-.nav-links a { color:var(--text); text-decoration:none; font-size:14px; font-weight:500; }
-.nav-links a:hover, .nav-links a.active { color:var(--accent); }
+.nav-links a { color:var(--ink-2); text-decoration:none; font-size:14px; font-weight:500; }
+.nav-links a:hover, .nav-links a.active { color:var(--zhu); }
 .nav-links a.active { font-weight:700; }
 
 .wrap { max-width:1000px; margin:64px auto 0; padding:36px 40px 80px; }
-.back-link { display:inline-block; color:var(--accent); text-decoration:none; font-size:14px; margin-bottom:18px; }
+.back-link { display:inline-block; color:var(--zhu); text-decoration:none; font-size:14px; margin-bottom:18px; }
 .back-link:hover { text-decoration:underline; }
 .page-head { text-align:center; margin-bottom:30px; }
-.page-head h1 { font-size:42px; color:var(--accent); letter-spacing:10px; margin-bottom:8px; }
+.page-head h1 { font-size:42px; color:var(--zhu); letter-spacing:10px; margin-bottom:8px; }
 .page-head p { color:var(--gold); font-size:15px; }
-.tagline { text-align:center; font-size:13px; color:var(--ink); opacity:.7; margin-top:6px; }
+.tagline { text-align:center; font-size:13px; color:var(--ink-3); opacity:.85; margin-top:6px; }
 
 .toc { display:grid; grid-template-columns:repeat(5,1fr); gap:8px; margin-bottom:34px; }
-.toc a { text-decoration:none; color:var(--text); text-align:center; border:1px solid var(--border);
-  background:var(--paper); border-radius:4px; padding:10px 4px; font-size:13px; }
-.toc a:hover { background:var(--accent); color:#fff; }
+.toc a { text-decoration:none; color:var(--ink); text-align:center; border:1px solid var(--line);
+  background:var(--paper-2); border-radius:4px; padding:10px 4px; font-size:13px; transition:.2s;}
+.toc a:hover { background:var(--zhu); color:#fff; }
 
-.shiyi-item { background:var(--paper); border:1px solid var(--border); border-left:4px solid var(--accent);
-  border-radius:4px; margin-bottom:20px; overflow:hidden; }
+.shiyi-item { background:var(--paper-2); border:1px solid var(--line); border-left:4px solid var(--zhu);
+  border-radius:var(--radius-lg); margin-bottom:20px; overflow:hidden; box-shadow:var(--shadow);}
 .shiyi-hd { padding:18px 26px; cursor:pointer; display:flex; align-items:center; justify-content:space-between; gap:14px; }
-.shiyi-hd:hover { background:var(--paper-2); }
-.shiyi-hd h3 { font-size:22px; color:var(--accent); }
+.shiyi-hd:hover { background:var(--chip-bg); }
+.shiyi-hd h3 { font-size:22px; color:var(--zhu); }
 .shiyi-hd .meta { font-size:12px; color:var(--gold); font-weight:400; margin-top:4px; }
-.shiyi-hd .arrow { color:var(--accent); font-size:18px; transition:.3s; flex-shrink:0; }
+.shiyi-hd .arrow { color:var(--zhu); font-size:18px; transition:.3s; flex-shrink:0; }
 .shiyi-item.open .arrow { transform:rotate(90deg); }
-.shiyi-bd { display:none; padding:0 26px 24px; border-top:1px dashed var(--border); }
+.shiyi-bd { display:none; padding:0 26px 24px; border-top:1px dashed var(--line); }
 .shiyi-item.open .shiyi-bd { display:block; }
-.shiyi-intro { font-size:15px; color:#5a4a3a; margin:16px 0; line-height:1.95; }
+.shiyi-intro { font-size:15px; color:var(--ink-2); margin:16px 0; line-height:1.95; }
 .pian { margin-top:18px; }
-.pian-title { font-size:15px; color:var(--gold); font-weight:700; margin-bottom:8px; padding-bottom:4px; border-bottom:1px solid var(--border); }
+.pian-title { font-size:15px; color:var(--gold); font-weight:700; margin-bottom:8px; padding-bottom:4px; border-bottom:1px solid var(--line); }
 .pian-text { font-size:16px; line-height:2.15; text-indent:2em; }
-.gua-pair { background:var(--bg); border-radius:6px; padding:12px 16px; margin-bottom:8px; border-left:3px solid var(--gold); }
-.gua-pair .gp-name { font-weight:700; color:var(--accent); font-size:14px; }
-.gua-pair .gp-text { font-size:14px; line-height:1.9; margin-top:2px; }
+.gua-pair { background:var(--chip-bg); border-radius:6px; padding:12px 16px; margin-bottom:8px; border-left:3px solid var(--gold); }
+.gua-pair .gp-name { font-weight:700; color:var(--zhu); font-size:14px; }
+.gua-pair .gp-text { font-size:14px; line-height:1.9; margin-top:2px; color:var(--ink-2);}
 .hint { text-align:center; font-size:13px; color:var(--gold); margin-top:26px; }
-.hint a { color:var(--accent); }
+.hint a { color:var(--zhu); }
 @media (max-width:900px) {
   .wrap { padding:24px 18px 60px; }
   .toc { grid-template-columns:repeat(3,1fr); }
@@ -76,6 +74,7 @@ body { font-family:'Songti SC','STSong','SimSun','Noto Serif CJK SC','Source Han
     <a href="animation/gua-index.html">易之变 · 动画</a>
     <a href="animation/qian.html">乾卦讲解</a>
     <a href="yanjiu.html">研究</a>
+    <span class="yj-theme-host"></span>
   </nav>
 
 <div class="wrap">

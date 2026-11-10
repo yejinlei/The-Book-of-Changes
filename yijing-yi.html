@@ -44,7 +44,7 @@ nav {
 header.film-hero { text-align:center; padding:52px 0 26px; }
 header.film-hero h1 { font-size:48px; letter-spacing:20px; color:var(--accent); font-weight:700; text-indent:20px; }
 header.film-hero .sub { font-size:13px; letter-spacing:4px; color:var(--gold); margin-top:10px; }
-header.film-hero .quote { margin-top:18px; font-size:15px; color:#6b5540; letter-spacing:1px; }
+header.film-hero .quote { margin-top:18px; font-size:15px; color:var(--ink-3); letter-spacing:1px; }
 
 /* 放映区 */
 .screen-wrap {
@@ -77,11 +77,11 @@ header.film-hero .quote { margin-top:18px; font-size:15px; color:#6b5540; letter
 /* 说明 */
 .notes { max-width:1100px; margin:30px auto 0; }
 .notes h2 { font-size:22px; color:var(--accent); letter-spacing:6px; margin-bottom:14px; border-left:4px solid var(--accent); padding-left:14px; }
-.notes p { font-size:14.5px; color:#4a3826; margin-bottom:10px; }
+.notes p { font-size:14.5px; color:var(--ink-2); margin-bottom:10px; }
 .notes .tech { display:flex; gap:20px; flex-wrap:wrap; margin:18px 0 6px; }
 .notes .tech > div { flex:1; min-width:220px; background:var(--paper); border:1px solid var(--border); border-radius:5px; padding:16px 18px; }
 .notes .tech h3 { font-size:15px; color:var(--gold); margin-bottom:7px; letter-spacing:2px; }
-.notes .tech p { font-size:13px; margin:0; color:#5a4632; }
+.notes .tech p { font-size:13px; margin:0; color:var(--ink-2); }
 
 /* 幕次表 */
 .scene-table { max-width:1100px; margin:34px auto 0; }
@@ -92,9 +92,9 @@ header.film-hero .quote { margin-top:18px; font-size:15px; color:#6b5540; letter
 .scene-table tr:nth-child(even) td { background:var(--paper-2); }
 .scene-table td.n { color:var(--gold); font-weight:700; width:56px; text-align:center; }
 .scene-table td.t { width:130px; color:var(--accent); }
-.scene-table td.time { width:78px; color:#6b5540; }
+.scene-table td.time { width:78px; color:var(--ink-3); }
 
-footer { text-align:center; padding:44px 0 34px; color:#8a7558; font-size:13px; letter-spacing:1px; }
+footer { text-align:center; padding:44px 0 34px; color:var(--ink-3); font-size:13px; letter-spacing:1px; }
 footer a { color:var(--accent); text-decoration:none; }
 @media (max-width:720px){
   nav{ padding:0 16px; } .nav-links{ gap:14px; } .nav-links a{ font-size:12px; }
@@ -104,7 +104,6 @@ footer a { color:var(--accent); text-decoration:none; }
 <link rel="stylesheet" href="css/yijing.css">
 <script src="js/theme-switch.js"></script>
 <script src="js/apply-shell.js" data-page="yijing-yi"></script>
-<link rel="stylesheet" href="css/yijing.css">
 </head>
 <body>
 <nav class="main-nav"><a href="index.html">首页</a>
@@ -117,6 +116,7 @@ footer a { color:var(--accent); text-decoration:none; }
     <a href="animation/gua-index.html">易之变 · 动画</a>
     <a href="animation/qian.html">乾卦讲解</a>
     <a href="yanjiu.html">研究</a>
+    <span class="yj-theme-host"></span>
   </nav>
 
 <div class="container">
