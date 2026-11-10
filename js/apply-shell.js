@@ -13,6 +13,19 @@
     return location.pathname.indexOf('/animation/') >= 0 ? '../' : '';
   }
 
+  function applyThemeEarly(){
+    // 同步、立即应用，不等脚本加载；apply-shell 接入的页面在 CSS 注入前就调用
+    try{
+      var t = localStorage.getItem('yijing_theme');
+      var ok = {'star':1,'bronze':1,'bamboo':1,'ink':1,'paper':1};
+      if(!t || !ok[t]) t = 'star';
+      var d = document.documentElement;
+      d.setAttribute('data-theme', t);
+      d.classList.remove('theme-star','theme-bronze','theme-bamboo','theme-ink','theme-paper');
+      d.classList.add('theme-' + t);
+    }catch(e){}
+  }
+
   function injectCSS(){
     if(document.querySelector('link[href*="yijing.css"]')) return;
     var link = document.createElement('link');
@@ -21,21 +34,29 @@
     document.head.appendChild(link);
   }
 
-  function injectScript(src){
+  function injectScript(src, opts){
     var file = src.split('/').pop();
     if(document.querySelector('script[src*="' + file + '"]')) return;
     var s = document.createElement('script');
     s.src = relativePath() + src;
-    s.async = false;            // 保持加载顺序：ontology → gua-full → enhance → linker
+    if(opts && opts.sync){
+      // 同步加载（不设置 async/defer），保证按注入顺序执行
+      s.async = false;
+      s.defer = false;
+    }else{
+      s.async = false;
+    }
     document.head.appendChild(s);
   }
 
   function injectOntology(){
+    // 先同步加载主题早初始化（对那些没有在 <head> 手动写 <script src=theme-init.js> 的老页面兜底）
+    injectScript('js/theme-init.js', {sync:true});
     ['data/yijing-ontology.js',
      'data/gua-full-data.js',
      'data/yijing-ontology-enhance.js',
      'data/yijing-yao-link.js',
-     'js/ontology-linker.js','js/theme-switch.js'].forEach(injectScript);
+     'js/ontology-linker.js','js/theme-switch.js'].forEach(function(s){ injectScript(s); });
   }
 
   function detectPage(){
@@ -59,6 +80,9 @@
   }
 
   function apply(){
+    // ⚠️ 第一行：同步应用已存储的主题，在任何 CSS 注入之前设置 data-theme
+    // 这是防止跨页跳回星象默认色的关键：CSS 首次计算时 html 已经有 data-theme 了
+    applyThemeEarly();
     injectCSS();
     injectOntology();
 
