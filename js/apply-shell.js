@@ -30,7 +30,7 @@
     if(document.querySelector('link[href*="yijing.css"]')) return;
     var link = document.createElement('link');
     link.rel = 'stylesheet';
-    link.href = relativePath() + 'css/yijing.css';
+    link.href = relativePath() + 'css/yijing.css?v=20261110b';
     document.head.appendChild(link);
   }
 
@@ -51,12 +51,12 @@
 
   function injectOntology(){
     // 先同步加载主题早初始化（对那些没有在 <head> 手动写 <script src=theme-init.js> 的老页面兜底）
-    injectScript('js/theme-init.js', {sync:true});
+    injectScript('js/theme-init.js?v=20261110b', {sync:true});
     ['data/yijing-ontology.js',
      'data/gua-full-data.js',
      'data/yijing-ontology-enhance.js',
      'data/yijing-yao-link.js',
-     'js/ontology-linker.js','js/theme-switch.js'].forEach(function(s){ injectScript(s); });
+     'js/ontology-linker.js?v=20261110b','js/theme-switch.js?v=20261110b'].forEach(function(s){ injectScript(s); });
   }
 
   function detectPage(){

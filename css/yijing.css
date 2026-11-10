@@ -1503,3 +1503,22 @@ canvas#bhua-three{
   -webkit-backdrop-filter:none !important;
   backdrop-filter:none !important;
 }
+
+/* ==========================================================
+   【紧急修复：彻底删除十翼卡片顶部的卷轴轴装饰（白竖条bug）】
+   只禁用伪元素，保留卡片本身的正常样式
+   ========================================================== */
+.shiyi-item::before, .shiyi-item::after,
+.shiyi-hd::before, .shiyi-hd::after,
+.shiyi-bd::before, .shiyi-bd::after,
+.shiyi-item > *::before, .shiyi-item > *::after {
+  display: none !important;
+  content: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+}
