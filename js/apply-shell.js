@@ -90,14 +90,14 @@
       ids: ['jingshi_yizhuan','huozhulin','huangjince','bushizhengzong','yixue_qimeng']
     },
     shifa: {
-      title: '筮法·相关原典',
-      intro: '筮法起源于上古，以大衍之数揲蓍起卦。以下为《系辞》大衍章、朱熹《易学启蒙》等筮法相关原典。',
-      ids: ['xici_shang','yixue_qimeng','huozhulin']
+      title: '筮法原典参照',
+      intro: '筮法起源于上古，以《系辞》大衍章揲蓍起卦为宗，后世朱熹《易学启蒙》定仪则、《火珠林》兴掷钱纳甲、《黄金策》立赋体断例、《卜筮正宗》集六爻大成。以下选录筮法源流相关原典，配合上方揲蓍、铜钱两种模拟器对照学习。',
+      ids: ['xici_shang','yixue_qimeng','huozhulin','huangjince','bushizhengzong']
     },
     yitu: {
-      title: '易图·相关原典',
-      intro: '河图洛书、先天后天、太极图等易图学，是宋易象数的核心。以下为《系辞》《易学启蒙》《太极图说》等相关原文。',
-      ids: ['xici_shang','yixue_qimeng','taijitu_shuo']
+      title: '图书派原典参照',
+      intro: '易图之学兴于北宋，周敦颐《太极图说》、邵雍《皇极经世》、朱熹《易学启蒙》是图书派核心典籍，以下选录其论图之文，配合上方太极、河图洛书、先天后天、消息卦图对照学习。',
+      ids: ['xici_shang','taijitu_shuo','huangji_jingshi','yixue_qimeng']
     },
     guabian: {
       title: '卦变·相关原典',

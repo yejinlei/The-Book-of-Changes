@@ -551,26 +551,6 @@ render();
   run(); setTimeout(run, 500); window.addEventListener('load', function(){ setTimeout(run, 700); });
 })();
 
-/* ===== 原典参照面板（筮法）===== */
-(function(){
-  function tryInject(){
-    if(!window.CLASSICS || !window.ClassicPanel){
-      if(!document.querySelector('script[src*="classics.js"]')){
-        var s1=document.createElement('script'); s1.src='data/classics.js'; s1.async=false; document.head.appendChild(s1);
-        var s2=document.createElement('script'); s2.src='js/classic-panel.js'; s2.async=false; document.head.appendChild(s2);
-      }
-      setTimeout(tryInject, 200);
-      return;
-    }
-    var container = document.querySelector('.content') || document.body;
-    window.ClassicPanel.render(container, {
-      title: '筮法·相关原典',
-      intro: '筮法起源于上古，以大衍之数揲蓍起卦。以下为《系辞》大衍章、朱熹《易学启蒙》等筮法相关原典。',
-      ids: ['xici_shang','yixue_qimeng','huozhulin']
-    });
-  }
-  if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded', tryInject); } else { tryInject(); }
-})();
 </script>
 </body>
 </html>
