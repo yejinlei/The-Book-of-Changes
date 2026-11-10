@@ -57,6 +57,12 @@
     <p class="sub-title">象数、义理、图书、史事、丹道、考据——六派易学的源流、代表人物与核心学说。</p>
     <div class="school-grid" id="schoolGrid"></div>
   </section>
+
+  <section class="section">
+    <h2><span class="en">05</span>五家注疏原典参照</h2>
+    <p class="sub-title">易学史最具代表性的五部注本核心段落选录。🔴 本体核心（直接释卦释爻、阐发本体）｜🟡 易理旁证（释易理方法论、体例）｜无角标段落为背景、序跋或非本体论述，完整保留供学习。</p>
+    <div id="wujiaYuandian" class="classic-books"></div>
+  </section>
 </main>
 
 <!-- 注家详情弹层（独立浮层，非 modal 遮罩，但作为抽屉） -->
@@ -490,3 +496,255 @@ details summary{cursor:pointer;color:var(--zhu);font-size:12px;}
 <script src="js/apply-shell.js" data-page="yanjiu"></script>
 </body>
 </html>
+
+<script>
+// ========== 五家注疏原典数据 ==========
+const WUJIA_DATA = [
+  {
+    id: 'wangbizhouyizhu',
+    title: '周易注',
+    author: '魏·王弼 注',
+    intro: '玄学易开山之作，扫象数阐义理，首次系统以《老》解《易》，提出"得意忘象""一爻为主""卦主说"等体例，主导易学近千年，至唐孔颖达疏后成为官学定本。',
+    juan: [
+      {
+        title: '周易略例·明象（总纲）',
+        paras: [
+          {
+            level: 'core',
+            text: '夫象者，出意者也；言者，明象者也。尽意莫若象，尽象莫若言。言生于象，故可寻言以观象；象生于意，故可寻象以观意。意以象尽，象以言著。',
+            refs: [{text:'象',href:'yitu.html#xiangshu'}]
+          },
+          {
+            level: 'core',
+            text: '故言者所以明象，得象而忘言；象者所以存意，得意而忘象。犹蹄者所以在兔，得兔而忘蹄；筌者所以在鱼，得鱼而忘筌也。',
+            refs: [{text:'意-象-言三层',href:'yanjiu.html#school-yili'}]
+          },
+          {
+            level: 'core',
+            text: '是故触类可为其象，合义可为其征。义苟在健，何必马乎？类苟在顺，何必牛乎？爻苟合顺，何必坤乃为牛？义苟应健，何必乾乃为马？',
+            refs: [{text:'乾坤',href:'gua.html#乾坤'}]
+          },
+          {level: 'none', text: '而或者定马于乾，案文责卦，有马无乾，则伪说滋漫，难可纪矣。互体不足，遂及卦变；变又不足，推致五行。一失其原，巧愈弥甚。'}
+        ]
+      },
+      {
+        title: '乾卦注',
+        paras: [
+          {
+            level: 'core',
+            text: '天也者，形之名也；健也者，用形者也。夫形也者，物之累也。有天之形，而能永保无亏，为物之首者，岂非至健哉！',
+            refs: [{text:'乾卦',href:'reader.html#乾'}]
+          },
+          {
+            level: 'core',
+            text: '初九，潜龙勿用——注：文言备矣。《象》曰：潜龙勿用，阳在下也。龙德而隐者也，不易乎世，不成乎名，遁世无闷，不见是而无闷。',
+            refs: [{text:'乾初九',href:'reader.html#乾-1'}]
+          }
+        ]
+      },
+      {
+        title: '周易略例·明彖（卦主说）',
+        paras: [
+          {
+            level: 'core',
+            text: '夫彖者何也？统论一卦之体，明其所由之主者也。夫众不能治众，治众者至寡者也；夫动不能制动，制天下之动者贞夫一者也。',
+            refs: [{text:'卦主说',href:'yanjiu.html#zj-wangbi'}]
+          },
+          {
+            level: 'pang',
+            text: '故六爻相错，可举一以明也；刚柔相乘，可立主以定也。是故杂物撰德，辨是与非，则非其中爻莫之备矣。',
+            refs: [{text:'中爻',href:'reader.html#shiyi'}]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'kongyingdazhengyi',
+    title: '周易正义',
+    author: '唐·孔颖达 等奉敕撰',
+    intro: '唐代官修《五经正义》之一，以王弼、韩康伯注为本，疏解注文，熔铸汉魏六朝易学，是科举定本，也是后世研究王弼易最权威的参考。',
+    juan: [
+      {
+        title: '卷首·论易之三名',
+        paras: [
+          {
+            level: 'core',
+            text: '夫"易"者，变化之总名，改换之殊称。自天地开辟，阴阳运行，寒暑迭来，日月更出，孚萌庶类，亭毒群品，新新不停，生生相续，莫非资变化之力、换代之功。',
+            refs: [{text:'变易',href:'bianhua.html'}]
+          },
+          {
+            level: 'core',
+            text: '易之三名：一曰易简，二曰变易，三曰不易。易简者，易则易知，简则易从；变易者，生生之道；不易者，天地定位，不可相易。三义唯《乾凿度》言之详矣。',
+            refs: [{text:'易一名而含三义',href:'guaqi.html#yuandian'}]
+          }
+        ]
+      },
+      {
+        title: '乾卦疏',
+        paras: [
+          {
+            level: 'pang',
+            text: '圣人作《易》，本以垂教。伏羲画八卦，文王作卦辞，周公作爻辞，孔子作十翼——所谓"人更三圣，世历三古"者也。',
+            refs: [{text:'十翼',href:'shiyi.html'}]
+          },
+          {
+            level: 'core',
+            text: '乾卦本以象天，天乃积诸阳气而成。六十四卦，皆仿乾坤。乾坤者，阴阳之根本，万物之祖宗；坎离者，乾坤之用。',
+            refs: [{text:'乾坤',href:'gua.html#乾坤'},{text:'坎离',href:'gua.html#坎离'}]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'yichuan',
+    title: '伊川易传（程氏易传）',
+    author: '北宋·程颐 撰',
+    intro: '理学易集大成之作。程伊川以"理"解《易》，不取王弼玄学，亦不溺邵雍图书，以君臣父子夫妇之道、吉凶消长之理言卦义，是宋易义理派最高成就，朱熹《本义》亦多取资。',
+    juan: [
+      {
+        title: '易传序',
+        paras: [
+          {
+            level: 'core',
+            text: '易，变易也，随时变易以从道也。其为书也，广大悉备，将以顺性命之理，通幽明之故，尽事物之情，而示开物成务之道也。',
+            refs: [{text:'程伊川易序',href:'yanjiu.html#zj-chengyi'}]
+          },
+          {
+            level: 'pang',
+            text: '去古虽远，遗经尚存。然而前儒失意以传言，后学诵言而忘味。自秦而下，盖无传矣。予生千载之后，悼斯文之湮晦，将俾后人沿流而求源，此《传》所以作也。'
+          }
+        ]
+      },
+      {
+        title: '乾卦传',
+        paras: [
+          {
+            level: 'core',
+            text: '乾，天也，天者天之形体，乾者天之性情。乾，健也，健而无息之谓乾。夫天，专言之则道也，天且弗违是也；分而言之，以形体谓之天，以主宰谓之帝，以功用谓之鬼神，以妙用谓之神，以性情谓之乾。',
+            refs: [{text:'乾卦',href:'reader.html#乾'},{text:'天理',href:'yanjiu.html#school-yili'}]
+          },
+          {
+            level: 'core',
+            text: '元亨利贞谓之四德。元者万物之始，亨者万物之长，利者万物之遂，贞者万物之成。惟乾坤有此四德，在他卦则随事而变焉。',
+            refs: [{text:'四德',href:'reader.html#乾'}]
+          }
+        ]
+      },
+      {
+        title: '复卦传',
+        paras: [
+          {
+            level: 'core',
+            text: '复，<a class="onto-kw" href="reader.html#復">复</a>亨。一阳复生于下，天地之心于是乎见。其道反复，七日来复，天行也。先儒以剥尽为坤，坤一阳下生为复，阳剥尽于上而复生于下，静极而动，天地生物之心于是可见。',
+            refs: [{text:'复卦',href:'reader.html#復'},{text:'消息卦',href:'guaqi.html#xiaoxi'}]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'zhouyi benyi',
+    title: '周易本义',
+    author: '南宋·朱熹 撰',
+    intro: '恢复《周易》古经（经传分离），以"河图洛书""先天后天""太极图"释图书象数，兼融义理，是明清科举官学定本，影响后世最巨。朱熹主张《易》本是卜筮之书，义理由卜筮而见。',
+    juan: [
+      {
+        title: '周易序',
+        paras: [
+          {
+            level: 'core',
+            text: '《易》之为书，卦爻彖象之义备，而天地万物之情见。……<a class="onto-kw" href="gua.html">六十四卦</a>、三百八十四爻，皆所以顺性命之理，尽变化之道也。',
+            refs: [{text:'六十四卦',href:'gua.html'},{text:'三百八十四爻',href:'reader.html'}]
+          },
+          {
+            level: 'pang',
+            text: '易本卜筮之书。后人以为止于卜筮，至王弼用老庄解，后人便只以为理，而不以为卜筮，亦非。想当初伏羲画卦之时，只是阳为吉、阴为凶……孔子始从义理解说，后儒遂以义理说易。',
+            refs: [{text:'易学启蒙',href:'shifa.html#yuandian'}]
+          }
+        ]
+      },
+      {
+        title: '河图洛书图说',
+        paras: [
+          {
+            level: 'core',
+            text: '河图之位：一与六共宗而居乎北，二与七为朋而居乎南，三与八同道而居乎东，四与九为友而居乎西，五与十相守而居乎中。盖其所以为数者，不过一阴一阳、一奇一偶，以两其五行而已。',
+            refs: [{text:'河图',href:'yitu.html#hetu'},{text:'洛书',href:'yitu.html#luoshu'},{text:'五行',href:'najia.html#wuxing'}]
+          }
+        ]
+      },
+      {
+        title: '太极图说解',
+        paras: [
+          {
+            level: 'core',
+            text: '太极，形而上之道也；阴阳，形而下之器也。是以自其著者而观之，则动静不同时、阴阳不同位，而太极无不在焉。自其微者而观之，则冲漠无朕，而动静阴阳之理已悉具于其中矣。',
+            refs: [{text:'太极',href:'yitu.html#taiji'},{text:'阴阳',href:'yiyi.html'}]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'zhouyi shangshi',
+    title: '周易尚氏学',
+    author: '近代·尚秉和 撰',
+    intro: '近代象数派集大成。尚氏以《焦氏易林》为宗，恢复西汉易学失传的"象"学（覆象、半象、互象、伏象、大象、逸象），证《易》辞无一字不从象生，驳正王弼以来扫象之偏，是20世纪最具分量的易学新著之一。',
+    juan: [
+      {
+        title: '总论·论易象',
+        paras: [
+          {
+            level: 'core',
+            text: '韩宣子适鲁，见《易象》与《鲁春秋》。夫曰易象，则易之为书，以象为本可知。故<u class="onto-kw">《系辞》</u>曰："易者象也，象也者像也。"盖所有易辞，无一字不从象生，无一字不根于象。',
+            refs: [{text:'系辞',href:'shiyi.html'},{text:'象',href:'yitu.html'}]
+          },
+          {
+            level: 'core',
+            text: '自王弼扫象，李鼎祚《集解》所存仅汉注十之三四。宋人以图书为说，益失卦象本真。清儒宗汉学而不知焦氏《易林》中逸象之妙，故于《易》之十之七八终不能解。',
+            refs: [{text:'王弼扫象',href:'yanjiu.html#zj-wangbi'},{text:'周易集解',href:'yanjiu.html#zj-lidingzuo'}]
+          }
+        ]
+      },
+      {
+        title: '自序',
+        paras: [
+          {
+            level: 'pang',
+            text: '自光绪而后，治汉易者众矣，然未有以卦象为归者。象学失传者千七百余年。兹于《焦氏易林》中得之，凡西汉失传之逸象约百七十余，复以此验之六十四卦、三百八十四爻，迎刃而解。',
+            refs: [{text:'焦氏易林',href:'yanjiu.html'}]
+          }
+        ]
+      },
+      {
+        title: '坤卦注',
+        paras: [
+          {
+            level: 'core',
+            text: '坤：元亨，利牝马之贞。尚氏按：坤为马、为牝，此<u class="onto-kw">坤</u>逸象。坤为地、为母、为众、为顺，人所共知；坤为马、为牝、为文、为帛，则西汉逸象，久佚不传，赖《易林》以存。',
+            refs: [{text:'坤卦',href:'reader.html#坤'}]
+          }
+        ]
+      }
+    ]
+  }
+];
+
+// 载入通用渲染器并渲染
+(function(){
+  function loadAndRender(){
+    if (typeof renderClassicBooks === 'function') {
+      renderClassicBooks(document.getElementById('wujiaYuandian'), WUJIA_DATA);
+    } else {
+      var s = document.createElement('script');
+      s.src = 'js/classic-render.js?v=20261110c';
+      s.onload = function(){ renderClassicBooks(document.getElementById('wujiaYuandian'), WUJIA_DATA); };
+      document.head.appendChild(s);
+    }
+  }
+  if (document.readyState==='loading') document.addEventListener('DOMContentLoaded', loadAndRender);
+  else loadAndRender();
+})();
+</script>
