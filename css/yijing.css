@@ -563,3 +563,302 @@ footer .ent-pop,
   border-radius:8px;
   color:var(--ink);
 }
+
+/* ============================================================
+   多主题系统：通过 [data-theme] 切换全部色彩变量
+   ============================================================ */
+
+/* ---------- 主题一：star（星象罗盘·深空蓝金）—— 默认 ---------- */
+/* 已由 :root 默认值提供，不再重复 */
+
+/* ---------- 主题二：bronze（青铜吉金·玄黑铜绿）---------- */
+[data-theme="bronze"]{
+  --space:#0a0a08;
+  --space-2:#13120e;
+  --space-3:#1f1e18;
+  --space-card:rgba(28,26,18,.82);
+  --space-card-solid:#1c1a12;
+  --space-deep:#050504;
+  --line:rgba(180,150,80,.18);
+  --line-strong:rgba(200,170,90,.35);
+  --line-soft:rgba(150,130,70,.1);
+  --shadow:0 4px 24px rgba(0,0,0,.6);
+  --shadow-lg:0 12px 48px rgba(0,0,0,.75);
+  --glow:0 0 24px rgba(180,140,60,.25);
+  --ink:#e8dfc5;
+  --ink-2:#c8bd98;
+  --ink-3:#8a805e;
+  --ink-dim:#6a6042;
+  --zhu:#b87333;         /* 铜红（锈迹朱）*/
+  --zhu-deep:#8b5422;
+  --zhu-soft:#c9904d;
+  --gold:#c9a15a;        /* 吉金（铜锈金）*/
+  --gold-bright:#e6c789;
+  --gold-deep:#8c6d35;
+  --silver:#b8ad8e;
+  --jade:#6a9070;        /* 铜绿锈 */
+  --ice:#7a8088;
+  --violet:#8a6a50;
+  --amber:#c08040;
+  color-scheme:dark;
+}
+
+/* ---------- 主题三：bamboo（竹简汉简·青竹墨）---------- */
+[data-theme="bamboo"]{
+  --space:#1f2a1e;
+  --space-2:#2a3829;
+  --space-3:#3a4a35;
+  --space-card:rgba(48,62,44,.85);
+  --space-card-solid:#364a32;
+  --space-deep:#141b12;
+  --line:rgba(200,210,170,.18);
+  --line-strong:rgba(210,220,170,.32);
+  --line-soft:rgba(170,190,150,.1);
+  --shadow:0 4px 24px rgba(0,20,0,.35);
+  --shadow-lg:0 12px 48px rgba(0,20,0,.5);
+  --glow:0 0 24px rgba(180,210,120,.18);
+  --ink:#f0ecd8;
+  --ink-2:#d5d0b0;
+  --ink-3:#9aa27c;
+  --ink-dim:#737a5c;
+  --zhu:#a83030;         /* 朱砂墨印 */
+  --zhu-deep:#842020;
+  --zhu-soft:#c85045;
+  --gold:#d9c878;        /* 竹黄 */
+  --gold-bright:#f0e2a0;
+  --gold-deep:#9a8a40;
+  --silver:#cdd4b0;
+  --jade:#7dac6a;        /* 竹青 */
+  --ice:#7aa0a8;
+  --violet:#a88888;
+  --amber:#c8a060;
+  color-scheme:dark;
+}
+
+/* ---------- 主题四：ink（水墨山水·素白淡墨）---------- */
+[data-theme="ink"]{
+  --space:#f5f2ea;
+  --space-2:#faf8f2;
+  --space-3:#ece8dc;
+  --space-card:rgba(255,253,248,.92);
+  --space-card-solid:#ffffff;
+  --space-deep:#e8e3d6;
+  --line:rgba(40,40,35,.12);
+  --line-strong:rgba(40,40,35,.22);
+  --line-soft:rgba(40,40,35,.06);
+  --shadow:0 4px 20px rgba(0,0,0,.08);
+  --shadow-lg:0 8px 32px rgba(0,0,0,.12);
+  --glow:0 0 20px rgba(80,60,30,.08);
+  --ink:#22201c;
+  --ink-2:#4a4640;
+  --ink-3:#7a7468;
+  --ink-dim:#999388;
+  --zhu:#b53030;         /* 朱砂题跋 */
+  --zhu-deep:#8e1e1e;
+  --zhu-soft:#d45050;
+  --gold:#8a6d3b;        /* 淡赭 */
+  --gold-bright:#5c4a2a;
+  --gold-deep:#6a5428;
+  --silver:#4a4a48;
+  --jade:#4a7050;        /* 石青 */
+  --ice:#507088;
+  --violet:#7a5070;
+  --amber:#a06030;
+  color-scheme:light;
+}
+
+/* ---------- 主题五：paper（宣纸古籍·米黄朱红）---------- */
+[data-theme="paper"]{
+  --space:#ece2c8;
+  --space-2:#f4ecd8;
+  --space-3:#e3d6b0;
+  --space-card:rgba(255,249,234,.92);
+  --space-card-solid:#fbf5e4;
+  --space-deep:#d9ccac;
+  --line:rgba(120,90,40,.18);
+  --line-strong:rgba(120,90,40,.3);
+  --line-soft:rgba(120,90,40,.08);
+  --shadow:0 3px 18px rgba(90,60,20,.12);
+  --shadow-lg:0 8px 32px rgba(90,60,20,.18);
+  --glow:0 0 20px rgba(200,140,60,.15);
+  --ink:#2a2520;
+  --ink-2:#5c4d3a;
+  --ink-3:#8a7558;
+  --ink-dim:#a08f70;
+  --zhu:#c23a2a;         /* 朱砂红（传统）*/
+  --zhu-deep:#9c1e12;
+  --zhu-soft:#e06850;
+  --gold:#a87f3a;        /* 古铜金 */
+  --gold-bright:#7a5420;
+  --gold-deep:#6e5020;
+  --silver:#5c4a30;
+  --jade:#4a7a4a;        /* 青瓷 */
+  --ice:#507090;
+  --violet:#885070;
+  --amber:#b07030;
+  color-scheme:light;
+}
+
+/* ====== 主题对应的 body 背景层（覆盖默认星空） ====== */
+/* 青铜：暗金裂纹/铜锈晕 */
+[data-theme="bronze"] body::before{
+  background:
+    radial-gradient(ellipse 1000px 700px at 70% 30%, rgba(120,80,20,.22) 0%, transparent 55%),
+    radial-gradient(ellipse 800px 600px at 25% 80%, rgba(80,120,80,.12) 0%, transparent 55%),
+    radial-gradient(circle at 50% 50%, #13120e 0%, #0a0a08 100%) !important;
+}
+[data-theme="bronze"] body::after{
+  background-image:
+    radial-gradient(1px 1px at 13% 22%, rgba(230,190,100,.55), transparent 50%),
+    radial-gradient(1.5px 1.5px at 44% 18%, rgba(200,160,60,.7), transparent 50%),
+    radial-gradient(1px 1px at 28% 56%, rgba(230,190,100,.4), transparent 50%),
+    radial-gradient(1px 1px at 60% 72%, rgba(120,160,100,.3), transparent 50%),
+    radial-gradient(1px 1px at 72% 36%, rgba(230,190,100,.35), transparent 50%),
+    radial-gradient(1.5px 1.5px at 85% 62%, rgba(200,160,60,.5), transparent 50%),
+    radial-gradient(2px 2px at 52% 28%, rgba(230,200,110,.6), transparent 50%) !important;
+}
+
+/* 竹简：竹节纹理 */
+[data-theme="bamboo"] body::before{
+  background:
+    repeating-linear-gradient(90deg, rgba(0,0,0,0) 0px, rgba(0,0,0,0) 62px, rgba(0,0,0,.08) 63px, rgba(0,0,0,0) 64px),
+    radial-gradient(ellipse 900px 700px at 30% 30%, rgba(80,120,60,.22) 0%, transparent 55%),
+    radial-gradient(ellipse 700px 600px at 80% 75%, rgba(180,140,60,.15) 0%, transparent 55%),
+    linear-gradient(180deg,#2a3829 0%,#1f2a1e 100%) !important;
+}
+[data-theme="bamboo"] body::after{
+  background-image:
+    radial-gradient(1px 1px at 15% 30%, rgba(220,230,160,.35), transparent 50%),
+    radial-gradient(1px 1px at 40% 70%, rgba(220,230,160,.3), transparent 50%),
+    radial-gradient(1px 1px at 75% 25%, rgba(240,220,150,.4), transparent 50%),
+    radial-gradient(1px 1px at 88% 80%, rgba(220,230,160,.3), transparent 50%) !important;
+}
+
+/* 水墨：远山晕染（浅底）*/
+[data-theme="ink"] body::before{
+  background:
+    radial-gradient(ellipse 1400px 500px at 30% 100%, rgba(80,80,90,.12) 0%, transparent 60%),
+    radial-gradient(ellipse 1000px 400px at 80% 85%, rgba(80,80,90,.10) 0%, transparent 60%),
+    radial-gradient(ellipse 800px 300px at 50% 70%, rgba(60,60,80,.08) 0%, transparent 60%),
+    linear-gradient(180deg,#faf8f2 0%,#f0ece0 100%) !important;
+}
+[data-theme="ink"] body::after{
+  background-image:
+    radial-gradient(1px 1px at 20% 30%, rgba(40,40,40,.25), transparent 50%),
+    radial-gradient(1px 1px at 60% 50%, rgba(40,40,40,.18), transparent 50%),
+    radial-gradient(1px 1px at 85% 20%, rgba(40,40,40,.2), transparent 50%) !important;
+  opacity:.6 !important;
+}
+
+/* 宣纸：纸张纹理+淡朱印 */
+[data-theme="paper"] body::before{
+  background:
+    radial-gradient(ellipse 1000px 600px at 80% 20%, rgba(200,140,60,.10) 0%, transparent 55%),
+    radial-gradient(ellipse 700px 500px at 20% 80%, rgba(180,80,40,.06) 0%, transparent 55%),
+    repeating-linear-gradient(0deg, rgba(0,0,0,0) 0px, rgba(0,0,0,0) 2px, rgba(140,100,40,.015) 3px, rgba(0,0,0,0) 4px),
+    linear-gradient(180deg,#f4ecd8 0%,#ece2c8 100%) !important;
+}
+[data-theme="paper"] body::after{
+  background-image:
+    radial-gradient(1px 1px at 20% 25%, rgba(120,80,30,.18), transparent 50%),
+    radial-gradient(1px 1px at 70% 50%, rgba(120,80,30,.12), transparent 50%),
+    radial-gradient(1px 1px at 45% 80%, rgba(120,80,30,.15), transparent 50%) !important;
+  opacity:.7 !important;
+}
+
+/* 浅色系下文字阴影和 a 链接默认金色改深 */
+[data-theme="ink"] a{color:#8a3828;}
+[data-theme="ink"] a:hover{color:#b54030; text-shadow:0 0 6px rgba(180,60,40,.2);}
+[data-theme="ink"] h2{color:#2a2018;}
+[data-theme="ink"] h3{color:#3a3028;}
+[data-theme="paper"] a{color:#9c2a2a;}
+[data-theme="paper"] a:hover{color:#c53828; text-shadow:0 0 6px rgba(190,60,30,.2);}
+[data-theme="paper"] h2{color:#7a4018;}
+[data-theme="paper"] h3{color:#5c3a20;}
+
+/* ============ 主题切换按钮 ============ */
+.theme-switcher{position:relative;margin-right:10px;}
+.theme-toggle{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:6px 14px;height:34px;border-radius:17px;cursor:pointer;
+  background:rgba(255,255,255,.06);border:1px solid var(--line);
+  color:var(--ink);font-family:var(--font-serif);font-size:13px;letter-spacing:1px;
+  transition:all .2s;backdrop-filter:blur(8px);
+}
+.theme-toggle:hover{background:rgba(255,255,255,.12);border-color:var(--gold);color:var(--gold-bright);}
+.theme-toggle .theme-ico{font-size:15px;}
+[data-theme="ink"] .theme-toggle,
+[data-theme="paper"] .theme-toggle{
+  background:rgba(0,0,0,.04);border-color:var(--line);
+}
+[data-theme="ink"] .theme-toggle:hover,
+[data-theme="paper"] .theme-toggle:hover{background:rgba(0,0,0,.08);}
+
+.theme-panel{
+  display:none;position:absolute;top:calc(100% + 10px);right:0;
+  width:260px;padding:8px;
+  background:var(--space-card);backdrop-filter:blur(12px);
+  border:1px solid var(--line-strong);border-radius:10px;
+  box-shadow:var(--shadow-lg);z-index:9999;
+}
+.theme-panel.open{display:block;}
+.theme-item{
+  display:flex;align-items:center;gap:10px;width:100%;
+  padding:10px 12px;margin:2px 0;border:none;background:transparent;
+  border-radius:7px;cursor:pointer;color:var(--ink);
+  font-family:var(--font-serif);text-align:left;transition:all .15s;
+}
+.theme-item:hover{background:rgba(255,255,255,.08);}
+.theme-item.active{background:linear-gradient(90deg, rgba(217,74,74,.15), rgba(212,176,121,.15));border:1px solid var(--gold);}
+[data-theme="ink"] .theme-item:hover,
+[data-theme="paper"] .theme-item:hover{background:rgba(0,0,0,.05);}
+[data-theme="ink"] .theme-item.active,
+[data-theme="paper"] .theme-item.active{background:linear-gradient(90deg, rgba(180,50,50,.1), rgba(140,100,50,.1));}
+.ti-ico{
+  width:30px;height:30px;display:flex;align-items:center;justify-content:center;
+  font-size:18px;border-radius:50%;flex-shrink:0;
+  background:linear-gradient(135deg,var(--zhu),var(--gold-deep));color:#fff;
+}
+.ti-main{flex:1;display:flex;flex-direction:column;}
+.ti-name{font-size:14px;color:var(--ink);letter-spacing:2px;}
+.ti-desc{font-size:11px;color:var(--ink-3);letter-spacing:0;margin-top:2px;}
+.ti-swatch{display:flex;gap:3px;}
+.ti-swatch i{width:10px;height:10px;border-radius:50%;display:inline-block;border:1px solid rgba(255,255,255,.15);}
+[data-theme="ink"] .ti-swatch i,[data-theme="paper"] .ti-swatch i{border-color:rgba(0,0,0,.1);}
+
+
+/* topbar-actions 容器 */
+.topbar-actions{display:inline-flex;align-items:center;gap:8px;margin-left:10px;}
+.nav-links{display:flex;align-items:center;}
+
+/* 让浅色系主题下的 nav logo/链接也能看清 */
+[data-theme="ink"] .topbar,
+[data-theme="paper"] .topbar{
+  background:rgba(255,253,248,.85);
+  border-bottom:1px solid var(--line);
+}
+[data-theme="ink"] .sidebar,
+[data-theme="paper"] .sidebar{
+  background:var(--space-card-solid);
+  border-right:1px solid var(--line);
+}
+[data-theme="ink"] .nav-links a,
+[data-theme="paper"] .nav-links a{color:var(--ink-2);}
+[data-theme="ink"] .nav-links a:hover,
+[data-theme="paper"] .nav-links a:hover{color:var(--zhu);}
+[data-theme="ink"] .nav-links a.active,
+[data-theme="paper"] .nav-links a.active{color:var(--zhu);border-bottom-color:var(--zhu);}
+[data-theme="ink"] .logo,
+[data-theme="paper"] .logo{color:var(--zhu);}
+[data-theme="ink"] .en,
+[data-theme="paper"] .en{color:var(--ink-3);}
+[data-theme="ink"] .nav-cta,
+[data-theme="paper"] .nav-cta{
+  background:var(--zhu);color:#fff;border:1px solid var(--zhu);
+}
+[data-theme="ink"] .nav-cta:hover,
+[data-theme="paper"] .nav-cta:hover{background:var(--zhu-deep);color:#fff;}
+
+/* 浅色系 footer */
+[data-theme="ink"] .footer,
+[data-theme="paper"] .footer{background:var(--space-card-solid);color:var(--ink-3);border-top:1px solid var(--line);}

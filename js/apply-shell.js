@@ -35,7 +35,7 @@
      'data/gua-full-data.js',
      'data/yijing-ontology-enhance.js',
      'data/yijing-yao-link.js',
-     'js/ontology-linker.js'].forEach(injectScript);
+     'js/ontology-linker.js','js/theme-switch.js'].forEach(injectScript);
   }
 
   function detectPage(){

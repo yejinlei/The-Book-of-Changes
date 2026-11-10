@@ -445,7 +445,9 @@
           TOP_PAGES.map(function(p){
             return '<a href="' + p.href + '" class="' + (activePage === p.id ? 'active' : '') + '">' + p.label + '</a>';
           }).join('') +
-          '<a href="shifa.html" class="nav-cta">起卦</a>' +
+          '<span class="topbar-actions">' +
+            '<a href="shifa.html" class="nav-cta">起卦</a>' +
+          '</span>' +
         '</div>' +
       '</nav>';
   }
