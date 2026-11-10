@@ -18,14 +18,49 @@
 <script src="js/theme-switch.js"></script>
 <script src="js/yijin-compass.js"></script>
 <style>
-.hero-taiji{font-size:72px;color:var(--zhu);margin-bottom:12px;display:inline-block;animation:spin 60s linear infinite;position:relative;z-index:2;text-shadow:0 0 24px rgba(217,74,74,.4);}
+.hero-taiji{font-size:64px;color:var(--zhu);margin-bottom:8px;display:inline-block;animation:spin 60s linear infinite;position:relative;z-index:2;text-shadow:0 0 24px rgba(217,74,74,.4);}
 @keyframes spin{to{transform:rotate(360deg);}}
-.hero-compass{
-  position:absolute;left:50%;top:48%;transform:translate(-50%,-50%);
-  width:680px;height:680px;max-width:110vw;opacity:.55;z-index:0;pointer-events:none;
+.hero{
+  position:relative;overflow:hidden;z-index:1;
+  min-height:88vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:60px 20px 40px;
 }
-.hero{position:relative;overflow:hidden;z-index:1;}
+.hero-compass{
+  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  width:min(900px,120vw);height:min(900px,120vw);
+  opacity:.45;z-index:0;pointer-events:none;
+}
 .hero > *:not(.hero-compass){position:relative;z-index:2;}
+.hero h1{margin:0 0 6px;}
+.hero .subtitle{margin-bottom:14px;}
+.hero .quote{margin-bottom:20px;}
+/* 统计卡半透明玻璃，不遮挡罗盘 */
+.stats-grid{
+  display:grid;grid-template-columns:repeat(6,1fr);gap:10px;
+  max-width:1100px;width:100%;margin-top:18px;
+}
+.stat-card{
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(212,176,121,.18);border-radius:var(--radius-lg);
+  padding:18px 10px;text-align:center;
+  backdrop-filter:blur(4px);
+  transition:all .3s;
+}
+.stat-card:hover{background:rgba(212,176,121,.12);border-color:var(--gold);transform:translateY(-3px);}
+.stat-card .stat-num{font-size:30px;color:var(--gold-bright);font-weight:700;letter-spacing:2px;font-family:var(--font-serif);text-shadow:0 0 16px rgba(212,176,121,.3);}
+.stat-card .stat-label{color:var(--ink);font-size:14px;letter-spacing:3px;margin-top:6px;font-weight:600;}
+.stat-card .stat-sub{color:var(--ink-3);font-size:11px;letter-spacing:2px;margin-top:2px;}
+@media (max-width:900px){
+  .stats-grid{grid-template-columns:repeat(3,1fr);}
+  .hero{min-height:auto;padding:40px 14px 30px;}
+  .hero-compass{width:min(520px,130vw);height:min(520px,130vw);opacity:.3;top:40%;}
+}
+@media (max-width:520px){
+  .stats-grid{grid-template-columns:repeat(2,1fr);gap:8px;}
+  .stat-card{padding:12px 6px;}
+  .stat-card .stat-num{font-size:22px;}
+  .stat-card .stat-label{font-size:13px;}
+}
 .ont-level{
   display:grid;grid-template-columns:repeat(7,1fr);gap:8px;
   margin:24px 0;
