@@ -280,8 +280,8 @@
   function tryInject(){
     if(!window.CLASSICS || !window.ClassicPanel){
       if(!document.querySelector('script[src*="classics.js"]')){
-        var s1=document.createElement('script'); s1.src='data/classics.js'; s1.async=false; document.head.appendChild(s1);
-        var s2=document.createElement('script'); s2.src='js/classic-panel.js'; s2.async=false; document.head.appendChild(s2);
+        var s1=document.createElement('script'); s1.src='data/classics.js?v=20261110d'; s1.async=false; document.head.appendChild(s1);
+        var s2=document.createElement('script'); s2.src='js/classic-panel.js?v=20261110d'; s2.async=false; document.head.appendChild(s2);
       }
       setTimeout(tryInject, 200);
       return;
@@ -289,8 +289,8 @@
     var container = document.querySelector('.content') || document.body;
     window.ClassicPanel.render(container, {
       title: '校勘异文·版本原典',
-      intro: '《周易》版本流传复杂，从汉帛书到魏王弼本、宋程朱注本，异文众多。以下为重要版本及注本原典。',
-      ids: ['boshu_zhouyi','ersanziwen','yizhiyi','wangbi_zhu','chengshi_yizhuan','zhouyi_benyi']
+      intro: '《周易》版本流传复杂，从战国楚简、汉帛书到魏王弼本、唐正义、宋程朱注本，异文众多。以下为重要版本及注本原典（含马王堆帛书易传六篇全部）。',
+      ids: ['boshu_zhouyi','ersanziwen','yizhiyi','boshu_yao','boshu_miaohe','boshu_zhaoli','wangbi_zhu','zhouyi_zhengyi','chengshi_yizhuan','zhouyi_benyi']
     });
   }
   if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded', tryInject); } else { tryInject(); }

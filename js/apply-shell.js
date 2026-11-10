@@ -56,10 +56,10 @@
      'data/gua-full-data.js',
      'data/yijing-ontology-enhance.js',
      'data/yijing-yao-link.js',
-     'data/classics.js',
+     'data/classics.js?v=20261110d',
      'js/ontology-linker.js?v=20261110b',
      'js/theme-switch.js?v=20261110b',
-     'js/classic-panel.js'].forEach(function(s){ injectScript(s); });
+     'js/classic-panel.js?v=20261110d'].forEach(function(s){ injectScript(s); });
   }
 
   // 每页默认要嵌入的典籍（页面可通过 <script>window.__CLASSICS_IDS=[...]</script> 覆盖）
@@ -81,8 +81,8 @@
     },
     jiaokan: {
       title: '校勘异文·版本原典',
-      intro: '《周易》版本流传复杂，从战国楚简、汉帛书到魏王弼本、宋程朱注本，异文众多。以下为重要版本及注本原典。',
-      ids: ['boshu_zhouyi','ersanziwen','yizhiyi','wangbi_zhu','chengshi_yizhuan','zhouyi_benyi']
+      intro: '《周易》版本流传复杂，从战国楚简、汉帛书到魏王弼本、唐正义、宋程朱注本，异文众多。以下为重要版本及注本原典（含马王堆帛书易传六篇全部）。',
+      ids: ['boshu_zhouyi','ersanziwen','yizhiyi','boshu_yao','boshu_miaohe','boshu_zhaoli','wangbi_zhu','zhouyi_zhengyi','chengshi_yizhuan','zhouyi_benyi']
     },
     najia: {
       title: '纳甲筮法·术数原典',

@@ -423,8 +423,8 @@ route();
   function tryInject(){
     if(!window.CLASSICS || !window.ClassicPanel){
       if(!document.querySelector('script[src*="classics.js"]')){
-        var s1=document.createElement('script'); s1.src='data/classics.js'; s1.async=false; document.head.appendChild(s1);
-        var s2=document.createElement('script'); s2.src='js/classic-panel.js'; s2.async=false; document.head.appendChild(s2);
+        var s1=document.createElement('script'); s1.src='data/classics.js?v=20261110d'; s1.async=false; document.head.appendChild(s1);
+        var s2=document.createElement('script'); s2.src='js/classic-panel.js?v=20261110d'; s2.async=false; document.head.appendChild(s2);
       }
       setTimeout(tryInject, 200);
       return;
