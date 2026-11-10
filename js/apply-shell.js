@@ -56,7 +56,92 @@
      'data/gua-full-data.js',
      'data/yijing-ontology-enhance.js',
      'data/yijing-yao-link.js',
-     'js/ontology-linker.js?v=20261110b','js/theme-switch.js?v=20261110b'].forEach(function(s){ injectScript(s); });
+     'data/classics.js',
+     'js/ontology-linker.js?v=20261110b',
+     'js/theme-switch.js?v=20261110b',
+     'js/classic-panel.js'].forEach(function(s){ injectScript(s); });
+  }
+
+  // 每页默认要嵌入的典籍（页面可通过 <script>window.__CLASSICS_IDS=[...]</script> 覆盖）
+  var PAGE_CLASSICS = {
+    shiyi: {
+      title: '十翼原典',
+      intro: '《易传》七种十篇，又称"十翼"，相传为孔子所作，是解释《易经》的最古文献。点击卡片展开阅读原文。',
+      ids: ['tuan_shang','tuan_xia','xiang_shang','xiang_xia','xici_shang','xici_xia','wenyan','shuogua','xugua','zagua']
+    },
+    yiyi: {
+      title: '医易同源·相关医典',
+      intro: '中医理论以阴阳五行为骨架，与《易》学同源异流。以下为医易会通相关核心医籍原文。',
+      ids: ['huangdi_neijing','leijing_fuyi','shanghan_lun']
+    },
+    guaqi: {
+      title: '卦气说·原典',
+      intro: '卦气说以《易》卦配四季、十二月、二十四气、七十二候，是汉易的核心理论。以下为相关纬书与文献原文。',
+      ids: ['yiwei_qianzaodu','yiwei_jilantu','huainanzi_tianwen']
+    },
+    jiaokan: {
+      title: '校勘异文·版本原典',
+      intro: '《周易》版本流传复杂，从战国楚简、汉帛书到魏王弼本、宋程朱注本，异文众多。以下为重要版本及注本原典。',
+      ids: ['boshu_zhouyi','ersanziwen','yizhiyi','wangbi_zhu','chengshi_yizhuan','zhouyi_benyi']
+    },
+    najia: {
+      title: '纳甲筮法·术数原典',
+      intro: '纳甲筮法（六爻预测）起源于西汉京房，以八宫、世应、六亲、五行断吉凶。以下为历代筮法核心典籍。',
+      ids: ['jingshi_yizhuan','huozhulin','huangjince','bushizhengzong','yixue_qimeng']
+    },
+    shifa: {
+      title: '筮法·相关原典',
+      intro: '筮法起源于上古，以大衍之数揲蓍起卦。以下为《系辞》大衍章、朱熹《易学启蒙》等筮法相关原典。',
+      ids: ['xici_shang','yixue_qimeng','huozhulin']
+    },
+    yitu: {
+      title: '易图·相关原典',
+      intro: '河图洛书、先天后天、太极图等易图学，是宋易象数的核心。以下为《系辞》《易学启蒙》《太极图说》等相关原文。',
+      ids: ['xici_shang','yixue_qimeng','taijitu_shuo']
+    },
+    guabian: {
+      title: '卦变·相关原典',
+      intro: '卦变说论一卦如何由他卦变来，是汉易与宋易的重要课题。以下为《系辞》《彖传》《太极图说》相关原文。',
+      ids: ['tuan_shang','xici_shang','xici_xia','taijitu_shuo']
+    },
+    bianhua: {
+      title: '变化之道·相关原典',
+      intro: '3D 变化沙盘展示太极、两仪、四象、八卦、万物的生成过程。以下为《系辞》《道德经》《太极图说》原典参照。',
+      ids: ['xici_shang','xici_xia','daodejing','taijitu_shuo']
+    },
+    dandao: {
+      title: '丹道·原典参照',
+      intro: '丹道以《周易参同契》为祖，融《易》理、黄老、丹法于一炉。以下为丹道三大核心典籍原文。',
+      ids: ['cantongqi','wuzhenpian','ruyaojing']
+    },
+    yanjiu: {
+      title: '历代注疏·代表注本',
+      intro: '历代注《易》著作汗牛充栋，此选取最具代表性的三部：王弼《周易注》（玄学义理）、程颐《伊川易传》（理学义理）、朱熹《周易本义》（卜筮本义）。',
+      ids: ['wangbi_zhu','chengshi_yizhuan','zhouyi_benyi']
+    },
+    rdf: {
+      title: '本体论建模·核心典籍',
+      intro: '本平台以《周易》及其历代注疏为本体数据源，以下典籍是构建易经本体知识图谱的核心底本。',
+      ids: ['xici_shang','xici_xia','shuogua','xugua','zagua','wangbi_zhu','zhouyi_benyi']
+    }
+  };
+
+  function injectClassicsPanel(content){
+    if(window.__CLASSICS_DISABLED) return;
+    var ids = window.__CLASSICS_IDS;
+    var page = (document.currentScript && document.currentScript.dataset.page) || detectPage();
+    var cfg;
+    if(ids && ids.length){
+      cfg = { title: window.__CLASSICS_TITLE || '原典参照', intro: window.__CLASSICS_INTRO || '', ids: ids };
+    }else{
+      cfg = PAGE_CLASSICS[page];
+    }
+    if(!cfg) return;
+    if(!window.CLASSICS || !window.ClassicPanel){
+      setTimeout(function(){ injectClassicsPanel(content); }, 200);
+      return;
+    }
+    window.ClassicPanel.render(content, cfg);
   }
 
   function detectPage(){
@@ -127,6 +212,9 @@
       var ft = document.createElement('div');
       ft.innerHTML = window.YJ_Link.footer();
       document.body.appendChild(ft.firstElementChild);
+
+      // 原典参照面板：自动注入到 content 末尾
+      injectClassicsPanel(content);
 
       window.YJ_Link.initMobile();
       document.body.style.paddingTop = '0';

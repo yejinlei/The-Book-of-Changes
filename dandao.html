@@ -10,6 +10,7 @@
 <script src="data/zhujia/index.js"></script>
 <script src="data/yijing-dandao.js"></script>
 <script src="js/ontology-linker.js"></script>
+<script>window.__CLASSICS_DISABLED = true; /* dandao 已有自定义丹道原典面板 */</script>
 <script src="js/apply-shell.js" data-page="dandao"></script>
 <style>
 .dandao-intro{max-width:960px;margin:0 auto 30px;padding:24px;background:var(--paper-2);border-left:4px solid var(--zhu);border-radius:0 10px 10px 0;}
@@ -80,6 +81,53 @@
 .xx-row{flex-wrap:wrap;}
 .yueti-flow{justify-content:flex-start;}
 }
+/* ========== 通用外部经典嵌入组件（后续其他书直接复用） ========== */
+/* 相关度四档：core=本体核心, indirect=旁证, wuxing=五行/概念相关, background=背景, unrelated=易无关 */
+.classic-wrap{max-width:960px;margin:0 auto;}
+.juan-title{font-family:var(--kai);font-size:24px;color:var(--zhu);margin:36px 0 16px;padding-bottom:8px;border-bottom:2px solid var(--chip-gold);}
+.chapter-title{font-family:var(--kai);font-size:19px;color:var(--zhu);margin:28px 0 14px;padding-left:12px;border-left:4px solid var(--gold);}
+.classic-para{position:relative;margin:14px 0;padding:16px 20px 14px 20px;border-radius:8px;line-height:2;font-family:var(--kai);font-size:17px;color:var(--ink);transition:all .25s;}
+.classic-para:hover{transform:translateX(2px);}
+/* 核心段落：朱砂左条 + 淡金底 + 金色细边框 */
+.para-core{background:color-mix(in srgb, var(--zhu) 6%, var(--paper-2));border:1px solid var(--chip-gold);border-left:5px solid var(--zhu);box-shadow:0 2px 10px rgba(0,0,0,.04);}
+/* 旁证/五行：暖黄底 + 金色左条 */
+.para-indirect,.para-wuxing{background:color-mix(in srgb, var(--gold) 8%, var(--paper-2));border-left:4px solid var(--gold);}
+/* 背景：普通卡片底，细边 */
+.para-background{background:var(--paper-2);border:1px solid var(--line);}
+/* 无关：灰底 + 极细边，视觉权重最低 */
+.para-unrelated{background:color-mix(in srgb, var(--ink-4) 8%, var(--paper-2));border:1px dashed var(--line-strong);opacity:.88;}
+/* 角标：相关度徽章 */
+.para-badge{position:absolute;top:-10px;left:16px;padding:2px 10px;border-radius:10px;font-family:var(--kai);font-size:12px;font-weight:bold;letter-spacing:1px;color:#fff;}
+.badge-core{background:var(--zhu);box-shadow:0 1px 4px rgba(156,42,42,.3);}
+.badge-indirect{background:var(--gold);}
+.badge-wuxing{background:var(--gold);}
+.badge-background{background:var(--ink-3);}
+.badge-unrelated{background:var(--ink-4);}
+/* 注解行 */
+.para-note{margin-top:10px;padding-top:8px;border-top:1px dashed var(--chip-bg);font-size:14px;line-height:1.8;font-family:var(--song);color:var(--ink-2);}
+/* 反向关联链接区 */
+.para-refs{margin-top:8px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:13px;font-family:var(--song);}
+.para-refs-label{color:var(--ink-3);margin-right:2px;}
+.para-ref{padding:2px 10px;border-radius:12px;background:var(--chip-bg);color:var(--zhu);text-decoration:none;font-family:var(--kai);transition:all .2s;}
+.para-ref:hover{background:var(--zhu);color:#fff;text-decoration:none;}
+/* 本体关键词（在正文里高亮链接） */
+.onto-kw{color:var(--zhu);font-weight:500;text-decoration:none;border-bottom:1px dotted var(--chip-gold);padding:0 1px;transition:all .2s;}
+.onto-kw:hover{background:var(--zhu);color:#fff;border-radius:2px;text-decoration:none;}
+/* 图例（在tab页顶部） */
+.classic-legend{max-width:960px;margin:0 auto 24px;padding:14px 18px;background:var(--paper-2);border-radius:8px;border:1px solid var(--line);display:flex;flex-wrap:wrap;gap:14px;align-items:center;font-size:13px;color:var(--ink-2);font-family:var(--song);}
+.legend-item{display:flex;align-items:center;gap:6px;}
+.legend-chip{width:20px;height:12px;border-radius:3px;}
+.legend-chip.core{background:var(--zhu);}
+.legend-chip.indirect{background:var(--gold);}
+.legend-chip.background{background:var(--chip-bg);border:1px solid var(--line);}
+.legend-chip.unrelated{background:var(--ink-4);opacity:.6;border:1px dashed var(--ink-3);}
+/* 移动端适配 */
+@media(max-width:640px){
+.classic-para{padding:14px 14px 12px 14px;font-size:16px;}
+.para-badge{font-size:11px;}
+.chapter-title{font-size:17px;}
+.juan-title{font-size:20px;}
+}
 </style>
 </head>
 <body>
@@ -95,6 +143,7 @@
 <div class="dd-tab" data-tab="huohou">火候节度</div>
 <div class="dd-tab" data-tab="yueti">月体纳甲</div>
 <div class="dd-tab" data-tab="yuanwen">原文选粹</div>
+<div class="dd-tab" data-tab="yuandian">完整原典（四档标识）</div>
 <div class="dd-tab" data-tab="stages">修炼阶段</div>
 <div class="dd-tab" data-tab="jia">丹家注疏</div>
 </div>
@@ -142,6 +191,22 @@
 <div class="dd-panel" id="panel-yuanwen">
 <h2 style="font-family:var(--kai);color:var(--zhu);max-width:1200px;margin:0 auto 16px;">参同契原文选粹</h2>
 <div id="yuanwenList"></div>
+</div>
+
+<!-- 完整原典（四档标识） -->
+<div class="dd-panel" id="panel-yuandian">
+<h2 style="font-family:var(--kai);color:var(--zhu);max-width:960px;margin:0 auto 14px;">《周易参同契》全文（本体相关度四档标识）</h2>
+<p style="max-width:960px;margin:0 auto 18px;font-size:14px;color:var(--ink-2);line-height:1.8;">
+每段按与《易经》本体的关联度分四档：<b style="color:var(--zhu)">本体核心</b>（直接引卦名/纳甲/消息卦，丹道合易核心）→ <b style="color:var(--gold)">易理旁证</b>（借易象喻丹法，含五行/阴阳/四象）→ <b style="color:var(--ink-2)">背景铺垫</b>（丹道术语/鼎器说明）→ <b style="color:var(--ink-3)">易无关</b>（单纯黄老/劝诫/自叙）。无关段落全保留以便对照，仅降低视觉权重不删除。段末「↩」链接跳转回《易经》本体对应节点。
+</p>
+<div class="classic-legend">
+  <div class="legend-item"><span class="legend-chip core"></span>本体核心</div>
+  <div class="legend-item"><span class="legend-chip indirect"></span>易理旁证/五行</div>
+  <div class="legend-item"><span class="legend-chip background"></span>背景铺垫</div>
+  <div class="legend-item"><span class="legend-chip unrelated"></span>易无关</div>
+  <div style="margin-left:auto;color:var(--ink-3);font-size:12px;font-family:var(--kai);">以彭晓《通真义》90章本分选核心15章 · 后续其他经典按同规范嵌入</div>
+</div>
+<div class="classic-wrap" id="yuandianWrap"></div>
 </div>
 
 <!-- 阶段 -->
@@ -240,12 +305,51 @@ D.yueti.forEach(function(y){
 });
 document.getElementById('yuetiFlow').innerHTML=yt;
 
-// 原文
+// 本体相关度徽标定义
+var LEVEL_MAP={
+  core:{label:'易经本体核心', cls:'core',  desc:'直接引用卦名/卦序/纳甲，对应本体卦实例'},
+  gua: {label:'卦象直引',     cls:'gua',   desc:'出现具体卦名，关联到相应卦象页面'},
+  wuxing:{label:'五行体系',   cls:'wuxing',desc:'五行/四象体系，关联本体五行概念'},
+  principle:{label:'易理总纲',cls:'principle',desc:'易理总纲（阴阳等），关联本体哲学概念'}
+};
+// 本体关键词→链接映射（卦名→gua.html锚点 / 术语→对应页锚点）
+var ONTO_KW={
+  '乾坤':'gua.html#乾坤','坎离':'gua.html#坎离',
+  '乾':'gua.html#乾','坤':'gua.html#坤','坎':'gua.html#坎','离':'gua.html#离',
+  '震':'gua.html#震','兑':'gua.html#兑','艮':'gua.html#艮','巽':'gua.html#巽',
+  '屯':'gua.html#屯','蒙':'gua.html#蒙',
+  '众卦':'gua.html','六十卦':'gua.html','易之门户':'shiyi.html',
+  '阴阳':'yiyi.html#阴阳','五行':'yiyi.html#五行','四象':'yitu.html#四象',
+  '纳甲':'najia.html','火候':'guaqi.html','月相':'yitu.html#月相',
+  '橐籥':'shiyi.html#系辞','龙虎':'dandao.html#panel-houhou'
+};
+// 关键词高亮函数：将段内本体术语转成可点击链接
+function linkify(text){
+  // 按关键词长度从长到短替换，避免"乾坤"被"乾"先匹配
+  var kws=Object.keys(ONTO_KW).sort(function(a,b){return b.length-a.length;});
+  kws.forEach(function(kw){
+    var url=ONTO_KW[kw];
+    var re=new RegExp(kw,'g');
+    text=text.replace(re,'<a class="onto-kw" href="'+url+'" title="查看《易经》本体相关条目">'+kw+'</a>');
+  });
+  return text;
+}
+
+// 原文（本体关联版）
 var ywl='';
 D.yuanwen.forEach(function(y){
-  ywl+='<div class="yuanwen-box"><div class="yw-quote">"'+y.quote+'"</div>'+
+  var lv=LEVEL_MAP[y.ontoLevel]||LEVEL_MAP.principle;
+  var tags=(y.ontoTags||[]).map(function(t){
+    var url=ONTO_KW[t]||'gua.html';
+    return '<a class="onto-tag tag-'+lv.cls+'" href="'+url+'">'+t+'</a>';
+  }).join('');
+  ywl+='<div class="yuanwen-box yw-'+lv.cls+'">'+
+    '<div class="yw-badge-row"><span class="yw-level level-'+lv.cls+'" title="'+lv.desc+'">📖 '+lv.label+'</span></div>'+
+    '<div class="yw-quote">"'+linkify(y.quote)+'"</div>'+
     '<div class="yw-src">——'+y.source+'</div>'+
-    '<div class="yw-note">'+y.note+'</div></div>';
+    '<div class="yw-note">'+linkify(y.note)+'</div>'+
+    '<div class="yw-tags-row"><span class="yw-tags-label">本体关联：</span>'+tags+'</div>'+
+    '</div>';
 });
 document.getElementById('yuanwenList').innerHTML=ywl;
 
@@ -270,6 +374,68 @@ D.dandaoJia.forEach(function(j){
     '<div class="dj-desc">'+j.desc+'</div></div>';
 });
 document.getElementById('dandaoJiaGrid').innerHTML=dj;
+
+// ==================== 完整原典（四档标识渲染） ====================
+var LEVEL_BADGE={
+  core:{label:'本体核心',cls:'core'},
+  indirect:{label:'易理旁证',cls:'indirect'},
+  wuxing:{label:'五行易理',cls:'wuxing'},
+  background:{label:'背景铺垫',cls:'background'},
+  unrelated:{label:'易无关',cls:'unrelated'}
+};
+// 本体关键词高亮（正文内自动转为链接）
+var CLASSIC_KW={};
+(function buildKwMap(){
+  // 从已有ONTO_KW继承，再补充关键词
+  var extra={
+    '易卦':'gua.html','卦爻':'reader.html','爻位':'reader.html','卦序':'gua.html',
+    '伏羲':'shiyi.html','文王':'shiyi.html','孔子':'shiyi.html','三圣':'shiyi.html',
+    '系辞':'shiyi.html#系辞','说卦':'shiyi.html#说卦','序卦':'shiyi.html#序卦','杂卦':'shiyi.html#杂卦',
+    '周天':'guaqi.html','律吕':'guaqi.html#律吕','斗柄':'guaqi.html',
+    '金丹':'dandao.html','内丹':'dandao.html','丹道':'dandao.html','丹法':'dandao.html',
+  };
+  for(var k in ONTO_KW)CLASSIC_KW[k]=ONTO_KW[k];
+  for(var k in extra)CLASSIC_KW[k]=extra[k];
+})();
+function classicLinkify(text){
+  var kws=Object.keys(CLASSIC_KW).sort(function(a,b){return b.length-a.length;});
+  kws.forEach(function(kw){
+    var url=CLASSIC_KW[kw];
+    var re=new RegExp(kw,'g');
+    text=text.replace(re,'<a class="onto-kw" href="'+url+'">'+kw+'</a>');
+  });
+  return text;
+}
+function renderYuandian(){
+  var html='';
+  var lastJuan='';
+  D.chapters.forEach(function(ch){
+    if(ch.juan!==lastJuan){
+      html+='<h3 class="juan-title">'+ch.juan+'</h3>';
+      lastJuan=ch.juan;
+    }
+    html+='<h4 class="chapter-title">'+ch.chapter+'</h4>';
+    ch.paragraphs.forEach(function(p){
+      var lv=LEVEL_BADGE[p.level]||LEVEL_BADGE.background;
+      var refs='';
+      if(p.ontoLinks&&p.ontoLinks.length){
+        refs='<div class="para-refs"><span class="para-refs-label">↩ 关联本体：</span>';
+        p.ontoLinks.forEach(function(r){
+          refs+='<a class="para-ref" href="'+r.url+'">'+r.name+'</a>';
+        });
+        refs+='</div>';
+      }
+      var note=p.note?'<div class="para-note">'+classicLinkify(p.note)+'</div>':'';
+      html+='<div class="classic-para para-'+lv.cls+'">'+
+        '<span class="para-badge badge-'+lv.cls+'">'+lv.label+'</span>'+
+        '<div class="para-text">'+classicLinkify(p.text)+'</div>'+
+        note+refs+
+        '</div>';
+    });
+  });
+  document.getElementById('yuandianWrap').innerHTML=html;
+}
+renderYuandian();
 </script>
 </body>
 </html>

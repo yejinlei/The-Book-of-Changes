@@ -417,6 +417,27 @@ function route(){
 }
 window.addEventListener('hashchange', route);
 route();
+
+// ===== 原典参照面板（六十四卦页）=====
+(function(){
+  function tryInject(){
+    if(!window.CLASSICS || !window.ClassicPanel){
+      if(!document.querySelector('script[src*="classics.js"]')){
+        var s1=document.createElement('script'); s1.src='data/classics.js'; s1.async=false; document.head.appendChild(s1);
+        var s2=document.createElement('script'); s2.src='js/classic-panel.js'; s2.async=false; document.head.appendChild(s2);
+      }
+      setTimeout(tryInject, 200);
+      return;
+    }
+    var container = document.querySelector('.content') || document.body;
+    window.ClassicPanel.render(container, {
+      title: '六十四卦·相关原典',
+      intro: '《序卦传》《杂卦传》为六十四卦排列、卦义的最古解释；《彖》《象》逐卦释辞。可展开对照阅读。',
+      ids: ['xugua','zagua','tuan_shang','tuan_xia','xiang_shang','xiang_xia','shuogua']
+    });
+  }
+  if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded', tryInject); } else { tryInject(); }
+})();
 </script>
 </body>
 </html>

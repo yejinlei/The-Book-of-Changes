@@ -532,6 +532,28 @@ function doDecorate(){
 doDecorate();
 setTimeout(doDecorate, 400);
 window.addEventListener('load', function(){ setTimeout(doDecorate, 600); });
+
+// ===== 原典参照面板（首页）=====
+(function(){
+  function tryInject(){
+    if(!window.CLASSICS || !window.ClassicPanel){
+      // 动态加载（首页未通过apply-shell注入）
+      if(!document.querySelector('script[src*="classics.js"]')){
+        var s1=document.createElement('script'); s1.src='data/classics.js'; s1.async=false; document.head.appendChild(s1);
+        var s2=document.createElement('script'); s2.src='js/classic-panel.js'; s2.async=false; document.head.appendChild(s2);
+      }
+      setTimeout(tryInject, 200);
+      return;
+    }
+    var container = document.querySelector('.content') || document.body;
+    window.ClassicPanel.render(container, {
+      title: '易经·核心原典',
+      intro: '《周易》经、传及历代最重要注本选粹。点击卡片展开阅读原文，作为研究入门的第一手文本。',
+      ids: ['xici_shang','xici_xia','wenyan','shuogua','wangbi_zhu','chengshi_yizhuan','zhouyi_benyi']
+    });
+  }
+  if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded', tryInject); } else { tryInject(); }
+})();
 </script>
 </body>
 </html>
