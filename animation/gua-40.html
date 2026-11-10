@@ -63,6 +63,7 @@
 (function(){
   var v = document.getElementById('v');
   var srcM3u8 = 'assets/gua-hls/40-损/playlist.m3u8';
+  var srcMp4 = 'assets/gua-mp4-360p/40-损.mp4';
   if (window.Hls && Hls.isSupported()) {
     var hls = new Hls({maxBufferLength:8,maxMaxBufferLength:30,maxBufferSize:30*1000*1000,lowLatencyMode:true,startLevel:-1});
     hls.loadSource(srcM3u8);
@@ -70,10 +71,7 @@
   } else if (v.canPlayType('application/vnd.apple.mpegurl')) {
     v.src = srcM3u8;
   } else {
-    var tip = document.createElement('div');
-    tip.style.cssText = 'margin-top:12px;font-size:14px;color:#8a97ae;line-height:1.8;';
-    tip.textContent = '当前浏览器不支持流式播放，请使用 Chrome、Edge、Firefox 或 Safari 的最新版本观看。';
-    v.parentNode.insertBefore(tip, v.nextSibling);
+    v.src = srcMp4;
   }
 })();
 </script>
