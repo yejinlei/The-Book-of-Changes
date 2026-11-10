@@ -1279,3 +1279,227 @@ canvas#bhua-three{
 .theme-item .ti-desc{ color:var(--ink-3) !important; }
 .theme-item.active{ color:var(--zhu) !important; }
 
+
+/* ============================================================
+   宣纸古籍 / 水墨山水 浅色系主题 系统性修复
+   1) backdrop-filter 在 Chromium + 实色浅底下会错误透出合成层，
+      产生深蓝伪色块，浅主题下统一禁用。
+   2) .src / .yao-tag / .dot-* / .btn / .seal 等白字徽章，浅底上必须换成深色/朱色字。
+   3) 爻画 fill、SVG 爻画描边在浅底上走墨/棕而非金白。
+   ============================================================ */
+[data-theme="paper"] *,
+[data-theme="ink"] *{
+  -webkit-backdrop-filter:none !important;
+  backdrop-filter:none !important;
+}
+
+/* ====== 浅色主题下 reader 内部的白字徽章改成深色底/朱字或彩底/白字（保留可读）====== */
+[data-theme="paper"] .reader .src,
+[data-theme="ink"] .reader .src{
+  color:#fff !important; /* 色块标签上的白字在浅色主题里保持白字（因为底本身是彩块：朱/玉/紫/冰蓝/金棕）*/
+}
+[data-theme="paper"] .reader .yao-tag,
+[data-theme="ink"] .reader .yao-tag{
+  color:#fff !important; /* 爻位红底上仍是白字 */
+}
+[data-theme="paper"] .version-btns button.on,
+[data-theme="ink"] .version-btns button.on{
+  color:#fff !important;
+}
+[data-theme="paper"] .nav-links a.active,
+[data-theme="ink"] .nav-links a.active{
+  color:#fff !important;
+}
+[data-theme="paper"] .btn-primary,
+[data-theme="paper"] .page-nav button:hover,
+[data-theme="paper"] .nav-cta,
+[data-theme="ink"] .btn-primary,
+[data-theme="ink"] .page-nav button:hover,
+[data-theme="ink"] .nav-cta{
+  color:#fff !important;
+}
+
+/* 浅主题下 "可计算" 红章/红按钮保证白字可见 */
+[data-theme="paper"] .seal,
+[data-theme="ink"] .seal{
+  color:#fff !important;
+}
+
+/* ====== 浅主题下所有带 backdrop-filter 的卡片统一实色底 + 无 blur ====== */
+[data-theme="paper"] .reader,
+[data-theme="paper"] .toolbar-card,
+[data-theme="paper"] .card-surface,
+[data-theme="paper"] .hero-card,
+[data-theme="paper"] .stat-card,
+[data-theme="paper"] .section,
+[data-theme="paper"] .guabian-card,
+[data-theme="paper"] .shifa-section,
+[data-theme="paper"] .najia-panel,
+[data-theme="paper"] .paipan-result,
+[data-theme="paper"] .yitu-card,
+[data-theme="paper"] .yizhuan-card,
+[data-theme="paper"] .jiaokan-card,
+[data-theme="ink"] .reader,
+[data-theme="ink"] .toolbar-card,
+[data-theme="ink"] .card-surface,
+[data-theme="ink"] .hero-card,
+[data-theme="ink"] .stat-card,
+[data-theme="ink"] .section,
+[data-theme="ink"] .guabian-card,
+[data-theme="ink"] .shifa-section,
+[data-theme="ink"] .najia-panel,
+[data-theme="ink"] .paipan-result,
+[data-theme="ink"] .yitu-card,
+[data-theme="ink"] .yizhuan-card,
+[data-theme="ink"] .jiaokan-card{
+  background:var(--card-surface) !important;
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+}
+
+/* 爻画 SVG 在浅主题下用深色墨/棕 */
+[data-theme="paper"]{
+  --gua-yao-fill:#3a2418;
+  --gua-yao-line:#6e5020;
+  --gua-title-fill:#3a2418;
+}
+[data-theme="ink"]{
+  --gua-yao-fill:#1a1a1a;
+  --gua-yao-line:#333;
+  --gua-title-fill:#1a1a1a;
+}
+
+/* 浅主题下浮动 popover/ent-pop 正确底色 */
+[data-theme="paper"] .ent-pop,
+[data-theme="ink"] .ent-pop{
+  background:var(--paper-2) !important;
+  color:var(--ink) !important;
+  border-color:var(--line) !important;
+}
+
+/* 浅主题下侧边栏激活项保证可见 */
+[data-theme="paper"] .sidebar nav a.active,
+[data-theme="ink"] .sidebar nav a.active{
+  color:var(--zhu) !important;
+}
+
+/* 浅主题下 .badge / 标签通用白字修正 */
+[data-theme="paper"] .badge,
+[data-theme="ink"] .badge,
+[data-theme="paper"] [class*="badge"],
+[data-theme="ink"] [class*="badge"]{
+  color:var(--on-accent, #fff) !important;
+}
+
+/* 宣纸/水墨 主题下 toolbar 卡片改为浅底，按钮/下拉/图例文字全适配 */
+[data-theme="paper"] .toolbar-card,
+[data-theme="ink"] .toolbar-card{
+  background:var(--paper-2) !important;
+  border-color:var(--line) !important;
+  box-shadow:var(--shadow) !important;
+}
+[data-theme="paper"] .toolbar-card label,
+[data-theme="paper"] .toolbar-hint,
+[data-theme="paper"] .legend,
+[data-theme="ink"] .toolbar-card label,
+[data-theme="ink"] .toolbar-hint,
+[data-theme="ink"] .legend{
+  color:var(--ink-2) !important;
+}
+[data-theme="paper"] .toolbar-card select,
+[data-theme="ink"] .toolbar-card select{
+  background:var(--paper) !important;
+  color:var(--ink) !important;
+  border-color:var(--line) !important;
+}
+[data-theme="paper"] .version-btns button,
+[data-theme="ink"] .version-btns button{
+  background:var(--paper-3) !important;
+  color:var(--ink-2) !important;
+  border-color:var(--line) !important;
+}
+[data-theme="paper"] .version-btns button:hover,
+[data-theme="ink"] .version-btns button:hover{
+  background:var(--gold) !important;
+  color:var(--paper-2) !important;
+}
+[data-theme="paper"] .version-btns button.on,
+[data-theme="ink"] .version-btns button.on{
+  background:var(--zhu) !important;
+  color:#fff !important;
+  border-color:var(--zhu) !important;
+}
+[data-theme="paper"] .checks label,
+[data-theme="ink"] .checks label{
+  color:var(--ink-2) !important;
+}
+
+/* 宣纸主题下正文"乾卦象征纯粹的阳刚与创造力"那一段正文文字已正常（var(--ink-2)=#5c4d3a 深棕），
+   爻辞条的朱红底纹 rgba(217,74,74,.06) 在米黄纸上是淡朱色，协调。
+   白话解条的 jade 绿底 rgba(74,122,80,.1) 在米黄纸上是淡青，协调。*/
+
+/* 顶部起卦红按钮浅主题保持朱底白字 */
+[data-theme="paper"] .nav-cta,
+[data-theme="ink"] .nav-cta{
+  background:var(--zhu) !important;
+  color:#fff !important;
+}
+[data-theme="paper"] .nav-cta:hover,
+[data-theme="ink"] .nav-cta:hover{
+  background:var(--zhu-deep) !important;
+}
+
+/* ==== 强制覆盖：浅色系主题下显式移除所有主要卡片的 backdrop-filter（类选择器特异性高于通配符，确保生效）==== */
+[data-theme="paper"] .reader,
+[data-theme="paper"] .toolbar-card,
+[data-theme="paper"] .toolbar,
+[data-theme="paper"] .section,
+[data-theme="paper"] .card-surface,
+[data-theme="paper"] .hero-card,
+[data-theme="paper"] .stat-card,
+[data-theme="paper"] .guabian-card,
+[data-theme="paper"] .guabian-panel,
+[data-theme="paper"] .shifa-section,
+[data-theme="paper"] .najia-panel,
+[data-theme="paper"] .paipan-result,
+[data-theme="paper"] .yitu-card,
+[data-theme="paper"] .yizhuan-card,
+[data-theme="paper"] .jiaokan-card,
+[data-theme="paper"] .yanjiu-card,
+[data-theme="paper"] .dandao-card,
+[data-theme="paper"] .yiyi-card,
+[data-theme="paper"] .guaqi-card,
+[data-theme="paper"] .rdf-card,
+[data-theme="paper"] .theme-panel,
+[data-theme="paper"] .ent-pop,
+[data-theme="paper"] .zhu-drawer-inner,
+[data-theme="paper"] .page-nav,
+[data-theme="paper"] .back-link,
+[data-theme="ink"] .reader,
+[data-theme="ink"] .toolbar-card,
+[data-theme="ink"] .toolbar,
+[data-theme="ink"] .section,
+[data-theme="ink"] .card-surface,
+[data-theme="ink"] .hero-card,
+[data-theme="ink"] .stat-card,
+[data-theme="ink"] .guabian-card,
+[data-theme="ink"] .guabian-panel,
+[data-theme="ink"] .shifa-section,
+[data-theme="ink"] .najia-panel,
+[data-theme="ink"] .paipan-result,
+[data-theme="ink"] .yitu-card,
+[data-theme="ink"] .yizhuan-card,
+[data-theme="ink"] .jiaokan-card,
+[data-theme="ink"] .yanjiu-card,
+[data-theme="ink"] .dandao-card,
+[data-theme="ink"] .yiyi-card,
+[data-theme="ink"] .guaqi-card,
+[data-theme="ink"] .rdf-card,
+[data-theme="ink"] .theme-panel,
+[data-theme="ink"] .ent-pop,
+[data-theme="ink"] .zhu-drawer-inner,
+[data-theme="ink"] .page-nav,
+[data-theme="ink"] .back-link{
+  -webkit-backdrop-filter:none !important;
+  backdrop-filter:none !important;
+}

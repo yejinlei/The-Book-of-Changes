@@ -33,7 +33,7 @@ a:hover{text-decoration:underline}
 .toolbar-card{
   background:var(--paper-2);border:1px solid var(--line);border-radius:8px;
   padding:12px 18px;display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;
-  box-shadow:var(--shadow);backdrop-filter:blur(6px);
+  box-shadow:var(--shadow);
 }
 .toolbar-card label{font-size:15px;color:var(--ink-2);white-space:nowrap}
 .toolbar-card select{font-family:inherit;font-size:15px;padding:4px 8px;border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:3px;min-width:260px;max-width:60vw}
@@ -55,13 +55,12 @@ a:hover{text-decoration:underline}
 .dot-jin{background:var(--gold-deep);color:#fff}
 .dot-zi{background:var(--violet);color:#fff}
 
-/* 正文容器：改用主题变量 */
+/* 正文容器：改用主题变量；浅色系主题下不要 backdrop-filter，Chromium 合成 bug 会透出底层叠层变深蓝 */
 .reader{
   max-width:860px;margin:18px auto 0;padding:40px 50px;
   background:var(--paper-2);
   border:1px solid var(--line-strong);border-radius:var(--radius-lg);
   box-shadow:var(--shadow-lg);position:relative;
-  backdrop-filter:blur(6px);
 }
 .reader::before,.reader::after{content:"";position:absolute;left:20px;right:20px;height:1px;background:repeating-linear-gradient(90deg,var(--line-soft) 0 6px,transparent 6px 12px);opacity:.6}
 .reader::before{top:14px}.reader::after{bottom:14px}
