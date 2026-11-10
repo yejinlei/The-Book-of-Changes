@@ -9,8 +9,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>变化 · 道家宇宙生成动态沙盘 | The Book of Changes</title>
 <script src="https://cdn.jsdelivr.net/npm/three@0.149.0/build/three.min.js"></script>
+<script type="module">
+  if(!window.THREE){
+    try{ const T = await import("./js/three.module.min.js"); window.THREE = T; }catch(e){ console.warn("three 本地兜底加载失败", e); }
+  }
+  window.dispatchEvent(new Event("three-ready"));
+</script>
 <link rel="stylesheet" href="css/yijing.css">
 <script src="js/theme-switch.js"></script>
+<script src="js/apply-shell.js" data-page="bianhua"></script>
 <style>
 :root{
   --bian-stage:#0b0a08;       /* three.js 舞台始终保持深色宇宙感 */
@@ -178,6 +185,7 @@ main{padding-top:64px;}
    骨：SVG  境：three.js  编：自定时间轴
    主链：道 → 一 → 二 → 三 → 万物 → 复归
    ========================================================= */
+function __startBianhua(){
 (function(){
 'use strict';
 
@@ -772,6 +780,9 @@ function boot(){
 boot();
 
 })();
+}
+if(window.THREE){ __startBianhua(); }
+else{ window.addEventListener('three-ready', __startBianhua, {once:true}); }
 </script>
 </body>
 </html>

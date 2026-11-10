@@ -11,88 +11,88 @@
 <script src="data/yijing-guaqi.js"></script>
 <script src="js/ontology-linker.js"></script>
 <style>
-.guaqi-hero{padding:30px 0 20px;text-align:center;border-bottom:2px solid var(--gold, #a87f3a);margin-bottom:24px;position:relative}
-.guaqi-hero::before{content:"☰ ☱ ☲ ☳ ☴ ☵ ☶ ☷";position:absolute;top:8px;left:50%;transform:translateX(-50%);font-size:14px;color:var(--gold, #a87f3a);letter-spacing:8px;opacity:.6}
-.guaqi-title{font-family:'STKaiti','KaiTi',serif;font-size:36px;color:var(--zhu, #9c2a2a);margin:30px 0 8px;letter-spacing:6px}
-.guaqi-subtitle{font-size:15px;color:var(--ink, #1f1a14);opacity:.75;letter-spacing:2px}
-.guaqi-desc{max-width:820px;margin:16px auto 0;font-size:14px;color:var(--ink, #1f1a14);line-height:1.9;opacity:.82}
+.guaqi-hero{padding:30px 0 20px;text-align:center;border-bottom:2px solid var(--gold, var(--gold-deep));margin-bottom:24px;position:relative}
+.guaqi-hero::before{content:"☰ ☱ ☲ ☳ ☴ ☵ ☶ ☷";position:absolute;top:8px;left:50%;transform:translateX(-50%);font-size:14px;color:var(--gold, var(--gold-deep));letter-spacing:8px;opacity:.6}
+.guaqi-title{font-family:'STKaiti','KaiTi',serif;font-size:36px;color:var(--zhu, var(--zhu));margin:30px 0 8px;letter-spacing:6px}
+.guaqi-subtitle{font-size:15px;color:var(--ink, var(--ink));opacity:.75;letter-spacing:2px}
+.guaqi-desc{max-width:820px;margin:16px auto 0;font-size:14px;color:var(--ink, var(--ink));line-height:1.9;opacity:.82}
 .tabs{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:20px 0 28px}
-.tab-btn{padding:8px 18px;background:var(--paper,rgba(15,28,52,.92));border:1.5px solid var(--zhu,#9c2a2a);color:var(--zhu,#9c2a2a);border-radius:2px;font-family:'STKaiti',serif;font-size:15px;cursor:pointer;transition:all .25s;letter-spacing:2px}
-.tab-btn:hover{background:rgba(156,42,42,.08)}
-.tab-btn.active{background:var(--zhu,#9c2a2a);color:#fff;box-shadow:0 2px 8px rgba(156,42,42,.25)}
+.tab-btn{padding:8px 18px;background:var(--paper,var(--paper-2));border:1.5px solid var(--zhu,var(--zhu));color:var(--zhu,var(--zhu));border-radius:2px;font-family:'STKaiti',serif;font-size:15px;cursor:pointer;transition:all .25s;letter-spacing:2px}
+.tab-btn:hover{background:var(--chip-bg)}
+.tab-btn.active{background:var(--zhu,var(--zhu));color:#fff;box-shadow:0 2px 8px var(--zhu-soft)}
 .tab-panel{display:none;animation:fadeIn .4s ease}
 .tab-panel.active{display:block}
 @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-.card-section{background:rgba(255,255,255,.4);border:1px solid rgba(168,127,58,.3);border-radius:4px;padding:24px;margin-bottom:24px}
-.card-title{font-family:'STKaiti',serif;font-size:22px;color:var(--zhu,#9c2a2a);margin-bottom:6px;text-align:center;letter-spacing:3px;position:relative;padding-bottom:8px}
-.card-title::after{content:"";position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:80px;height:1.5px;background:var(--gold,#a87f3a)}
-.card-sub{text-align:center;font-size:13px;color:var(--ink,#1f1a14);opacity:.65;margin:8px 0 20px;letter-spacing:1px}
+.card-section{background:var(--paper-2);border:1px solid var(--line);border-radius:4px;padding:24px;margin-bottom:24px}
+.card-title{font-family:'STKaiti',serif;font-size:22px;color:var(--zhu,var(--zhu));margin-bottom:6px;text-align:center;letter-spacing:3px;position:relative;padding-bottom:8px}
+.card-title::after{content:"";position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:80px;height:1.5px;background:var(--gold,var(--gold-deep))}
+.card-sub{text-align:center;font-size:13px;color:var(--ink,var(--ink));opacity:.65;margin:8px 0 20px;letter-spacing:1px}
 .sizheng-wrap{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;max-width:1000px;margin:0 auto}
-.sizheng-card{background:#fff;border:1.5px solid var(--gold,#a87f3a);border-radius:4px;padding:16px;text-align:center;position:relative;overflow:hidden}
+.sizheng-card{background:var(--paper-2);border:1.5px solid var(--gold,var(--gold-deep));border-radius:4px;padding:16px;text-align:center;position:relative;overflow:hidden}
 .sizheng-card.season-dong{border-top:4px solid #2c5d8a}
-.sizheng-card.season-chun{border-top:4px solid #4a8c3f}
+.sizheng-card.season-chun{border-top:4px solid var(--jade)}
 .sizheng-card.season-xia{border-top:4px solid #c0392b}
-.sizheng-card.season-qiu{border-top:4px solid #b8860b}
-.sizheng-symbol{font-size:48px;margin:8px 0;line-height:1;color:var(--ink,#1f1a14);font-family:serif}
-.sizheng-name{font-family:'STKaiti',serif;font-size:22px;color:var(--zhu,#9c2a2a);margin-bottom:4px;letter-spacing:2px}
-.sizheng-role{font-size:12px;color:var(--gold,#a87f3a);margin-bottom:10px;letter-spacing:1px}
+.sizheng-card.season-qiu{border-top:4px solid var(--gold)}
+.sizheng-symbol{font-size:48px;margin:8px 0;line-height:1;color:var(--ink,var(--ink));font-family:serif}
+.sizheng-name{font-family:'STKaiti',serif;font-size:22px;color:var(--zhu,var(--zhu));margin-bottom:4px;letter-spacing:2px}
+.sizheng-role{font-size:12px;color:var(--gold,var(--gold-deep));margin-bottom:10px;letter-spacing:1px}
 .sizheng-jieqi{display:flex;flex-direction:column;gap:4px}
-.jq-item{font-size:13px;padding:5px 8px;background:var(--paper,rgba(15,28,52,.92));border-radius:2px;display:flex;justify-content:space-between;border-left:3px solid var(--zhu,#9c2a2a)}
-.jq-yao{font-size:11px;color:var(--gold,#a87f3a)}
+.jq-item{font-size:13px;padding:5px 8px;background:var(--paper,var(--paper-2));border-radius:2px;display:flex;justify-content:space-between;border-left:3px solid var(--zhu,var(--zhu))}
+.jq-yao{font-size:11px;color:var(--gold,var(--gold-deep))}
 /* 消息卦 */
 .xiaoxi-wrap{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;max-width:1100px;margin:0 auto}
-.xx-card{background:#fff;border:1px solid rgba(168,127,58,.4);border-radius:3px;padding:12px 8px;text-align:center;position:relative}
+.xx-card{background:var(--paper-2);border:1px solid var(--line-strong);border-radius:3px;padding:12px 8px;text-align:center;position:relative}
 .xx-card.yang{border-left:3px solid #c0392b}
 .xx-card.yin{border-left:3px solid #2c5d8a}
 .xx-symbol{font-size:32px;line-height:1;margin:6px 0;font-family:serif}
-.xx-name{font-family:'STKaiti',serif;font-size:17px;color:var(--zhu,#9c2a2a);letter-spacing:1px}
-.xx-meta{font-size:11px;color:var(--gold,#a87f3a);margin:4px 0}
-.xx-lv{font-size:12px;color:var(--ink,#1f1a14);opacity:.8;margin-top:4px}
+.xx-name{font-family:'STKaiti',serif;font-size:17px;color:var(--zhu,var(--zhu));letter-spacing:1px}
+.xx-meta{font-size:11px;color:var(--gold,var(--gold-deep));margin:4px 0}
+.xx-lv{font-size:12px;color:var(--ink,var(--ink));opacity:.8;margin-top:4px}
 .xx-yangyao{display:flex;justify-content:center;gap:1px;margin-top:6px}
-.yang-bar{width:12px;height:3px;background:#c0392b}
-.yin-bar{width:5px;height:3px;background:#2c5d8a}
+.yang-bar{width:12px;height:3px;background:var(--zhu)}
+.yin-bar{width:5px;height:3px;background:var(--ice)}
 /* 月体纳甲 */
 .moon-phase-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;max-width:1000px;margin:0 auto}
-.moon-card{background:#fff;border:1px solid rgba(168,127,58,.3);border-radius:4px;padding:16px;text-align:center;position:relative}
+.moon-card{background:var(--paper-2);border:1px solid var(--line);border-radius:4px;padding:16px;text-align:center;position:relative}
 .moon-svg{width:70px;height:70px;margin:8px auto;display:block}
-.moon-day{font-family:'STKaiti',serif;font-size:20px;color:var(--zhu,#9c2a2a)}
-.moon-xiang{font-size:13px;color:var(--ink,#1f1a14);margin:4px 0}
-.moon-fang{font-size:12px;color:var(--gold,#a87f3a)}
-.moon-gan{display:inline-block;padding:2px 8px;background:var(--zhu,#9c2a2a);color:#fff;border-radius:2px;font-size:12px;margin-top:6px;letter-spacing:2px}
-.moon-desc{font-size:11px;color:var(--ink,#1f1a14);opacity:.7;margin-top:8px;line-height:1.5;font-style:italic}
+.moon-day{font-family:'STKaiti',serif;font-size:20px;color:var(--zhu,var(--zhu))}
+.moon-xiang{font-size:13px;color:var(--ink,var(--ink));margin:4px 0}
+.moon-fang{font-size:12px;color:var(--gold,var(--gold-deep))}
+.moon-gan{display:inline-block;padding:2px 8px;background:var(--zhu,var(--zhu));color:#fff;border-radius:2px;font-size:12px;margin-top:6px;letter-spacing:2px}
+.moon-desc{font-size:11px;color:var(--ink,var(--ink));opacity:.7;margin-top:8px;line-height:1.5;font-style:italic}
 /* 爻辰表 */
-.yaochen-table{max-width:1100px;margin:0 auto;width:100%;border-collapse:collapse;background:#fff}
-.yaochen-table th,.yaochen-table td{border:1px solid rgba(168,127,58,.3);padding:8px 12px;text-align:center;font-size:13px}
-.yaochen-table th{background:var(--zhu,#9c2a2a);color:#fff;font-family:'STKaiti',serif;letter-spacing:2px;font-weight:normal;font-size:14px}
-.yaochen-table tr:nth-child(even){background:rgba(247,241,225,.5)}
+.yaochen-table{max-width:1100px;margin:0 auto;width:100%;border-collapse:collapse;background:var(--paper-2)}
+.yaochen-table th,.yaochen-table td{border:1px solid var(--line);padding:8px 12px;text-align:center;font-size:13px}
+.yaochen-table th{background:var(--zhu,var(--zhu));color:#fff;font-family:'STKaiti',serif;letter-spacing:2px;font-weight:normal;font-size:14px}
+.yaochen-table tr:nth-child(even){background:var(--chip-bg)}
 .yaochen-table .yao-sym{font-size:18px;font-family:serif}
-.yaochen-table .chen-char{font-family:'STKaiti',serif;font-size:18px;color:var(--zhu,#9c2a2a)}
+.yaochen-table .chen-char{font-family:'STKaiti',serif;font-size:18px;color:var(--zhu,var(--zhu))}
 /* 六日七分 */
 .ri-table-wrap{max-width:1200px;margin:0 auto;overflow-x:auto}
-.liuri-table{width:100%;border-collapse:collapse;background:#fff;font-size:13px}
-.liuri-table th,.liuri-table td{border:1px solid rgba(168,127,58,.3);padding:6px 10px;text-align:center}
-.liuri-table th{background:var(--zhu,#9c2a2a);color:#fff;font-family:'STKaiti',serif;letter-spacing:1px}
-.liuri-table tr:nth-child(even){background:rgba(247,241,225,.5)}
-.role-gong{color:#b8860b;font-weight:bold}
-.role-pi{color:var(--zhu,#9c2a2a);font-weight:bold}
-.role-qing{color:#2c5d8a;font-weight:bold}
-.role-dafu{color:#4a8c3f;font-weight:bold}
-.role-hou{color:#8e44ad;font-weight:bold}
+.liuri-table{width:100%;border-collapse:collapse;background:var(--paper-2);font-size:13px}
+.liuri-table th,.liuri-table td{border:1px solid var(--line);padding:6px 10px;text-align:center}
+.liuri-table th{background:var(--zhu,var(--zhu));color:#fff;font-family:'STKaiti',serif;letter-spacing:1px}
+.liuri-table tr:nth-child(even){background:var(--chip-bg)}
+.role-gong{color:var(--gold);font-weight:bold}
+.role-pi{color:var(--zhu,var(--zhu));font-weight:bold}
+.role-qing{color:var(--ice);font-weight:bold}
+.role-dafu{color:var(--jade);font-weight:bold}
+.role-hou{color:var(--violet);font-weight:bold}
 /* 七十二候 */
 .hou-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;max-width:1200px;margin:0 auto}
-.hou-card{background:#fff;border:1px solid rgba(168,127,58,.3);border-radius:3px;padding:10px;font-size:12px;line-height:1.6}
-.hou-jq{color:var(--gold,#a87f3a);font-size:11px;letter-spacing:1px}
-.hou-name{font-family:'STKaiti',serif;font-size:15px;color:var(--zhu,#9c2a2a);margin:3px 0;letter-spacing:1px}
-.hou-pi{font-size:11px;color:var(--ink,#1f1a14);opacity:.7}
+.hou-card{background:var(--paper-2);border:1px solid var(--line);border-radius:3px;padding:10px;font-size:12px;line-height:1.6}
+.hou-jq{color:var(--gold,var(--gold-deep));font-size:11px;letter-spacing:1px}
+.hou-name{font-family:'STKaiti',serif;font-size:15px;color:var(--zhu,var(--zhu));margin:3px 0;letter-spacing:1px}
+.hou-pi{font-size:11px;color:var(--ink,var(--ink));opacity:.7}
 /* 常数 */
 .const-wrap{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;max-width:1000px;margin:0 auto}
-.const-item{background:#fff;border:1px solid rgba(168,127,58,.3);border-radius:3px;padding:14px;text-align:center}
-.const-num{font-family:'STKaiti',serif;font-size:28px;color:var(--zhu,#9c2a2a)}
-.const-label{font-size:13px;color:var(--ink,#1f1a14);margin-top:4px}
-.const-formula{font-size:11px;color:var(--gold,#a87f3a);margin-top:4px;font-family:monospace}
+.const-item{background:var(--paper-2);border:1px solid var(--line);border-radius:3px;padding:14px;text-align:center}
+.const-num{font-family:'STKaiti',serif;font-size:28px;color:var(--zhu,var(--zhu))}
+.const-label{font-size:13px;color:var(--ink,var(--ink));margin-top:4px}
+.const-formula{font-size:11px;color:var(--gold,var(--gold-deep));margin-top:4px;font-family:monospace}
 /* 文献 */
-.source-list{max-width:800px;margin:0 auto;font-size:13px;line-height:2;color:var(--ink,#1f1a14);opacity:.85;list-style:none;padding:0}
-.source-list li::before{content:"◆ ";color:var(--zhu,#9c2a2a);font-size:10px;margin-right:6px}
+.source-list{max-width:800px;margin:0 auto;font-size:13px;line-height:2;color:var(--ink,var(--ink));opacity:.85;list-style:none;padding:0}
+.source-list li::before{content:"◆ ";color:var(--zhu,var(--zhu));font-size:10px;margin-right:6px}
 @media(max-width:768px){
   .sizheng-wrap,.moon-phase-grid,.xiaoxi-wrap,.hou-grid{grid-template-columns:repeat(2,1fr)}
   .guaqi-title{font-size:28px;letter-spacing:3px}
@@ -136,11 +136,11 @@
   <div class="card-section">
     <div class="card-title">三层结构</div>
     <div class="card-sub">卦气说的三层历法配卦体系</div>
-    <div style="max-width:800px;margin:0 auto;font-size:14px;line-height:2;color:var(--ink,#1f1a14)">
-      <p><strong style="color:var(--zhu,#9c2a2a);font-family:STKaiti,serif;font-size:16px">方伯层·四正卦</strong>：坎北、震东、离南、兑西，分主冬春夏秋四时；每卦六爻主六节气，<strong>4×6=24爻主二十四节气</strong>。四正卦不参与值日，如方伯监临四方。</p>
-      <p><strong style="color:var(--zhu,#9c2a2a);font-family:STKaiti,serif;font-size:16px">君位层·十二辟卦</strong>：复、临、泰、大壮、夬、乾、姤、遁、否、观、剥、坤，又称十二消息卦，阳长为息、阴长为消；每卦主一月一月之政，<strong>12×6=72爻主七十二候</strong>。辟者，君也。</p>
-      <p><strong style="color:var(--zhu,#9c2a2a);font-family:STKaiti,serif;font-size:16px">臣位层·六十杂卦</strong>：六十四卦去四正卦，余六十卦，依公、辟、侯、大夫、卿五等爵位循环排列，配入十二月；<strong>每卦主6又7/80日（六日七分），60×6=360爻主360日+420分=365¼日</strong>，合四分历周天。</p>
-      <p style="text-align:center;margin-top:20px;font-family:STKaiti,serif;font-size:16px;color:var(--zhu,#9c2a2a);letter-spacing:4px">
+    <div style="max-width:800px;margin:0 auto;font-size:14px;line-height:2;color:var(--ink,var(--ink))">
+      <p><strong style="color:var(--zhu,var(--zhu));font-family:STKaiti,serif;font-size:16px">方伯层·四正卦</strong>：坎北、震东、离南、兑西，分主冬春夏秋四时；每卦六爻主六节气，<strong>4×6=24爻主二十四节气</strong>。四正卦不参与值日，如方伯监临四方。</p>
+      <p><strong style="color:var(--zhu,var(--zhu));font-family:STKaiti,serif;font-size:16px">君位层·十二辟卦</strong>：复、临、泰、大壮、夬、乾、姤、遁、否、观、剥、坤，又称十二消息卦，阳长为息、阴长为消；每卦主一月一月之政，<strong>12×6=72爻主七十二候</strong>。辟者，君也。</p>
+      <p><strong style="color:var(--zhu,var(--zhu));font-family:STKaiti,serif;font-size:16px">臣位层·六十杂卦</strong>：六十四卦去四正卦，余六十卦，依公、辟、侯、大夫、卿五等爵位循环排列，配入十二月；<strong>每卦主6又7/80日（六日七分），60×6=360爻主360日+420分=365¼日</strong>，合四分历周天。</p>
+      <p style="text-align:center;margin-top:20px;font-family:STKaiti,serif;font-size:16px;color:var(--zhu,var(--zhu));letter-spacing:4px">
         卦气起中孚 · 坎初为冬至 · 六十卦周 · 岁功成矣
       </p>
     </div>
@@ -162,8 +162,8 @@
     <div class="card-title">十二消息卦 · 十二律吕</div>
     <div class="card-sub">阳长为息（复→乾）、阴长为消（姤→坤），配十二月、十二辰、十二律</div>
     <div class="xiaoxi-wrap" id="xiaoxiWrap"></div>
-    <div style="max-width:900px;margin:24px auto 0;font-size:13px;line-height:1.9;color:var(--ink,#1f1a14);opacity:.85">
-      <p style="text-align:center;font-family:STKaiti,serif;font-size:15px;color:var(--zhu,#9c2a2a);letter-spacing:2px;margin-bottom:12px">十二律吕简介</p>
+    <div style="max-width:900px;margin:24px auto 0;font-size:13px;line-height:1.9;color:var(--ink,var(--ink));opacity:.85">
+      <p style="text-align:center;font-family:STKaiti,serif;font-size:15px;color:var(--zhu,var(--zhu));letter-spacing:2px;margin-bottom:12px">十二律吕简介</p>
       <div id="lvlvWrap" style="display:grid;grid-template-columns:repeat(2,1fr);gap:6px 20px"></div>
     </div>
   </div>
@@ -174,12 +174,12 @@
   <div class="card-section">
     <div class="card-title">《周易参同契》月体纳甲</div>
     <div class="card-sub">初三震庚 → 初八兑丁 → 十五乾甲 → 十六巽辛 → 廿三艮丙 → 三十坤乙</div>
-    <p style="max-width:800px;margin:0 auto 20px;font-size:13px;line-height:1.9;color:var(--ink,#1f1a14);opacity:.85;text-align:center">
+    <p style="max-width:800px;margin:0 auto 20px;font-size:13px;line-height:1.9;color:var(--ink,var(--ink));opacity:.85;text-align:center">
       魏伯阳曰：「三日出为爽，震受庚西方；八日兑受丁，上弦平如绳；十五乾体就，盛满甲东方；十六转受统，巽辛见平明；艮直于丙南，下弦二十三；坤乙三十日，东北丧其明。」以一月之月相盈亏，象八卦阴阳消长，丹道火候即法此。坎为月纳戊、离为日纳己，日月为易，居中宫。
     </p>
     <div class="moon-phase-grid" id="moonGrid"></div>
-    <div style="max-width:800px;margin:24px auto 0;background:#fff;border:1px solid rgba(168,127,58,.3);border-radius:4px;padding:16px">
-      <p style="text-align:center;font-family:STKaiti,serif;font-size:16px;color:var(--zhu,#9c2a2a);letter-spacing:2px;margin-bottom:10px">京房八卦纳甲全表</p>
+    <div style="max-width:800px;margin:24px auto 0;background:var(--paper-2);border:1px solid var(--line);border-radius:4px;padding:16px">
+      <p style="text-align:center;font-family:STKaiti,serif;font-size:16px;color:var(--zhu,var(--zhu));letter-spacing:2px;margin-bottom:10px">京房八卦纳甲全表</p>
       <table class="liuri-table" style="max-width:600px;margin:0 auto">
         <tr><th>八卦</th><th>纳干</th><th>阴阳</th><th>方位</th><th>备注</th></tr>
         <tbody id="najiaBaguaTbody"></tbody>
@@ -193,14 +193,14 @@
   <div class="card-section">
     <div class="card-title">郑玄爻辰说 · 二十八宿</div>
     <div class="card-sub">乾贞于子左行 · 坤贞于未右行 · 爻上值宿</div>
-    <p style="max-width:800px;margin:0 auto 20px;font-size:13px;line-height:1.9;color:var(--ink,#1f1a14);opacity:.85;text-align:center">
+    <p style="max-width:800px;margin:0 auto 20px;font-size:13px;line-height:1.9;color:var(--ink,var(--ink));opacity:.85;text-align:center">
       《易纬·乾凿度》：「乾贞于十一月子，左行阳时六；坤贞于六月未，右行阴时六。」郑玄以乾坤十二爻配十二辰、十二律吕、二十八宿，凡阳爻从乾辰、阴爻从坤辰。比卦初六「有孚盈缶」郑注：「爻辰在未，上值东井。井之水人所汲用缶。」即此义。
     </p>
-    <h4 style="text-align:center;font-family:STKaiti,serif;color:var(--zhu,#9c2a2a);margin:20px 0 10px;letter-spacing:2px">乾卦六爻爻辰（阳爻法此）</h4>
+    <h4 style="text-align:center;font-family:STKaiti,serif;color:var(--zhu,var(--zhu));margin:20px 0 10px;letter-spacing:2px">乾卦六爻爻辰（阳爻法此）</h4>
     <table class="yaochen-table" id="qianChenTable"></table>
-    <h4 style="text-align:center;font-family:STKaiti,serif;color:var(--zhu,#9c2a2a);margin:30px 0 10px;letter-spacing:2px">坤卦六爻爻辰（阴爻法此）</h4>
+    <h4 style="text-align:center;font-family:STKaiti,serif;color:var(--zhu,var(--zhu));margin:30px 0 10px;letter-spacing:2px">坤卦六爻爻辰（阴爻法此）</h4>
     <table class="yaochen-table" id="kunChenTable"></table>
-    <h4 style="text-align:center;font-family:STKaiti,serif;color:var(--zhu,#9c2a2a);margin:30px 0 10px;letter-spacing:2px">十二辰·十二次·二十八宿对照</h4>
+    <h4 style="text-align:center;font-family:STKaiti,serif;color:var(--zhu,var(--zhu));margin:30px 0 10px;letter-spacing:2px">十二辰·十二次·二十八宿对照</h4>
     <table class="yaochen-table" id="chenXiuTable"></table>
   </div>
 </div>
@@ -210,7 +210,7 @@
   <div class="card-section">
     <div class="card-title">六十卦六日七分值日</div>
     <div class="card-sub">公、辟、侯、大夫、卿五等爵位月配五卦，合周天365¼日</div>
-    <p style="max-width:800px;margin:0 auto 16px;font-size:13px;line-height:1.9;color:var(--ink,#1f1a14);opacity:.85;text-align:center">
+    <p style="max-width:800px;margin:0 auto 16px;font-size:13px;line-height:1.9;color:var(--ink,var(--ink));opacity:.85;text-align:center">
       一岁十二月，每月五卦（侯卦拆为内外两卦，分跨两月），五日一候、一月六候、一年七十二候。每卦主六日七分（六十卦合365¼日），每爻主一日余。<span class="role-gong">公</span>（金黄）<span class="role-pi">辟</span>（朱红）<span class="role-qing">卿</span>（靛蓝）<span class="role-dafu">大夫</span>（松绿）<span class="role-hou">侯</span>（紫）五等爵位循环。
     </p>
     <div class="ri-table-wrap">
@@ -341,12 +341,12 @@
   }).join('');
 
   document.getElementById('lvlvWrap').innerHTML = Q.lvlv.map(function(l){
-    return '<div><strong style="color:var(--zhu,#9c2a2a);font-family:STKaiti,serif">'+l.lv+'</strong>（'+l.chen+'·'+l.yue+'月）：'+l.desc+'</div>';
+    return '<div><strong style="color:var(--zhu,var(--zhu));font-family:STKaiti,serif">'+l.lv+'</strong>（'+l.chen+'·'+l.yue+'月）：'+l.desc+'</div>';
   }).join('');
 
   // ------- 月相 -------
   function moonSVG(yangxian, colorY, colorN){
-    var cy=colorY||'#1f1a14', cn=colorN||'rgba(15,28,52,.92)', r=28, cx=35, cy2=35;
+    var cy=colorY||'var(--ink)', cn=colorN||'var(--paper-2)', r=28, cx=35, cy2=35;
     // 简单画月相：阳爻数0-3，0=全黑（坤），1=娥眉（震），2=上弦（兑），3=满月（乾）
     // 阴生（巽=2阴1阳、艮=1阴2阳）从另侧
     var fill = cn, stroke=cy;
@@ -375,7 +375,7 @@
 
   document.getElementById('najiaBaguaTbody').innerHTML = Q.najiaBagua.map(function(n){
     return '<tr><td style="font-family:serif;font-size:20px">'+guaSym(n.gua)+' '+
-      (GUA_NAME[n.gua]||n.gua)+'</td><td style="color:var(--zhu,#9c2a2a);font-weight:bold">'+n.gan+'</td>'+
+      (GUA_NAME[n.gua]||n.gua)+'</td><td style="color:var(--zhu,var(--zhu));font-weight:bold">'+n.gan+'</td>'+
       '<td>'+n.yinyang+'</td><td>'+n.fangwei+'</td><td style="font-size:12px">'+n.desc+'</td></tr>';
   }).join('');
 
@@ -419,7 +419,7 @@
   Q.liushigualist.forEach(function(g){
     lt+='<tr><td>'+yueName[g.yue]+'</td>'+
       '<td class="'+roleClass[g.role]+'">'+roleName[g.role]+'</td>'+
-      '<td style="font-family:STKaiti,serif;color:var(--zhu,#9c2a2a)">'+gn(g.hou)+(g.note?'（'+g.note+'）':'')+'</td>'+
+      '<td style="font-family:STKaiti,serif;color:var(--zhu,var(--zhu))">'+gn(g.hou)+(g.note?'（'+g.note+'）':'')+'</td>'+
       '<td style="font-family:serif;font-size:20px">'+guaSym(g.hou.replace(/_nei|_wai/g,''))+'</td>'+
       '<td style="font-size:11px;opacity:.7">'+g.hou+'</td>'+
       '<td>'+(g.role==='hou_wai'||g.role==='hou'?'3日(候) + 3日(侯卦)':Q.constants.riPerGua.toFixed(4)+' 日')+'</td></tr>';

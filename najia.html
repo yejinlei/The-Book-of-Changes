@@ -540,7 +540,7 @@
       const map={'父母':'fumu','兄弟':'xiongdi','子孙':'zisun','妻财':'qicai','官鬼':'guangui'};
       return `<span class="lq ${map[n]||''}">${n}</span>`;
     };
-    const wxColors = {'金':'#c8a54a','木':'#3a7850','水':'#3a6394','火':'#b04028','土':'#8a6f3a'};
+    const wxColors = {'金':'var(--gold-deep)','木':'var(--jade)','水':'var(--ice)','火':'var(--zhu)','土':'var(--amber)'};
     const wxChip = (w)=>`<span style="background:${wxColors[w]};color:#fff;padding:1px 6px;border-radius:3px;font-size:.78rem">${w}</span>`;
 
     const godRow = (title, list, wsList, wx, desc) => {
