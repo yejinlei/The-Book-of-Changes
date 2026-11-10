@@ -12,12 +12,13 @@
     '象数派':'yanjiu.html#school-xiangshu','义理派':'yanjiu.html#school-yili','图书派':'yanjiu.html#school-tushu','考据派':'yanjiu.html#school-kaoju',
     '周易参同契':'dandao.html','医易':'yiyi.html','卦变':'guabian.html','互体':'guabian.html#huti','旁通':'guabian.html#pangtong','飞伏':'najia.html#feifu','世应':'najia.html#shiying',
     '爻位':'reader.html#key-yaowei','当位':'reader.html#key-dangwei','十二地支':'najia.html#dizhi','清华简':'jiaokan.html#tsinghua','上博简':'jiaokan.html#shangbo','秦简归藏':'jiaokan.html#guizang','数字卦':'jiaokan.html#shuzigua','筮法':'shifa.html',
-    '京房':'yanjiu.html','郑玄':'yanjiu.html','荀爽':'yanjiu.html','虞翻':'yanjiu.html','王弼':'yanjiu.html','孔颖达':'yanjiu.html','李鼎祚':'yanjiu.html','程颐':'yanjiu.html','张载':'yanjiu.html','朱熹':'yanjiu.html','邵雍':'yanjiu.html','周敦颐':'yanjiu.html','王夫之':'yanjiu.html','高亨':'yanjiu.html','李镜池':'yanjiu.html','于省吾':'yanjiu.html','闻一多':'yanjiu.html','屈万里':'yanjiu.html','朱伯崑':'yanjiu.html','惠栋':'yanjiu.html','张惠言':'yanjiu.html','焦循':'yanjiu.html',
-    '易学哲学史':'yanjiu.html','易纬乾凿度':'guaqi.html','左传':'jiaokan.html','八宫卦':'najia.html','六亲':'najia.html#liuqin','游魂归魂':'najia.html',
+    '京房':'yanjiu.html','郑玄':'yanjiu.html','荀爽':'yanjiu.html','虞翻':'yanjiu.html','王弼':'yanjiu.html','孔颖达':'yanjiu.html','李鼎祚':'yanjiu.html','程颐':'yanjiu.html','张载':'yanjiu.html','朱熹':'yanjiu.html','邵雍':'yanjiu.html','周敦颐':'yanjiu.html','王夫之':'yanjiu.html','高亨':'yanjiu.html','李镜池':'yanjiu.html','于省吾':'yanjiu.html','闻一多':'yanjiu.html','屈万里':'yanjiu.html','朱伯崑':'yanjiu.html','惠栋':'yanjiu.html','张惠言':'yanjiu.html','焦循':'yanjiu.html','杨简':'yanjiu.html','蔡清':'yanjiu.html','顾颉刚':'yanjiu.html','张三丰':'dandao.html',
+    '易学哲学史':'yanjiu.html','易汉学':'yanjiu.html','周易虞氏义':'yanjiu.html','易学三书':'yanjiu.html','杨氏易传':'yanjiu.html','易经蒙引':'yanjiu.html','周易卦爻辞中的故事':'yanjiu.html','玄机直讲':'dandao.html','大丹直指':'dandao.html','医理真传':'yiyi.html',
+    '易纬乾凿度':'guaqi.html','左传':'jiaokan.html','八宫卦':'najia.html','六亲':'najia.html#liuqin','游魂归魂':'najia.html','爻辰':'guabian.html','旁通':'guabian.html#pangtong','飞伏':'najia.html#feifu','世应':'najia.html#shiying','心学':'yanjiu.html#school-yili','古史辨':'yanjiu.html#school-kaoju','升降':'guabian.html','时行':'guabian.html','相错':'guabian.html',
     '中医':'yiyi.html','黄帝内经':'yiyi.html','医易义':'yiyi.html','大医习业':'yiyi.html','四圣心源':'yiyi.html','伤寒论':'yiyi.html',
-    '坎离':'gua.html#坎离','龙虎':'dandao.html','周天火候':'dandao.html','三花聚顶':'dandao.html','五气朝元':'dandao.html','取坎填离':'dandao.html','乾坤交姤':'dandao.html',
+    '坎离':'gua.html#坎离','龙虎':'dandao.html','周天火候':'dandao.html','三花聚顶':'dandao.html','五气朝元':'dandao.html','取坎填离':'dandao.html','乾坤交姤':'dandao.html','活子时':'dandao.html','金丹':'dandao.html',
     '阳气':'yiyi.html','命门':'yiyi.html','六经辨证':'yiyi.html',
-    '惠栋':'yanjiu.html#zj-zj_huidong'
+    '王亥':'reader.html','帝乙归妹':'reader.html','高宗伐鬼方':'reader.html','箕子明夷':'reader.html','康侯':'reader.html'
   };
 
   function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
@@ -94,7 +95,7 @@
   function loadClassics(cb){
     if(window.CLASSICS){cb();return;}
     var s = document.createElement('script');
-    s.src = 'data/classics.js?v=20261110g';
+    s.src = 'data/classics.js?v=20261110h';
     s.onload = cb;
     s.onerror = cb;
     document.head.appendChild(s);
