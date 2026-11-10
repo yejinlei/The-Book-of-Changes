@@ -30,7 +30,7 @@
     if(document.querySelector('link[href*="yijing.css"]')) return;
     var link = document.createElement('link');
     link.rel = 'stylesheet';
-    link.href = relativePath() + 'css/yijing.css?v=20261110b';
+    link.href = relativePath() + 'css/yijing.css?v=20261110f';
     document.head.appendChild(link);
   }
 
@@ -51,15 +51,15 @@
 
   function injectOntology(){
     // 先同步加载主题早初始化（对那些没有在 <head> 手动写 <script src=theme-init.js> 的老页面兜底）
-    injectScript('js/theme-init.js?v=20261110b', {sync:true});
+    injectScript('js/theme-init.js?v=20261110f', {sync:true});
     ['data/yijing-ontology.js',
      'data/gua-full-data.js',
      'data/yijing-ontology-enhance.js',
      'data/yijing-yao-link.js',
-     'data/classics.js?v=20261110d',
-     'js/ontology-linker.js?v=20261110b',
-     'js/theme-switch.js?v=20261110b',
-     'js/classic-panel.js?v=20261110d'].forEach(function(s){ injectScript(s); });
+     'data/classics.js?v=20261110f',
+     'js/ontology-linker.js?v=20261110f',
+     'js/theme-switch.js?v=20261110f',
+     'js/classic-panel.js?v=20261110f'].forEach(function(s){ injectScript(s); });
   }
 
   // 每页默认要嵌入的典籍（页面可通过 <script>window.__CLASSICS_IDS=[...]</script> 覆盖）
@@ -71,8 +71,8 @@
     },
     yiyi: {
       title: '医易同源·相关医典',
-      intro: '中医理论以阴阳五行为骨架，与《易》学同源异流。以下为医易会通相关核心医籍原文。',
-      ids: ['huangdi_neijing','leijing_fuyi','shanghan_lun']
+      intro: '中医理论以阴阳五行为骨架，与《易》学同源异流。以下为医易会通相关核心医籍原文，涵盖《黄帝内经》、张景岳《医易义》、张仲景《伤寒论》、孙思邈《千金要方》、黄元御《四圣心源》共五部。',
+      ids: ['huangdi_neijing','leijing_fuyi','shanghan_lun','sunsimiao_dyi','huangyuanyu_ssxy']
     },
     guaqi: {
       title: '卦气说·原典',
@@ -81,8 +81,8 @@
     },
     jiaokan: {
       title: '校勘异文·版本原典',
-      intro: '《周易》版本流传复杂，从战国楚简、汉帛书到魏王弼本、唐正义、宋程朱注本，异文众多。以下为重要版本及注本原典（含马王堆帛书易传六篇全部）。',
-      ids: ['boshu_zhouyi','ersanziwen','yizhiyi','boshu_yao','boshu_miaohe','boshu_zhaoli','wangbi_zhu','zhouyi_zhengyi','chengshi_yizhuan','zhouyi_benyi']
+      intro: '《周易》版本流传复杂：战国楚简（清华简、上博简）、秦简归藏、汉帛书易传六篇（马王堆）、魏王弼本、唐正义、宋程朱注本，异文众多。以下为重要出土文献与传世注本对照参照。',
+      ids: ['boshu_zhouyi','ersanziwen','yizhiyi','boshu_yao','boshu_miaohe','boshu_zhaoli','tsinghua_shifa','shangbo_zhouyi','qinjian_guizang','wangbi_zhu','zhouyi_zhengyi','chengshi_yizhuan','zhouyi_benyi']
     },
     najia: {
       title: '纳甲筮法·术数原典',
@@ -96,8 +96,8 @@
     },
     yitu: {
       title: '图书派原典参照',
-      intro: '易图之学兴于北宋，周敦颐《太极图说》、邵雍《皇极经世》、朱熹《易学启蒙》是图书派核心典籍，以下选录其论图之文，配合上方太极、河图洛书、先天后天、消息卦图对照学习。',
-      ids: ['xici_shang','taijitu_shuo','huangji_jingshi','yixue_qimeng']
+      intro: '易图之学兴于北宋，周敦颐《太极图说》、邵雍《皇极经世》、朱熹《易学启蒙》是图书派核心典籍；清初胡渭《易图明辨》系统辨伪河图洛书先天图出处，动摇宋易图书神话。以下选录论图辨图之文，配合上方太极、河图洛书、先天后天、消息卦图对照学习。',
+      ids: ['xici_shang','taijitu_shuo','huangji_jingshi','yixue_qimeng','huwei_yitu']
     },
     guabian: {
       title: '卦变·相关原典',
@@ -111,13 +111,13 @@
     },
     dandao: {
       title: '丹道·原典参照',
-      intro: '丹道以《周易参同契》为祖，融《易》理、黄老、丹法于一炉。以下为丹道三大核心典籍原文。',
-      ids: ['cantongqi','wuzhenpian','ruyaojing']
+      intro: '丹道以《周易参同契》为祖，融《易》理、黄老、丹法于一炉。陈抟《无极图》开宋代内丹之先河，张伯端《悟真篇》、《入药镜》为南北宗核心，明代《性命圭旨》集其大成。以下为丹道六大核心典籍原文，含《道德经》与丹家合参。',
+      ids: ['cantongqi','daodejing','wuzhenpian','ruyaojing','chen_tuan_wuji','xingming_guizhi']
     },
     yanjiu: {
-      title: '历代注疏·代表注本',
-      intro: '历代注《易》著作汗牛充栋，此选取最具代表性的三部：王弼《周易注》（玄学义理）、程颐《伊川易传》（理学义理）、朱熹《周易本义》（卜筮本义）。',
-      ids: ['wangbi_zhu','chengshi_yizhuan','zhouyi_benyi']
+      title: '历代注疏·代表注本（15家）',
+      intro: '历代注《易》著作汗牛充栋，此选取易学史最具代表性的 15 家注本：魏王弼（玄学易）、唐孔颖达（官修正义）、李鼎祚（集解汉易）、北宋程颐（理学义理）、张载（气学派）、苏轼（蜀学）、邵雍（图书派）、南宋朱熹（本义）、明来知德（错综说）、明末王夫之（气学集大成）、近代尚秉和（象数复兴）、现代高亨（考据）、李镜池（古史辨）、于省吾（古文字）、闻一多（神话学）、屈万里（集释）。',
+      ids: ['wangbi_zhu','zhouyi_zhengyi','zhouyi_jijie','chengshi_yizhuan','hengqu_yishuo','dongpo_yizhuan','huangji_jingshi','zhouyi_benyi','zhouyi_jizhu','zhouyi_waizhuan','zhouyi_shangshi','zhouyi_gujing_jinzhu','zhouyi_tanyuan','yushengyi','wen_yiduo','quwanli']
     },
     rdf: {
       title: '本体论建模·核心典籍',
