@@ -15,9 +15,16 @@
 <script src="data/yijing-ontology-enhance.js"></script>
 <script src="data/yijing-yao-link.js"></script>
 <script src="js/ontology-linker.js"></script>
+<script src="js/yijin-compass.js"></script>
 <style>
-.hero-taiji{font-size:72px;color:var(--zhu);margin-bottom:12px;display:inline-block;animation:spin 60s linear infinite;}
+.hero-taiji{font-size:72px;color:var(--zhu);margin-bottom:12px;display:inline-block;animation:spin 60s linear infinite;position:relative;z-index:2;text-shadow:0 0 24px rgba(217,74,74,.4);}
 @keyframes spin{to{transform:rotate(360deg);}}
+.hero-compass{
+  position:absolute;left:50%;top:48%;transform:translate(-50%,-50%);
+  width:680px;height:680px;max-width:110vw;opacity:.55;z-index:0;pointer-events:none;
+}
+.hero{position:relative;overflow:hidden;z-index:1;}
+.hero > *:not(.hero-compass){position:relative;z-index:2;}
 .ont-level{
   display:grid;grid-template-columns:repeat(7,1fr);gap:8px;
   margin:24px 0;
@@ -118,6 +125,7 @@
 
     <!-- Hero -->
     <section class="hero">
+      <div class="hero-compass" id="heroCompass"></div>
       <div class="hero-taiji">☯</div>
       <h1>易经本体论</h1>
       <div class="subtitle">The Book of Changes Ontology · 易有太极 是生两仪</div>
@@ -125,7 +133,7 @@
         "易之为书也，广大悉备，有天道焉，有人道焉，有地道焉。"<br>
         —— 《周易·系辞下》
       </div>
-      <div style="margin-bottom:32px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+      <div style="margin-bottom:32px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;position:relative;z-index:2;">
         <a href="gua.html" class="btn">进入卦象</a>
         <a href="shifa.html" class="btn btn-gold">起卦占筮</a>
         <a href="reader.html" class="btn btn-ghost">经文阅读</a>
@@ -305,6 +313,7 @@
 document.getElementById('topbar-slot').innerHTML = YJ_Link.topbar('home');
 document.getElementById('sidebar-slot').innerHTML = YJ_Link.sidebar('home');
 document.getElementById('footer-slot').innerHTML = YJ_Link.footer();
+if(window.YJ_Compass) YJ_Compass.attach(document.getElementById('heroCompass'), 680);
 
 const ONT = YJ_ONT;
 const GF = YJ_GUA_FULL;

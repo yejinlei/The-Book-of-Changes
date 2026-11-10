@@ -11,8 +11,8 @@
 <script src="https://cdn.jsdelivr.net/npm/three@0.149.0/build/three.min.js"></script>
 <style>
 :root{
-  --bg:#f4ecd8; --paper:#faf6ed; --text:#2b1810; --accent:#8b0000;
-  --gold:#b8860b; --ink:#1a1a2e; --border:#d4c5a3; --shadow:rgba(139,0,0,.08);
+  --bg:#0a1628; --paper:rgba(18,34,64,.92); --text:#e8edf5; --accent:#d94a4a;
+  --gold:#d4b079; --ink:#e8edf5; --border:rgba(200,215,240,.25); --shadow:rgba(0,0,0,.5);
 }
 *{margin:0;padding:0;box-sizing:border-box;}
 body{
@@ -21,17 +21,20 @@ body{
 }
 /* ===== 顶栏 ===== */
 .top-nav{
-  position:fixed;top:0;left:0;right:0;height:64px;background:var(--paper);
-  border-bottom:2px solid var(--border);z-index:1000;display:flex;align-items:center;
-  justify-content:space-between;padding:0 40px;box-shadow:0 2px 8px var(--shadow);
+  position:fixed;top:0;left:0;right:0;height:64px;
+  background:linear-gradient(180deg, rgba(10,22,40,.96), rgba(8,16,30,.92));
+  border-bottom:1px solid var(--border);z-index:1000;display:flex;align-items:center;
+  justify-content:space-between;padding:0 28px;box-shadow:0 2px 20px rgba(0,0,0,.5);
+  backdrop-filter:blur(12px);
 }
-.logo{font-size:20px;font-weight:700;color:var(--ink);text-decoration:none;display:flex;align-items:center;gap:8px;}
-.logo .taiji{color:var(--accent);font-size:28px;}
-.logo small{font-size:12px;font-weight:400;color:var(--gold);margin-left:6px;letter-spacing:1px;}
-.nav-links{display:flex;gap:24px;align-items:center;}
-.nav-links a{color:var(--text);text-decoration:none;font-size:14px;font-weight:500;transition:.2s;}
-.nav-links a:hover{color:var(--accent);}
-.nav-links a.cur{color:var(--accent);font-weight:700;border-bottom:2px solid var(--accent);padding-bottom:2px;}
+.logo{font-size:20px;font-weight:700;color:var(--ink);text-decoration:none;display:flex;align-items:center;gap:10px;letter-spacing:4px;}
+.logo .taiji{color:var(--gold);font-size:26px;text-shadow:0 0 12px rgba(212,176,121,.5);}
+.logo small{font-size:10px;font-weight:400;color:rgba(200,215,240,.6);margin-left:6px;letter-spacing:2px;font-family:sans-serif;}
+.nav-links{display:flex;gap:4px;align-items:center;flex-wrap:wrap;}
+.nav-links a{color:var(--text);text-decoration:none;font-size:14px;font-weight:500;transition:.2s;padding:6px 12px;border-radius:4px;letter-spacing:1px;}
+.nav-links a:hover{background:rgba(212,176,121,.12);color:var(--gold);}
+.nav-links a.cur{color:var(--gold);background:rgba(212,176,121,.14);font-weight:700;border-bottom:none;padding-bottom:6px;position:relative;}
+.nav-links a.cur::after{content:"";position:absolute;left:12px;right:12px;bottom:2px;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);}
 main{padding-top:64px;}
 
 /* ===== 舞台 ===== */

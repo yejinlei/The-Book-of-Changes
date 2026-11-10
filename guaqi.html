@@ -249,14 +249,18 @@
   // 工具：卦名id→中文名
   var GUA_NAME = (function(){
     var m={};
-    (window.YJ_ONTOLOGY_ENHANCE.guaMap||{}).forEach(function(g){ m[g.id]=g.name; });
+    var gm = window.YJ_ONTOLOGY_ENHANCE && (window.YJ_ONTOLOGY_ENHANCE.guaMap || window.YJ_ONTOLOGY_ENHANCE.liushisigua) || [];
+    var arr = Array.isArray(gm) ? gm : Object.values(gm);
+    arr.forEach(function(g){ if(g && g.id) m[g.id]=g.name; });
     // 补一些id→名
     var extra={zhongfu:'中孚',qianwenyan:'谦',xiaoguo:'小过',dayou:'大有',
       jie:'解',lv:'旅',daxu:'大畜',ben:'贲',guimei:'归妹',wuwang:'无妄',
       kun4:'困',jiji:'既济',shihe:'噬嗑',daguo:'大过',weiji:'未济',
       jian2:'蹇',yi2:'颐',xiaoxu:'小畜',jie2:'节',feng:'丰',
       tongren:'同人',cui:'萃',huan:'涣',heng:'恒',sun:'损',
-      xun:'巽',mingyi:'明夷',jian:'渐',sheng:'升',xu:'需'};
+      xun:'巽',mingyi:'明夷',jian:'渐',sheng:'升',xu:'需',
+      fu:'复',lin:'临',tai:'泰',dazhuang:'大壮',guai:'夬',qian:'乾',
+      gou:'姤',dun:'遁',pi:'否',guan:'观',bo:'剥',kun:'坤'};
     for(var k in extra) if(!m[k]) m[k]=extra[k];
     return m;
   })();
@@ -266,7 +270,9 @@
     return GUA_NAME[id] || id;
   }
   function guaSym(id){
-    var g = (window.YJ_ONTOLOGY_ENHANCE.guaMap||[]).find(function(x){return x.id===id;});
+    var gm = window.YJ_ONTOLOGY_ENHANCE && (window.YJ_ONTOLOGY_ENHANCE.guaMap || window.YJ_ONTOLOGY_ENHANCE.liushisigua) || [];
+    var arr = Array.isArray(gm) ? gm : Object.values(gm);
+    var g = arr.find(function(x){return x.id===id;});
     return g?g.symbol:'☷';
   }
 

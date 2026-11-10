@@ -43,6 +43,8 @@
     var map = {
       'index.html':'home','gua.html':'gua','reader.html':'reader','shiyi.html':'shiyi',
       'yitu.html':'yitu','bianhua.html':'bianhua','shifa.html':'shifa','yanjiu.html':'yanjiu',
+      'jiaokan.html':'jiaokan','guabian.html':'guabian','najia.html':'najia',
+      'guaqi.html':'guaqi','yiyi.html':'yiyi','dandao.html':'dandao','rdf.html':'rdf',
       'yijing-yi.html':'home'
     };
     return map[p] || 'home';

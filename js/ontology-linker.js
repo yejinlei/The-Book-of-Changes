@@ -477,6 +477,16 @@
     }
   }
 
+  /* ================= 注家查找（跨本体）================= */
+  function findZhujia(id){
+    // 在 ontology-enhance 的 zhujia + yijing-zhujia-texts.zhujia 两份数据里找
+    var list = (YJ.zhujia || []).concat((window.YJ_ZHUJIA_TEXTS && YJ_ZHUJIA_TEXTS.zhujia) || []);
+    for(var i=0;i<list.length;i++){ if(list[i] && list[i].id === id) return list[i]; }
+    // 按姓名反查
+    for(var i=0;i<list.length;i++){ if(list[i] && list[i].name === id) return list[i]; }
+    return null;
+  }
+
   /* ================= 导出 ================= */
   window.YJ_Link = {
     ent: entTag,
@@ -484,6 +494,7 @@
     renderRels: relsHTML,
     relsHTML: relsHTML,
     find: findEntity,
+    findZhujia: findZhujia,
     typeOf: guessTypeOf,
     decorate: decorate,
     sidebar: buildSidebar,

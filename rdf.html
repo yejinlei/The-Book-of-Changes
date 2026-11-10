@@ -451,7 +451,8 @@ GitHub. https://yejinlei.github.io/The-Book-of-Changes/
   cloud('verCloud', D.entities.versions, 'zb', x=>`jiaokan.html#${x.id}`);
 document.getElementById('topbar-slot').innerHTML = YJ_Link.topbar('rdf');
 document.getElementById('sidebar-slot').innerHTML = YJ_Link.sidebar('rdf');
-document.querySelector('.footer-slot').innerHTML = YJ_Link.footer();
+var _ft = document.getElementById('footer-slot') || document.querySelector('.footer-slot') || document.querySelector('footer.footer-slot');
+if(_ft) _ft.innerHTML = YJ_Link.footer();
 YJ_Link.initMobile();
 })();
 </script>
