@@ -86,7 +86,7 @@ body { font-family:var(--font-serif,'Songti SC','STSong','SimSun',serif); backgr
   </div>
 </div>
 
-<script src="data/texts-index.js"></script>
+<script src="data/texts-index.js?v=20261111d"></script>
 <script>
 (function(){
   var T = window.YJ_TEXTS;
@@ -105,8 +105,8 @@ body { font-family:var(--font-serif,'Songti SC','STSong','SimSun',serif); backgr
 
   function renderTabs(){
     var cats = [{key:'all',name:'全部'}, {key:'yijing',name:'易学注疏'}, {key:'shushu',name:'术数筮法'},
-                {key:'daozang',name:'丹道道家'}, {key:'yiyao',name:'医易同源'},
-                {key:'zibu',name:'诸子'}, {key:'rulu',name:'儒家'}];
+                {key:'daozang',name:'丹道道家'}, {key:'yizang',name:'医易同源'},
+                {key:'zizang',name:'诸子'}, {key:'rucang',name:'儒家'}];
     $('qwTabs').innerHTML = cats.map(function(c){
       var n = c.key==='all' ? books.length : books.filter(function(b){return b.cat===c.key;}).length;
       return '<span class="qw-tab'+(cur===c.key?' on':'')+'" data-cat="'+c.key+'">'+c.name+' <b>'+n+'</b></span>';
