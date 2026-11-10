@@ -74,7 +74,7 @@
       var nav = document.createElement('div');
       nav.id = 'yj-newnav';
       nav.innerHTML = window.YJ_Link.topbar(page);
-      var oldTop = document.querySelector('.topbar,.top-nav,#topbar,nav.main-nav');
+      var oldTop = document.querySelector('.topbar,.top-nav,#topbar,nav.main-nav,nav.nav-links,nav.site-nav');
       if(oldTop && !oldTop.closest('#yj-newnav')) oldTop.remove();
       document.body.insertBefore(nav, document.body.firstChild);
 

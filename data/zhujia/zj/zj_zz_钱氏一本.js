@@ -1,0 +1,3 @@
+/*! 注家分片 钱氏一本（集解 0 / 折中 3）*/
+window.YJ_ZJ_ZJ = window.YJ_ZJ_ZJ || {};
+window.YJ_ZJ_ZJ["zj_zz_钱氏一本"] = {"id":"zj_zz_钱氏一本","name":"钱氏一本","jijieQuotes":[],"zhezhongSamples":[{"gua":"兑","guaId":"g58","pos":"集说","text":"《兑》五说体，与《履》五健体不同，《履》五健，恐其和之难，危在夬，《兑》五说，不觉其人之易，危在孚，故皆“有厉”之象。","locator":{"book":"周易折中","gua":"兑","pos":"总论"},"citation":"《御纂周易折中》·兑卦·总论","edition":"zhezhong"},{"gua":"涣","guaId":"g59","pos":"集说","text":"去不复来，逖不复近，出不复入。其于坎血，远而又远，何咎之有。","locator":{"book":"周易折中","gua":"涣","pos":"总论"},"citation":"《御纂周易折中》·涣卦·总论","edition":"zhezhong"},{"gua":"未济","guaId":"g64","pos":"集说","text":"难处者，《旅》之时。难尽者，《旅》主义。或以《旅》兴，或以《旅》丧，所关甚大。\n重巽以申命。","locator":{"book":"周易折中","gua":"未济","pos":"总论"},"citation":"《御纂周易折中》·未济卦·总论","edition":"zhezhong"}],"samples":[]};

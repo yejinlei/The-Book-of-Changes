@@ -1,0 +1,3 @@
+/*! 注家分片 真氏德秀（集解 0 / 折中 2）*/
+window.YJ_ZJ_ZJ = window.YJ_ZJ_ZJ || {};
+window.YJ_ZJ_ZJ["zj_zz_真氏德秀"] = {"id":"zj_zz_真氏德秀","name":"真氏德秀","jijieQuotes":[],"zhezhongSamples":[{"gua":"未济","guaId":"g64","pos":"集说","text":"人之生，精与气合，精属阴，气属阳，精则魄也，目之所以明，耳之所之聪。气亢乎体，凡人心之能思虑知识，身之能举动勇决，此之谓魂，神指魂而言，鬼指魄而言。","locator":{"book":"周易折中","gua":"未济","pos":"总论"},"citation":"《御纂周易折中》·未济卦·总论","edition":"zhezhong"},{"gua":"未济","guaId":"g64","pos":"集说","text":"案《易》之并言仁义者，此章及《说卦》“立天之道”章而已，在天地则曰生，在圣人则曰仁，仁之义盖可识矣。","locator":{"book":"周易折中","gua":"未济","pos":"总论"},"citation":"《御纂周易折中》·未济卦·总论","edition":"zhezhong"}],"samples":[]};

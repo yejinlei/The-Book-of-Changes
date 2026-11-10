@@ -1,0 +1,3 @@
+/*! 注家分片 张氏拭（集解 0 / 折中 2）*/
+window.YJ_ZJ_ZJ = window.YJ_ZJ_ZJ || {};
+window.YJ_ZJ_ZJ["zj_zz_张氏拭"] = {"id":"zj_zz_张氏拭","name":"张氏拭","jijieQuotes":[],"zhezhongSamples":[{"gua":"未济","guaId":"g64","pos":"集说","text":"既惧其始，使人防微杜渐，又惧其终，使人持盈守成，要之以无咎而补过，乃易之道也。","locator":{"book":"周易折中","gua":"未济","pos":"总论"},"citation":"《御纂周易折中》·未济卦·总论","edition":"zhezhong"},{"gua":"未济","guaId":"g64","pos":"集说","text":"心之说也，不忤子理，虑之研也，不昧于事，则得者为吉，失者为凶，吉凶既定，则凡勉于事功者，莫不弘之不息以成其功矣。\n谷氏家杰曰；能说诸心，能研诸虑，二能字应下成能之能，见此理人人具有，唯圣人能说能研耳。\n是故变化云为，吉事有祥，象事知器，占事知来。","locator":{"book":"周易折中","gua":"未济","pos":"总论"},"citation":"《御纂周易折中》·未济卦·总论","edition":"zhezhong"}],"samples":[]};

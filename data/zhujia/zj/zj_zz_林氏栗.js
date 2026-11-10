@@ -1,0 +1,3 @@
+/*! 注家分片 林氏栗（集解 0 / 折中 2）*/
+window.YJ_ZJ_ZJ = window.YJ_ZJ_ZJ || {};
+window.YJ_ZJ_ZJ["zj_zz_林氏栗"] = {"id":"zj_zz_林氏栗","name":"林氏栗","jijieQuotes":[],"zhezhongSamples":[{"gua":"解","guaId":"g40","pos":"集说","text":"《蹇》止乎坎小，是以言“利西南，不利东北”。《解》动于险外，是以但言“西南”之“利”，不复言“东北”之小利也。","locator":{"book":"周易折中","gua":"解","pos":"总论"},"citation":"《御纂周易折中》·解卦·总论","edition":"zhezhong"},{"gua":"未济","guaId":"g64","pos":"集说","text":"此节上下卦相应，初四为始，初“潜藏”，四乃“革”矣，革潜为“跃”也，二五为中，二“文明”，五乃“天德”矣，言德，称其位也，三上为终，三“与时偕行”，上偕极矣。\n乾元用九，乃见天则。","locator":{"book":"周易折中","gua":"未济","pos":"总论"},"citation":"《御纂周易折中》·未济卦·总论","edition":"zhezhong"}],"samples":[]};

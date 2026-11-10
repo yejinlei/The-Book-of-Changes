@@ -1,0 +1,3 @@
+/*! 注家分片 胡氏瑷（集解 0 / 折中 2）*/
+window.YJ_ZJ_ZJ = window.YJ_ZJ_ZJ || {};
+window.YJ_ZJ_ZJ["zj_zz_胡氏瑷"] = {"id":"zj_zz_胡氏瑷","name":"胡氏瑷","jijieQuotes":[],"zhezhongSamples":[{"gua":"未济","guaId":"g64","pos":"集说","text":"凡革之道，必须巳日，然后可以革之也，民固即日而未孚。可遽革之乎，故但可固守中顺，未可大有所为。\n巳日革之，行有嘉也。","locator":{"book":"周易折中","gua":"未济","pos":"总论"},"citation":"《御纂周易折中》·未济卦·总论","edition":"zhezhong"},{"gua":"未济","guaId":"g64","pos":"集说","text":"巽之体，上下皆巽，如风之入物，无所不至，无所不顺，故曰“随风巽”。\n君子法此巽风之象，以申其命行其事于天下，无有不至，而无有不顺者也。","locator":{"book":"周易折中","gua":"未济","pos":"总论"},"citation":"《御纂周易折中》·未济卦·总论","edition":"zhezhong"}],"samples":[]};

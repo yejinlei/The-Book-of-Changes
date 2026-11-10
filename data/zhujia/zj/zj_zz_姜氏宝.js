@@ -1,0 +1,3 @@
+/*! 注家分片 姜氏宝（集解 0 / 折中 3）*/
+window.YJ_ZJ_ZJ = window.YJ_ZJ_ZJ || {};
+window.YJ_ZJ_ZJ["zj_zz_姜氏宝"] = {"id":"zj_zz_姜氏宝","name":"姜氏宝","jijieQuotes":[],"zhezhongSamples":[{"gua":"未济","guaId":"g64","pos":"集说","text":"必出门然后无咎，若于宗，则门内之人而已，此所以吝也。","locator":{"book":"周易折中","gua":"未济","pos":"总论"},"citation":"《御纂周易折中》·未济卦·总论","edition":"zhezhong"},{"gua":"未济","guaId":"g64","pos":"集说","text":"观礼于《小象》，以“樽酒簋贰”为句，则晁氏之说以“贰用缶”为句者非矣。\n坎不盈，中未大也。","locator":{"book":"周易折中","gua":"未济","pos":"总论"},"citation":"《御纂周易折中》·未济卦·总论","edition":"zhezhong"},{"gua":"未济","guaId":"g64","pos":"集说","text":"“昼夜之道”，乃幽明死生鬼神之所以然，圣人通知之而有以深彻乎其蕴，又不但知有其故，知有其说，知有其情状而已也。","locator":{"book":"周易折中","gua":"未济","pos":"总论"},"citation":"《御纂周易折中》·未济卦·总论","edition":"zhezhong"}],"samples":[]};

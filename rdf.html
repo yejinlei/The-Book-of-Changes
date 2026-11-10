@@ -17,7 +17,7 @@
 .rdf-hero .sub{font-size:16px;opacity:.95;line-height:1.9;max-width:760px;}
 .rdf-hero .en{font-family:Georgia,serif;font-style:italic;opacity:.7;margin-top:12px;font-size:14px;letter-spacing:1px;}
 .rdf-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin:24px 0;}
-.rdf-stat{background:#fdf8ea;border:1px solid #e8dcc0;border-radius:6px;padding:16px;text-align:center;}
+.rdf-stat{background:#fdf8ea;border:1px solid var(--line);border-radius:6px;padding:16px;text-align:center;}
 .rdf-stat .num{font-size:28px;color:var(--zhu);font-weight:600;font-family:'STKaiti',serif;}
 .rdf-stat .lb{font-size:12px;color:#6b5a3c;margin-top:6px;letter-spacing:2px;}
 .code-block{background:#1f1a14;color:#e9e1c6;padding:18px 20px;border-radius:6px;font-family:'SF Mono',Consolas,monospace;font-size:12px;line-height:1.8;overflow-x:auto;margin:12px 0;border-left:3px solid var(--zhu);}
@@ -33,7 +33,7 @@
 .tab-pane{display:none;}
 .tab-pane.active{display:block;}
 
-.query-card{background:#fdf8ea;border:1px solid #e8dcc0;border-radius:6px;padding:18px 20px;margin:14px 0;transition:all .2s;}
+.query-card{background:#fdf8ea;border:1px solid var(--line);border-radius:6px;padding:18px 20px;margin:14px 0;transition:all .2s;}
 .query-card:hover{border-color:var(--zhu);box-shadow:0 2px 8px rgba(156,42,42,.08);}
 .query-card h3{margin:0 0 8px;font-size:17px;color:var(--zhu);display:flex;align-items:center;gap:8px;}
 .query-card h3::before{content:'▸';color:var(--gold);}
@@ -41,14 +41,14 @@
 .query-card .sparql{background:#1f1a14;color:#a8b9a5;padding:10px 12px;border-radius:4px;font-family:'SF Mono',monospace;font-size:11px;line-height:1.6;margin-bottom:10px;overflow-x:auto;}
 table.rdf-tbl{width:100%;border-collapse:collapse;margin-top:10px;font-size:13px;}
 table.rdf-tbl th{background:#ecdfb8;color:#3b2f1e;padding:8px 12px;text-align:left;font-weight:600;border-bottom:2px solid var(--zhu);font-size:12px;letter-spacing:1px;}
-table.rdf-tbl td{padding:8px 12px;border-bottom:1px solid #e8dcc0;color:#2a2520;}
+table.rdf-tbl td{padding:8px 12px;border-bottom:1px solid var(--line);color:#2a2520;}
 table.rdf-tbl tr:hover td{background:#faf3dd;}
 table.rdf-tbl td.num{color:var(--zhu);font-weight:600;text-align:center;}
 
 .dl-section{margin:28px 0;}
 .dl-section h2{font-size:22px;color:var(--ink);border-left:4px solid var(--zhu);padding-left:12px;margin:0 0 16px;letter-spacing:2px;}
 .dl-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;}
-.dl-card{background:#fdf8ea;border:1px solid #e8dcc0;border-radius:6px;padding:16px;}
+.dl-card{background:#fdf8ea;border:1px solid var(--line);border-radius:6px;padding:16px;}
 .dl-card h4{margin:0 0 8px;color:var(--zhu);font-size:15px;}
 .dl-card p{font-size:12px;color:#6b5a3c;line-height:1.8;margin:0 0 10px;}
 .dl-btn{display:inline-block;padding:6px 14px;background:var(--zhu);color:rgba(15,28,52,.92);border-radius:4px;text-decoration:none;font-size:12px;transition:all .2s;border:1px solid var(--zhu);}
@@ -69,7 +69,7 @@ table.rdf-tbl td.num{color:var(--zhu);font-weight:600;text-align:center;}
 
 .license-box{background:#eef4e9;border:1px solid #c8d8b6;border-radius:6px;padding:16px 20px;margin:20px 0;font-size:13px;color:#3a4a2a;line-height:1.9;}
 .license-box strong{color:#2a3a1a;}
-.note-box{background:#fdf6e3;border:1px dashed var(--gold);border-radius:6px;padding:14px 18px;margin:16px 0;font-size:13px;color:#5a4a2a;line-height:1.9;}
+.note-box{background:#fdf6e3;border:1px dashed var(--gold);border-radius:6px;padding:14px 18px;margin:16px 0;font-size:13px;color:var(--ink-2);line-height:1.9;}
 
 @media(max-width:768px){
   .rdf-hero{padding:32px 20px;}
@@ -81,8 +81,6 @@ table.rdf-tbl td.num{color:var(--zhu);font-weight:600;text-align:center;}
 </style>
 </head>
 <body>
-<div class="topbar-slot"></div>
-<div class="sidebar-slot"></div>
 
 <main class="main">
 <div class="rdf-hero">
@@ -363,7 +361,6 @@ GitHub. https://yejinlei.github.io/The-Book-of-Changes/
   </div>
 </div>
 
-<footer class="footer-slot"></footer>
 </main>
 
 <script>
@@ -449,11 +446,7 @@ GitHub. https://yejinlei.github.io/The-Book-of-Changes/
     sf_dayan:'shifa.html', sf_tongqian:'shifa.html', sf_meihua:'shifa.html', sf_najia:'najia.html'
   })[x.id] || '#');
   cloud('verCloud', D.entities.versions, 'zb', x=>`jiaokan.html#${x.id}`);
-document.getElementById('topbar-slot').innerHTML = YJ_Link.topbar('rdf');
-document.getElementById('sidebar-slot').innerHTML = YJ_Link.sidebar('rdf');
-var _ft = document.getElementById('footer-slot') || document.querySelector('.footer-slot') || document.querySelector('footer.footer-slot');
-if(_ft) _ft.innerHTML = YJ_Link.footer();
-YJ_Link.initMobile();
+  /* 外壳（导航/侧栏/页脚）统一由 js/apply-shell.js 注入，此处不再重复渲染 */
 })();
 </script>
 </body>

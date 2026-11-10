@@ -1,0 +1,3 @@
+/*! 注家分片 章氏潢（集解 0 / 折中 3）*/
+window.YJ_ZJ_ZJ = window.YJ_ZJ_ZJ || {};
+window.YJ_ZJ_ZJ["zj_zz_章氏潢"] = {"id":"zj_zz_章氏潢","name":"章氏潢","jijieQuotes":[],"zhezhongSamples":[{"gua":"坎","guaId":"g29","pos":"集说","text":"六十四卦，独于坎卦指出心以示人，可见心在身中，真如一阳陷于二阴之内，所谓道心惟微者此也。","locator":{"book":"周易折中","gua":"坎","pos":"总论"},"citation":"《御纂周易折中》·坎卦·总论","edition":"zhezhong"},{"gua":"离","guaId":"g30","pos":"集说","text":"明之于人，犹火之于木。火宿于木而能焚木，明本于人而能害人，顾用之何如耳。九四不中不正，刚气燥暴，其害若此。","locator":{"book":"周易折中","gua":"离","pos":"总论"},"citation":"《御纂周易折中》·离卦·总论","edition":"zhezhong"},{"gua":"中孚","guaId":"g61","pos":"集说","text":"二居兑泽，故曰“在阴”。上为巽风，故曰“于天”。孚于中也，则鸣鹤自有子和。孚于外也，则翰音徒登于天。然则中孚可以人伪为之哉！","locator":{"book":"周易折中","gua":"中孚","pos":"总论"},"citation":"《御纂周易折中》·中孚卦·总论","edition":"zhezhong"}],"samples":[]};

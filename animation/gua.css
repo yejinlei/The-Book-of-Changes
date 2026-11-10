@@ -1,0 +1,77 @@
+/* ========================================================
+   单卦讲解页 gua-XX.html 共用样式（移动端优先）
+   单卦页用的类名是 .wrap/.video-box/.card/.top/.yao-list
+   与 animation/style.css（gua-index 用 .page-wrap/.player）并存
+   ======================================================== */
+body.gua-page{
+  background:var(--space-2);
+  color:var(--ink);
+  margin:0;
+  font-family:'Noto Serif CJK SC','Noto Serif SC','Songti SC','STSong',serif;
+  min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+}
+/* 侧栏走主站 yj-sitebar（已在 yijing.css） */
+.wrap{max-width:780px;margin:0 auto;padding:20px 16px 60px;}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px;}
+.top .back{color:var(--ink-3);text-decoration:none;font-size:13px;letter-spacing:1px;transition:.2s;}
+.top .back:hover{color:var(--gold-bright);}
+.wrap h1{font-size:26px;letter-spacing:4px;color:var(--gold-bright);margin:4px 0 6px;display:flex;align-items:center;flex-wrap:wrap;gap:10px;}
+.wrap h1 .hls-badge{display:inline-block;font-size:11px;background:var(--zhu);color:#fff;padding:2px 8px;border-radius:3px;font-weight:400;letter-spacing:1px;}
+.wrap .sub{color:var(--ink-3);font-size:13px;letter-spacing:2px;margin-bottom:14px;}
+.video-box{
+  background:var(--space-card);border:1px solid var(--line);border-radius:10px;
+  padding:8px;box-shadow:var(--shadow);margin-bottom:18px;
+}
+.video-box video{
+  width:100%;display:block;border-radius:6px;background:#000;
+  aspect-ratio:16/9;  /* 关键：640×360=16:9，避免移动端拉伸 */
+  object-fit:contain;
+}
+.card{
+  background:var(--space-card);border:1px solid var(--line);border-radius:10px;
+  padding:16px 18px;margin-bottom:14px;box-shadow:var(--shadow);
+}
+.card h2{font-size:17px;letter-spacing:2px;color:var(--gold-bright);margin:0 0 10px;border-left:3px solid var(--zhu);padding-left:10px;}
+.card .guaci{font-size:17px;line-height:2;color:var(--ink);letter-spacing:1px;margin-bottom:8px;}
+.card .bai{font-size:15px;line-height:1.85;color:var(--ink-2);}
+.yao-list{list-style:none;padding:0;margin:0;}
+.yao-list li{padding:10px 0;border-bottom:1px dashed var(--line);font-size:14px;line-height:1.85;color:var(--ink-2);}
+.yao-list li:last-child{border-bottom:none;}
+.yao-list .yao-ti{
+  display:inline-block;min-width:38px;color:var(--zhu);font-weight:700;
+  font-size:14px;letter-spacing:1px;margin-right:6px;
+}
+.rel-nav{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;}
+.rel-nav a{padding:6px 12px;border:1px solid var(--line);border-radius:5px;color:var(--ink-2);text-decoration:none;font-size:13px;transition:.2s;}
+.rel-nav a:hover{border-color:var(--zhu);color:var(--zhu);}
+.footer{text-align:center;color:var(--ink-dim);font-size:12px;letter-spacing:2px;margin-top:24px;padding-top:20px;border-top:1px solid var(--line);}
+
+/* ======= 移动端适配 ======= */
+@media(max-width:640px){
+  .yj-sitebar{padding:0 10px;height:50px;gap:6px;}
+  .yj-sitebar .inner{gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+  .yj-sitebar .inner::-webkit-scrollbar{display:none;}
+  .yj-sitebar .brand{font-size:15px;}
+  .yj-sitebar .brand small{display:none;}
+  .yj-sitebar .lnk{padding:3px 6px;font-size:12px;}
+  .yj-sitebar .cta{padding:5px 10px;font-size:12px;}
+  .wrap{padding:14px 12px 50px;}
+  .wrap h1{font-size:22px;letter-spacing:3px;}
+  .wrap h1 .hls-badge{font-size:10px;padding:1px 6px;}
+  .wrap .sub{font-size:12px;}
+  .video-box{padding:6px;border-radius:8px;margin-bottom:14px;}
+  .card{padding:13px 14px;border-radius:8px;}
+  .card h2{font-size:15px;letter-spacing:1px;}
+  .card .guaci{font-size:15px;line-height:1.9;}
+  .card .bai{font-size:14px;line-height:1.8;}
+  .yao-list li{font-size:13px;line-height:1.8;padding:9px 0;}
+  .yao-list .yao-ti{min-width:34px;font-size:13px;}
+  .rel-nav a{padding:5px 10px;font-size:12px;}
+  .top .back{font-size:12px;}
+}
+/* 极小屏 */
+@media(max-width:380px){
+  .wrap h1{font-size:20px;letter-spacing:2px;}
+  .card{padding:12px;}
+}

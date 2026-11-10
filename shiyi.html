@@ -39,7 +39,7 @@ body { font-family:'Songti SC','STSong','SimSun','Noto Serif CJK SC','Source Han
 .shiyi-item { background:var(--paper); border:1px solid var(--border); border-left:4px solid var(--accent);
   border-radius:4px; margin-bottom:20px; overflow:hidden; }
 .shiyi-hd { padding:18px 26px; cursor:pointer; display:flex; align-items:center; justify-content:space-between; gap:14px; }
-.shiyi-hd:hover { background:#fffdf5; }
+.shiyi-hd:hover { background:var(--paper-2); }
 .shiyi-hd h3 { font-size:22px; color:var(--accent); }
 .shiyi-hd .meta { font-size:12px; color:var(--gold); font-weight:400; margin-top:4px; }
 .shiyi-hd .arrow { color:var(--accent); font-size:18px; transition:.3s; flex-shrink:0; }
@@ -73,7 +73,7 @@ body { font-family:'Songti SC','STSong','SimSun','Noto Serif CJK SC','Source Han
     <a href="yitu.html">易图互动</a>
   <a href="shifa.html">筮法推演</a>
     <a href="bianhua.html">变化</a>
-    <a href="animation/index.html">易之变 · 动画</a>
+    <a href="animation/gua-index.html">易之变 · 动画</a>
     <a href="animation/qian.html">乾卦讲解</a>
     <a href="yanjiu.html">研究</a>
   </nav>
@@ -164,10 +164,10 @@ function render() {
   document.getElementById('tagline').textContent =
     `共十翼 · 彖传上下、象传上下、系辞上下、文言、说卦、序卦、杂卦，凡十篇`;
   document.getElementById('toc').innerHTML = list.map((p,i)=>
-    `<a href="#shiyi-${i}">${p.name.replace('传','')}</a>`).join('');
+    `<a href="#${p.id}">${p.name.replace('传','')}</a>`).join('');
 
   document.getElementById('shiyiList').innerHTML = list.map((p,i) => `
-    <div class="shiyi-item ${i===0?'open':''}" id="shiyi-${i}">
+    <div class="shiyi-item ${i===0?'open':''}" id="${p.id}" data-hash="${p.id}">
       <div class="shiyi-hd">
         <div>
           <h3>《${p.name}》</h3>

@@ -3,6 +3,7 @@
    深空蓝底 + 银白/淡金文字 + 朱红点缀 + 星轨罗盘背景
    ======================================================== */
 :root{
+  --gutter:40px;            /* 内容区左右留白（响应式） */
   /* === 兼容别名（旧名→新星象色）=== */
   --paper:var(--space-2);
   --paper-2:var(--space-card-solid);
@@ -46,6 +47,7 @@
   --font-serif:'Songti SC','STSong','SimSun','Noto Serif CJK SC','Source Han Serif SC','Noto Serif SC',serif;
   --font-sans:'PingFang SC','Microsoft YaHei','Hiragino Sans GB','Noto Sans CJK SC',sans-serif;
   --font-kai:'STKaiti','KaiTi','Kaiti SC',serif;
+  --chip-bg:rgba(212,176,121,.14);
 }
 
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -211,7 +213,7 @@ h3{font-size:20px;letter-spacing:2px;margin:18px 0 10px;color:var(--silver);}
 }
 
 .content{
-  flex:1;min-width:0;padding:32px 40px 60px;
+  flex:1;min-width:0;padding:32px var(--gutter) 60px;
   max-width:100%;
 }
 
@@ -494,6 +496,7 @@ code{padding:2px 6px;font-size:13px;color:var(--jade);}
 
 /* ===== 响应式 ===== */
 @media (max-width:1024px){
+  :root{--gutter:16px;}
   .topbar{padding:0 16px;height:58px;}
   .nav-links{display:none;position:absolute;top:58px;left:0;right:0;flex-direction:column;gap:0;
     background:var(--space-card-solid);border-bottom:1px solid var(--line);padding:8px 12px;box-shadow:var(--shadow);}
@@ -507,7 +510,7 @@ code{padding:2px 6px;font-size:13px;color:var(--jade);}
     transition:max-height .3s, padding .3s;
   }
   .sidebar.open{max-height:70vh;padding:16px;overflow-y:auto;}
-  .content{padding:20px 16px 40px;}
+  .content{padding:20px var(--gutter) 40px;}
   h1{font-size:28px;letter-spacing:4px;}
   h2{font-size:22px;letter-spacing:3px;}
   .grid-3,.grid-4{grid-template-columns:repeat(2,1fr);}
@@ -573,6 +576,7 @@ footer .ent-pop,
 
 /* ---------- 主题二：bronze（青铜吉金·玄黑铜绿）---------- */
 [data-theme="bronze"]{
+  --chip-bg:rgba(180,150,80,.18);
   --space:#0a0a08;
   --space-2:#13120e;
   --space-3:#1f1e18;
@@ -605,6 +609,7 @@ footer .ent-pop,
 
 /* ---------- 主题三：bamboo（竹简汉简·青竹墨）---------- */
 [data-theme="bamboo"]{
+  --chip-bg:rgba(120,150,90,.16);
   --space:#1f2a1e;
   --space-2:#2a3829;
   --space-3:#3a4a35;
@@ -637,6 +642,7 @@ footer .ent-pop,
 
 /* ---------- 主题四：ink（水墨山水·素白淡墨）---------- */
 [data-theme="ink"]{
+  --chip-bg:rgba(80,60,40,.12);
   --space:#f5f2ea;
   --space-2:#faf8f2;
   --space-3:#ece8dc;
@@ -669,6 +675,7 @@ footer .ent-pop,
 
 /* ---------- 主题五：paper（宣纸古籍·米黄朱红）---------- */
 [data-theme="paper"]{
+  --chip-bg:rgba(160,125,70,.16);
   --space:#ece2c8;
   --space-2:#f4ecd8;
   --space-3:#e3d6b0;
@@ -862,3 +869,19 @@ footer .ent-pop,
 /* 浅色系 footer */
 [data-theme="ink"] .footer,
 [data-theme="paper"] .footer{background:var(--space-card-solid);color:var(--ink-3);border-top:1px solid var(--line);}
+
+/* ================= 深链接锚点高亮（hash-router.js）================= */
+.hash-target{
+  outline:2px solid var(--gold) !important;
+  outline-offset:3px;
+  border-radius:var(--radius-lg);
+  animation:hashPulse 1.6s ease-out 2;
+  scroll-margin-top:80px;
+}
+@keyframes hashPulse{
+  0%,100%{ box-shadow:0 0 0 0 rgba(212,176,121,0); }
+  50%{ box-shadow:0 0 0 7px rgba(212,176,121,.30); }
+}
+@media (max-width:640px){
+  .hash-target{ scroll-margin-top:64px; }
+}

@@ -1,0 +1,3 @@
+/*! 注家分片 杨氏文焕（集解 0 / 折中 3）*/
+window.YJ_ZJ_ZJ = window.YJ_ZJ_ZJ || {};
+window.YJ_ZJ_ZJ["zj_zz_杨氏文焕"] = {"id":"zj_zz_杨氏文焕","name":"杨氏文焕","jijieQuotes":[],"zhezhongSamples":[{"gua":"同人","guaId":"g13","pos":"集说","text":"“同人于野”则“亨”，“于门”则“无咎”，“于宗”则“吝”，“于郊”则“无悔”。“于宗”不若“于门”，“于门”不若“于郊”，“于郊”不若“于野”，六爻有不能尽卦义者，《同人》是也。","locator":{"book":"周易折中","gua":"同人","pos":"总论"},"citation":"《御纂周易折中》·同人卦·总论","edition":"zhezhong"},{"gua":"剥","guaId":"g23","pos":"集说","text":"“贯鱼”者，众阴在下之象也。“硕果”者，一阳在上之象也。","locator":{"book":"周易折中","gua":"剥","pos":"总论"},"citation":"《御纂周易折中》·剥卦·总论","edition":"zhezhong"},{"gua":"未济","guaId":"g64","pos":"集说","text":"川途既通，则暴客至矣，又不可无御之之术，重门以御之，击柝以警之，则暴客无自而至。","locator":{"book":"周易折中","gua":"未济","pos":"总论"},"citation":"《御纂周易折中》·未济卦·总论","edition":"zhezhong"}],"samples":[]};

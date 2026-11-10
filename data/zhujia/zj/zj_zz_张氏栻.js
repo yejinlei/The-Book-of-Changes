@@ -1,0 +1,3 @@
+/*! 注家分片 张氏栻（集解 0 / 折中 2）*/
+window.YJ_ZJ_ZJ = window.YJ_ZJ_ZJ || {};
+window.YJ_ZJ_ZJ["zj_zz_张氏栻"] = {"id":"zj_zz_张氏栻","name":"张氏栻","jijieQuotes":[],"zhezhongSamples":[{"gua":"未济","guaId":"g64","pos":"集说","text":"“谦谦君子，卑以自牧”，如牧牛羊然，使之驯服，方可以言谦。今人往往反以骄矜为养气，此特客气，非浩然之气也。","locator":{"book":"周易折中","gua":"未济","pos":"总论"},"citation":"《御纂周易折中》·未济卦·总论","edition":"zhezhong"},{"gua":"未济","guaId":"g64","pos":"集说","text":"《易》三百八十四爻未尝言仁，此独言之，盖有深旨。克己复礼为仁，克其私心，复其天理，所以为仁；二去初未远，上无系应，能从初而复，所以为下仁也；至四但言从道，而不谓之仁，盖道者举其大凡，不若仁为至切也。","locator":{"book":"周易折中","gua":"未济","pos":"总论"},"citation":"《御纂周易折中》·未济卦·总论","edition":"zhezhong"}],"samples":[]};

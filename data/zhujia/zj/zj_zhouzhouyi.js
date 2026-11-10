@@ -1,0 +1,3 @@
+/*! 注家分片 周敦颐（集解 0 / 折中 2）*/
+window.YJ_ZJ_ZJ = window.YJ_ZJ_ZJ || {};
+window.YJ_ZJ_ZJ["zj_zhouzhouyi"] = {"id":"zj_zhouzhouyi","name":"周敦颐","jijieQuotes":[],"zhezhongSamples":[{"gua":"未济","guaId":"g64","pos":"集说/总论","text":"“童蒙求我”，我正果行，如筮焉。“筮”，叩神也，再三则渎矣，“渎则不告”也。“山下出泉”，静而清也。汨则乱，乱不决也。慎哉其唯时中乎！","locator":{"book":"周易折中","gua":"未济","pos":"总论"},"citation":"《御纂周易折中》·未济卦·总论","edition":"zhezhong"},{"gua":"未济","guaId":"g64","pos":"集说/总论","text":"“大哉乾元，万物资始”，诚之源也；“乾道变化，务正性命”，诚斯立焉。纯粹至善者也，故曰“一阴一阳之谓道。继之者善也。成之者性也”。大哉《易》也，性命之源乎。","locator":{"book":"周易折中","gua":"未济","pos":"总论"},"citation":"《御纂周易折中》·未济卦·总论","edition":"zhezhong"}],"samples":[]};

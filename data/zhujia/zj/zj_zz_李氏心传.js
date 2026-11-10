@@ -1,0 +1,3 @@
+/*! 注家分片 李氏心传（集解 0 / 折中 3）*/
+window.YJ_ZJ_ZJ = window.YJ_ZJ_ZJ || {};
+window.YJ_ZJ_ZJ["zj_zz_李氏心传"] = {"id":"zj_zz_李氏心传","name":"李氏心传","jijieQuotes":[],"zhezhongSamples":[{"gua":"未济","guaId":"g64","pos":"集说","text":"“素履往”，即《中庸》所谓素位而行者也，独行愿，即《中庸》所谓不愿乎其外者也。\n幽人贞吉，中不自乱也。","locator":{"book":"周易折中","gua":"未济","pos":"总论"},"citation":"《御纂周易折中》·未济卦·总论","edition":"zhezhong"},{"gua":"未济","guaId":"g64","pos":"集说","text":"“劝相”，即相友相助相扶持之意。","locator":{"book":"周易折中","gua":"未济","pos":"总论"},"citation":"《御纂周易折中》·未济卦·总论","edition":"zhezhong"},{"gua":"未济","guaId":"g64","pos":"集说","text":"蔡邕云，以仁守位，以财聚人，则汉以前已用此“仁”字矣。","locator":{"book":"周易折中","gua":"未济","pos":"总论"},"citation":"《御纂周易折中》·未济卦·总论","edition":"zhezhong"}],"samples":[]};

@@ -45,12 +45,12 @@
     gua:    function(id){ return 'gua.html#' + id; },
     yao:    function(id){ var g=id.split('_y')[0]; return 'gua.html#' + g + '~' + id; },
     bagua:  function(id){ return 'gua.html#' + id; },
-    zhujia: function(id){ return 'yanjiu.html#' + id; },
-    zhuben: function(id){ return 'reader.html#' + id; },
-    liupai: function(id){ return 'yanjiu.html#' + id; },
+    zhujia: function(id){ return 'yanjiu.html#zj-' + id; },
+    zhuben: function(id){ return 'yanjiu.html#' + id; },
+    liupai: function(id){ return 'yanjiu.html#lp-' + id; },
     yitu:   function(id){ return 'yitu.html#' + id; },
     shiyi:  function(id){ return 'shiyi.html#' + id; },
-    event:  function(id){ return 'index.html#chuan'; }
+    event:  function(id){ return 'index.html#' + (id || 'chuan'); }
   };
 
   /* ================= 反向关系索引 ================= */
@@ -262,27 +262,39 @@
     return total;
   }
 
-  /* ================= 逐爻注家注解（从 YJ_ZHUJIA_TEXTS 聚合）================= */
+  /* ================= 逐爻注家注解（按需加载 data/zhujia/gua 分片）================= */
   var annoCache = {};
+  var _scriptCache = {};
+  function loadScriptOnce(url, cb){
+    if(_scriptCache[url] === 'done'){ cb(); return; }
+    if(_scriptCache[url]){ _scriptCache[url].push(cb); return; }
+    _scriptCache[url] = [cb];
+    var s = document.createElement('script');
+    s.src = url;
+    s.onload = function(){ var q=_scriptCache[url]; _scriptCache[url]='done'; if(q) q.forEach(function(f){ try{f();}catch(e){} }); };
+    s.onerror = function(){ _scriptCache[url]='done'; try{cb();}catch(e){} };
+    document.head.appendChild(s);
+  }
+  function guaNameToId(guaName){
+    if(window.YJ_ZJ_GUA_NAME_MAP && window.YJ_ZJ_GUA_NAME_MAP[guaName]) return window.YJ_ZJ_GUA_NAME_MAP[guaName];
+    var g = findEntity('gua', guaName);
+    return g ? g.id : null;
+  }
+  function zhujiaIndexList(){
+    return (window.YJ_ZJ_INDEX && window.YJ_ZJ_INDEX.zhujia) || YJ.zhujia || [];
+  }
   function loadYaoAnnotations(guaName, cb){
     if(annoCache[guaName]){ cb(annoCache[guaName]); return; }
-    var T = window.YJ_ZHUJIA_TEXTS || {zhujia:[]};
-    var nameMap = {};
-    T.zhujia.forEach(function(z){ nameMap[z.id] = z.name; });
-    // 按该卦聚合所有注文，再按爻位分桶
-    var byPos_bucket = { heads:[], yao:{} };
-    // yaoId 的位置顺序：初九/初六 → 用九/用六
     var YAO_POS = ['初九','初六','九二','六二','九三','六三','九四','六四','九五','六五','上九','上六','用九','用六'];
-    T.zhujia.forEach(function(z){
-      (z.jijieQuotes||[]).forEach(function(q){
-        if(q.gua !== guaName) return;
+    var gid = guaNameToId(guaName);
+    var assemble = function(quotes){
+      var byPos_bucket = { heads:[], yao:{} };
+      (quotes||[]).forEach(function(q){
         var posKey = q.position || '';
-        var rec = { srcId: z.id, src: z.name, text: q.text, dynasty: z.dynasty||'', school: z.school||'' };
-        // 判定属于哪一爻
+        var rec = { srcId: q.zj, src: q.zjName, text: q.text, dynasty: q.dynasty||'', school: q.school||'' };
         if(posKey === '卦辞' || posKey.indexOf('元亨利贞')>=0 || posKey.length<4) {
           byPos_bucket.heads.push(rec);
         } else {
-          // 匹配位置关键词
           var matched = null;
           for (var i=0; i<YAO_POS.length; i++){
             if(posKey.indexOf(YAO_POS[i])>=0){ matched = YAO_POS[i]; break; }
@@ -295,56 +307,64 @@
           }
         }
       });
-    });
-    // 同时从旧 data/gua/*.json 补卦辞头注，兜底
-    fetch('data/gua/' + encodeURIComponent(guaName) + '.json', { cache: 'force-cache' })
-      .then(function(r){ return r.json(); })
-      .then(function(j){
-        var buckets = [], heads = byPos_bucket.heads.slice(), cur = null;
-        var lines = (j && j.jijie && j.jijie.lines) || [];
-        var posStack = [];
-        lines.forEach(function(l){
-          if(l.k === 'text'){
-            cur = { text: l.t||'', notes: [], posKey: '' };
-            for (var i=0;i<YAO_POS.length;i++){
-              if((l.t||'').indexOf(YAO_POS[i])>=0){ cur.posKey = YAO_POS[i]; break; }
+      // 兜底：旧 data/gua/*.json 的卦辞头注
+      fetch('data/gua/' + encodeURIComponent(guaName) + '.json', { cache: 'force-cache' })
+        .then(function(r){ return r.json(); })
+        .then(function(j){
+          var buckets = [], heads = byPos_bucket.heads.slice(), cur = null;
+          var lines = (j && j.jijie && j.jijie.lines) || [];
+          var zjList = zhujiaIndexList();
+          lines.forEach(function(l){
+            if(l.k === 'text'){
+              cur = { text: l.t||'', notes: [], posKey: '' };
+              for (var i=0;i<YAO_POS.length;i++){
+                if((l.t||'').indexOf(YAO_POS[i])>=0){ cur.posKey = YAO_POS[i]; break; }
+              }
+              buckets.push(cur);
+            } else if(l.k === 'note' && l.s !== '案'){
+              var nid = null; var nm = l.s;
+              for (var k=0;k<zjList.length;k++){ if(zjList[k].name === nm || zjList[k].style === nm){ nid = zjList[k].id; break; } }
+              if(!nid){
+                if(!cur) heads.push({srcId:null, src:nm, text:(l.t||'').replace(/^[：:]*/,''),dynasty:'',school:''});
+                else cur.notes.push({srcId:null, src:nm, text:(l.t||'').replace(/^[：:]*/,''),dynasty:'',school:''});
+              }
             }
-            buckets.push(cur);
-          } else if(l.k === 'note' && l.s !== '案'){
-            // 把原注追加到对应桶；若 id 已在 YJ_ZHUJIA_TEXTS 中则跳过，避免重复
-            var nid = null;
-            var nm = l.s;
-            // 简单映射原名→id
-            T.zhujia.forEach(function(z){
-              if(z.name === nm || z.style === nm) nid = z.id;
-            });
-            if(!nid){
-              // 兜底加 heads
-              if(!cur) heads.push({srcId:null, src:nm, text:(l.t||'').replace(/^[：:]*/,''),dynasty:'',school:''});
-              else cur.notes.push({srcId:null, src:nm, text:(l.t||'').replace(/^[：:]*/,''),dynasty:'',school:''});
+          });
+          buckets.forEach(function(b){
+            if(b.posKey && byPos_bucket.yao[b.posKey]){
+              byPos_bucket.yao[b.posKey].forEach(function(r){
+                if(!b.notes.find(function(x){return x.src===r.src && x.text===r.text;})) b.notes.push(r);
+              });
             }
-          }
+          });
+          var out = { buckets: buckets, heads: heads, raw: j };
+          annoCache[guaName] = out;
+          cb(out);
+        })
+        .catch(function(){
+          var buckets = [];
+          Object.keys(byPos_bucket.yao).forEach(function(pk){
+            buckets.push({text:pk, notes:byPos_bucket.yao[pk], posKey:pk});
+          });
+          var out = { buckets: buckets, heads: byPos_bucket.heads, raw: null };
+          annoCache[guaName] = out;
+          cb(out);
         });
-        // 把 zhujia-texts 的按爻注文合并进对应桶
-        buckets.forEach(function(b){
-          if(b.posKey && byPos_bucket.yao[b.posKey]){
-            byPos_bucket.yao[b.posKey].forEach(function(r){
-              if(!b.notes.find(function(x){return x.src===r.src && x.text===r.text;})) b.notes.push(r);
-            });
-          }
-        });
-        var out = { buckets: buckets, heads: heads, raw: j };
-        annoCache[guaName] = out;
-        cb(out);
-      })
-      .catch(function(){
-        // data/gua 文件缺失时，仅用 zhujia-texts 输出 heads
-        var buckets = [];
-        Object.keys(byPos_bucket.yao).forEach(function(pk){
-          buckets.push({text:pk, notes:byPos_bucket.yao[pk], posKey:pk});
-        });
-        cb({ buckets: buckets, heads: byPos_bucket.heads, raw: null });
+    };
+    if(gid && window.YJ_ZJ_GUA[gid]){ assemble(window.YJ_ZJ_GUA[gid].quotes); return; }
+    if(gid){
+      loadScriptOnce('data/zhujia/gua/' + gid + '.js', function(){
+        assemble((window.YJ_ZJ_GUA[gid]||{}).quotes || []);
       });
+    } else {
+      assemble([]);
+    }
+  }
+
+  /* 按注家加载分片（yanjiu.html 详情按需用）*/
+  function loadZhujiaShard(id, cb){
+    if(window.YJ_ZJ_ZJ[id]){ cb(window.YJ_ZJ_ZJ[id]); return; }
+    loadScriptOnce('data/zhujia/zj/' + id + '.js', function(){ cb(window.YJ_ZJ_ZJ[id] || null); });
   }
 
   // 把某爻与汇评分桶匹配（增强：优先用 yao.pos 匹配）
@@ -388,6 +408,9 @@
     { id:'home',    label:'首页',    href:'index.html' },
     { id:'gua',     label:'六十四卦', href:'gua.html' },
     { id:'reader',  label:'经文',    href:'reader.html' },
+    { id:'shiyi',   label:'十翼',    href:'shiyi.html' },
+    { id:'yitu',    label:'易图',    href:'yitu.html' },
+    { id:'bianhua', label:'变化',    href:'bianhua.html' },
     { id:'guabian', label:'卦变',    href:'guabian.html' },
     { id:'jiaokan', label:'校勘',    href:'jiaokan.html' },
     { id:'shifa',   label:'筮法',    href:'shifa.html' },
@@ -481,8 +504,8 @@
 
   /* ================= 注家查找（跨本体）================= */
   function findZhujia(id){
-    // 在 ontology-enhance 的 zhujia + yijing-zhujia-texts.zhujia 两份数据里找
-    var list = (YJ.zhujia || []).concat((window.YJ_ZHUJIA_TEXTS && YJ_ZHUJIA_TEXTS.zhujia) || []);
+    // 在 ontology 的 zhujia + 轻量索引 YJ_ZJ_INDEX.zhujia 两份数据里找
+    var list = (YJ.zhujia || []).concat((window.YJ_ZJ_INDEX && YJ_ZJ_INDEX.zhujia) || []);
     for(var i=0;i<list.length;i++){ if(list[i] && list[i].id === id) return list[i]; }
     // 按姓名反查
     for(var i=0;i<list.length;i++){ if(list[i] && list[i].name === id) return list[i]; }
@@ -505,6 +528,8 @@
     initMobile: initMobile,
     buildIndex: buildInverseIndex,
     loadYaoAnnotations: loadYaoAnnotations,
+    loadZhujiaShard: loadZhujiaShard,
+    loadScriptOnce: loadScriptOnce,
     matchYaoBucket: matchYaoBucket,
     PAGE_MAP: PAGE_MAP
   };
@@ -515,4 +540,7 @@
     buildInverseIndex();
     setTimeout(initMobile, 0);
   }
+
+  // 自动注入全站深链接锚点路由（免逐页引用）
+  try{ loadScriptOnce('js/hash-router.js', function(){}); }catch(e){}
 })();

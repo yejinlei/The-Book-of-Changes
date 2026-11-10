@@ -8,7 +8,7 @@
 <script src="data/yijing-ontology.js"></script>
 <script src="data/gua-full-data.js"></script>
 <script src="data/yijing-ontology-enhance.js"></script>
-<script src="data/yijing-zhujia-texts.js"></script>
+<script src="data/zhujia/index.js"></script>
 <script src="data/yijing-zhujia-relations.js"></script>
 <script src="js/ontology-linker.js"></script>
 </head>
@@ -68,7 +68,7 @@
 
 <script>
 (function(){
-  const T = window.YJ_ZHUJIA_TEXTS;
+  const T = window.YJ_ZJ_INDEX || {zhujia:[],zhuben:[],sources:[]};
   const O = window.YJ_ONT;
 
   // 朝代分组
@@ -182,6 +182,7 @@
   T.zhuben.forEach(z=>{if(!zbShown.find(x=>x.id===z.id))zbShown.push(z);});
   zbShown.forEach(b=>{
     const it = document.createElement('div'); it.className='zb-item';
+    it.id = b.id; it.setAttribute('data-hash', b.id);
     // 找到作者名
     const authNames = (b.author||'').split('/').map(aid=>{
       const az = T.zhujia.find(z=>z.id===aid);
@@ -199,17 +200,18 @@
   // ---------- 流派卡片 ----------
   const schoolGrid = document.getElementById('schoolGrid');
   const SCHOOLS = [
-    {name:'象数派',color:'#9c2a2a',desc:'以卦象、爻位、卦变、互体、旁通、纳甲为核心方法，汉易代表。',members:['zj_mengxi','zj_jingfang','zj_zhengxuan','zj_xunshuang','zj_yufan','zj_laizhide','zj_shangbinghe','zj_liudajun']},
-    {name:'义理派',color:'#3a4f9c',desc:'以义理解《易》，扫象数之繁琐，阐发儒家哲理。',members:['zj_kongzi','zj_wangbi','zj_kongyingda','zj_chengyi','zj_zhuxi','zj_wangfuzhi','zj_jinjngfang']},
-    {name:'图书派',color:'#2d7d58',desc:'以河图洛书、先天图、太极图为核心，宋易大宗。',members:['zj_chentuan','zj_shaoyong','zj_zhouzhouyi','zj_zhangzai']},
-    {name:'史事派',color:'#a87f3a',desc:'以历代史事证经，将易学与历史经验结合。',members:['zj_ganbao','zj_yangwanli']},
-    {name:'丹道派',color:'#6b4a82',desc:'以易理言丹道修炼，将易与内养结合。',members:['zj_weiboyang']},
-    {name:'考据派',color:'#5b5b5b',desc:'以训诂、文字、出土文献考辨经文本义，清代朴学与现代学术代表。',members:['zj_huidong','zj_zhanghuiyan','zj_jiaoxun','zj_huangzongxi','zj_gaoheng','zj_lijingchi','zj_gujiegang','zj_yuxingwu','zj_liaomingchun']},
-    {name:'汇通派',color:'#8b4513',desc:'近代以来，会通中西、儒释道或多学科视角的新易学。',members:['zj_hangxinzhai','zj_nanhuaijin','zj_fupeirong','zj_zengshiqiang','zj_zhubokun']},
-    {name:'普及派',color:'#b85a3d',desc:'面向大众解《易》，重人事、管理、处世应用。',members:['zj_nanhuaijin','zj_fupeirong','zj_zengshiqiang','zj_huangshouqi','zj_zhangsanwen']},
+    {id:'lp_xiangshu',name:'象数派',color:'#9c2a2a',desc:'以卦象、爻位、卦变、互体、旁通、纳甲为核心方法，汉易代表。',members:['zj_mengxi','zj_jingfang','zj_zhengxuan','zj_xunshuang','zj_yufan','zj_laizhide','zj_shangbinghe','zj_liudajun']},
+    {id:'lp_yili',name:'义理派',color:'#3a4f9c',desc:'以义理解《易》，扫象数之繁琐，阐发儒家哲理。',members:['zj_kongzi','zj_wangbi','zj_kongyingda','zj_chengyi','zj_zhuxi','zj_wangfuzhi','zj_jinjngfang']},
+    {id:'lp_tushu',name:'图书派',color:'#2d7d58',desc:'以河图洛书、先天图、太极图为核心，宋易大宗。',members:['zj_chentuan','zj_shaoyong','zj_zhouzhouyi','zj_zhangzai']},
+    {id:'lp_shishi',name:'史事派',color:'#a87f3a',desc:'以历代史事证经，将易学与历史经验结合。',members:['zj_ganbao','zj_yangwanli']},
+    {id:'lp_dao',name:'丹道派',color:'#6b4a82',desc:'以易理言丹道修炼，将易与内养结合。',members:['zj_weiboyang']},
+    {id:'lp_kaozheng',name:'考据派',color:'#5b5b5b',desc:'以训诂、文字、出土文献考辨经文本义，清代朴学与现代学术代表。',members:['zj_huidong','zj_zhanghuiyan','zj_jiaoxun','zj_huangzongxi','zj_gaoheng','zj_lijingchi','zj_gujiegang','zj_yuxingwu','zj_liaomingchun']},
+    {id:'lp_qitazongjiao',name:'汇通派',color:'#8b4513',desc:'近代以来，会通中西、儒释道或多学科视角的新易学。',members:['zj_hangxinzhai','zj_nanhuaijin','zj_fupeirong','zj_zengshiqiang','zj_zhubokun']},
+    {id:'lp_puji',name:'普及派',color:'#b85a3d',desc:'面向大众解《易》，重人事、管理、处世应用。',members:['zj_nanhuaijin','zj_fupeirong','zj_zengshiqiang','zj_huangshouqi','zj_zhangsanwen']},
   ];
   SCHOOLS.forEach(s=>{
     const card = document.createElement('div'); card.className='school-card';
+    if(s.id){ card.id = s.id; card.setAttribute('data-hash', s.id); }
     card.style.borderLeft = `4px solid ${s.color}`;
     const mHTML = s.members.map(mid=>{
       const mz = T.zhujia.find(z=>z.id===mid);
@@ -222,14 +224,12 @@
     schoolGrid.appendChild(card);
   });
 
-  // ---------- 注家详情抽屉 ----------
-  function showZhu(zid) {
-    const z = T.zhujia.find(x=>x.id===zid);
-    if (!z) return;
-    const body = document.getElementById('zhuDetailBody');
-    // 注文展开：集解按卦分组
+  // 由分片数据生成注文 HTML
+  function buildZhuTextsHTML(z, shard) {
+    const jijieQuotes = (shard && shard.jijieQuotes) || [];
+    const zhezhongSamples = (shard && shard.zhezhongSamples) || [];
     const jijieByGua = {};
-    (z.jijieQuotes||[]).forEach(q=>{
+    jijieQuotes.forEach(q=>{
       if (!jijieByGua[q.gua]) jijieByGua[q.gua] = [];
       jijieByGua[q.gua].push(q);
     });
@@ -237,26 +237,31 @@
       const qs = jijieByGua[gn];
       const gid = qs[0].guaId;
       return `<div class="zq-gua">
-        <h4><a href="gua.html#${gid}" target="_blank">${gn}卦 →</a> <span class="zq-cnt">${qs.length} 条</span></h4>
+        <h4><a href="gua.html#${gid}">${gn}卦 →</a> <span class="zq-cnt">${qs.length} 条</span></h4>
         ${qs.slice(0,8).map(q=>`<div class="zq-item">
-          <span class="zq-pos">${q.citation||q.pos||''}</span>
+          <span class="zq-pos">${q.citation||q.position||''}</span>
           <span class="zq-text">${q.text}</span>
         </div>`).join('')}
-        ${qs.length>8?`<details><summary>展开剩余 ${qs.length-8} 条</summary>${qs.slice(8).map(q=>`<div class="zq-item"><span class="zq-pos">${q.citation||q.pos||''}</span><span class="zq-text">${q.text}</span></div>`).join('')}</details>`:''}
+        ${qs.length>8?`<details><summary>展开剩余 ${qs.length-8} 条</summary>${qs.slice(8).map(q=>`<div class="zq-item"><span class="zq-pos">${q.citation||q.position||''}</span><span class="zq-text">${q.text}</span></div>`).join('')}</details>`:''}
       </div>`;
     }).join('');
-
-    const zzHTML = (z.zhezhongSamples||[]).length ? `<h3>《周易折中》引${z.name}说</h3>${(z.zhezhongSamples||[]).map(q=>`
-      <div class="zq-item zz"><span class="zq-pos"><a href="gua.html#${q.guaId}" target="_blank">${q.citation||(q.gua+"卦·"+q.pos)}</a></span><span class="zq-text">${q.text}</span></div>
+    const zzHTML = zhezhongSamples.length ? `<h3>《周易折中》引${z.name}说</h3>${zhezhongSamples.map(q=>`
+      <div class="zq-item zz"><span class="zq-pos"><a href="gua.html#${q.guaId}">${q.citation||(q.gua+"卦·"+q.pos)}</a></span><span class="zq-text">${q.text}</span></div>
     `).join('')}` : '';
+    if (!jijieQuotes.length && !zhezhongSamples.length) return '<p class="zq-empty">暂无逐条注文收录</p>';
+    return (jijieQuotes.length?`<h3>《周易集解》注文选录（共涉及 ${Object.keys(jijieByGua).length} 卦）</h3>${guaListHTML}`:'') + zzHTML;
+  }
 
+  // ---------- 注家详情抽屉（元数据即时渲染，注文分片按需加载）----------
+  function showZhu(zid) {
+    const z = T.zhujia.find(x=>x.id===zid);
+    if (!z) return;
+    const body = document.getElementById('zhuDetailBody');
     const worksHTML = (z.works||[]).length ? `<div class="z-meta-row"><b>代表作：</b>${z.works.map(w=>`<span class="work-tag">${w}</span>`).join('')}</div>` : '';
 
     // ---------- 学术关系网络 ----------
     const R = window.YJ_ZHUJIA_RELATIONS || {byZhujia:{}, typeMeta:{}};
     const myRels = R.byZhujia[z.id] || {};
-    const TM = R.typeMeta || {};
-    // 正向关系（我→他人）：师承、宗述、引述、驳斥、评议
     const forwardGroups = [
       {key:'shicheng', label:'受学于', cls:'rel-shicheng'},
       {key:'zongshu',  label:'宗述',   cls:'rel-zongshu'},
@@ -264,14 +269,13 @@
       {key:'refute',   label:'驳斥',   cls:'rel-refute'},
       {key:'ping',     label:'评议',   cls:'rel-ping'},
     ];
-    // 反向关系（他人→我）：弟子、被宗、被引、被驳
     const backwardGroups = [
       {key:'dizi',    label:'弟子/传人', cls:'rel-shicheng'},
       {key:'bezong',  label:'被宗述',   cls:'rel-zongshu'},
       {key:'beiyin',  label:'被引述',   cls:'rel-cite'},
       {key:'beibo',   label:'被驳斥',   cls:'rel-refute'},
     ];
-    function relGroupHTML(groups, dir) {
+    function relGroupHTML(groups) {
       return groups.map(g => {
         const arr = (myRels[g.key]||[]).slice(0, 12);
         if (!arr.length) return '';
@@ -292,11 +296,11 @@
       <p class="rel-legend"><span class="rel-star">★</span> 学术史公认传承（师承/宗述），其余为从注文原文自动挖掘</p>
       <div class="rel-section">
         <div class="rel-section-title">← 学术渊源（我承何人）</div>
-        ${relGroupHTML(forwardGroups, 'fwd') || '<div class="rel-empty">暂未录入直接师承/宗述关系</div>'}
+        ${relGroupHTML(forwardGroups) || '<div class="rel-empty">暂未录入直接师承/宗述关系</div>'}
       </div>
       <div class="rel-section">
         <div class="rel-section-title">→ 学术影响（何人承我）</div>
-        ${relGroupHTML(backwardGroups, 'bwd') || '<div class="rel-empty">暂无明确传人记录</div>'}
+        ${relGroupHTML(backwardGroups) || '<div class="rel-empty">暂无明确传人记录</div>'}
       </div>
     </div>` : '';
 
@@ -315,18 +319,23 @@
         <span>合计 <b>${z.stats.total}</b> 处原文</span>
       </div>
       ${relHTML}
-      ${z.samples.length?`<h3>《周易集解》注文选录（共涉及 ${Object.keys(jijieByGua).length} 卦）</h3>${guaListHTML}`:''}
-      ${zzHTML}
+      <div id="zhuTexts" class="zq-loading">正在加载注文…</div>
     `;
     // 关系芯片点击跳转到对应注家
     body.querySelectorAll('.rel-chip').forEach(chip=>{
-      chip.addEventListener('click', ()=>{
-        const tzid = chip.dataset.zid;
-        showZhu(tzid);
-      });
+      chip.addEventListener('click', ()=>{ showZhu(chip.dataset.zid); });
     });
     document.getElementById('zhuDetail').classList.add('open');
     document.body.style.overflow='hidden';
+    // 注文分片按需加载
+    const fill = function(shard){
+      const el = document.getElementById('zhuTexts');
+      if (el) { el.className=''; el.innerHTML = buildZhuTextsHTML(z, shard); }
+    };
+    if (z.stats.total <= 0) { fill(null); return; }
+    if (window.YJ_ZJ_ZJ[zid]) { fill(window.YJ_ZJ_ZJ[zid]); }
+    else if (window.YJ_Link && YJ_Link.loadZhujiaShard) { YJ_Link.loadZhujiaShard(zid, fill); }
+    else { fill(null); }
   }
   document.getElementById('zhuClose').addEventListener('click', ()=>{
     document.getElementById('zhuDetail').classList.remove('open');
@@ -349,21 +358,21 @@
 .section-hero{padding:80px 24px 40px;text-align:center;max-width:1100px;margin:0 auto;}
 .section-hero h1{font-size:44px;margin:0 0 8px;color:var(--ink);letter-spacing:4px;}
 .section-hero .en{color:var(--gold);font-size:12px;letter-spacing:3px;margin:0 0 18px;font-family:Georgia,serif;}
-.section-hero .sub{color:#554c40;font-size:16px;line-height:1.9;max-width:820px;margin:0 auto;}
+.section-hero .sub{color:var(--ink-2);font-size:16px;line-height:1.9;max-width:820px;margin:0 auto;}
 .stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:28px;max-width:760px;margin-left:auto;margin-right:auto;}
-.stat-card{background:#fff8e7;border:1px solid #e8dcc0;padding:16px;border-radius:8px;text-align:center;}
+.stat-card{background:var(--paper-2);border:1px solid var(--line);padding:16px;border-radius:8px;text-align:center;}
 .stat-card .n{font-size:28px;color:var(--zhu);font-weight:700;}
 .stat-card .k{font-size:15px;color:var(--ink);margin:4px 0;}
 .stat-card .sub{font-size:12px;color:#8a7a5f;}
 .section{max-width:1200px;margin:0 auto;padding:40px 24px;}
 .section h2{font-size:26px;color:var(--ink);border-bottom:2px solid var(--zhu);padding-bottom:8px;display:flex;align-items:center;gap:12px;}
 .section h2 .en{color:var(--gold);font-size:13px;font-family:Georgia,serif;letter-spacing:2px;}
-.sub-title{color:#6b5f4d;font-size:14px;margin:-4px 0 20px;}
+.sub-title{color:var(--ink-2);font-size:14px;margin:-4px 0 20px;}
 
 /* 时间轴 */
 .dynasty-timeline{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
-.dynasty-col{background:#fff8e7;border:1px solid #e8dcc0;border-radius:8px;padding:14px;}
-.dynasty-head{border-bottom:1px dashed #c9b98f;padding-bottom:8px;margin-bottom:8px;}
+.dynasty-col{background:var(--paper-2);border:1px solid var(--line);border-radius:8px;padding:14px;}
+.dynasty-head{border-bottom:1px dashed var(--line-strong);padding-bottom:8px;margin-bottom:8px;}
 .dynasty-head .dn{font-size:18px;color:var(--zhu);font-weight:700;letter-spacing:2px;}
 .dynasty-head .dc{font-size:12px;color:#8a7a5f;margin-top:2px;}
 .dynasty-item{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px dotted #eadfc2;font-size:13px;cursor:pointer;color:var(--ink);text-decoration:none;}
@@ -375,13 +384,13 @@
 
 /* 筛选 */
 .filter-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;align-items:center;}
-.filter-btn{border:1px solid #c9b98f;background:#fff8e7;color:#5a4d38;padding:6px 14px;border-radius:16px;font-size:13px;cursor:pointer;font-family:inherit;}
+.filter-btn{border:1px solid var(--line-strong);background:var(--paper-2);color:var(--ink-2);padding:6px 14px;border-radius:16px;font-size:13px;cursor:pointer;font-family:inherit;}
 .filter-btn.active{background:var(--zhu);color:#fff;border-color:var(--zhu);}
-.zhujia-search{margin-left:auto;border:1px solid #c9b98f;padding:7px 14px;border-radius:16px;font-size:13px;width:260px;font-family:inherit;background:#fff8e7;}
+.zhujia-search{margin-left:auto;border:1px solid var(--line-strong);padding:7px 14px;border-radius:16px;font-size:13px;width:260px;font-family:inherit;background:var(--paper-2);}
 
 /* 注家卡片 */
 .zhujia-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:14px;}
-.zj-card{background:#fff8e7;border:1px solid #e8dcc0;border-radius:10px;padding:16px;cursor:pointer;transition:all .2s;position:relative;}
+.zj-card{background:var(--paper-2);border:1px solid var(--line);border-radius:10px;padding:16px;cursor:pointer;transition:all .2s;position:relative;}
 .zj-card:hover{border-color:var(--zhu);box-shadow:0 4px 14px rgba(156,42,42,.12);transform:translateY(-2px);}
 .zj-badge{position:absolute;top:10px;right:10px;background:var(--zhu);color:#fff;font-size:10px;padding:2px 7px;border-radius:8px;letter-spacing:1px;}
 .zj-name{font-size:20px;font-weight:700;color:var(--ink);margin-bottom:2px;}
@@ -392,23 +401,23 @@
 .zj-stats em{font-style:normal;font-weight:700;color:var(--zhu);font-size:15px;}
 .zj-stats i{font-style:normal;font-size:10px;color:#8a7a5f;}
 .zj-works{display:flex;flex-wrap:wrap;gap:4px;}
-.work-tag{background:#f0e4c2;color:#6b5a3a;font-size:10px;padding:2px 7px;border-radius:4px;}
+.work-tag{background:var(--chip-bg);color:var(--ink-2);font-size:10px;padding:2px 7px;border-radius:4px;}
 
 /* 注本 */
 .zhuben-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;}
-.zb-item{background:#fffaf0;border:1px solid #e8dcc0;border-left:4px solid var(--zhu);padding:14px 16px;border-radius:6px;}
+.zb-item{background:var(--paper-2);border:1px solid var(--line);border-left:4px solid var(--zhu);padding:14px 16px;border-radius:6px;}
 .zb-dyn{font-size:11px;color:var(--gold);letter-spacing:1px;}
 .zb-title{font-size:18px;color:var(--ink);font-weight:700;margin:4px 0;}
 .zb-author{font-size:12px;color:#8a7a5f;margin-bottom:6px;}
-.zb-desc{font-size:13px;color:#4a4034;line-height:1.75;}
+.zb-desc{font-size:13px;color:var(--ink-2);line-height:1.75;}
 
 /* 流派 */
 .school-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;}
-.school-card{background:#fffaf0;border:1px solid #e8dcc0;padding:16px;border-radius:8px;}
+.school-card{background:var(--paper-2);border:1px solid var(--line);padding:16px;border-radius:8px;}
 .school-card h3{margin:0 0 8px;font-size:18px;}
-.school-card p{margin:0 0 10px;font-size:13px;color:#4a4034;line-height:1.75;}
+.school-card p{margin:0 0 10px;font-size:13px;color:var(--ink-2);line-height:1.75;}
 .school-members{display:flex;flex-wrap:wrap;gap:6px;}
-.school-member{background:#f0e4c2;color:#6b4a2a;font-size:12px;padding:3px 9px;border-radius:12px;text-decoration:none;cursor:pointer;}
+.school-member{background:var(--chip-bg);color:var(--ink-2);font-size:12px;padding:3px 9px;border-radius:12px;text-decoration:none;cursor:pointer;}
 .school-member:hover{background:var(--zhu);color:#fff;}
 
 /* 抽屉 */
@@ -422,16 +431,16 @@
 .zhu-head h2{margin:0;font-size:28px;color:var(--ink);letter-spacing:2px;}
 .zhu-style{color:#8a7a5f;font-style:italic;margin:4px 0;}
 .zhu-school{color:var(--gold);font-size:14px;}
-.zhu-bio{font-size:15px;line-height:1.95;color:#3a3226;margin-bottom:16px;text-indent:2em;}
-.z-meta-row{margin:8px 0;display:flex;gap:6px;flex-wrap:wrap;align-items:center;font-size:13px;color:#5a4d38;}
-.zhu-stats-bar{display:flex;gap:20px;background:#f5ecd4;padding:10px 16px;border-radius:6px;margin:14px 0;font-size:13px;color:#5a4d38;}
+.zhu-bio{font-size:15px;line-height:1.95;color:var(--ink);margin-bottom:16px;text-indent:2em;}
+.z-meta-row{margin:8px 0;display:flex;gap:6px;flex-wrap:wrap;align-items:center;font-size:13px;color:var(--ink-2);}
+.zhu-stats-bar{display:flex;gap:20px;background:var(--paper-2);padding:10px 16px;border-radius:6px;margin:14px 0;font-size:13px;color:var(--ink-2);}
 .zhu-stats-bar b{color:var(--zhu);font-size:17px;margin:0 4px;}
 .zhu-drawer-inner h3{border-left:3px solid var(--zhu);padding-left:10px;margin:24px 0 12px;font-size:17px;color:var(--ink);}
-.zq-gua{background:#fff8e7;border:1px solid #e8dcc0;border-radius:6px;padding:12px 14px;margin-bottom:10px;}
+.zq-gua{background:var(--paper-2);border:1px solid var(--line);border-radius:6px;padding:12px 14px;margin-bottom:10px;}
 .zq-gua h4{margin:0 0 8px;font-size:15px;display:flex;align-items:center;gap:10px;}
 .zq-gua h4 a{color:var(--zhu);text-decoration:none;}
 .zq-gua h4 a:hover{text-decoration:underline;}
-.zq-cnt{font-size:11px;background:#f0e4c2;color:#6b5a3a;padding:1px 7px;border-radius:10px;}
+.zq-cnt{font-size:11px;background:var(--chip-bg);color:var(--ink-2);padding:1px 7px;border-radius:10px;}
 .zq-item{display:flex;gap:8px;padding:6px 0;border-top:1px dotted #eadfc2;font-size:13px;line-height:1.8;}
 .zq-item:first-child{border-top:none;}
 .zq-pos{min-width:152px;max-width:152px;color:var(--gold);font-size:12px;padding-top:2px;line-height:1.7;}
@@ -447,18 +456,18 @@ details summary{cursor:pointer;color:var(--zhu);font-size:12px;}
   .zhujia-search{width:100%;margin-left:0;}
 }
 /* 学术关系网络 */
-.zhu-relations{background:#fff8e7;border:1px solid #e8dcc0;border-radius:8px;padding:16px 18px;margin:16px 0;}
+.zhu-relations{background:var(--paper-2);border:1px solid var(--line);border-radius:8px;padding:16px 18px;margin:16px 0;}
 .zhu-relations h3{border:none;padding:0;margin:0 0 6px;font-size:16px;color:var(--ink);display:flex;align-items:baseline;gap:10px;}
 .rel-total{font-size:12px;color:#8a7a5f;font-weight:400;}
 .rel-legend{font-size:11px;color:#a89878;margin:0 0 12px;}
 .rel-star{color:var(--gold);margin-left:2px;}
 .rel-section{margin-bottom:10px;}
 .rel-section:last-child{margin-bottom:0;}
-.rel-section-title{font-size:12px;color:var(--zhu);letter-spacing:2px;margin:8px 0 6px;border-bottom:1px dashed #e8dcc0;padding-bottom:4px;}
+.rel-section-title{font-size:12px;color:var(--zhu);letter-spacing:2px;margin:8px 0 6px;border-bottom:1px dashed var(--line);padding-bottom:4px;}
 .rel-group{display:flex;align-items:flex-start;gap:8px;padding:4px 0;font-size:13px;line-height:1.9;}
-.rel-label{min-width:82px;color:#6b5a3a;font-size:12px;padding-top:2px;flex-shrink:0;}
+.rel-label{min-width:82px;color:var(--ink-2);font-size:12px;padding-top:2px;flex-shrink:0;}
 .rel-targets{flex:1;display:flex;flex-wrap:wrap;gap:5px;}
-.rel-chip{display:inline-block;background:#f0e4c2;color:#5a4a2a;font-size:12px;padding:2px 10px;border-radius:12px;cursor:pointer;transition:all .15s;border:1px solid transparent;}
+.rel-chip{display:inline-block;background:var(--chip-bg);color:var(--ink-2);font-size:12px;padding:2px 10px;border-radius:12px;cursor:pointer;transition:all .15s;border:1px solid transparent;}
 .rel-chip:hover{background:var(--zhu);color:#fff;border-color:var(--zhu);}
 .rel-more{font-size:11px;color:#a89878;padding:2px 4px;}
 .rel-empty{font-size:12px;color:#a89878;font-style:italic;padding:4px 0;}
