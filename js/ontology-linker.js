@@ -400,6 +400,7 @@
     { id:'yiyi',    label:'医易会通', href:'yiyi.html',    icon:'醫' },
     { id:'dandao',  label:'丹道参同', href:'dandao.html',  icon:'丹' },
     { id:'yanjiu',  label:'历代注疏', href:'yanjiu.html',  icon:'注' },
+    { id:'quanwen', label:'古籍全文库', href:'quanwen.html', icon:'籍' },
     { id:'rdf',     label:'本体/RDF',  href:'rdf.html',     icon:'⬡' },
     { id:'bianhua', label:'易之变·动画', href:'bianhua.html', icon:'影' },
     { id:'anim',    label:'卦象动画', href:'animation/gua-index.html', icon:'影' }
@@ -419,6 +420,7 @@
     { id:'yiyi',    label:'医易',    href:'yiyi.html' },
     { id:'dandao',  label:'丹道',    href:'dandao.html' },
     { id:'yanjiu',  label:'注疏',    href:'yanjiu.html' },
+    { id:'quanwen', label:'全文库',  href:'quanwen.html' },
     { id:'rdf',     label:'本体',    href:'rdf.html' },
     { id:'anim',    label:'动画',    href:'animation/gua-index.html' }
   ];
