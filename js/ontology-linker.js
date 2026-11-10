@@ -367,7 +367,7 @@
 
   /* ================= 全站外壳 ================= */
   var NAV_PAGES = [
-    { id:'home',    label:'本经大义', href:'index.html',   icon:'☯' },
+    { id:'home',    label:'首页', href:'index.html',   icon:'☯' },
     { id:'gua',     label:'六十四卦', href:'gua.html',     icon:'䷀' },
     { id:'reader',  label:'经文汇评', href:'reader.html',  icon:'書' },
     { id:'shiyi',   label:'十翼易传', href:'shiyi.html',   icon:'傳' },

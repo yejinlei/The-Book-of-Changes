@@ -533,3 +533,33 @@ code{padding:2px 6px;font-size:13px;color:var(--jade);}
 
 /* 选中文字颜色 */
 ::selection{background:var(--zhu);color:#fff;}
+
+/* ===== 星象风兼容性修复 ===== */
+/* 非正文区域（按钮、nav、tag、chip、grid项）内的实体弹层默认隐藏，避免堆叠 */
+button .ent-pop,
+.nav-links .ent-pop,
+.sidebar .ent-pop,
+.tag .ent-pop,
+.chip .ent-pop,
+.gb-pick-btn .ent-pop,
+.najia-liuq .ent-pop,
+.gua-grid-item .ent-pop,
+.nav-item .ent-pop,
+.topbar .ent-pop,
+footer .ent-pop,
+.tabs .ent-pop,
+.badge .ent-pop{display:none !important;}
+
+/* .ent-pop 默认隐藏，仅在 :hover 或正文阅读区显示 */
+.ent .ent-pop, .ent-pop{display:none !important;}
+.reader .ent .ent-pop,
+.reader .ent:hover .ent-pop,
+.ent-pop.visible{display:block !important;}
+
+/* 阅读区深色版正文卡片（深空风，适配经文/卦爻/注文） */
+.reader-card-dark{
+  background:linear-gradient(180deg, rgba(22,38,68,.92), rgba(15,28,52,.96));
+  border:1px solid rgba(212,176,121,.28);
+  border-radius:8px;
+  color:var(--ink);
+}

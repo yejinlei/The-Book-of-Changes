@@ -19,14 +19,14 @@
 <script src="js/apply-shell.js" data-page="najia"></script>
 <style>
   :root{
-    --paper:#f7f1e1; --paper-2:#efe6d0; --ink:#1f1a14; --ink-2:#4a3f32;
+    --paper:rgba(15,28,52,.92); --paper-2:#efe6d0; --ink:#1f1a14; --ink-2:#4a3f32;
     --zhu:#9c2a2a; --zhu-2:#b84a3e; --gold:#a87f3a; --jade:#4a7a5e; --indigo:#3e5a80;
   }
   body{background:var(--paper);color:var(--ink);font-family:"Noto Serif SC","Songti SC",serif;margin:0;line-height:1.8;}
   .wrap{max-width:1200px;margin:0 auto;padding:24px 20px 80px;}
   h1.page-title{font-size:2.2rem;margin:0 0 6px;text-align:center;letter-spacing:6px;color:var(--zhu);}
   .page-sub{text-align:center;color:var(--ink-2);font-size:.95rem;margin-bottom:30px;}
-  .page-sub .seal{display:inline-block;background:var(--zhu);color:#f7f1e1;padding:2px 10px;border-radius:4px;font-size:.8rem;margin-left:8px;letter-spacing:2px;}
+  .page-sub .seal{display:inline-block;background:var(--zhu);color:rgba(15,28,52,.92);padding:2px 10px;border-radius:4px;font-size:.8rem;margin-left:8px;letter-spacing:2px;}
   .grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
   @media(max-width:860px){.grid{grid-template-columns:1fr;}}
 
@@ -44,7 +44,7 @@
   @keyframes flip{0%{transform:rotateY(0);}50%{transform:rotateY(180deg) scale(1.08);}100%{transform:rotateY(360deg);}}
 
   .btn-row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:12px 0;}
-  .btn{background:var(--zhu);color:#f7f1e1;border:none;padding:10px 20px;border-radius:4px;font-family:inherit;font-size:.95rem;cursor:pointer;letter-spacing:2px;transition:all .2s;}
+  .btn{background:var(--zhu);color:rgba(15,28,52,.92);border:none;padding:10px 20px;border-radius:4px;font-family:inherit;font-size:.95rem;cursor:pointer;letter-spacing:2px;transition:all .2s;}
   .btn:hover{background:var(--zhu-2);transform:translateY(-1px);}
   .btn.ghost{background:transparent;color:var(--zhu);border:1px solid var(--zhu);}
   .btn.gold{background:var(--gold);}
@@ -65,7 +65,7 @@
   .yao-bar.yang{width:42px;}
   .yao-bar.yin{width:18px;}
   .yao-btn{padding:4px 10px;border:1px solid #d4c29a;background:#fdfaef;border-radius:3px;cursor:pointer;font-family:inherit;font-size:.85rem;}
-  .yao-btn.active{background:var(--zhu);color:#f7f1e1;border-color:var(--zhu);}
+  .yao-btn.active{background:var(--zhu);color:rgba(15,28,52,.92);border-color:var(--zhu);}
 
   /* 排盘展示 */
   .pai-head{display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap;margin-bottom:18px;}
@@ -118,7 +118,7 @@
 
   /* 飞伏神 */
   .fu-list{margin-top:10px;font-size:.88rem;}
-  .fu-item{padding:8px 10px;background:#f8f1dd;border-left:3px solid var(--indigo);border-radius:0 4px 4px 0;margin-bottom:6px;}
+  .fu-item{padding:8px 10px;background:#fff;border-left:3px solid var(--indigo);border-radius:0 4px 4px 0;margin-bottom:6px;}
   .fu-item .fushen-b{color:var(--indigo);font-weight:600;}
   .fu-item .feishen-b{color:var(--ink);}
   .fu-item .rel{color:var(--zhu);font-size:.82rem;margin-left:6px;}
@@ -130,7 +130,7 @@
   .xiyi-item b{color:var(--zhu);margin-right:4px;}
 
   /* 学术说明 */
-  .notice{padding:10px 14px;background:#f4ecd8;border-left:3px solid var(--zhu);border-radius:0 4px 4px 0;font-size:.88rem;color:var(--ink-2);margin-bottom:16px;line-height:1.7;}
+  .notice{padding:10px 14px;background:var(--space-deep);border-left:3px solid var(--zhu);border-radius:0 4px 4px 0;font-size:.88rem;color:var(--ink-2);margin-bottom:16px;line-height:1.7;}
   .notice b{color:var(--zhu);}
 
   .section{margin-top:28px;}

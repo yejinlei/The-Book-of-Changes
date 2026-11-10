@@ -12,7 +12,7 @@
 
 <style>
 :root{
-  --paper:#f4ecd8;
+  --paper:var(--space-deep);
   --paper-2:#ede2c7;
   --ink:#2b1d0e;
   --zhu:#8b0000;    /* 朱批 */
@@ -25,13 +25,13 @@
   --accent:#8b0000;
 }
 *{box-sizing:border-box}
-html,body{margin:0;padding:0;background:var(--paper);color:var(--ink);font-family:'Songti SC','STSong','SimSun','Noto Serif CJK SC','Source Han Serif SC','Noto Serif SC',serif;line-height:1.9;font-size:17px;}
+html,body{margin:0;padding:0;background:var(--space-deep);color:var(--ink);font-family:'Songti SC','STSong','SimSun','Noto Serif CJK SC','Source Han Serif SC','Noto Serif SC',serif;line-height:1.9;font-size:17px;}
 body{padding-bottom:120px}
 a{color:var(--zhu);text-decoration:none}
 a:hover{text-decoration:underline}
 
 /* 顶部导航 */
-.topbar{position:sticky;top:0;z-index:50;background:linear-gradient(180deg,#efe4c8,#e8d9b3);border-bottom:2px solid var(--zhu);box-shadow:0 2px 8px rgba(60,30,0,.12);}
+.topbar{position:sticky;top:0;z-index:50;}
 .topbar-inner{max-width:1200px;margin:0 auto;padding:10px 18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
 .site-title{font-family:'STKaiti','KaiTi','Kaiti SC','Songti SC','STSong','SimSun','Noto Serif CJK SC','Source Han Serif SC','Noto Serif SC',serif;font-size:26px;color:var(--zhu);letter-spacing:4px;white-space:nowrap;padding-right:14px;border-right:1px solid var(--line);margin-right:6px}
 .site-title a{color:inherit}
@@ -41,13 +41,13 @@ a:hover{text-decoration:underline}
 
 /* 工具条 */
 .toolbar{max-width:1200px;margin:14px auto 0;padding:0 18px}
-.toolbar-card{background:#fbf5e4;border:1px solid var(--line);border-radius:4px;padding:12px 16px;display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;box-shadow:inset 0 0 30px rgba(180,140,70,.06)}
+.toolbar-card{background:rgba(22,38,68,.8);border:1px solid var(--line);border-radius:8px;padding:12px 18px;box-shadow:var(--shadow-md);display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;box-shadow:inset 0 0 30px rgba(180,140,70,.06)}
 .toolbar-card label{font-size:15px;color:var(--soft);white-space:nowrap}
-.toolbar-card select{font-family:inherit;font-size:15px;padding:4px 8px;border:1px solid var(--line);background:#fff9ea;color:var(--ink);border-radius:3px;min-width:260px;max-width:60vw}
+.toolbar-card select{font-family:inherit;font-size:15px;padding:4px 8px;border:1px solid var(--line);background:rgba(10,20,40,.9);color:var(--ink);border:1px solid var(--line);border-radius:3px;min-width:260px;max-width:60vw}
 .version-btns{display:flex;flex-wrap:wrap;gap:4px}
-.version-btns button{font-family:inherit;font-size:14px;padding:4px 12px;border:1px solid var(--line);background:#fff9ea;cursor:pointer;border-radius:3px;color:var(--ink);transition:.15s}
+.version-btns button{font-family:inherit;font-size:14px;padding:4px 12px;border:1px solid var(--line);background:rgba(10,20,40,.7);cursor:pointer;border-radius:4px;color:var(--ink-2);border:1px solid var(--line);transition:.15s}
 .version-btns button:hover{background:var(--hover)}
-.version-btns button.on{background:var(--zhu);color:#fbf5e4;border-color:var(--zhu)}
+.version-btns button.on{background:var(--zhu);color:#fff;border-color:var(--zhu);box-shadow:0 0 12px rgba(180,50,50,.4)}
 .checks{display:flex;gap:16px;flex-wrap:wrap}
 .checks label{display:inline-flex;align-items:center;gap:5px;cursor:pointer;user-select:none}
 .checks input{accent-color:var(--zhu);transform:scale(1.1)}
@@ -55,13 +55,13 @@ a:hover{text-decoration:underline}
 .legend{display:flex;gap:10px;flex-wrap:wrap;font-size:13px}
 .legend span{display:inline-flex;align-items:center;gap:4px}
 .legend i{display:inline-block;width:10px;height:10px;border-radius:2px}
-.dot-zhu{background:var(--zhu)}
+.dot-zhu{background:var(--zhu);color:#fff}
 .dot-mo{background:var(--mo)}
 .dot-lan{background:var(--lan)}
 .dot-jin{background:var(--jin)}
 
 /* 正文容器 */
-.reader{max-width:860px;margin:18px auto 0;padding:40px 50px;background:#fbf5e4;border:1px solid var(--line);box-shadow:0 2px 20px rgba(60,30,0,.08);position:relative}
+.reader{max-width:860px;margin:18px auto 0;padding:40px 50px;background:linear-gradient(180deg,rgba(22,38,68,.96),rgba(13,24,46,.98));border:1px solid var(--line-strong);box-shadow:var(--shadow-lg);position:relative}
 .reader::before,.reader::after{content:"";position:absolute;left:20px;right:20px;height:1px;background:repeating-linear-gradient(90deg,var(--line) 0 6px,transparent 6px 12px);opacity:.6}
 .reader::before{top:14px}.reader::after{bottom:14px}
 
@@ -76,28 +76,28 @@ a:hover{text-decoration:underline}
 .reader-bagua{display:inline-flex;align-items:center}
 .reader-sep{opacity:.5;margin:0 2px}
 .gua-meta{font-size:14px;color:var(--soft);margin-top:8px}
-.section-hd{font-size:22px;color:var(--zhu);text-align:center;letter-spacing:6px;margin:28px 0 14px;font-weight:600;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:8px 0;background:linear-gradient(90deg,transparent,rgba(139,0,0,.05),transparent)}
+.section-hd{font-size:22px;color:var(--zhu);text-align:center;letter-spacing:6px;margin:28px 0 14px;font-weight:600;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:8px 0;background:linear-gradient(90deg,transparent,rgba(212,176,121,.12),transparent)}
 .sub-hd{font-size:17px;color:var(--lan);font-weight:600;margin:18px 0 8px;padding-left:8px;border-left:3px solid var(--lan)}
 .line-hd{font-size:18px;color:var(--zhu);font-weight:600;margin:22px 0 8px;display:flex;align-items:baseline;gap:8px}
-.line-hd .yao-tag{background:var(--zhu);color:#fbf5e4;font-size:13px;padding:2px 8px;border-radius:2px;letter-spacing:1px}
+.line-hd .yao-tag{background:var(--zhu);color:#fff;font-size:13px;padding:2px 8px;border-radius:2px;letter-spacing:1px}
 
 /* 正文段落 */
 .gua-text{font-size:19px;line-height:2.1;text-indent:2em;margin:6px 0;letter-spacing:1px;color:var(--ink)}
-.gua-text.yao-ci{font-size:19px;line-height:2.1;text-indent:2em;margin:4px 0;color:var(--ink);border-left:3px solid var(--zhu);padding-left:12px;background:rgba(139,0,0,.03);padding-top:4px;padding-bottom:4px}
+.gua-text.yao-ci{font-size:19px;line-height:2.1;text-indent:2em;margin:4px 0;color:var(--ink);border-left:3px solid var(--zhu);padding-left:12px;background:rgba(180,50,50,.06);padding-top:6px;padding-bottom:6px}
 .gua-text.tuan-ci{font-size:18px;line-height:2.1;color:#3a2510}
 
 /* 批注块（段间嵌入，仿脂批夹批风格） */
-.anno{margin:8px 24px;padding:8px 14px;border-left:3px solid var(--jin);background:linear-gradient(90deg,rgba(138,109,59,.08),transparent);border-radius:0 3px 3px 0;font-size:15px;line-height:1.9;color:#4a3620;position:relative}
+.anno{margin:8px 24px;padding:8px 14px;border-left:3px solid var(--jin);background:linear-gradient(90deg,rgba(212,176,121,.08),rgba(212,176,121,.02));border-radius:0 6px 6px 0;font-size:15px;line-height:1.9;color:var(--ink-2);position:relative}
 .anno .src{display:inline-block;font-size:12px;color:#fff;background:var(--jin);padding:1px 7px;border-radius:2px;margin-right:8px;vertical-align:2px;letter-spacing:1px;font-weight:500}
-.anno.cmt-wangbi .src{background:var(--zhu)}
+.anno.cmt-wangbi .src{background:var(--zhu);color:#fff}
 .anno.cmt-kongyingda .src{background:var(--mo)}
-.anno.cmt-zhuxi .src{background:#5a3b8c}
+.anno.cmt-zhuxi .src{background:#6e4a9e;color:#fff}
 .anno.cmt-chengyi .src{background:var(--lan)}
 .anno.cmt-jijie .src{background:var(--jin)}
-.anno.cmt-zhezhong .src{background:#6b4423}
+.anno.cmt-zhezhong .src{background:#7a5a3a;color:#fff}
 .anno.cmt-an .src{background:#8b4513}
 .anno.cmt-zonglun .src{background:#4a4a4a}
-.anno.cmt-baihua{border-left-color:#2a6b4a;background:linear-gradient(90deg,rgba(42,107,74,.08),transparent)}
+.anno.cmt-baihua{border-left-color:#2e7a54;background:linear-gradient(90deg,rgba(46,122,84,.1),transparent)}
 .anno.cmt-baihua .src{background:#2a6b4a}
 
 /* 行间小注（嵌入正文） */
@@ -115,10 +115,10 @@ body.no-zj .anno.cmt-jijie,body.no-zj .anno.cmt-zhezhong{display:none}
 
 /* 页脚导航 */
 .page-nav{max-width:860px;margin:18px auto;padding:0 50px;display:flex;justify-content:space-between;gap:10px}
-.page-nav button{font-family:inherit;font-size:15px;padding:8px 22px;border:1px solid var(--zhu);background:#fbf5e4;color:var(--zhu);cursor:pointer;border-radius:3px;letter-spacing:2px;transition:.15s}
-.page-nav button:hover{background:var(--zhu);color:#fbf5e4}
+.page-nav button{font-family:inherit;font-size:15px;padding:8px 22px;border:1px solid var(--zhu);background:rgba(10,20,40,.7);color:var(--gold);cursor:pointer;border-radius:4px;border:1px solid var(--line-strong);letter-spacing:2px;transition:.15s}
+.page-nav button:hover{background:var(--zhu);color:#fff}
 .page-nav button:disabled{opacity:.35;cursor:not-allowed}
-.page-nav button:disabled:hover{background:#fbf5e4;color:var(--zhu)}
+.page-nav button:disabled:hover{background:rgba(10,20,40,.3);color:var(--ink-3);}
 
 /* 回到首页链接 */
 .back-link{text-align:center;margin-top:20px}
@@ -379,13 +379,13 @@ body.no-zj .anno.cmt-jijie,body.no-zj .anno.cmt-zhezhong{display:none}
             <a href="shifa.html#demo-${String(num-1).padStart(2,'0')}"
                style="display:inline-block;padding:3px 14px;border:1px solid var(--zhu);
                       color:var(--zhu);font-size:13px;letter-spacing:2px;text-decoration:none"
-               onmouseover="this.style.background='var(--zhu)';this.style.color='#fff'"
-               onmouseout="this.style.background='transparent';this.style.color='var(--zhu)'">蓍 占 示 例 →</a>
+               onmouseover="this.style.background='var(--zhu)';this.style.color='#fff';this.style.boxShadow='0 0 12px rgba(180,50,50,.4)'"
+               onmouseout="this.style.background='rgba(10,20,40,.0)';this.style.color='var(--gold)';this.style.boxShadow='none'">蓍 占 示 例 →</a>
             <a href="animation/gua-${String(num-1).padStart(2,'0')}.html"
                style="display:inline-block;margin-left:8px;padding:3px 14px;border:1px solid var(--gold);
                       color:var(--gold);font-size:13px;letter-spacing:2px;text-decoration:none"
-               onmouseover="this.style.background='var(--gold)';this.style.color='#fff'"
-               onmouseout="this.style.background='transparent';this.style.color='var(--gold)'">讲 解 动 画 →</a>
+               onmouseover="this.style.background='var(--gold)';this.style.color='#0a1428';this.style.boxShadow='0 0 12px rgba(212,176,121,.4)'"
+               onmouseout="this.style.background='rgba(10,20,40,.0)';this.style.color='var(--gold)';this.style.boxShadow='none'">讲 解 动 画 →</a>
           </div>
         </div>
       </div>
