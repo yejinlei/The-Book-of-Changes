@@ -115,6 +115,9 @@
 .onto-kw:hover{background:var(--zhu);color:#fff;border-radius:2px;text-decoration:none;}
 /* 图例（在tab页顶部） */
 .classic-legend{max-width:960px;margin:0 auto 24px;padding:14px 18px;background:var(--paper-2);border-radius:8px;border:1px solid var(--line);display:flex;flex-wrap:wrap;gap:14px;align-items:center;font-size:13px;color:var(--ink-2);font-family:var(--song);}
+.classic-book-head{max-width:960px;margin:0 auto 18px;padding:18px 22px;background:var(--paper-2);border-radius:8px;border:1px solid var(--line-strong);}
+.classic-book-head h3{font-family:var(--kai);font-size:20px;color:var(--zhu);margin:0 0 6px;}
+.classic-book-head p{margin:4px 0;font-size:14px;line-height:1.8;color:var(--ink-2);font-family:var(--song);}
 .legend-item{display:flex;align-items:center;gap:6px;}
 .legend-chip{width:20px;height:12px;border-radius:3px;}
 .legend-chip.core{background:var(--zhu);}
@@ -195,16 +198,16 @@
 
 <!-- 完整原典（四档标识） -->
 <div class="dd-panel" id="panel-yuandian">
-<h2 style="font-family:var(--kai);color:var(--zhu);max-width:960px;margin:0 auto 14px;">《周易参同契》全文（本体相关度四档标识）</h2>
+<h2 style="font-family:var(--kai);color:var(--zhu);max-width:960px;margin:0 auto 14px;">丹道三经合参 · 本体相关度四档标识</h2>
 <p style="max-width:960px;margin:0 auto 18px;font-size:14px;color:var(--ink-2);line-height:1.8;">
-每段按与《易经》本体的关联度分四档：<b style="color:var(--zhu)">本体核心</b>（直接引卦名/纳甲/消息卦，丹道合易核心）→ <b style="color:var(--gold)">易理旁证</b>（借易象喻丹法，含五行/阴阳/四象）→ <b style="color:var(--ink-2)">背景铺垫</b>（丹道术语/鼎器说明）→ <b style="color:var(--ink-3)">易无关</b>（单纯黄老/劝诫/自叙）。无关段落全保留以便对照，仅降低视觉权重不删除。段末「↩」链接跳转回《易经》本体对应节点。
+丹道以"大易、黄老、炉火"三家同契为宗，核心经典三部——《周易参同契》（万古丹经王）、《道德经》（道家本体）、《悟真篇》（内丹南宗正脉）。每段按与《易经》本体的关联度分四档：<b style="color:var(--zhu)">本体核心</b>（直接引卦名/纳甲/消息卦）→ <b style="color:var(--gold)">易理旁证</b>（借易象喻丹法/五行阴阳）→ <b style="color:var(--ink-2)">背景铺垫</b>（丹道术语说明）→ <b style="color:var(--ink-3)">易无关</b>（单纯劝诫/旁门批判）。无关段保留原文以利对照，段末↩链接跳回本体页。
 </p>
 <div class="classic-legend">
   <div class="legend-item"><span class="legend-chip core"></span>本体核心</div>
   <div class="legend-item"><span class="legend-chip indirect"></span>易理旁证/五行</div>
   <div class="legend-item"><span class="legend-chip background"></span>背景铺垫</div>
   <div class="legend-item"><span class="legend-chip unrelated"></span>易无关</div>
-  <div style="margin-left:auto;color:var(--ink-3);font-size:12px;font-family:var(--kai);">以彭晓《通真义》90章本分选核心15章 · 后续其他经典按同规范嵌入</div>
+  <div style="margin-left:auto;color:var(--ink-3);font-size:12px;font-family:var(--kai);">参同契 · 道德经 · 悟真篇</div>
 </div>
 <div class="classic-wrap" id="yuandianWrap"></div>
 </div>
@@ -407,31 +410,136 @@ function classicLinkify(text){
   return text;
 }
 function renderYuandian(){
+  // 丹道三经：第一本用数据里 D.chapters（参同契），后两本内嵌
+  var DAN_BOOKS=[
+    {title:'周易参同契',author:'东汉 · 魏伯阳 撰',
+     desc:'万古丹经王。以大易、黄老、炉火三家同契，借卦象、纳甲、十二消息卦描述内丹火候，是易学本体外推到丹道修炼的集大成之作。',
+     chapters:D.chapters},
+    {title:'道德经（老子）',author:'春秋 · 老聃 撰',
+     desc:'道家本体论之根。五千言以"道—阴阳—反"立本，"反者道之动"直接对应易消息卦阴阳消长；"谷神不死是谓玄牝"为后世丹道本体论所本；与《系辞》"一阴一阳之谓道"同构。',
+     chapters:[
+       {juan:'道经 · 上篇',chapter:'第一章',paras:[
+         {text:'道可道，非常道；名可名，非常名。无名天地之始，有名万物之母。故常无欲以观其妙，常有欲以观其徼。此两者同出而异名，同谓之玄，玄之又玄，众妙之门。',
+          level:'indirect',note:'【易注】"无名天地始、有名万物母"——与《易·系辞》"易有太极，是生两仪"的宇宙论同构；"两者同出而异名"即阴阳同出于太极。',
+          ontoLinks:[{name:'太极',url:'yitu.html'},{name:'系辞传',url:'shiyi.html'}]},
+       ]},
+       {juan:'道经 · 上篇',chapter:'第二章',paras:[
+         {text:'天下皆知美之为美，斯恶已；皆知善之为善，斯不善已。故有无相生，难易相成，长短相较，高下相倾，音声相和，前后相随。',
+          level:'wuxing',note:'【易注】"有无相生"即阴阳对待；与易卦阴阳相反相成、消息卦一消一息之理一致。',
+          ontoLinks:[{name:'阴阳',url:'reader.html#key-yinyang'}]},
+       ]},
+       {juan:'道经 · 上篇',chapter:'第六章',paras:[
+         {text:'谷神不死，是谓玄牝。玄牝之门，是谓天地根。绵绵若存，用之不勤。',
+          level:'core',note:'【易注】"玄牝之门"即乾坤门户、阴阳之根；《参同契》"乾坤者易之门户"直承此义，是丹道"玄关一窍"的本体源头，对应乾坤二卦。',
+          ontoLinks:[{name:'乾坤',url:'gua.html#乾坤'},{name:'周易参同契',url:'dandao.html'}]},
+       ]},
+       {juan:'道经 · 上篇',chapter:'第十六章',paras:[
+         {text:'致虚极，守静笃，万物并作，吾以观复。夫物芸芸，各复归其根。归根曰静，是谓复命。',
+          level:'core',note:'【易注】"复"——直接对应复卦（地雷复，一阳来复），即十二消息卦中坤阴极而生阳之卦。邵雍以此为"天心"。',
+          ontoLinks:[{name:'复卦',url:'gua.html?g=24-复'},{name:'十二消息卦',url:'guaqi.html#xiaoxi'}]},
+       ]},
+       {juan:'道经 · 上篇',chapter:'第二十五章',paras:[
+         {text:'有物混成，先天地生，寂兮寥兮，独立而不改，周行而不殆，可以为天下母。吾不知其名，字之曰道，强为之名曰大。大曰逝，逝曰远，远曰反。',
+          level:'core',note:'【易注】"先天地生"者即太极；"周行而不殆""远曰反"即易卦消息循环、终则有始（剥极而复、既济未济循环）。',
+          ontoLinks:[{name:'太极',url:'yitu.html'},{name:'复卦',url:'gua.html?g=24-复'},{name:'未济卦',url:'gua.html?g=64-未济'}]},
+       ]},
+       {juan:'道经 · 上篇',chapter:'第二十八章',paras:[
+         {text:'知其雄，守其雌，为天下谿。为天下谿，常德不离，复归于婴儿。知其白，守其黑，为天下式。为天下式，常德不忒，复归于无极。',
+          level:'wuxing',note:'【易注】"知雄守雌""知白守黑"即《易》"阴阳互藏"——阳中含阴、阴中含阳；与坎中满（外阴内阳）、离中虚（外阳内阴）结构同。',
+          ontoLinks:[{name:'坎卦',url:'gua.html?g=29-坎'},{name:'离卦',url:'gua.html?g=30-离'}]},
+       ]},
+       {juan:'道经 · 下篇',chapter:'第四十章',paras:[
+         {text:'反者道之动，弱者道之用。天下万物生于有，有生于无。',
+          level:'core',note:'【易注】"反者道之动"——易学核心运动观：阴极阳生、阳极阴生、消息卦反覆；卦气周流六虚、剥复循环皆从此出。这是老子与易学本体最直接的契合句。',
+          ontoLinks:[{name:'十二消息卦',url:'guaqi.html#xiaoxi'},{name:'剥卦',url:'gua.html?g=23-剥'},{name:'复卦',url:'gua.html?g=24-复'}]},
+       ]},
+       {juan:'道经 · 下篇',chapter:'第四十二章',paras:[
+         {text:'道生一，一生二，二生三，三生万物。万物负阴而抱阳，冲气以为和。',
+          level:'core',note:'【易注】"道生一（太极）一生二（两仪）二生三（天地人/阴阳合）三生万物"——太极→两仪→四象→八卦宇宙生成论的道家版；"负阴抱阳冲气以为和"即阴阳交感。',
+          ontoLinks:[{name:'太极',url:'yitu.html'},{name:'两仪四象',url:'yitu.html'},{name:'阴阳',url:'reader.html#key-yinyang'}]},
+       ]},
+       {juan:'道经 · 下篇',chapter:'第七十七章',paras:[
+         {text:'天之道，其犹张弓与？高者抑之，下者举之，有余者损之，不足者补之。天之道损有余而补不足，人之道则不然，损不足以奉有余。',
+          level:'indirect',note:'【易注】"损有余补不足"对应损益二卦（山泽损、风雷益）——《杂卦》"损益，盛衰之始也"，是易理天道均衡观在《老子》中的复述。',
+          ontoLinks:[{name:'损卦',url:'gua.html?g=41-损'},{name:'益卦',url:'gua.html?g=42-益'}]},
+       ]},
+     ]},
+    {title:'悟真篇',author:'北宋 · 张伯端（紫阳真人）',
+     desc:'内丹南宗正脉。张伯端以诗词演丹道，自言"仆幼亲善道，涉猎三教经书，以至刑法书算、医卜战阵、天文地理、吉凶死生之术，靡不留心详究"，其丹法完全建立在易象卦气之上，与《参同契》并称双璧。',
+     chapters:[
+       {juan:'悟真篇 · 卷上',chapter:'七言律诗 · 第一',paras:[
+         {text:'不求大道出迷途，纵负贤才岂丈夫？百岁光阴石火烁，一生身世水泡浮。只贪利禄求荣显，不觉形容暗瘁枯。试问堆金等山岳，无常买得不来无？',
+          level:'unrelated',note:'【注】劝世诗，纯道学劝诫，无易象关联。',ontoLinks:[]},
+       ]},
+       {juan:'悟真篇 · 卷上',chapter:'七言律诗 · 第二（乾坤为鼎器）',paras:[
+         {text:'先把乾坤为鼎器，次搏乌兔药来烹。既驱二物归黄道，争得金丹不解生？',
+          level:'core',note:'【易注】"乾坤为鼎器、乌兔为药物（乌为日=离中真阴、兔为月=坎中真阳）、黄道为中道"——完全承续《参同契》乾坤坎离四卦丹法，直指离坎填合结丹。',
+          ontoLinks:[{name:'乾坤',url:'gua.html#乾坤'},{name:'坎离',url:'gua.html#坎离'},{name:'周易参同契',url:'dandao.html'}]},
+       ]},
+       {juan:'悟真篇 · 卷上',chapter:'七言律诗 · 第四（坎离交姤）',paras:[
+         {text:'偃月炉中玉蕊生，朱砂鼎内水银平。只因火力调和后，种得黄芽渐长成。',
+          level:'indirect',note:'【易注】"偃月炉"指坎卦（水=月=铅），"朱砂鼎"指离卦（火=日=汞）；黄芽即先天一阳初动——对应复卦一阳来复。',
+          ontoLinks:[{name:'坎卦',url:'gua.html?g=29-坎'},{name:'离卦',url:'gua.html?g=30-离'},{name:'复卦',url:'gua.html?g=24-复'}]},
+       ]},
+       {juan:'悟真篇 · 卷中',chapter:'七言绝句 · 第一（十二消息火候）',paras:[
+         {text:'玄牝之门世罕知，休将口鼻妄施为。饶君吐纳经千载，争得金乌搦兔儿？',
+          level:'core',note:'【易注】"玄牝之门"——复用老子语指乾坤门户；"金乌搦兔儿"即日（离）月（坎）交合，丹家要诀。',
+          ontoLinks:[{name:'乾坤',url:'gua.html#乾坤'},{name:'坎离',url:'gua.html#坎离'},{name:'道德经',url:'dandao.html'}]},
+       ]},
+       {juan:'悟真篇 · 卷中',chapter:'七言绝句 · 第八（月体纳甲）',paras:[
+         {text:'八月十五玩蟾辉，正是金精壮盛时。若到一阳才起复，便堪进火莫延迟。',
+          level:'core',note:'【易注】"八月十五"为月望——对应纳甲法十五为乾卦（月满）；"一阳才起复"即十二消息卦地雷复卦，为活子时进火之候。直接承袭《参同契》月体纳甲火候。',
+          ontoLinks:[{name:'纳甲',url:'najia.html'},{name:'月体纳甲',url:'dandao.html#panel-yueti'},{name:'复卦',url:'gua.html?g=24-复'}]},
+       ]},
+       {juan:'悟真篇 · 卷中',chapter:'七言绝句 · 第十六（周天火候）',paras:[
+         {text:'万卷仙经语总同，金丹只此是根宗。依他坤位生成体，种在乾家交感宫。',
+          level:'core',note:'【易注】"坤位生成"即坎中真阳（乾金寄坤体而成坎）；"乾家交感宫"即离中真阴返乾而成丹——即取坎填离、还返先天乾坤之丹法。',
+          ontoLinks:[{name:'乾坤',url:'gua.html#乾坤'},{name:'坎离',url:'gua.html#坎离'}]},
+       ]},
+       {juan:'悟真篇 · 后序',chapter:'读周易参同契',paras:[
+         {text:'叔通从事魏伯阳，相将笑入无何乡。引证《参同契》，明确金液还丹之要。予观其书，辞陋而道大，言微而旨深，列八卦以陈休咎，运阴阳而测鬼神，实大道之渊源，养生之枢要也。',
+          level:'core',note:'【易注】张伯端自序推崇参同契，"列八卦以陈休咎、运阴阳而测鬼神"，明确承认丹道以易卦阴阳为本体。',
+          ontoLinks:[{name:'周易参同契',url:'dandao.html'},{name:'八卦',url:'yitu.html'}]},
+       ]},
+       {juan:'悟真篇 · 附录',chapter:'禅宗歌颂诗曲杂言 · 即心是佛颂',paras:[
+         {text:'佛即心兮心即佛，心佛从来皆妄物。若知无佛复无心，始是真如法身佛。',
+          level:'unrelated',note:'【注】张伯端晚年三教合一倾向，此段纯禅宗，无易学本体关联，保留以见三教合流全貌。',ontoLinks:[]},
+       ]},
+     ]},
+  ];
+
   var html='';
-  var lastJuan='';
-  D.chapters.forEach(function(ch){
-    if(ch.juan!==lastJuan){
-      html+='<h3 class="juan-title">'+ch.juan+'</h3>';
-      lastJuan=ch.juan;
-    }
-    html+='<h4 class="chapter-title">'+ch.chapter+'</h4>';
-    ch.paragraphs.forEach(function(p){
-      var lv=LEVEL_BADGE[p.level]||LEVEL_BADGE.background;
-      var refs='';
-      if(p.ontoLinks&&p.ontoLinks.length){
-        refs='<div class="para-refs"><span class="para-refs-label">↩ 关联本体：</span>';
-        p.ontoLinks.forEach(function(r){
-          refs+='<a class="para-ref" href="'+r.url+'">'+r.name+'</a>';
-        });
-        refs+='</div>';
+  DAN_BOOKS.forEach(function(book){
+    html+='<div class="classic-book-head"><h3>《'+book.title+'》</h3>'+
+      '<p style="color:var(--zhu);font-family:var(--kai);">'+book.author+'</p>'+
+      '<p>'+book.desc+'</p></div>';
+    html+='<div class="classic-wrap">';
+    var lastJuan='';
+    book.chapters.forEach(function(ch){
+      if(ch.juan!==lastJuan){
+        html+='<h3 class="juan-title">'+ch.juan+'</h3>';
+        lastJuan=ch.juan;
       }
-      var note=p.note?'<div class="para-note">'+classicLinkify(p.note)+'</div>':'';
-      html+='<div class="classic-para para-'+lv.cls+'">'+
-        '<span class="para-badge badge-'+lv.cls+'">'+lv.label+'</span>'+
-        '<div class="para-text">'+classicLinkify(p.text)+'</div>'+
-        note+refs+
-        '</div>';
+      html+='<h4 class="chapter-title">'+ch.chapter+'</h4>';
+      (ch.paragraphs||[]).forEach(function(p){
+        var lv=LEVEL_BADGE[p.level]||LEVEL_BADGE.background;
+        var refs='';
+        if(p.ontoLinks&&p.ontoLinks.length){
+          refs='<div class="para-refs"><span class="para-refs-label">↩ 关联本体：</span>';
+          p.ontoLinks.forEach(function(r){
+            refs+='<a class="para-ref" href="'+r.url+'">'+r.name+'</a>';
+          });
+          refs+='</div>';
+        }
+        var note=p.note?'<div class="para-note">'+classicLinkify(p.note)+'</div>':'';
+        html+='<div class="classic-para para-'+lv.cls+'">'+
+          '<span class="para-badge badge-'+lv.cls+'">'+lv.label+'</span>'+
+          '<div class="para-text">'+classicLinkify(p.text)+'</div>'+
+          note+refs+
+          '</div>';
+      });
     });
+    html+='</div>';
   });
   document.getElementById('yuandianWrap').innerHTML=html;
 }
