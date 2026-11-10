@@ -9,104 +9,106 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>变化 · 道家宇宙生成动态沙盘 | The Book of Changes</title>
 <script src="https://cdn.jsdelivr.net/npm/three@0.149.0/build/three.min.js"></script>
+<link rel="stylesheet" href="css/yijing.css">
+<script src="js/theme-switch.js"></script>
 <style>
 :root{
-  --bg:#0a1628; --paper:rgba(18,34,64,.92); --text:#e8edf5; --accent:#d94a4a;
-  --gold:#d4b079; --ink:#e8edf5; --border:rgba(200,215,240,.25); --shadow:rgba(0,0,0,.5);
+  --bian-stage:#0b0a08;       /* three.js 舞台始终保持深色宇宙感 */
 }
 *{margin:0;padding:0;box-sizing:border-box;}
 body{
   font-family:'Songti SC','STSong','SimSun','Noto Serif CJK SC','Source Han Serif SC',serif;
-  background:var(--bg); color:var(--text); line-height:1.8;
+  background:var(--bian-stage); color:var(--ink); line-height:1.8;
 }
 /* ===== 顶栏 ===== */
 .top-nav{
   position:fixed;top:0;left:0;right:0;height:64px;
-  background:linear-gradient(180deg, rgba(10,22,40,.96), rgba(8,16,30,.92));
-  border-bottom:1px solid var(--border);z-index:1000;display:flex;align-items:center;
-  justify-content:space-between;padding:0 28px;box-shadow:0 2px 20px rgba(0,0,0,.5);
+  background:linear-gradient(180deg, var(--space-2), var(--paper));
+  border-bottom:1px solid var(--line);z-index:1000;display:flex;align-items:center;
+  justify-content:space-between;padding:0 28px;box-shadow:var(--shadow);
   backdrop-filter:blur(12px);
 }
 .logo{font-size:20px;font-weight:700;color:var(--ink);text-decoration:none;display:flex;align-items:center;gap:10px;letter-spacing:4px;}
-.logo .taiji{color:var(--gold);font-size:26px;text-shadow:0 0 12px rgba(212,176,121,.5);}
-.logo small{font-size:10px;font-weight:400;color:rgba(200,215,240,.6);margin-left:6px;letter-spacing:2px;font-family:sans-serif;}
+.logo .taiji{color:var(--zhu);font-size:26px;text-shadow:0 0 12px var(--zhu-soft);}
+.logo small{font-size:10px;font-weight:400;color:var(--ink-3);margin-left:6px;letter-spacing:2px;font-family:sans-serif;}
 .nav-links{display:flex;gap:4px;align-items:center;flex-wrap:wrap;}
-.nav-links a{color:var(--text);text-decoration:none;font-size:14px;font-weight:500;transition:.2s;padding:6px 12px;border-radius:4px;letter-spacing:1px;}
+.nav-links a{color:var(--ink-2);text-decoration:none;font-size:14px;font-weight:500;transition:.2s;padding:6px 12px;border-radius:4px;letter-spacing:1px;}
 .nav-links a:hover{background:rgba(212,176,121,.12);color:var(--gold);}
-.nav-links a.cur{color:var(--gold);background:rgba(212,176,121,.14);font-weight:700;border-bottom:none;padding-bottom:6px;position:relative;}
+.nav-links a.cur{color:var(--gold-bright);background:rgba(212,176,121,.14);font-weight:700;border-bottom:none;padding-bottom:6px;position:relative;}
 .nav-links a.cur::after{content:"";position:absolute;left:12px;right:12px;bottom:2px;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);}
+.nav-actions{display:flex;align-items:center;margin-left:auto;}
 main{padding-top:64px;}
 
-/* ===== 舞台 ===== */
-.stage-wrap{position:relative;width:100%;height:calc(100vh - 64px);min-height:560px;background:#0b0a08;overflow:hidden;}
+/* ===== 舞台（three.js 画布始终深色，形成沉浸宇宙感） ===== */
+.stage-wrap{position:relative;width:100%;height:calc(100vh - 64px);min-height:560px;background:var(--bian-stage);overflow:hidden;}
 #three-canvas{position:absolute;inset:0;width:100%;height:100%;display:block;}
 #svg-layer{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;}
 #svg-layer svg{width:100%;height:100%;display:block;}
 
-/* 中央字幕 */
+/* 中央字幕（舞台上的文字，始终明亮，在深色舞台上） */
 .verse{
   position:absolute;left:50%;top:14%;transform:translateX(-50%);
-  text-align:center;color:var(--space-deep);pointer-events:none;z-index:20;
+  text-align:center;color:#fff;pointer-events:none;z-index:20;
   text-shadow:0 2px 16px rgba(0,0,0,.9),0 0 40px rgba(139,0,0,.4);
   width:92%;max-width:900px;
 }
 .verse .big{font-size:clamp(26px,5vw,54px);letter-spacing:.18em;font-weight:700;color:#faf6ed;}
-.verse .sub{font-size:clamp(13px,2vw,19px);letter-spacing:.12em;color:#c9a94e;margin-top:14px;}
-.verse .src{font-size:clamp(11px,1.4vw,14px);letter-spacing:.1em;color:#8c8578;margin-top:10px;}
+.verse .sub{font-size:clamp(13px,2vw,19px);letter-spacing:.12em;color:var(--gold);margin-top:14px;}
+.verse .src{font-size:clamp(11px,1.4vw,14px);letter-spacing:.1em;color:rgba(240,230,200,.7);margin-top:10px;}
 
 /* 幕标尺 */
 .stage-badge{
-  position:absolute;left:24px;top:22px;z-index:20;color:#c9a94e;
-  font-size:13px;letter-spacing:.16em;padding:6px 14px;border:1px solid rgba(201,169,78,.4);
-  border-radius:2px;background:rgba(0,0,0,.35);
+  position:absolute;left:24px;top:22px;z-index:20;color:var(--gold);
+  font-size:13px;letter-spacing:.16em;padding:6px 14px;border:1px solid var(--gold-deep);
+  border-radius:2px;background:rgba(0,0,0,.45);backdrop-filter:blur(4px);
 }
 .stage-badge b{color:#faf6ed;font-size:15px;}
 
-/* ===== 控制台 ===== */
+/* ===== 控制台（底部渐变遮罩，始终深色以衬托舞台） ===== */
 .console{
   position:absolute;left:0;right:0;bottom:0;z-index:30;padding:18px 28px 22px;
-  background:linear-gradient(180deg,rgba(11,10,8,0) 0%,rgba(11,10,8,.86) 34%,rgba(11,10,8,.96) 100%);
+  background:linear-gradient(180deg,rgba(11,10,8,0) 0%,rgba(11,10,8,.72) 34%,rgba(11,10,8,.9) 100%);
 }
 .progress{height:4px;background:rgba(244,236,216,.16);border-radius:2px;cursor:pointer;position:relative;margin-bottom:16px;}
-.progress .fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--gold));border-radius:2px;width:0;transition:width .08s linear;}
+.progress .fill{height:100%;background:linear-gradient(90deg,var(--zhu),var(--gold));border-radius:2px;width:0;transition:width .08s linear;}
 .progress .knob{
   position:absolute;top:50%;width:14px;height:14px;border-radius:50%;
-  background:#faf6ed;border:3px solid var(--accent);transform:translate(-50%,-50%);left:0;
+  background:#faf6ed;border:3px solid var(--zhu);transform:translate(-50%,-50%);left:0;
   box-shadow:0 0 12px rgba(139,0,0,.8);
 }
 .ctrl-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
 .ctrl-btn{
-  background:rgba(244,236,216,.08);border:1px solid rgba(201,169,78,.45);color:rgba(22,38,68,.7);
+  background:rgba(244,236,216,.10);border:1px solid var(--gold-deep);color:rgba(240,230,200,.85);
   padding:8px 16px;border-radius:3px;font-family:inherit;font-size:13.5px;cursor:pointer;transition:.2s;letter-spacing:.06em;
 }
-.ctrl-btn:hover{background:rgba(139,0,0,.5);border-color:var(--accent);color:#fff;}
-.ctrl-btn.primary{background:var(--accent);border-color:var(--accent);color:#fff;}
-.ctrl-btn.primary:hover{background:#6d0000;}
-.ctrl-btn.on{background:rgba(139,0,0,.6);border-color:#e0b04a;color:#fff;}
+.ctrl-btn:hover{background:var(--zhu-soft);border-color:var(--zhu);color:#fff;}
+.ctrl-btn.primary{background:var(--zhu);border-color:var(--zhu);color:#fff;}
+.ctrl-btn.primary:hover{background:var(--zhu-deep);}
+.ctrl-btn.on{background:rgba(139,0,0,.6);border-color:var(--gold);color:#fff;}
 .scene-tabs{display:flex;gap:8px;margin-left:auto;flex-wrap:wrap;}
 .scene-tabs .tab{
   padding:7px 13px;font-size:12.5px;border-radius:3px;cursor:pointer;
-  border:1px solid rgba(201,169,78,.3);color:#b9ab8c;transition:.2s;letter-spacing:.05em;white-space:nowrap;
+  border:1px solid var(--gold-deep);color:rgba(240,230,200,.7);transition:.2s;letter-spacing:.05em;white-space:nowrap;
 }
 .scene-tabs .tab:hover{color:#faf6ed;border-color:var(--gold);}
-.scene-tabs .tab.active{background:rgba(139,0,0,.55);color:#fff;border-color:var(--accent);}
+.scene-tabs .tab.active{background:rgba(139,0,0,.55);color:#fff;border-color:var(--zhu);}
 
-/* ===== 底部注文面板 ===== */
+/* ===== 底部注文面板（舞台上的浮层，半透明深色） ===== */
 .note-panel{
   position:absolute;right:24px;top:80px;width:300px;z-index:20;
-  background:rgba(11,10,8,.72);border-left:2px solid var(--accent);
-  padding:18px 20px;color:#c9c0a8;font-size:13.5px;line-height:2;
-  backdrop-filter:blur(3px);max-height:60vh;overflow:auto;
+  background:rgba(11,10,8,.72);border-left:2px solid var(--zhu);
+  padding:18px 20px;color:rgba(240,230,200,.85);font-size:13.5px;line-height:2;
+  backdrop-filter:blur(6px);max-height:60vh;overflow:auto;
 }
-.note-panel h4{color:#e0b04a;font-size:15px;margin-bottom:10px;letter-spacing:.1em;font-weight:600;}
+.note-panel h4{color:var(--gold);font-size:15px;margin-bottom:10px;letter-spacing:.1em;font-weight:600;}
 .note-panel .hl{color:#faf6ed;}
-.note-panel .cn{color:rgba(22,38,68,.7);font-size:14.5px;}
+.note-panel .cn{color:rgba(240,230,200,.65);font-size:14.5px;}
 .note-panel::-webkit-scrollbar{width:5px;}
-.note-panel::-webkit-scrollbar-thumb{background:rgba(139,0,0,.6);border-radius:3px;}
+.note-panel::-webkit-scrollbar-thumb{background:var(--zhu);border-radius:3px;}
 
 /* 提示 */
 .hint{
-  position:absolute;left:24px;bottom:108px;z-index:20;color:#8c8578;font-size:12px;
+  position:absolute;left:24px;bottom:108px;z-index:20;color:rgba(240,230,200,.6);font-size:12px;
   letter-spacing:.08em;
 }
 
@@ -119,9 +121,9 @@ main{padding-top:64px;}
   .top-nav{padding:0 16px;}
   .nav-links a:not(.cur):not(.btn-reader){display:none;}
   .scene-tabs{margin-left:0;width:100%;}
+  .console{padding:14px 16px 16px;}
 }
 </style>
-<script src="js/apply-shell.js" data-page="bianhua"></script>
 </head>
 <body>
 <nav class="top-nav"><a class="logo" href="index.html"><span class="taiji">☯</span>易经本体论<small>CHANGES</small></a>
@@ -136,6 +138,7 @@ main{padding-top:64px;}
     <a href="animation/gua-index.html">易之变 · 动画</a>
     <a href="animation/qian.html">乾卦讲解</a>
     <a href="yanjiu.html">研究</a>
+    <div class="nav-actions"></div>
   </nav>
 <main>
 <div class="stage-wrap" id="stage">

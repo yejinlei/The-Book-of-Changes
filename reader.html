@@ -11,99 +11,99 @@
 
 
 <style>
-:root{
-  --paper:var(--space-deep);
-  --paper-2:#ede2c7;
-  --ink:#2b1d0e;
-  --zhu:#8b0000;    /* 朱批 */
-  --mo:#1f4e2c;     /* 墨批 */
-  --lan:#1a3e6d;    /* 蓝批 */
-  --jin:#8a6d3b;    /* 金批/案 */
-  --line:#c9b98e;
-  --soft:#6b5534;
-  --hover:#e9dcb4;
-  --accent:#8b0000;
-}
+/* reader 专属样式：全部使用主题变量，不硬编码颜色 */
 *{box-sizing:border-box}
-html,body{margin:0;padding:0;background:var(--space-deep);color:var(--ink);font-family:'Songti SC','STSong','SimSun','Noto Serif CJK SC','Source Han Serif SC','Noto Serif SC',serif;line-height:1.9;font-size:17px;}
+html,body{margin:0;padding:0;background:transparent;color:var(--ink);font-family:'Songti SC','STSong','SimSun','Noto Serif CJK SC','Source Han Serif SC','Noto Serif SC',serif;line-height:1.9;font-size:17px;}
 body{padding-bottom:120px}
 a{color:var(--zhu);text-decoration:none}
 a:hover{text-decoration:underline}
 
-/* 顶部导航 */
-.topbar{position:sticky;top:0;z-index:50;}
+/* 顶部导航（apply-shell 会替换为新版 topbar，但保留兜底） */
+.topbar{position:sticky;top:0;z-index:50;background:var(--paper-2);border-bottom:1px solid var(--line);}
 .topbar-inner{max-width:1200px;margin:0 auto;padding:10px 18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
-.site-title{font-family:'STKaiti','KaiTi','Kaiti SC','Songti SC','STSong','SimSun','Noto Serif CJK SC','Source Han Serif SC','Noto Serif SC',serif;font-size:26px;color:var(--zhu);letter-spacing:4px;white-space:nowrap;padding-right:14px;border-right:1px solid var(--line);margin-right:6px}
+.site-title{font-family:'STKaiti','KaiTi','Kaiti SC',serif;font-size:26px;color:var(--zhu);letter-spacing:4px;white-space:nowrap;padding-right:14px;border-right:1px solid var(--line);margin-right:6px}
 .site-title a{color:inherit}
 .nav-links{display:flex;gap:2px;flex-wrap:wrap}
 .nav-links a{color:var(--ink);padding:5px 11px;border-radius:3px;font-size:15px;white-space:nowrap}
-.nav-links a:hover,.nav-links a.active{background:var(--zhu);color:#f8f1dd;text-decoration:none}
+.nav-links a:hover,.nav-links a.active{background:var(--zhu);color:#fff;text-decoration:none}
 
 /* 工具条 */
 .toolbar{max-width:1200px;margin:14px auto 0;padding:0 18px}
-.toolbar-card{background:rgba(22,38,68,.8);border:1px solid var(--line);border-radius:8px;padding:12px 18px;box-shadow:var(--shadow-md);display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;box-shadow:inset 0 0 30px rgba(180,140,70,.06)}
-.toolbar-card label{font-size:15px;color:var(--soft);white-space:nowrap}
-.toolbar-card select{font-family:inherit;font-size:15px;padding:4px 8px;border:1px solid var(--line);background:rgba(10,20,40,.9);color:var(--ink);border:1px solid var(--line);border-radius:3px;min-width:260px;max-width:60vw}
+.toolbar-card{
+  background:var(--paper-2);border:1px solid var(--line);border-radius:8px;
+  padding:12px 18px;display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;
+  box-shadow:var(--shadow);backdrop-filter:blur(6px);
+}
+.toolbar-card label{font-size:15px;color:var(--ink-2);white-space:nowrap}
+.toolbar-card select{font-family:inherit;font-size:15px;padding:4px 8px;border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:3px;min-width:260px;max-width:60vw}
 .version-btns{display:flex;flex-wrap:wrap;gap:4px}
-.version-btns button{font-family:inherit;font-size:14px;padding:4px 12px;border:1px solid var(--line);background:rgba(10,20,40,.7);cursor:pointer;border-radius:4px;color:var(--ink-2);border:1px solid var(--line);transition:.15s}
-.version-btns button:hover{background:var(--hover)}
-.version-btns button.on{background:var(--zhu);color:#fff;border-color:var(--zhu);box-shadow:0 0 12px rgba(180,50,50,.4)}
+.version-btns button{font-family:inherit;font-size:14px;padding:4px 12px;border:1px solid var(--line);background:var(--paper);cursor:pointer;border-radius:4px;color:var(--ink-2);transition:.15s}
+.version-btns button:hover{background:var(--gold);color:#fff}
+.version-btns button.on{background:var(--zhu);color:#fff;border-color:var(--zhu);box-shadow:0 0 12px var(--zhu-soft)}
 .checks{display:flex;gap:16px;flex-wrap:wrap}
-.checks label{display:inline-flex;align-items:center;gap:5px;cursor:pointer;user-select:none}
+.checks label{display:inline-flex;align-items:center;gap:5px;cursor:pointer;user-select:none;color:var(--ink-2)}
 .checks input{accent-color:var(--zhu);transform:scale(1.1)}
-.toolbar-hint{font-size:13px;color:var(--soft)}
-.legend{display:flex;gap:10px;flex-wrap:wrap;font-size:13px}
+.toolbar-hint{font-size:13px;color:var(--ink-3)}
+.legend{display:flex;gap:10px;flex-wrap:wrap;font-size:13px;color:var(--ink-2)}
 .legend span{display:inline-flex;align-items:center;gap:4px}
 .legend i{display:inline-block;width:10px;height:10px;border-radius:2px}
+/* 五类注家色块——跟随主题，但保留视觉区分度 */
 .dot-zhu{background:var(--zhu);color:#fff}
-.dot-mo{background:var(--mo)}
-.dot-lan{background:var(--lan)}
-.dot-jin{background:var(--jin)}
+.dot-mo{background:var(--jade);color:#fff}
+.dot-lan{background:var(--ice);color:#fff}
+.dot-jin{background:var(--gold-deep);color:#fff}
+.dot-zi{background:var(--violet);color:#fff}
 
-/* 正文容器 */
-.reader{max-width:860px;margin:18px auto 0;padding:40px 50px;background:linear-gradient(180deg,rgba(22,38,68,.96),rgba(13,24,46,.98));border:1px solid var(--line-strong);box-shadow:var(--shadow-lg);position:relative}
-.reader::before,.reader::after{content:"";position:absolute;left:20px;right:20px;height:1px;background:repeating-linear-gradient(90deg,var(--line) 0 6px,transparent 6px 12px);opacity:.6}
+/* 正文容器：改用主题变量 */
+.reader{
+  max-width:860px;margin:18px auto 0;padding:40px 50px;
+  background:var(--paper-2);
+  border:1px solid var(--line-strong);border-radius:var(--radius-lg);
+  box-shadow:var(--shadow-lg);position:relative;
+  backdrop-filter:blur(6px);
+}
+.reader::before,.reader::after{content:"";position:absolute;left:20px;right:20px;height:1px;background:repeating-linear-gradient(90deg,var(--line-soft) 0 6px,transparent 6px 12px);opacity:.6}
 .reader::before{top:14px}.reader::after{bottom:14px}
 
 .gua-head{text-align:center;border-bottom:1px double var(--line);padding-bottom:18px;margin-bottom:24px}
-.gua-title{font-family:"STKaiti","KaiTi","Kaiti SC","Songti SC",serif;font-size:40px;color:var(--zhu);letter-spacing:8px;margin:0 0 6px}
-.gua-sub{font-size:15px;color:var(--soft);letter-spacing:2px}
-.reader-gua-row{display:flex;align-items:center;justify-content:center;gap:28px;margin:16px 0 4px}
+.gua-title{font-family:"STKaiti","KaiTi",serif;font-size:40px;color:var(--zhu);letter-spacing:8px;margin:0 0 6px}
+.gua-sub{font-size:15px;color:var(--ink-3);letter-spacing:2px}
+.reader-gua-row{display:flex;align-items:center;justify-content:center;gap:28px;margin:16px 0 4px;flex-wrap:wrap}
 .reader-gua-svg{flex-shrink:0}
-.reader-gua-svg .gua-svg{filter:drop-shadow(0 2px 4px rgba(139,0,0,.12))}
+.reader-gua-svg .gua-svg{filter:drop-shadow(0 2px 8px var(--zhu-soft))}
 .reader-gua-text{text-align:left}
 .reader-bagua-row{display:flex;align-items:center;gap:6px;margin-top:6px;font-size:13px;color:var(--gold)}
 .reader-bagua{display:inline-flex;align-items:center}
 .reader-sep{opacity:.5;margin:0 2px}
-.gua-meta{font-size:14px;color:var(--soft);margin-top:8px}
-.section-hd{font-size:22px;color:var(--zhu);text-align:center;letter-spacing:6px;margin:28px 0 14px;font-weight:600;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:8px 0;background:linear-gradient(90deg,transparent,rgba(212,176,121,.12),transparent)}
-.sub-hd{font-size:17px;color:var(--lan);font-weight:600;margin:18px 0 8px;padding-left:8px;border-left:3px solid var(--lan)}
-.line-hd{font-size:18px;color:var(--zhu);font-weight:600;margin:22px 0 8px;display:flex;align-items:baseline;gap:8px}
+.gua-meta{font-size:14px;color:var(--ink-3);margin-top:8px}
+.section-hd{font-size:22px;color:var(--zhu);text-align:center;letter-spacing:6px;margin:28px 0 14px;font-weight:600;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:8px 0;background:linear-gradient(90deg,transparent,var(--glow),transparent)}
+.sub-hd{font-size:17px;color:var(--ice);font-weight:600;margin:18px 0 8px;padding-left:8px;border-left:3px solid var(--ice)}
+.line-hd{font-size:18px;color:var(--zhu);font-weight:600;margin:22px 0 8px;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
 .line-hd .yao-tag{background:var(--zhu);color:#fff;font-size:13px;padding:2px 8px;border-radius:2px;letter-spacing:1px}
 
 /* 正文段落 */
 .gua-text{font-size:19px;line-height:2.1;text-indent:2em;margin:6px 0;letter-spacing:1px;color:var(--ink)}
-.gua-text.yao-ci{font-size:19px;line-height:2.1;text-indent:2em;margin:4px 0;color:var(--ink);border-left:3px solid var(--zhu);padding-left:12px;background:rgba(180,50,50,.06);padding-top:6px;padding-bottom:6px}
-.gua-text.tuan-ci{font-size:18px;line-height:2.1;color:#3a2510}
+.gua-text.yao-ci{font-size:19px;line-height:2.1;text-indent:2em;margin:4px 0;color:var(--ink);border-left:3px solid var(--zhu);padding-left:12px;background:rgba(217,74,74,.06);padding-top:6px;padding-bottom:6px}
+.gua-text.tuan-ci{font-size:18px;line-height:2.1;color:var(--ink)}
 
-/* 批注块（段间嵌入，仿脂批夹批风格） */
-.anno{margin:8px 24px;padding:8px 14px;border-left:3px solid var(--jin);background:linear-gradient(90deg,rgba(212,176,121,.08),rgba(212,176,121,.02));border-radius:0 6px 6px 0;font-size:15px;line-height:1.9;color:var(--ink-2);position:relative}
-.anno .src{display:inline-block;font-size:12px;color:#fff;background:var(--jin);padding:1px 7px;border-radius:2px;margin-right:8px;vertical-align:2px;letter-spacing:1px;font-weight:500}
+/* 批注块：各注家保留色块区分，底纹用主题变量 */
+.anno{margin:8px 24px;padding:8px 14px;border-left:3px solid var(--gold-deep);background:var(--chip-bg, rgba(212,176,121,.08));border-radius:0 6px 6px 0;font-size:15px;line-height:1.9;color:var(--ink-2);position:relative}
+.anno .src{display:inline-block;font-size:12px;color:#fff;background:var(--gold-deep);padding:1px 7px;border-radius:2px;margin-right:8px;vertical-align:2px;letter-spacing:1px;font-weight:500}
 .anno.cmt-wangbi .src{background:var(--zhu);color:#fff}
-.anno.cmt-kongyingda .src{background:var(--mo)}
-.anno.cmt-zhuxi .src{background:#6e4a9e;color:#fff}
-.anno.cmt-chengyi .src{background:var(--lan)}
-.anno.cmt-jijie .src{background:var(--jin)}
-.anno.cmt-zhezhong .src{background:#7a5a3a;color:#fff}
-.anno.cmt-an .src{background:#8b4513}
-.anno.cmt-zonglun .src{background:#4a4a4a}
-.anno.cmt-baihua{border-left-color:#2e7a54;background:linear-gradient(90deg,rgba(46,122,84,.1),transparent)}
-.anno.cmt-baihua .src{background:#2a6b4a}
+.anno.cmt-kongyingda .src{background:var(--jade);color:#fff}
+.anno.cmt-zhuxi .src{background:var(--violet);color:#fff}
+.anno.cmt-chengyi .src{background:var(--ice);color:#fff}
+.anno.cmt-jijie .src{background:var(--gold-deep);color:#fff}
+.anno.cmt-zhezhong .src{background:var(--amber);color:#fff}
+.anno.cmt-an .src{background:var(--silver);color:#fff}
+.anno.cmt-zonglun .src{background:var(--ink-3);color:#fff}
+.anno.cmt-baihua{border-left-color:var(--jade);background:rgba(74,112,80,.1)}
+.anno.cmt-baihua .src{background:var(--jade);color:#fff}
 
-/* 行间小注（嵌入正文） */
-.inline-note{display:inline;font-size:14px;color:var(--mo);vertical-align:baseline;margin:0 2px}
-.inline-note::before{content:"【";color:var(--mo);opacity:.6}
-.inline-note::after{content:"】";color:var(--mo);opacity:.6}
+/* 行间小注 */
+.inline-note{display:inline;font-size:14px;color:var(--jade);vertical-align:baseline;margin:0 2px}
+.inline-note::before{content:"【";color:var(--jade);opacity:.7}
+.inline-note::after{content:"】";color:var(--jade);opacity:.7}
 
 /* 无批/只看批 */
 body.no-anno .anno{display:none}
@@ -115,14 +115,17 @@ body.no-zj .anno.cmt-jijie,body.no-zj .anno.cmt-zhezhong{display:none}
 
 /* 页脚导航 */
 .page-nav{max-width:860px;margin:18px auto;padding:0 50px;display:flex;justify-content:space-between;gap:10px}
-.page-nav button{font-family:inherit;font-size:15px;padding:8px 22px;border:1px solid var(--zhu);background:rgba(10,20,40,.7);color:var(--gold);cursor:pointer;border-radius:4px;border:1px solid var(--line-strong);letter-spacing:2px;transition:.15s}
+.page-nav button{font-family:inherit;font-size:15px;padding:8px 22px;border:1px solid var(--zhu);background:var(--paper);color:var(--gold);cursor:pointer;border-radius:4px;border:1px solid var(--line-strong);letter-spacing:2px;transition:.15s}
 .page-nav button:hover{background:var(--zhu);color:#fff}
 .page-nav button:disabled{opacity:.35;cursor:not-allowed}
-.page-nav button:disabled:hover{background:rgba(10,20,40,.3);color:var(--ink-3);}
+.page-nav button:disabled:hover{background:var(--paper);color:var(--ink-3);}
 
 /* 回到首页链接 */
 .back-link{text-align:center;margin-top:20px}
-.back-link a{color:var(--soft);font-size:14px}
+.back-link a{color:var(--ink-3);font-size:14px}
+
+/* 加载提示 */
+#reader .loading{text-align:center;padding:60px 0;color:var(--ink-3);font-size:15px}
 
 /* 响应式 */
 @media (max-width:760px){
@@ -186,7 +189,7 @@ body.no-zj .anno.cmt-jijie,body.no-zj .anno.cmt-zhezhong{display:none}
       <span><i class="dot-zhu"></i>王弼注</span>
       <span><i class="dot-mo"></i>孔疏</span>
       <span><i class="dot-lan"></i>程传</span>
-      <span style="color:#5a3b8c">●</span><span>朱本义</span>
+      <span style="color:var(--violet)">●</span><span>朱本义</span>
       <span><i class="dot-jin"></i>汉唐诸家</span>
     </span>
   </div>
@@ -345,7 +348,7 @@ body.no-zj .anno.cmt-jijie,body.no-zj .anno.cmt-zhezhong{display:none}
 
     // 首次进入该卦且未缓存时，显示加载提示
     if(!GUA_CACHE[name]){
-      cont.innerHTML = '<div style="text-align:center;padding:60px 0;color:#9a8f7a;font-size:15px">正在加载《'+name+'》卦历代汇评…</div>';
+      cont.innerHTML = '<div class="loading">正在加载《'+name+'》卦历代汇评…</div>';
     }
 
     loadGua(name).then(()=>{
@@ -379,13 +382,13 @@ body.no-zj .anno.cmt-jijie,body.no-zj .anno.cmt-zhezhong{display:none}
             <a href="shifa.html#demo-${String(num-1).padStart(2,'0')}"
                style="display:inline-block;padding:3px 14px;border:1px solid var(--zhu);
                       color:var(--zhu);font-size:13px;letter-spacing:2px;text-decoration:none"
-               onmouseover="this.style.background='var(--zhu)';this.style.color='#fff';this.style.boxShadow='0 0 12px rgba(180,50,50,.4)'"
-               onmouseout="this.style.background='rgba(10,20,40,.0)';this.style.color='var(--gold)';this.style.boxShadow='none'">蓍 占 示 例 →</a>
+               onmouseover="this.style.background='var(--zhu)';this.style.color='#fff';this.style.boxShadow='0 0 12px var(--zhu-soft)'"
+               onmouseout="this.style.background='transparent';this.style.color='var(--zhu)';this.style.boxShadow='none'">蓍 占 示 例 →</a>
             <a href="animation/gua-${String(num-1).padStart(2,'0')}.html"
                style="display:inline-block;margin-left:8px;padding:3px 14px;border:1px solid var(--gold);
                       color:var(--gold);font-size:13px;letter-spacing:2px;text-decoration:none"
-               onmouseover="this.style.background='var(--gold)';this.style.color='#0a1428';this.style.boxShadow='0 0 12px rgba(212,176,121,.4)'"
-               onmouseout="this.style.background='rgba(10,20,40,.0)';this.style.color='var(--gold)';this.style.boxShadow='none'">讲 解 动 画 →</a>
+               onmouseover="this.style.background='var(--gold)';this.style.color='var(--paper-2)';this.style.boxShadow='0 0 12px var(--gold-bright)'"
+               onmouseout="this.style.background='transparent';this.style.color='var(--gold)';this.style.boxShadow='none'">讲 解 动 画 →</a>
           </div>
         </div>
       </div>
