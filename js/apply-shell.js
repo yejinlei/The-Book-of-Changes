@@ -59,7 +59,8 @@
      'data/classics.js?v=20261110g',
      'js/ontology-linker.js?v=20261110g',
      'js/theme-switch.js?v=20261110g',
-     'js/classic-panel.js?v=20261110g'].forEach(function(s){ injectScript(s); });
+     'js/classic-panel.js?v=20261110g',
+     'js/yijing-commentary-loader.js?v=20261111a'].forEach(function(s){ injectScript(s); });
   }
 
   // 每页默认要嵌入的典籍（页面可通过 <script>window.__CLASSICS_IDS=[...]</script> 覆盖）
