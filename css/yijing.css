@@ -4,10 +4,13 @@
    ======================================================== */
 :root{
   --gutter:40px;            /* 内容区左右留白（响应式） */
-  /* === 兼容别名（旧名→新星象色）=== */
+  /* === 兼容别名（通过 var() 延迟绑定，各主题覆盖 --space* 时自动跟随）=== */
   --paper:var(--space-2);
   --paper-2:var(--space-card-solid);
-  --paper-3:rgba(25,45,80,.8);
+  --paper-3:var(--space-3);
+  --card-surface:var(--paper-2);
+  --input-bg:var(--paper);
+  --pop-bg:var(--paper-2);
   /* 主色 —— 星象深空 */
   --space:#060f1f;          /* 最深夜空 */
   --space-2:#0a1628;        /* 主底 */

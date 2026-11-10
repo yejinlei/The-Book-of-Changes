@@ -469,6 +469,7 @@
             return '<a href="' + p.href + '" class="' + (activePage === p.id ? 'active' : '') + '">' + p.label + '</a>';
           }).join('') +
           '<span class="topbar-actions">' +
+            '<span class="yj-theme-host"></span>' +
             '<a href="shifa.html" class="nav-cta">起卦</a>' +
           '</span>' +
         '</div>' +
