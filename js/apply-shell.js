@@ -30,7 +30,7 @@
     if(document.querySelector('link[href*="yijing.css"]')) return;
     var link = document.createElement('link');
     link.rel = 'stylesheet';
-    link.href = relativePath() + 'css/yijing.css?v=20261110e';
+    link.href = relativePath() + 'css/yijing.css?v=20261110g';
     document.head.appendChild(link);
   }
 
@@ -51,15 +51,15 @@
 
   function injectOntology(){
     // 先同步加载主题早初始化（对那些没有在 <head> 手动写 <script src=theme-init.js> 的老页面兜底）
-    injectScript('js/theme-init.js?v=20261110e', {sync:true});
+    injectScript('js/theme-init.js?v=20261110g', {sync:true});
     ['data/yijing-ontology.js',
      'data/gua-full-data.js',
      'data/yijing-ontology-enhance.js',
      'data/yijing-yao-link.js',
-     'data/classics.js?v=20261110e',
-     'js/ontology-linker.js?v=20261110e',
-     'js/theme-switch.js?v=20261110e',
-     'js/classic-panel.js?v=20261110e'].forEach(function(s){ injectScript(s); });
+     'data/classics.js?v=20261110g',
+     'js/ontology-linker.js?v=20261110g',
+     'js/theme-switch.js?v=20261110g',
+     'js/classic-panel.js?v=20261110g'].forEach(function(s){ injectScript(s); });
   }
 
   // 每页默认要嵌入的典籍（页面可通过 <script>window.__CLASSICS_IDS=[...]</script> 覆盖）
@@ -71,8 +71,8 @@
     },
     yiyi: {
       title: '医易同源·相关医典',
-      intro: '中医理论以阴阳五行为骨架，与《易》学同源异流。以下为医易会通相关核心医籍原文，涵盖《黄帝内经》、张景岳《医易义》、张仲景《伤寒论》、孙思邈《千金要方》、黄元御《四圣心源》共五部。',
-      ids: ['huangdi_neijing','leijing_fuyi','shanghan_lun','sunsimiao_dyi','huangyuanyu_ssxy']
+      intro: '中医理论以阴阳五行为骨架，与《易》学同源异流。以下为医易会通相关核心医籍原文，涵盖《黄帝内经》、张景岳《医易义》、张仲景《伤寒论》、孙思邈《千金要方》、黄元御《四圣心源》、郑钦安《医理真传》（火神派）共六部。',
+      ids: ['huangdi_neijing','leijing_fuyi','shanghan_lun','sunsimiao_dyi','huangyuanyu_ssxy','zheng-qinan-yili-zhenchuan']
     },
     guaqi: {
       title: '卦气说·原典',
@@ -111,13 +111,13 @@
     },
     dandao: {
       title: '丹道·原典参照',
-      intro: '丹道以《周易参同契》为祖，融《易》理、黄老、丹法于一炉。陈抟《无极图》开宋代内丹之先河，张伯端《悟真篇》、《入药镜》为南北宗核心，明代《性命圭旨》集其大成。以下为丹道六大核心典籍原文，含《道德经》与丹家合参。',
-      ids: ['cantongqi','daodejing','wuzhenpian','ruyaojing','chen_tuan_wuji','xingming_guizhi']
+      intro: '丹道以《周易参同契》为祖，融《易》理、黄老、丹法于一炉。陈抟《无极图》开宋代内丹之先河，张伯端《悟真篇》、《入药镜》为南北宗核心，金代丘处机《大丹直指》传北宗清修，明代《性命圭旨》集其大成。以下为丹道七大核心典籍原文，含《道德经》与丹家合参。',
+      ids: ['cantongqi','daodejing','wuzhenpian','ruyaojing','chen_tuan_wuji','xingming_guizhi','qiuchuji-dadan-zhizhi']
     },
     yanjiu: {
-      title: '历代注疏·代表注本（15家）',
-      intro: '历代注《易》著作汗牛充栋，此选取易学史最具代表性的 15 家注本：魏王弼（玄学易）、唐孔颖达（官修正义）、李鼎祚（集解汉易）、北宋程颐（理学义理）、张载（气学派）、苏轼（蜀学）、邵雍（图书派）、南宋朱熹（本义）、明来知德（错综说）、明末王夫之（气学集大成）、近代尚秉和（象数复兴）、现代高亨（考据）、李镜池（古史辨）、于省吾（古文字）、闻一多（神话学）、屈万里（集释）。',
-      ids: ['wangbi_zhu','zhouyi_zhengyi','zhouyi_jijie','chengshi_yizhuan','hengqu_yishuo','dongpo_yizhuan','huangji_jingshi','zhouyi_benyi','zhouyi_jizhu','zhouyi_waizhuan','zhouyi_shangshi','zhouyi_gujing_jinzhu','zhouyi_tanyuan','yushengyi','wen_yiduo','quwanli']
+      title: '历代注疏·代表注本（19家）',
+      intro: '历代注《易》著作汗牛充栋，此选取易学史最具代表性的 19 家注本：汉郑玄、荀爽、虞翻（汉易象数三家）；魏王弼（玄学易）；唐孔颖达（官修正义）、李鼎祚（集解汉易）；北宋程颐（理学义理）、张载（气学派）、苏轼（蜀学）、邵雍（图书派）；南宋朱熹（本义）；明来知德（错综说）；明末王夫之（气学集大成）；近代尚秉和（象数复兴）；现代高亨（考据）、李镜池（古史辨）、于省吾（古文字）、闻一多（神话学）、屈万里（数字卦集释）；另附朱伯崑《易学哲学史》通论。',
+      ids: ['zhengyi-yiwei','shunshuang-yi','yufan-yi','wangbi_zhu','zhouyi_zhengyi','zhouyi_jijie','chengshi_yizhuan','hengqu_yishuo','dongpo_yizhuan','huangji_jingshi','zhouyi_benyi','zhouyi_jizhu','zhouyi_waizhuan','zhouyi_shangshi','zhouyi_gujing_jinzhu','zhouyi_tanyuan','yushengyi','wen_yiduo','quwanli-zhouyi','zhubokun-yixue-zhexue-shi']
     },
     rdf: {
       title: '本体论建模·核心典籍',
