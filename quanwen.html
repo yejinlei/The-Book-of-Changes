@@ -53,7 +53,7 @@ body { font-family:var(--font-serif,'Songti SC','STSong','SimSun',serif); backgr
 }
 </style>
 <script>window.__CLASSICS_DISABLED = true;</script>
-<script src="js/apply-shell.js?v=20261111a" data-page="quanwen"></script>
+<script src="js/apply-shell.js?v=20261111i" data-page="quanwen"></script>
 </head>
 <body>
 <div class="wrap">
@@ -66,10 +66,10 @@ body { font-family:var(--font-serif,'Songti SC','STSong','SimSun',serif); backgr
   <div class="qw-bar">
     <input class="qw-search" id="qwSearch" type="search" placeholder="检索书名 / 作者（如：王弼、参同契、纳甲）…">
   </div>
-  <div class="qw-tabs" id="qwTabs"></div>
-  <div class="qw-grid" id="qwGrid"></div>
+  <div class="qw-tabs" id="qwTabs" data-no-ontology></div>
+  <div class="qw-grid" id="qwGrid" data-no-ontology></div>
 
-  <div class="qw-reader" id="qwReader" style="display:none;">
+  <div class="qw-reader" id="qwReader" style="display:none;" data-no-ontology>
     <div class="rt" id="qwTitle"></div>
     <div class="rm" id="qwMeta"></div>
     <div class="rbar">
@@ -87,7 +87,7 @@ body { font-family:var(--font-serif,'Songti SC','STSong','SimSun',serif); backgr
 </div>
 
 <script src="js/pako.min.js?v=20261111e"></script>
-<script src="data/texts-index.js?v=20261111e"></script>
+<script src="data/texts-index.js?v=20261111f"></script>
 <script>
 (function(){
   var T = window.YJ_TEXTS;

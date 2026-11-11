@@ -214,6 +214,8 @@
             return NodeFilter.FILTER_REJECT;
           if(p.classList && (p.classList.contains('ent') || p.classList.contains('no-ont')))
             return NodeFilter.FILTER_REJECT;
+          if(p.hasAttribute && (p.hasAttribute('data-no-ontology') || p.hasAttribute('data-no-ont')))
+            return NodeFilter.FILTER_REJECT;
           p = p.parentNode;
         }
         return NodeFilter.FILTER_ACCEPT;

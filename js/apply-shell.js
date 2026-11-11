@@ -57,7 +57,7 @@
      'data/yijing-ontology-enhance.js',
      'data/yijing-yao-link.js',
      'data/classics.js?v=20261110g',
-     'js/ontology-linker.js?v=20261110g',
+     'js/ontology-linker.js?v=20261111h',
      'js/theme-switch.js?v=20261110g',
      'js/classic-panel.js?v=20261110g',
      'js/yijing-commentary-loader.js?v=20261111a'].forEach(function(s){ injectScript(s); });
