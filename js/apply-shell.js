@@ -30,7 +30,7 @@
     if(document.querySelector('link[href*="yijing.css"]')) return;
     var link = document.createElement('link');
     link.rel = 'stylesheet';
-    link.href = relativePath() + 'css/yijing.css?v=20261110g';
+    link.href = relativePath() + 'css/yijing.css?v=20261111n';
     document.head.appendChild(link);
   }
 
@@ -51,16 +51,35 @@
 
   function injectOntology(){
     // 先同步加载主题早初始化（对那些没有在 <head> 手动写 <script src=theme-init.js> 的老页面兜底）
-    injectScript('js/theme-init.js?v=20261110g', {sync:true});
+    injectScript('js/theme-init.js?v=20261111n', {sync:true});
+    // 轻量模式（页面设置 window.__ONTOLOGY_LAZY=true）：只取导航壳所需的最小数据，
+    // 跳过约 300KB 的完整本体数据；页面自身若需本体，可调用 window.__ensureOntology()
+    if(window.__ONTOLOGY_LAZY){
+      injectScript('data/shell-gua.js?v=20261111n');
+      injectScript('js/ontology-linker.js?v=20261111n');
+      injectScript('js/theme-switch.js?v=20261111n');
+      window.__ensureOntology = function(cb){
+        injectScript('data/yijing-ontology.js?v=20261111n');
+        injectScript('data/gua-full-data.js');
+        injectScript('data/yijing-ontology-enhance.js');
+        injectScript('data/yijing-yao-link.js');
+        injectScript('data/classics.js?v=20261111n');
+        injectScript('js/classic-panel.js?v=20261111n');
+        injectScript('js/yijing-commentary-loader.js?v=20261111n');
+        if(cb) setTimeout(cb, 400);
+      };
+      return;
+    }
     ['data/yijing-ontology.js',
      'data/gua-full-data.js',
      'data/yijing-ontology-enhance.js',
      'data/yijing-yao-link.js',
-     'data/classics.js?v=20261110g',
-     'js/ontology-linker.js?v=20261111h',
-     'js/theme-switch.js?v=20261110g',
-     'js/classic-panel.js?v=20261110g',
-     'js/yijing-commentary-loader.js?v=20261111a'].forEach(function(s){ injectScript(s); });
+     'data/classics.js?v=20261111n',
+     'js/ontology-linker.js?v=20261111n',
+     'js/theme-switch.js?v=20261111n',
+     'js/classic-panel.js?v=20261111n',
+     'js/onto-quanwen.js?v=20261111n',
+     'js/yijing-commentary-loader.js?v=20261111n'].forEach(function(s){ injectScript(s); });
   }
 
   // 每页默认要嵌入的典籍（页面可通过 <script>window.__CLASSICS_IDS=[...]</script> 覆盖）

@@ -61,7 +61,7 @@ body { font-family:'Songti SC','STSong','SimSun','Noto Serif CJK SC','Source Han
 }
 </style>
 <script>window.__CLASSICS_DISABLED = true; /* shiyi 已自带十翼卡片区，由原页面直接处理原文章节 */</script>
-<script src="js/apply-shell.js?v=20261110g" data-page="shiyi"></script>
+<script src="js/apply-shell.js?v=20261111n" data-page="shiyi"></script>
 </head>
 <body>
 <nav class="top-nav"><a href="index.html" class="logo"><span class="taiji">☯</span>易经本体论<small>ONTOLOGY</small></a>
@@ -188,6 +188,14 @@ function render() {
   });
 }
 document.addEventListener('DOMContentLoaded', render);
+</script>
+<section id="qwRel" style="max-width:1180px;margin:6px auto 46px;padding:0 20px;"></section>
+<script>
+(function wait(n){
+  if(window.YJ_QW && window.YJ_QW.renderAll){
+    window.YJ_QW.renderAll(document.getElementById('qwRel'), 'shiyi', {title:'📚 古籍全文库 · 论及十翼各篇的典籍', unit:'十翼篇目', per:10});
+  } else if(n < 100){ setTimeout(function(){ wait(n+1); }, 100); }
+})(0);
 </script>
 </body>
 </html>

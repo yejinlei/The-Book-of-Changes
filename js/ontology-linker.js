@@ -11,7 +11,8 @@
  */
 (function(){
   'use strict';
-  var YJ = window.YJ_ONT || {};
+  // 完整本体数据优先；轻量模式（如全文库）下回退到仅含导航所需的最小数据
+  var YJ = window.YJ_ONT || window.YJ_SHELL_GUA || {};
   var GF = window.YJ_GUA_FULL || {};
 
   /* ================= 实体集合 ================= */

@@ -1699,3 +1699,17 @@ canvas#bhua-three{
   .classic-book-head h3{font-size:19px;}
   .para-refs{font-size:12px;}
 }
+
+/* ===== 本体 → 全文库 反向关联组件 ===== */
+.yj-qw-link { margin-top:24px; padding:16px 18px; background:var(--chip-bg); border-left:3px solid var(--gold); border-radius:var(--radius,6px); }
+.yj-qw-link h3 { color:var(--zhu); font-size:17px; margin:0 0 8px; letter-spacing:1px; }
+.yj-qw-sub { font-size:12px; color:var(--ink-3); margin:0 0 10px; line-height:1.7; }
+.yj-qw-grid { display:flex; flex-wrap:wrap; gap:8px; }
+.yj-qw-book { display:inline-block; padding:4px 12px; border:1px solid var(--line); border-radius:99px; background:var(--paper-2); color:var(--zhu); text-decoration:none; font-size:13px; }
+.yj-qw-book i { font-style:normal; color:var(--gold); font-size:11px; margin-left:4px; }
+.yj-qw-book:hover { background:var(--zhu); color:var(--on-accent,#fff); }
+.yj-qw-book:hover i { color:#fff; }
+.yj-qw-group { margin:12px 0; padding-top:10px; border-top:1px dashed var(--line); }
+.yj-qw-group:first-of-type { border-top:none; padding-top:0; }
+.yj-qw-group h4 { font-size:14px; color:var(--ink); margin:0 0 7px; }
+.yj-qw-group h4 i { font-style:normal; color:var(--gold); font-size:11px; margin-left:6px; }

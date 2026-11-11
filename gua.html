@@ -13,6 +13,7 @@
 <script src="data/yijing-yao-link.js"></script>
 <script src="js/ontology-linker.js"></script>
 <script src="js/theme-switch.js"></script>
+<script src="js/onto-quanwen.js?v=20261111n"></script>
 <style>
 .gua-detail{display:none;}
 .gua-detail.active{display:block;}
@@ -363,6 +364,7 @@ function showGua(id){
   document.getElementById('detailView').classList.add('active');
   bindAnnoButtons();
   window.YJ_Link.decorate(document.getElementById('detailContent'));
+  if(window.YJ_QW) window.YJ_QW.render(document.getElementById('detailContent'), 'gua', g.id);
 }
 
 /* ---------- 逐爻注家注解（下钻）---------- */

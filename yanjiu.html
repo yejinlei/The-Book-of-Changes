@@ -334,6 +334,7 @@
     });
     document.getElementById('zhuDetail').classList.add('open');
     document.body.style.overflow='hidden';
+    if(window.YJ_QW && body) window.YJ_QW.render(body, 'zhujia', zid);
     // 注文分片按需加载
     const fill = function(shard){
       const el = document.getElementById('zhuTexts');
@@ -493,7 +494,7 @@ details summary{cursor:pointer;color:var(--zhu);font-size:12px;}
   .rel-label{min-width:auto;}
 }
 </style>
-<script src="js/apply-shell.js?v=20261110g" data-page="yanjiu"></script>
+<script src="js/apply-shell.js?v=20261111n" data-page="yanjiu"></script>
 </body>
 </html>
 
