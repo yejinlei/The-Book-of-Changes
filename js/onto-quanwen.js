@@ -14,7 +14,7 @@
     if(loading) return;
     loading = true;
     var s = document.createElement('script');
-    s.src = 'data/texts-ontology.js?v=20261111n';
+    s.src = 'data/texts-ontology.js?v=20261111p';
     s.onload = s.onerror = function(){
       var c = cbs; cbs = [];
       c.forEach(function(f){ f(window.YJ_TEXTO); });
@@ -31,13 +31,14 @@
 
   function render(container, type, id){
     if(!container || !id) return;
+    var anchorClass = 'yj-qw-link yj-qw-single yj-qw-' + type + '-' + id;
     ensure(function(O){
       if(!O || !O.inv || !O.inv[id] || !O.inv[id].length) return;
       var all = O.inv[id].slice().sort(function(a, b){ return b[1] - a[1]; });
       var list = all.slice(0, 30);
-      var old = container.querySelector('.yj-qw-link');
+      var old = container.querySelector('.' + anchorClass.replace(/ /g,'.'));
       if(old) old.remove();
-      var html = '<div class="yj-qw-link">' +
+      var html = '<div class="' + anchorClass + '">' +
         '<h3>📚 古籍全文库 · 相关典籍（' + all.length + ' 部）</h3>' +
         '<p class="yj-qw-sub">下列公版古籍全文中论及本条目（数字为出现次数），点击直达原文，网页端可切换简繁、标出本体概念：</p>' +
         '<div class="yj-qw-grid">' +
@@ -53,16 +54,18 @@
   function renderAll(container, type, opts){
     if(!container) return;
     opts = opts || {};
+    var anchorClass = 'yj-qw-link yj-qw-type-' + type;
     ensure(function(O){
       if(!O || !O.names || !O.types || !O.inv) return;
       var names = O.names, types = O.types, inv = O.inv;
       var per = opts.per || 10;
       var ids = Object.keys(names).filter(function(k){ return types[k] === type && inv[k] && inv[k].length; });
       ids.sort(function(a, b){ return inv[b].length - inv[a].length; });
-      if(!ids.length) return;
-      var old = container.querySelector('.yj-qw-link');
+      // 同一类型的旧区块先移除；不同类型的区块互不干扰
+      var old = container.querySelector('.' + anchorClass.replace(/ /g,'.'));
       if(old) old.remove();
-      var html = '<div class="yj-qw-link">' +
+      if(!ids.length) return;
+      var html = '<div class="' + anchorClass + '">' +
         '<h3>' + (opts.title || '📚 古籍全文库 · 相关典籍') + '</h3>' +
         '<p class="yj-qw-sub">下列公版古籍全文中论及本站各' + (opts.unit || '条目') + '（数字为出现次数）。点击直达原文，网页端可切换简繁、并标识与本体相关的段落。</p>';
       ids.forEach(function(id){

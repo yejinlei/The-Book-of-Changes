@@ -12,6 +12,7 @@
 <script src="data/yijing-gua-bian-engine.js"></script>
 <script src="js/ontology-linker.js"></script>
 <script src="js/theme-switch.js"></script>
+<script src="js/onto-quanwen.js?v=20261111p"></script>
 <style>
 .gb-hero{
   text-align:center;padding:40px 20px 26px;
@@ -249,8 +250,8 @@
   function tryInject(){
     if(!window.CLASSICS || !window.ClassicPanel){
       if(!document.querySelector('script[src*="classics.js"]')){
-        var s1=document.createElement('script'); s1.src='data/classics.js?v=20261110h'; s1.async=false; document.head.appendChild(s1);
-        var s2=document.createElement('script'); s2.src='js/classic-panel.js?v=20261110g'; s2.async=false; document.head.appendChild(s2);
+        var s1=document.createElement('script'); s1.src='data/classics.js?v=20261111p'; s1.async=false; document.head.appendChild(s1);
+        var s2=document.createElement('script'); s2.src='js/classic-panel.js?v=20261111p'; s2.async=false; document.head.appendChild(s2);
       }
       setTimeout(tryInject, 200);
       return;
@@ -261,6 +262,12 @@
       intro: '卦变说论一卦如何由他卦变来，是汉易与宋易的重要课题。以下为《系辞》《彖传》《太极图说》相关原文。',
       ids: ['tuan_shang','xici_shang','xici_xia','taijitu_shuo']
     });
+    // 全文库反向关联：列出卦变、十二消息卦、六十四卦、十翼在古籍中的相关典籍
+    if(window.YJ_QW){
+      var main = document.querySelector('.content') || document.body;
+      window.YJ_QW.renderAll(main, 'yitu', {title:'📚 古籍全文库 · 卦变相关典籍', unit:'易图/卦变条目', per:8});
+      window.YJ_QW.renderAll(main, 'shiyi', {title:'📚 古籍全文库 · 十翼相关典籍', unit:'十翼篇目', per:8});
+    }
   }
   if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded', tryInject); } else { tryInject(); }
 })();

@@ -13,7 +13,7 @@
 <script src="data/yijing-yao-link.js"></script>
 <script src="js/ontology-linker.js"></script>
 <script src="js/theme-switch.js"></script>
-<script src="js/onto-quanwen.js?v=20261111n"></script>
+<script src="js/onto-quanwen.js?v=20261111p"></script>
 <style>
 .gua-detail{display:none;}
 .gua-detail.active{display:block;}
@@ -425,8 +425,8 @@ route();
   function tryInject(){
     if(!window.CLASSICS || !window.ClassicPanel){
       if(!document.querySelector('script[src*="classics.js"]')){
-        var s1=document.createElement('script'); s1.src='data/classics.js?v=20261110h'; s1.async=false; document.head.appendChild(s1);
-        var s2=document.createElement('script'); s2.src='js/classic-panel.js?v=20261110g'; s2.async=false; document.head.appendChild(s2);
+        var s1=document.createElement('script'); s1.src='data/classics.js?v=20261111p'; s1.async=false; document.head.appendChild(s1);
+        var s2=document.createElement('script'); s2.src='js/classic-panel.js?v=20261111p'; s2.async=false; document.head.appendChild(s2);
       }
       setTimeout(tryInject, 200);
       return;

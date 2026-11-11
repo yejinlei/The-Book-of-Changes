@@ -82,7 +82,7 @@ body { font-family:var(--font-serif,'Songti SC','STSong','SimSun',serif); backgr
 }
 </style>
 <script>window.__CLASSICS_DISABLED = true; window.__ONTOLOGY_LAZY = true;</script>
-<script src="js/apply-shell.js?v=20261111n" data-page="quanwen"></script>
+<script src="js/apply-shell.js?v=20261111p" data-page="quanwen"></script>
 </head>
 <body>
 <div class="wrap">
@@ -129,9 +129,9 @@ body { font-family:var(--font-serif,'Songti SC','STSong','SimSun',serif); backgr
   </div>
 </div>
 
-<script src="js/pako.min.js?v=20261111n"></script>
-<script src="data/texts-index.js?v=20261111n"></script>
-<script src="data/t2s-map.js?v=20261111n"></script>
+<script src="js/pako.min.js?v=20261111p"></script>
+<script src="data/texts-index.js?v=20261111p"></script>
+<script src="data/t2s-map.js?v=20261111p"></script>
 <script>
 (function(){
   'use strict';
@@ -374,7 +374,7 @@ body { font-family:var(--font-serif,'Songti SC','STSong','SimSun',serif); backgr
     if(ontoLoading) return;
     ontoLoading = true;
     var sc = document.createElement('script');
-    sc.src = 'data/texts-ontology.js?v=20261111n';
+    sc.src = 'data/texts-ontology.js?v=20261111p';
     sc.onload = sc.onerror = function(){ var c = ontoCbs; ontoCbs = []; c.forEach(function(f){ f(); }); };
     document.head.appendChild(sc);
   }

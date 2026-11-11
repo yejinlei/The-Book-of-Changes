@@ -156,7 +156,7 @@
 
   // 渲染单个书籍
   async function renderBook(container, book){
-    const url = `data/texts/yijing/${encodeURIComponent(book.file)}?v=20261111`;
+    const url = `data/texts/yijing/${encodeURIComponent(book.file)}?v=20261111p`;
     container.innerHTML = `<div class="classic-loading" style="padding:20px;text-align:center;color:#a68dc8;">⏳ 正在加载 ${book.title}...</div>`;
     try {
       const resp = await fetch(url);

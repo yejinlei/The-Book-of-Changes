@@ -12,6 +12,7 @@
 <script src="data/yijing-variants.js"></script>
 <script src="js/ontology-linker.js"></script>
 <script src="js/theme-switch.js"></script>
+<script src="js/onto-quanwen.js?v=20261111p"></script>
 <style>
 .jk-hero{text-align:center;padding:40px 20px 26px;background:linear-gradient(180deg,var(--paper-2) 0%,var(--paper) 100%);border-bottom:1px solid var(--line);}
 .jk-hero{margin:0 calc(-1 * var(--gutter)) 24px;padding-left:var(--gutter);padding-right:var(--gutter);}
@@ -280,8 +281,8 @@
   function tryInject(){
     if(!window.CLASSICS || !window.ClassicPanel){
       if(!document.querySelector('script[src*="classics.js"]')){
-        var s1=document.createElement('script'); s1.src='data/classics.js?v=20261110h'; s1.async=false; document.head.appendChild(s1);
-        var s2=document.createElement('script'); s2.src='js/classic-panel.js?v=20261110g'; s2.async=false; document.head.appendChild(s2);
+        var s1=document.createElement('script'); s1.src='data/classics.js?v=20261111p'; s1.async=false; document.head.appendChild(s1);
+        var s2=document.createElement('script'); s2.src='js/classic-panel.js?v=20261111p'; s2.async=false; document.head.appendChild(s2);
       }
       setTimeout(tryInject, 200);
       return;
@@ -292,10 +293,16 @@
       intro: '《周易》版本流传复杂：战国楚简（清华简、上博简）、秦简归藏、汉帛书易传六篇（马王堆）、魏王弼本、唐正义、宋程朱注本，异文众多。以下为重要出土文献与传世注本对照参照。',
       ids: ['boshu_zhouyi','ersanziwen','yizhiyi','boshu_yao','boshu_miaohe','boshu_zhaoli','tsinghua_shifa','shangbo_zhouyi','qinjian_guizang','wangbi_zhu','zhouyi_zhengyi','chengshi_yizhuan','zhouyi_benyi']
     });
+    // 全文库反向关联
+    if(window.YJ_QW){
+      var main = document.querySelector('.content') || document.body;
+      window.YJ_QW.renderAll(main, 'zhuben', {title:'📚 古籍全文库 · 各注本相关典籍', unit:'注本', per:6});
+      window.YJ_QW.renderAll(main, 'zhujia', {title:'📚 古籍全文库 · 核心注家相关典籍', unit:'注家', per:6});
+    }
   }
   if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded', tryInject); } else { tryInject(); }
 })();
 </script>
-<script src="js/yijing-commentary-loader.js?v=20261111a"></script>
+<script src="js/yijing-commentary-loader.js?v=20261111p"></script>
 </body>
 </html>

@@ -95,7 +95,7 @@
   function loadClassics(cb){
     if(window.CLASSICS){cb();return;}
     var s = document.createElement('script');
-    s.src = 'data/classics.js?v=20261110h';
+    s.src = 'data/classics.js?v=20261111p';
     s.onload = cb;
     s.onerror = cb;
     document.head.appendChild(s);
